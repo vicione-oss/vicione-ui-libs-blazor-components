@@ -1,0 +1,20 @@
+﻿@using ViciOne.Ui.Blazor.Components.Extensions
+
+@inherits ContextMenuItemBase
+
+ @if (ShouldBeShown())
+{
+    var cssClasses = new List<string> { "context-menu-button" };
+
+    if (!Enabled || !Parent.Enabled)
+        cssClasses.Add("disabled");
+
+    var attributes = new Dictionary<string, object>();
+
+    if (string.IsNullOrWhiteSpace(Title))
+        attributes.Add("title", Title!);
+
+    <div class="@string.Join(" ", cssClasses)" @attributes="attributes" @onclick="@ButtonClickAsync">
+         @Shared.RenderFragments.Icon(this)
+    </div>
+}

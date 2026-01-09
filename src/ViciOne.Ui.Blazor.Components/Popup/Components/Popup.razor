@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNetCore.Components.Sections
+@using ViciOne.Ui.Blazor.Components.Popup.Extensions
+
+@if (!Visible) return;
+
+<SectionContent SectionId="this">
+    @{
+        var modelRootCssClasses = new List<string> { "modal-root" };
+
+        if (ShowBackdrop)
+            modelRootCssClasses.Add("with-backdrop");
+
+        var modalRootStyles = new Dictionary<string, object>();
+
+        if (ZIndex is not null)
+            modalRootStyles["--z-index"] = ZIndex;
+
+        var modalRootAttributes = new Dictionary<string, object>();
+
+        if (modalRootStyles.Count > 0)
+            modalRootAttributes["style"] = string.Join("; ", modalRootStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
+    }
+    <div class="@string.Join(" ", modelRootCssClasses)" @attributes="modalRootAttributes" @ref="_modalRootElementReference">
+        @{
+            var modelDialogCssClasses = new List<string> { "modal-dialog" };
+
+            if (_x is not null || _y is not null)
+                modelDialogCssClasses.Add(MoveInteraction.EndedCssClass);
+
+            if (CssClass is not null)
+                modelDialogCssClasses.AddRange(CssClass.Split(" "));
+
+            var modalDialogStyles = new Dictionary<string, object>();
+
+            if (Width is not null)
+                modalDialogStyles["width"] = Width;
+
+            if (Height is not null)
+                modalDialogStyles["height"] = Height;
+
+            if (_x is not null || _y is not null)
+            {
+                if (_x is not null)
+                    modalDialogStyles["left"] = $"{_x.Value.ToAttributeValue(precision: 3)}px";
+
+                if (_y is not null)
+                    modalDialogStyles["top"] = $"{_y.Value.ToAttributeValue(precision: 3)}px";
+            }
+
+            var modalDialogAttributes = new Dictionary<string, object>
+            {
+                { "style", string.Join("; ", modalDialogStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}")) }
+            };
+        }
+        <div class="@string.Join(" ", modelDialogCssClasses)" @attributes="modalDialogAttributes" @ref="_modalDialogElementReference">
+            <div class="modal-content">
+                @if (ChildContent is not null)
+                {
+                    <CascadingValue TValue="IPopup" Value="this" IsFixed="true">
+                        <CascadingValue TValue="IMoveablePopup" Value="this" IsFixed="true">
+                            @ChildContent
+                        </CascadingValue>
+                    </CascadingValue>
+                }
+            </div>
+        </div>
+    </div>
+</SectionContent>

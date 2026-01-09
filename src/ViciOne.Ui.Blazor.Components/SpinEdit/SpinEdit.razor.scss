@@ -1,0 +1,105 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/animations/mixins" as animations;
+@use "../Styles/inputs";
+
+@use "sass:color";
+
+.spin-edit {
+    display: inline-flex;
+    flex-direction: row;
+
+    @include inputs.border();
+
+    @include inputs.disabled-style();
+    @include inputs.invalid-style();
+
+    ::deep .input {
+        flex-grow: 1;
+        min-width: 0; // allow input to shrink when the outer element is smaller than the default minimum input width applied by the browser
+        
+        border-width: 0;
+
+        border-top-left-radius: inputs.$border-radius - inputs.$border-width;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: inputs.$border-radius - inputs.$border-width;
+
+        &:disabled {
+            opacity: unset; // avoids applying styles from @include inputs.disabled-style() twice
+        }
+    }
+
+    .buttons {
+        display: grid;
+        grid-auto-flow: row;
+        grid-auto-rows: 50%;
+        grid-auto-columns: 24px;
+
+        border-width: 0 0 0 1px;
+        border-color: inputs.$border-color-default;
+        border-style: solid;
+        
+        .spin-button {
+            // general resets
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            border-width: 0;
+            border-radius: 0;
+
+            &:first-child {
+                border-top-right-radius: inputs.$border-radius - inputs.$border-width;
+            }
+
+            &:last-child {
+                border-bottom-right-radius: inputs.$border-radius - inputs.$border-width;
+            }
+
+            display: flex;
+
+            position: relative;
+
+            background-color: inherit;
+            @include animations.background-color();
+
+            color: color.change(colors.$font-light, $alpha: 0.8);
+
+            ::deep .icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+
+                &.icon--up {
+                    transform: translate(-50%, -50%) rotate(270deg);
+                }
+
+                &.icon--down {
+                    transform: translate(-50%, -50%) rotate(90deg);
+                }
+            }
+
+            &:focus-visible {
+                outline: none;
+            }
+        }
+    }
+
+    // interaction
+    &.focused {
+        &:not(.disabled):not(.read-only) {
+            border-color: colors.$accent;
+        }
+    }
+
+    &:hover {
+        &:not(.disabled):not(.read-only) {
+            border-color: colors.$accent-hover;
+        }
+    }
+
+    &:not(.disabled):not(.read-only) {
+        .spin-button:hover {
+            background-color: color.adjust(colors.$font-light, $lightness: -11%, $alpha: -0.9);
+        }
+    }
+}

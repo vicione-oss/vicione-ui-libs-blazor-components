@@ -1,0 +1,31 @@
+﻿{
+    "Arguments": "--no-source-map --style=compressed",
+    "ScopedCssFolders": [
+        "AdvancedErrorBoundary",
+        "Button",
+        "CheckBox",
+        "ComboBox",
+        "AdvancedErrorBoundary",
+        "ContentLoadingIndication",
+        "ContextMenu",
+        "EditorLayout",
+        "ExpandableMenu",
+        "Grid",
+        "LoadingSpinner",
+        "Popup",
+        "PropertyGrid",
+        "SearchBox",
+        "SectionRail",
+        "Sidebar",
+        "SpinEdit",
+        "Switch",
+        "TextBox",
+        "Tooltip"
+    ],
+    "Compilations": [
+        {
+            "Source": "Styles/icons/_bundle.scss",
+            "Target": "wwwroot/icons/bundle.css"
+        }
+    ]
+}

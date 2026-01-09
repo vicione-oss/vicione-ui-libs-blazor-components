@@ -1,0 +1,17 @@
+﻿@use "../../../Styles/design/scrollbar" as scrollbar;
+
+.left-pane {
+    grid-area: left-pane;
+
+    height: 100%;
+    overflow: auto;
+
+    margin-right: var(--grid-element-spacing);
+    
+    border-top-left-radius: var(--grid-element-border-top-left-radius);
+    border-bottom-left-radius: var(--grid-element-border-bottom-left-radius);
+
+    background: var(--grid-element-background);
+
+    @include scrollbar.adjust-styles();
+}

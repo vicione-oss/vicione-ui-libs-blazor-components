@@ -1,0 +1,26 @@
+﻿{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitOverride": true,
+        "skipLibCheck": true,
+        "paths": {
+            "/_content/ViciOne.Ui.Blazor.Components/js/pointer-capture.js": [ "./Scripts/PointerCapture.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-extensions.js": [ "./Scripts/PointerEventMixins.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/context-menu/enums/mouse-leave-direction.js": [ "./ContextMenu/Enums/MouseLeaveDirection.cs.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/child-context-menu-position.js": [ "./ContextMenu/Models/ChildContextMenuPosition.cs.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/context-menu-position.js": [ "./ContextMenu/Models/ContextMenuPosition.cs.ts" ]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

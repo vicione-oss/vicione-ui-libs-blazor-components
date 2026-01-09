@@ -1,0 +1,27 @@
+﻿@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models
+@using ViciOne.Ui.Blazor.Components.Resources.PropertyGrid
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@if (ShowHeader)
+{
+    <div class="property-group@(IsSubGroup ? " sub-group" : string.Empty)" style="--indent-mult: @(SubGroupLayer);" @onclick="@OnPropertyGroupContainerClick">
+
+        <div class="group-dropdown@(_expanded ? " expanded" : string.Empty)">
+            <MonochromeIcon CssClass="icon" Name="MonochromeIconName.Chevron" Size="MonochromeIconSize.Small" />
+        </div>
+
+        <span class="group-name@(_isDescriptionAvailable ? string.Empty : " stretched")">
+            @Header
+        </span>
+
+        @if (_isDescriptionAvailable)
+        {
+            <span class="group-description" title="@Description">
+                @Description
+            </span>
+        }
+    </div>
+}
+
+<PropertyEntrySet IndentationMultiplier="SubGroupLayer" Items="Items" Visible="_expanded" KeepMessages="@KeepMessages" />

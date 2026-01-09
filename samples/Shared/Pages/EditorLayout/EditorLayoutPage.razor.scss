@@ -1,0 +1,22 @@
+﻿@use "../../Styles/mixins";
+
+.left, .top, .right, .center, .bottom, .debug {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    height: 100%
+}
+
+.left, .top, .right, .bottom, .debug {
+    @include mixins.dotted-border();
+}
+
+.top, .bottom {
+    border-left-width: 0;
+    border-right-width: 0;
+}
+
+.debug {
+    border-left-width: 0;
+}

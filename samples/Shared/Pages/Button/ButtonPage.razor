@@ -1,0 +1,47 @@
+﻿@page "/button"
+
+@using Shared.Extensions
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Button.Extensions
+@using ViciOne.Ui.Blazor.Components.Factories
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+@using ViciOne.Ui.MonochromeIcons.Core.Extensions
+
+<h3>Enabled / Disabled</h3>
+
+<div class="inline-grid">
+    <Button Enabled="true" Text="Enabled" />
+    <Button Enabled="false" Text="Disabled" />
+</div>
+
+<h3>Size</h3>
+
+<div class="inline-grid">
+    @foreach (var buttonSize in TypeSafeEnumFactory<ButtonSize>.CreateAll().Reverse())
+    {
+        <Button Size="buttonSize" Text="@buttonSize.GetName()" />
+    }
+</div>
+
+<h3>Icon and text</h3>
+
+<div class="inline-grid">
+    @foreach (var buttonSizeName in TypeSafeEnumFactory<ButtonSize>.CreateAll().Reverse())
+    {
+        var iconCssClass = MonochromeIconName.Edit.GetCssClasses(buttonSizeName.ToMonochromeIconSize()).ToSpaceSeparated();
+
+       <Button Size="buttonSizeName" IconCssClass="@iconCssClass" Text="@buttonSizeName.GetName()" />
+    }
+</div>
+
+<h3>Icon only</h3>
+
+<div class="inline-grid">
+    @foreach (var buttonSizeName in TypeSafeEnumFactory<ButtonSize>.CreateAll().Reverse())
+    {
+        var iconCssClass = MonochromeIconName.Edit.GetCssClasses(buttonSizeName.ToMonochromeIconSize()).ToSpaceSeparated();
+
+        <Button Size="buttonSizeName" IconCssClass="@iconCssClass" />
+    }
+</div>

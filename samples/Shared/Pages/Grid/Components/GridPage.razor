@@ -1,0 +1,100 @@
+﻿@page "/grid"
+
+@using Shared.Extensions
+@using Shared.Pages.Grid.Models
+@using ViciOne.Ui.Blazor.Components.Grid.Components
+@using ViciOne.Ui.Blazor.Components.Grid.Components.ActionButtons
+@using ViciOne.Ui.Blazor.Components.Grid.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Grid.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Grid.Components.Panes
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<div class="layout">
+    <div class="virtualize-wrapper">
+        <div>
+            Virtualize
+        </div>
+        <Switch @bind-Value="_virtualize" />
+    </div>
+
+    <div class="grid-example">
+        <Grid Items="_itemsQueryable" CssClass="sample-grid" Virtualize="_virtualize">
+            <ActionButtons>
+                <AddGridActionButton OnClick="AddGridItem" />
+                <EditGridActionButton Enabled="false" />
+                <DeleteGridActionButton />
+                <GridActionButton IconCssClass="@_toggleLeftPaneGridActionButtonIconCssClass" Text="Left pane" OnClick="@ToggleLeftPane" />
+            </ActionButtons>
+
+            <Filter>
+                <GridFilterControl @bind-Text="@_filterText" @bind-Text:after="@ApplyFilter" />
+            </Filter>
+
+            <ChildContent>
+                @if (_hasLeftPane)
+                {
+                    <LeftPane CssClass="left-pane--customization">
+                        <p>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                            ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </p>
+
+                        <p>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </p>
+                    </LeftPane>
+                }
+
+                <ItemSelectColumn KeySelector="@(item => item.Id)" Selection="@ItemSelection" />
+
+                <TemplateColumn Title="Key">
+                    @{
+                        var key = new MarkupString(context.Key);
+
+                        if (context.Key == "Foo")
+                            key = key.MakeBold();
+
+                        if (_filterApplied)
+                            key = key.WithHighlightedText(_filterText);
+
+                        @key
+                    }
+                </TemplateColumn>
+
+                <TemplateColumn Title="Value">
+                    @{
+                        var value = new MarkupString(context.Value);
+
+                        if (context.Value.StartsWith("Dolor"))
+                            value = value.MakeItalic();
+
+                        if (_filterApplied)
+                            value = value.WithHighlightedText(_filterText);
+
+                        @value
+                    }
+                </TemplateColumn>
+
+                <PropertyColumn Property="@(item => item.Timestamp)" />
+
+                <NavigationColumn NavigationButtonTitle="Show details" Navigate="@((ExampleGridItem item) => ShowDetails(item))" />
+            </ChildContent>
+
+            <Footer>
+                <SelectionFooter GridSelection="ItemSelection" />
+            </Footer>
+        </Grid>
+
+        @if (_showDetailSource is not null)
+        {
+            <h4>Details</h4>
+
+            <p>
+                <code>Id</code> is <code>@_showDetailSource.Id</code>
+            </p>
+        }
+    </div>
+</div>

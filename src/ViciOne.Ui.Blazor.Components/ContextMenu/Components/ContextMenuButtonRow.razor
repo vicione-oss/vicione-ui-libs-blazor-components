@@ -1,0 +1,32 @@
+﻿@inherits ContextMenuItemBase
+
+@if (ShouldBeShown())
+{
+    if (BeginGroup)
+    {
+        @ContextMenuSeparator.Render
+    }
+
+    <li role="none">
+        <div role="menuitem" class="context-menu-button-row">
+            @if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <span class="title">@Title</span>
+            }
+
+            <div class="button-container" style="--button-count: @_buttons.Count;">
+
+                @if (ChildContent is not null)
+                {
+                    <CascadingValue Value="this" IsFixed="true">
+                        <CascadingValue Value="ItemFilter">
+                            <CascadingValue Value="CascadingApplicableTo">
+                                @ChildContent(this)
+                            </CascadingValue>
+                        </CascadingValue>
+                    </CascadingValue>
+                }
+            </div>
+        </div>
+    </li>
+}

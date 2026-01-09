@@ -1,0 +1,14 @@
+﻿.popup-cell {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    // our layer might overlay other visible UI elements,
+    // so we need to make sure clicks are not registered on our layer,
+    // instead clicks should be propagated to underlying visible UI elements
+    pointer-events: none;
+
+    & ::deep > * {
+        pointer-events: initial; // reverts pointer-events: none from outer layer to ensure elements in popup cell are clickable
+    }
+}

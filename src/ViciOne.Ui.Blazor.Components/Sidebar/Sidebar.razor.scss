@@ -1,0 +1,48 @@
+﻿.sidebar {
+    position: relative;
+    width: var(--width);
+    height: 100%;
+
+    $box-shadow-width: 5px;
+    $mover-width: 10px;
+
+    .content {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .mover {
+        position: absolute;
+        width: $mover-width;
+        top: 0;
+        bottom: 0;
+        cursor: col-resize;
+    }
+
+    .mover-ghost {
+        position: fixed;
+        width: unset;
+        height: unset;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    &.sidebar--left {
+        box-shadow: $box-shadow-width 0 8px -2px rgb(0 0 0 / 40%);
+
+        .mover {
+            right: -$mover-width;
+        }
+    }
+
+    &.sidebar--right {
+        box-shadow: -$box-shadow-width 0 8px -2px rgb(0 0 0 / 40%);
+
+        .mover {
+            left: -$mover-width;
+        }
+    }
+}

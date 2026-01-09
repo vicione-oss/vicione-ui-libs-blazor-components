@@ -1,0 +1,31 @@
+﻿@mixin dotted-border() {
+    border-width: 2px;
+    border-style: dotted;
+    border-color: rgba(255, 150, 0, 1);
+}
+
+@mixin header-and-content-padding() {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@mixin options-styling() {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-auto-flow: row;
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 8px;
+
+    .option {
+        display: contents;
+
+        & > *:first-child {
+            grid-column: 1;
+        }
+
+        & > *:last-child {
+            grid-column: 2;
+        }
+    }
+}

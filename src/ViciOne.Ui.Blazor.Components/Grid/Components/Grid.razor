@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.Components.Sections
+@using ViciOne.Ui.Blazor.Components.Grid.Components.Footers
+
+@typeparam TGridItem
+
+@{
+    var gridContainerCssClasses = new List<string> { "grid-container" };
+    var contentCssClasses = new List<string> { "content" };
+    var quickGridItemSize = 33;
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        gridContainerCssClasses.AddRange(CssClass.Split(" "));
+
+    if (Virtualize)
+        contentCssClasses.Add("content--virtualized");
+}
+
+<div class="@string.Join(" ", gridContainerCssClasses)">
+    @if (ActionButtons is not null)
+    {
+        <div class="action-buttons">
+            @ActionButtons
+        </div>
+    }
+
+    @if (Filter is not null)
+    {
+        <div class="filter">
+            @Filter
+        </div>
+    }
+
+    <SectionOutlet SectionId="@_leftPaneSectionId" />
+
+    <div class="@string.Join(" ", contentCssClasses)" style="--quickgrid-item-size: @(quickGridItemSize)px">
+
+        <CascadingValue Value="_leftPaneSectionId" IsFixed="true">
+            <CascadingValue Value="this" IsFixed="true">
+                <QuickGrid @key="Virtualize" Items="Items" ChildContent="ChildContent" Virtualize="Virtualize" ItemSize="quickGridItemSize" />
+            </CascadingValue>
+        </CascadingValue>
+    </div>
+
+    <div class="footer">
+        <CascadingValue Value="@(Items is null ? 0 : Items.Count())">
+            @if (Footer is not null)
+            {
+                @Footer
+            }
+            else
+            {
+                <DefaultFooter />
+            }
+        </CascadingValue>
+    </div>
+</div>

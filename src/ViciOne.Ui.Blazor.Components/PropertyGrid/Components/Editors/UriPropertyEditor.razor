@@ -1,0 +1,23 @@
+﻿@using ViciOne.Ui.Blazor.Components.TextBox
+
+@inherits PropertyEditorBase<Uri?>
+
+@{
+    var placeholder = AllowNull ? Constants.NullPlaceholder : null;
+
+    var valid = !_valueEnteredInvalid;
+
+    if (Valid.HasValue)
+        valid &= Valid.Value;
+}
+
+<TextBox Placeholder="@placeholder"
+         Value="@_valuePassed"
+         ValueChanged="@TextBoxValueChangedAsync"
+         Enabled="@Enabled"
+         ReadOnly="@ReadOnly"
+         Valid="@valid"
+         UpdateKey="@_updateKey"
+         EnterPressed="@TextBoxEnterPressedAsync"
+         EscapePressed="@TextBoxEscapePressedAsync"
+         @ref="InnerEditorComponentReference" />

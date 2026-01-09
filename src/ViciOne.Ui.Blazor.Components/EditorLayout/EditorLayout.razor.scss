@@ -1,0 +1,48 @@
+﻿@use "../Styles/design/scrollbar" as scrollbar;
+
+.editor-layout {
+    height: 100%;
+
+    display: grid;
+    grid-template-areas: "content debug";
+    grid-template-columns: 1fr auto;
+
+    .content {
+        grid-area: content;
+
+        display: grid;
+        grid-template-areas:
+            "left top right"
+            "left center right"
+            "left bottom right";
+        grid-template-columns: max-content auto max-content;
+        grid-template-rows: auto 1fr auto;
+
+        .content__left {
+            grid-area: left;
+        }
+
+        .content__top {
+            grid-area: top;
+        }
+
+        .content__right {
+            grid-area: right;
+        }
+
+        .content__center {
+            grid-area: center;
+
+            // ensure that the center area reduces its dimension when left, top, right
+            // and bottom content needs more space
+            overflow: auto;
+            @include scrollbar.adjust-styles();
+
+            position: relative; // give content with absolute positioning something to align on
+        }
+
+        .content__bottom {
+            grid-area: bottom;
+        }
+    }
+}

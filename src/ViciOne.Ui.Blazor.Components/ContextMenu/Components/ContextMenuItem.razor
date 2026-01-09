@@ -1,0 +1,52 @@
+﻿@inherits ContextMenuItemBase
+
+@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Resources.ContextMenu
+
+@if (ShouldBeShown())
+{
+    var cssClasses = new List<string> { "context-menu-item" };
+
+    if (!Enabled)
+        cssClasses.Add("disabled");
+
+    if (this.IsAnyIconParameterSet())
+        cssClasses.Add("with-icon");
+
+    var attributes = new Dictionary<string, object>();
+
+    if (Enabled)
+        attributes.Add("tabindex", "0");
+
+    if (BeginGroup)
+    {
+        @ContextMenuSeparator.Render
+    }
+
+    <li role="none">
+        <div role="menuitem"
+             class="@string.Join(" ", cssClasses)"
+             @attributes="attributes"
+             @onclick="MenuItemClickAsync"
+             @onmouseenter="MenuItemMouseEnterAsync"
+             @ref="_htmlElementReference">
+
+            @Shared.RenderFragments.Icon(this)
+
+            <span class="text">@Text</span>
+
+            @if (ChildContent is not null)
+            {
+                <div class="chevron">
+                    @((MarkupString)SvgIcons.ChevronRightSmall)
+                </div>
+
+                <ContextMenu ApplicableTo="CascadingApplicableTo"
+                             VisibilityChanged="ChildContentContextMenuVisibilityChangedAsync"
+                             @ref="_childContextMenu">
+                    @ChildContent(this)
+                </ContextMenu>
+            }
+        </div>
+    </li>
+}

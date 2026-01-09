@@ -1,0 +1,27 @@
+﻿@use "./../../Styles/design/colors";
+@use "./../../Styles/design/popup";
+
+.pre-render-container {
+    visibility: collapse;
+}
+
+.tooltip-container {
+    color: colors.$font;
+    font-size: 11px;
+    height: min-content;
+    left: var(--position-x);
+    line-height: 14px;
+    min-width: 100px;
+    pointer-events: none;
+    position: fixed;
+    top: var(--position-y);
+    z-index: var(--position-z);
+
+    & ::deep > * {
+        // some visible parameters set here to allow tooltip implementations to override these parameters
+        background-color: colors.$background-darker;
+        border-radius: popup.$border-radius;
+        box-shadow: popup.$box-shadow;
+        width: min-content;
+    }
+}

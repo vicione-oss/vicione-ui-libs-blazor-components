@@ -1,0 +1,70 @@
+﻿@use "../../../Styles/design/colors";
+@use "../../../Styles/design/typography";
+@use "../../../Styles/animations/mixins" as animations;
+@use "../../../Styles/inputs/mixins" as inputs;
+
+@use "sass:color";
+
+.grid-action-button {
+    // general resets
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border-width: 0;
+
+    // general styles
+    $height: 24px;
+
+    height: $height;
+    border-radius: 3px;
+    background-color: inherit;
+    color: color.change(colors.$font-light, $alpha: 0.8);
+
+    font-family: inherit;
+    font-weight: typography.$font-weight-extra-light;
+    letter-spacing: 0.4px;
+
+    display: inline-grid;
+    grid-template-areas: "icon text";
+
+    $icon-margin-left: 0px;
+    grid-template-columns: auto minmax($icon-margin-left, 1fr); // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+    align-items: center;
+
+    @include animations.multiple($color: true, $background-color: true);
+
+    ::deep .icon {
+        grid-area: icon;
+
+        width: 24px;
+        height: $height;
+    }
+
+    .text {
+        grid-area: text;
+
+        font-size: 12px;
+        line-height: 12px;
+
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    // interaction
+    @include inputs.disabled-style();
+
+    &:not(:disabled) {
+        cursor: pointer;
+
+        &:hover {
+            color: colors.$font-light;
+            background-color: color.change(colors.$font-light, $alpha: 0.05);
+        }
+    }
+
+    &:focus {
+        outline: none;
+        color: colors.$font-light;
+        background-color: color.change(colors.$font-light, $alpha: 0.05);
+    }
+}

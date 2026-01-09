@@ -1,0 +1,25 @@
+﻿@using ViciOne.Ui.Blazor.Components.Shared
+
+@{
+    var cssClasses = new List<string> { "grid-action-button" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    var additionalAttributes = new Dictionary<string, object>();
+
+    if (!string.IsNullOrWhiteSpace(Title))
+        additionalAttributes.Add("title", Title);
+
+    if (!Enabled)
+        additionalAttributes.Add("disabled", "disabled");
+}
+
+<button type="button" class="@string.Join(" ", cssClasses)" @onclick="@ButtonClickAsync" @attributes="@additionalAttributes">
+    @RenderFragments.Icon(this)
+
+    @if (!string.IsNullOrWhiteSpace(Text))
+    {
+        <div class="text">@Text</div>
+    }
+</button>

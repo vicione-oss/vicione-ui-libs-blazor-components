@@ -1,0 +1,58 @@
+﻿@page "/content-loading-indication"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication
+@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication.Enums
+@using ViciOne.Ui.Blazor.Components.Factories
+@using ViciOne.Ui.Blazor.Components.LoadingSpinner.Components
+
+<h3>ComboBox</h3>
+
+<ContentLoadingIndication Visible="@_comboBoxLoadingIndicationVisible" Kind="@_comboBoxLoadingIndicationKind">
+    <ComboBox Items="@_comboBoxItems" ValueSelector="@(i => i.Value)" TextSelector="@(i => i.Text)" @bind-Value="_comboBoxSelectedItem" />
+</ContentLoadingIndication>
+
+<p>
+    @foreach (var k in TypeSafeEnumFactory<LoadingIndicationKind>.CreateAll())
+    {
+        var buttonText = k.ToString();
+
+        <Button Text="@buttonText" OnClick="@(async () => await ReloadComboBoxAsync(k))" />
+    }
+</p>
+
+<h3>Plain text</h3>
+
+<ContentLoadingIndication Visible="@_plainTextLoadingIndicationVisible" Kind="@_plainTextLoadingIndicationKind">
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+    aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+    no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+    justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+</ContentLoadingIndication>
+
+<p>
+    @foreach (var k in TypeSafeEnumFactory<LoadingIndicationKind>.CreateAll())
+    {
+        var buttonText = k.ToString();
+
+        <Button Text="@buttonText" OnClick="@(async () => await ReloadPlainTextAsync(k))" />
+    }
+</p>
+
+<h3>No animated transition on first render cycle</h3>
+
+@foreach (var k in TypeSafeEnumFactory<LoadingIndicationKind>.CreateAll())
+{
+    <div>
+        <ContentLoadingIndication Visible="@_noAnimatedTransitionOnFirstRenderContentLoadingIndicationVisible" Kind="@k">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+        </ContentLoadingIndication>
+    </div>
+} 
+
+<p>
+    <Button Text="Toggle Visible" OnClick="@ToggleVisible" />
+</p>

@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
+    <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+    <PackageReference Include="StronglyTypedId" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="ViciOne.Ui.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.Localization" />
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Assets">
+      <PrivateAssets>all</PrivateAssets><!-- avoids include of CSS isolation bundle -->
+      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Components" />
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ViciOne.Ui.Blazor.Components\ViciOne.Ui.Blazor.Components.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="sasscompiler.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
+    <ItemGroup>
+      <MonochromeIcon Include="align-bottom" Size="16" />
+      <MonochromeIcon Include="align-left" Size="16" />
+      <MonochromeIcon Include="align-right" Size="16" />
+      <MonochromeIcon Include="align-top" Size="16" />
+      <MonochromeIcon Include="dataflow-solid" Size="24;32" />
+      <MonochromeIcon Include="edit" Size="16;24;32" />
+      <MonochromeIcon Include="filter-light" Size="16" />
+      <MonochromeIcon Include="folder" Size="24" />
+      <MonochromeIcon Include="hamburger-menu" Size="24" />
+      <MonochromeIcon Include="info-outlined" Size="24;32" />
+      <MonochromeIcon Include="open" Size="16;24" />
+      <MonochromeIcon Include="reload" Size="16" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <MonochromeIconSvgOutputFolder>$(MSBuildProjectDirectory)/wwwroot/icons/monochrome-icons</MonochromeIconSvgOutputFolder>
+      <MonochromeIconScssOutputFolder>$(MSBuildProjectDirectory)/Styles/icons/monochrome-icons</MonochromeIconScssOutputFolder>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
+    <PropertyGroup>
+      <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
+      <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
+    </PropertyGroup>
+  </Target>
+
+</Project>

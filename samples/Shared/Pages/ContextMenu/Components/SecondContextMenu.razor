@@ -1,0 +1,17 @@
+﻿@using Shared.Pages.ContextMenu.Models
+@using Shared.Pages.ContextMenu.Services
+@using ViciOne.Ui.Blazor.Components.ContextMenu.Components
+
+@inherits SpecializedContextMenuWithStateBase<SecondContextMenuContext, SecondContextMenuState>
+
+<ContextMenu @ref="ContextMenu"
+             ApplicableTo="new(typeof(SecondContextMenuModel))"
+             VisibilityChanged="@ContextMenuVisibilityChangedAsync">
+
+    <ContextMenuHeader Text="Second context menu" />
+
+    <ContextMenuItem BeginGroup=true
+                     IconCssClass="@_editIcon"
+                     OnClick="@OnItemClickedAsync"
+                     Text="The only item" />
+</ContextMenu>

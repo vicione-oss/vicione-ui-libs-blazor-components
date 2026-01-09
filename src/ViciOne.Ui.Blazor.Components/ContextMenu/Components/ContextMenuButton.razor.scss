@@ -1,0 +1,32 @@
+﻿@use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/design/colors";
+
+.context-menu-button {
+    align-items: center;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    padding: 0px;
+
+    border-radius: 2px;
+
+    background-color: transparent;
+    @include animations.background-color();
+
+    ::deep .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    &.disabled {
+        opacity: 0.5;
+    }
+
+    &:not(.disabled) {
+        cursor: pointer;
+
+        &:focus, &:hover {
+            background-color: colors.$background-light-hover;
+        }
+    }
+}

@@ -1,0 +1,8 @@
+@use "sass:color";
+
+.custom-theme {
+    --vo-ui-bc-color-accent: green;
+    --vo-ui-bc-color-accent-hover: pink;
+    --vo-ui-bc-text-box-background-color: #{color.adjust(green, $lightness: -15%)};
+    --vo-ui-bc-text-box-color: lightblue;
+}

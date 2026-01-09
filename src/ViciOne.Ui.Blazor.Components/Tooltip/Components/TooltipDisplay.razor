@@ -1,0 +1,39 @@
+@using ViciOne.Ui.Blazor.Components.Tooltip.Models
+
+<div class="tooltip-display-container">
+    @{
+        var tooltipIndex = 0;
+        foreach (var tooltip in _renderingTooltips.Where(t => t.PreRendered && t.Displaying))
+        {
+            if (tooltip.Ignore)
+                continue;
+
+            var rootPosition = GetTooltipRootPosition(tooltip);
+
+            <div class="tooltip-container"
+                 id="@(tooltip.Id)"
+                 style="--position-x: @(rootPosition.X)px;
+                        --position-y: @(rootPosition.Y)px;
+                        --position-z: @(_tooltipService.BaseZIndex + tooltipIndex)">
+
+                @tooltip.Content
+            </div>
+
+            tooltipIndex++;
+        }
+    }
+
+    <div class="pre-render-container">
+        @foreach (var tooltip in _renderingTooltips.Where(t => !t.PreRendered))
+        {
+            <div class="tooltip-container"
+                 id="@(tooltip.Id)"
+                 style="--position-x: @(tooltip.Position.X)px;
+                        --position-y: @(tooltip.Position.Y)px;
+                        --position-z: 0;">
+
+                @tooltip.Content
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,59 @@
+﻿@page "/spin-edit"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<h3>Options</h3>
+
+<div class="options">
+    <div class="option">
+        <div>
+            IsRastered (allow only multiple of <code>Interval</code> as input)
+        </div>
+        <div>
+            <Switch @bind-Value="_isRastered" />
+        </div>
+    </div>
+</div>
+
+<h3>Unbound / <code>Interval</code> 10</h3>
+
+<SpinEdit Value="@_unboundSpinEditValue" Interval="10" Minimum="30" Maximum="200" IsRastered="_isRastered" @ref="_unboundSpinEdit" />
+
+<p>
+    <Button Text="Get value" Size="ButtonSize.Small" OnClick="GetUnboundSpinEditValueClick" />
+
+    <span>&nbsp;>&nbsp;</span> @_unboundSpinEditValue
+</p>
+
+<h3>Value / <code>Interval</code> 10</h3>
+
+<SpinEdit @bind-Value="@_value" Interval="10" Minimum="30" Maximum="200" IsRastered="_isRastered" />
+
+contains @_value
+
+<h3>Nullable value / <code>Interval</code> 5</h3>
+
+<SpinEdit @bind-Value="@_nullableValue" Interval="5" Minimum="5" Maximum="220" IsRastered="_isRastered" />
+
+contains @(_nullableValue is null ? "null" : _nullableValue.ToString())
+
+<h3>Enum value / <code>Interval</code> 1</h3>
+
+<SpinEdit @bind-Value="@_buttonSize" Interval="1" Minimum="_buttonSizeFirst" Maximum="_buttonSizeLast" IsRastered="_isRastered" />
+
+contains @(_buttonSize.GetName())
+
+<h3>Read-only</h3>
+
+<SpinEdit Value="@_value" Interval="1" Minimum="10" Maximum="220" ReadOnly="true" IsRastered="_isRastered" />
+
+<h3>Disabled</h3>
+
+<SpinEdit Value="@_value" Interval="1" Minimum="10" Maximum="220" Enabled="false" IsRastered="_isRastered" />
+
+<h3>Invalid</h3>
+
+<SpinEdit Value="@_value" Interval="1" Minimum="10" Maximum="220" IsRastered="_isRastered" Valid="false" />

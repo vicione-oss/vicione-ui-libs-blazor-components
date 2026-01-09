@@ -1,0 +1,45 @@
+﻿@page "/search-box"
+
+@using Shared.Extensions
+@using ViciOne.Ui.Blazor.Components.SearchBox
+
+<h3>Search by click on search icon or Enter key press</h3>
+
+<div class="grid-container">
+    <div class="search-box-container">
+        <SearchBox Text="@_searchBoxText"
+                   TextChanged="@SearchBoxTextChanged"
+                   CssClass="demo-1-search-box"
+                   ExecuteSearch="@SearchBoxExecuteSearch" />
+    </div>
+    <span class="search-term">Search term: @_demo1SearchTerm</span>
+
+    <div class="search-result">
+        <p>@_loremText1.WithHighlightedText(_demo1SearchTerm)</p>
+    </div>
+</div>
+
+<h3>Search while typing</h3>
+
+<div class="grid-container">
+    <div class="search-box-container">
+        <SearchBox @bind-Text="@_demo2SearchTerm" />
+    </div>
+    <span class="search-term">Search term: @_demo2SearchTerm</span>
+
+    <div class="search-result">
+        <p>@_loremText2.WithHighlightedText(_demo2SearchTerm)</p>
+    </div>
+</div>
+
+<h3>Placeholder</h3>
+
+<SearchBox Placeholder="Lorem ipsum" />
+
+<h3>Custom icon</h3>
+
+<SearchBox Placeholder="Lorem ipsum" IconCssClass="@_customIconCssClass" />
+
+<h3>Disabled</h3>
+
+<SearchBox Enabled="false" />

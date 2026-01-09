@@ -1,0 +1,292 @@
+﻿@using ViciOne.Ui.Blazor.Components.CheckBox
+@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Interfaces
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Components.Editors
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Messages
+@using ViciOne.Ui.Blazor.Components.Resources.PropertyGrid
+@using ViciOne.Ui.Blazor.Components.TextBox
+@using ViciOne.Ui.Blazor.Components.Tooltip.Components
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@typeparam TPropertyValue
+
+@if (IsVisible())
+{
+    var hasValueDifferentFromDefaultValue = HasValueDifferentFromDefaultValue();
+    var informationToolTipText = PropertyGridItem.InformationTooltipText;
+    var infomationVisible = !string.IsNullOrWhiteSpace(informationToolTipText);
+    var hasMultipleValues = _value is null;
+    var editorEnabled = true;
+    var editorAllowsValueSelection = false;
+    var hasWizard = _hasWizard;
+
+    var cssClasses = new List<string> { "property-row" };
+
+    if (!_visible)
+        cssClasses.Add("hidden");
+
+    if (hasValueDifferentFromDefaultValue)
+        cssClasses.Add("has-value-different-from-default-value");
+
+    if (hasMultipleValues)
+        cssClasses.Add("has-multiple-values");
+
+    List<ISelectableValue<TPropertyValue>>? selectableValues = null;
+    var selectionPropertyGridItem = PropertyGridItem as ISelectionPropertyGridItem<TPropertyValue>;
+    if (selectionPropertyGridItem is not null)
+    {
+        editorAllowsValueSelection = true;
+
+        selectableValues = selectionPropertyGridItem.GetUnifiedSelectableValues();
+
+        if (selectableValues is null)
+        {
+            infomationVisible = true;
+            informationToolTipText = Resources.PropertyGrid.Localization.PropertyEntry
+                .TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyExclusive;
+
+            editorEnabled = false;
+            hasWizard = false;
+        }
+        else if (selectableValues.Count == 0)
+        {
+            infomationVisible = true;
+            informationToolTipText = Resources.PropertyGrid.Localization.PropertyEntry
+                .TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound;
+
+            editorEnabled = false;
+            hasWizard = false;
+        }
+    }
+
+    <div class="@string.Join(" ", cssClasses)">
+
+        <span class="expansion-placeholder" />
+
+        <div class="property-name-container @(infomationVisible ? "information-visible" : string.Empty)"
+             style="--indent-mult: @(IndentationMultiplier);">
+
+            <TooltipContainer>
+                <ChildContent>
+                    <span @onpointerenter="@context.OnPointerEnter"
+                          @onpointerleave="@context.OnPointerLeave"
+                          @onpointermove="@context.OnPointerMove"
+                          class="property-name">
+
+                        @PropertyGridItem.DisplayName
+                    </span>
+                </ChildContent>
+
+                <TooltipContent>
+                    <div class="name-tooltip">
+                        <div class="display-name">
+                            @PropertyGridItem.DisplayName
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(PropertyGridItem.Description))
+                        {
+                            <div class="separator" />
+                            <div class="description">
+                                @PropertyGridItem.Description
+                            </div>
+                        }
+                    </div>
+                </TooltipContent>
+            </TooltipContainer>
+
+            @if (infomationVisible)
+            {
+                <TooltipContainer>
+                    <ChildContent>
+                        <div @onpointerenter="@context.OnPointerEnter"
+                             @onpointerleave="@context.OnPointerLeave"
+                             @onpointermove="@context.OnPointerMove"
+                             class="information-icon-container">
+                            <MonochromeIcon Name="MonochromeIconName.InfoOutlined" Size="MonochromeIconSize.Small" />
+                        </div>
+                    </ChildContent>
+                    
+                    <TooltipContent>
+                        <div class="information-tooltip">
+                            @informationToolTipText
+                        </div>
+                    </TooltipContent>
+                </TooltipContainer>
+            }
+        </div>
+
+        <div @onfocusin="@OnFocusInAsync" @onfocusout="@OnFocusOut" class="property-value">
+
+            @{
+                var editorComponentDescriptor = new PropertyEditorComponentDescriptor(PropertyGridItem.ValueType,
+                        editorAllowsValueSelection);
+
+                if (editorComponentDescriptor.AllowsValueSelection)
+                    PropertyEditorComponentRegistry.Add(editorComponentDescriptor, typeof(SelectionPropertyEditor<TPropertyValue>));
+
+                object? valueBoxed = null;
+                object selectableValuesBoxed = selectableValues ?? new List<ISelectableValue<TPropertyValue>>();
+
+                if (hasMultipleValues)
+                    valueBoxed = null;
+                else if (_value is not null)
+                    valueBoxed = _value.Value;
+
+                if (valueBoxed is null)
+                {
+                    // Value that is going to be passed to component is null...
+
+                    var editorComponentValueType = editorComponentDescriptor.ValueType;
+
+                    if (editorComponentValueType.IsValueType && !editorComponentValueType.IsNullableValueType())
+                    {
+                        // ... but at this stage an editor component for non-nullable values is going to be used,
+                        // hence we need to switch to an editor component that supports nullable values.
+
+                        var nullableEditorComponentValueType = editorComponentValueType.MakeNullableType();
+
+                        editorComponentDescriptor = new PropertyEditorComponentDescriptor(
+                            nullableEditorComponentValueType, editorComponentDescriptor.AllowsValueSelection);
+
+                        if (editorComponentDescriptor.AllowsValueSelection)
+                        {
+                            var makeSelectableValuesNullableDelegate = MakeSelectableValuesNullable<int>;
+                            var makeSelectableValuesNullableMethod = makeSelectableValuesNullableDelegate.Method
+                                .GetGenericMethodDefinition().MakeGenericMethod(editorComponentValueType);
+
+                            selectableValuesBoxed = makeSelectableValuesNullableMethod.Invoke(null, [selectableValuesBoxed])!;
+
+                            var nullableSelectionPropertyEditorComponentType = typeof(SelectionPropertyEditor<>)
+                                .MakeGenericType(nullableEditorComponentValueType);
+
+                            PropertyEditorComponentRegistry.Add(editorComponentDescriptor,
+                                nullableSelectionPropertyEditorComponentType);
+                        }
+                        else
+                        {
+                            // For values that should not be selectable, we don't need to switch to another editor component
+                            // because a suitable editor component is registered in PropertyEditorComponentRegistry.
+                        }
+                    }
+                }
+
+                if (PropertyEditorComponentRegistry.TryGet(editorComponentDescriptor, out var editorComponentType))
+                {
+                    var editorComponentParameters = new Dictionary<string, object>
+                    {
+                        { nameof(PropertyEditorBase<TPropertyValue>.Value), valueBoxed! },
+                        { nameof(PropertyEditorBase<TPropertyValue>.ValueChanged), CreateValueChangedCallback(editorComponentDescriptor.ValueType) },
+
+                        { nameof(PropertyEditorBase<TPropertyValue>.Enabled), PropertyGridItem.Enabled && editorEnabled },
+                        { nameof(PropertyEditorBase<TPropertyValue>.ReadOnly), PropertyGridItem.ReadOnly }
+                    };
+
+                    if (editorComponentDescriptor.AllowsValueSelection)
+                    {
+                        editorComponentParameters.Add(nameof(SelectionPropertyEditor<TPropertyValue>.SelectableValues), selectableValuesBoxed);
+                        editorComponentParameters.Add(nameof(SelectionPropertyEditor<TPropertyValue>.NoOptionSelected), hasMultipleValues);
+                    }
+
+                    if (editorComponentType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(INumericPropertyEditor<,>)) &&
+                        PropertyGridItem is INumericPropertyGridItem numericPropertyGridItem)
+                    {
+                        editorComponentParameters.Add(nameof(INumericPropertyEditor<int, int>.Interval), numericPropertyGridItem.GetIntervalBoxed());
+                        editorComponentParameters.Add(nameof(INumericPropertyEditor<int, int>.Minimum), numericPropertyGridItem.GetMinimumBoxed());
+                        editorComponentParameters.Add(nameof(INumericPropertyEditor<int, int>.Maximum), numericPropertyGridItem.GetMaximumBoxed());
+                        editorComponentParameters.Add(nameof(INumericPropertyEditor<int, int>.IsRastered), numericPropertyGridItem.IsRasteredValue);
+                    }
+
+                    if (typeof(IHasAllowNull).IsAssignableFrom(editorComponentType))
+                        editorComponentParameters.Add(nameof(IHasAllowNull.AllowNull), PropertyGridItem.CanBeSetToNull);
+
+                    if (typeof(IHasUpdateKey).IsAssignableFrom(editorComponentType))
+                        editorComponentParameters.Add(nameof(IHasUpdateKey.UpdateKey), _updateKey!);
+
+                    if (typeof(IHasValueParseError).IsAssignableFrom(editorComponentType))
+                        editorComponentParameters.Add(nameof(IHasValueParseError.ValueParseError), CreateValueParseErrorCallback());
+
+                    if (typeof(IHasEnterPressed<>).MakeGenericType(editorComponentDescriptor.ValueType).IsAssignableFrom(editorComponentType))
+                        editorComponentParameters.Add(nameof(IHasEnterPressed<TPropertyValue>.EnterPressed), CreateEnterPressedCallback(editorComponentDescriptor.ValueType));
+
+                    if (typeof(IHasEscapePressed<>).MakeGenericType(editorComponentDescriptor.ValueType).IsAssignableFrom(editorComponentType))
+                        editorComponentParameters.Add(nameof(IHasEscapePressed<TPropertyValue>.EscapePressed), CreateEscapePressedCallback(editorComponentDescriptor.ValueType));
+
+                    editorComponentParameters.Add(nameof(PropertyEditorBase<TPropertyValue>.Valid), IsValid());
+
+                    <DynamicComponent Type="editorComponentType" Parameters="editorComponentParameters" @ref="_dynamicComponent" />
+                }
+            }
+
+            @if (HasErrorMessages() && _showErrors)
+            {
+                <PropertyEditorTooltip HasCloseButton="@_keepMessages" OnClose="@OnCloseErrorMessageAsync">
+                    <Content>
+                        @foreach (var errorMessage in _errorMessages)
+                        {
+                            <div>
+                                @errorMessage.Text
+                            </div>
+                        }
+                    </Content>
+                </PropertyEditorTooltip>
+            }
+            else if (HasInfoMessages() && _showInfos)
+            {
+                // Processing infos in else path because we can currently display either errors or infos,
+                // hence infos have a lower priority for now.
+
+                var valueRestoredInfoMessages = _infoMessages.OfType<ValueRestoredInfoMessage>().ToList();
+
+                if (valueRestoredInfoMessages.Any())
+                {
+                    @foreach (var valueRestoredInfoMessage in valueRestoredInfoMessages)
+                    {
+                        <PropertyEditorTooltip HasCloseButton="true"
+                                               OnClose="@(() => OnCloseInfoMessagesAsync(valueRestoredInfoMessage))"
+                                               @key="valueRestoredInfoMessage">
+                            <Content>
+                                <div>
+                                    @valueRestoredInfoMessage.Text
+                                </div>
+                            </Content>
+
+                            <AfterContent>
+                                <div class="separator" />
+
+                                @foreach (var reason in valueRestoredInfoMessage.Reasons)
+                                {
+                                    <div>
+                                        @reason
+                                    </div>
+                                }
+                            </AfterContent>
+                        </PropertyEditorTooltip>
+                    }
+                }
+                else
+                {
+                    <PropertyEditorTooltip HasCloseButton="true"
+                                           OnClose="@(() => OnCloseInfoMessagesAsync(_infoMessages))">
+                        <Content>
+                            @foreach (var infoMessage in _infoMessages)
+                            {
+                                <div>
+                                    @infoMessage.Text
+                                </div>
+                            }
+                        </Content>
+                    </PropertyEditorTooltip>
+                }
+            }
+        </div>
+
+        @if (hasWizard)
+        {
+            <span class="property-wizard" @onclick="@OnPropertyWizardButtonClickedAsync" />
+        }
+    </div>
+}

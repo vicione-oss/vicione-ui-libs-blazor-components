@@ -1,0 +1,23 @@
+﻿@using ViciOne.Ui.Blazor.Components.PropertyGrid.Components.ContextMenu
+
+@typeparam TContext
+
+@if (_state is null) return;
+
+<div class="property-grid">
+    <CascadingValue Value="_controller">
+        @if (_state.GroupByCategory)
+        {
+            foreach (var g in _state.Items.ToLookup(p => p.Category).OrderBy(g => g.Key))
+            {
+                <PropertyGroup Header="@g.Key" Items="@g" ShowHeader="true" KeepMessages="@_state.KeepMessages" />
+            }
+        }
+        else
+        {
+            <PropertyEntrySet Items="@_state.Items" KeepMessages="@_state.KeepMessages" />
+        }
+    </CascadingValue>
+</div>
+
+<PropertyEntryContextMenu ServiceKey="@typeof(TContext)" VisibilityChanged="@ContextMenuVisibilityChanged" />

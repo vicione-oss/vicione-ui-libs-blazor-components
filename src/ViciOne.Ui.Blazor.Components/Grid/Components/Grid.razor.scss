@@ -1,0 +1,268 @@
+﻿@use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/design/scrollbar";
+@use "../../Styles/design/colors";
+@use "../../Styles/design/typography";
+
+@use "sass:color";
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        "action-buttons action-buttons filter"
+        "left-pane content content"
+        "footer footer footer";
+    grid-template-columns: auto 1fr 240px;
+    grid-template-rows: auto 1fr auto;
+
+    $grid-element-border-radius: 3px;
+    --grid-element-border-top-left-radius: #{$grid-element-border-radius};
+    --grid-element-border-bottom-left-radius: #{$grid-element-border-radius};
+
+     $grid-element-spacing: 4px;
+     --grid-element-spacing: #{$grid-element-spacing};
+
+     $grid-element-background: color.change(colors.$background-light, $alpha: 0.3);
+     --grid-element-background: #{$grid-element-background};
+
+    .action-buttons {
+        grid-area: action-buttons;
+
+        display: flex;
+        gap: 24px;
+        margin: 16px 0px;
+        flex-wrap: wrap;
+    }
+
+    .filter {
+        grid-area: filter;
+
+        display: grid;
+
+        margin: 16px 0px;
+    }
+
+    .content {
+        grid-area: content;
+
+        &.content--virtualized {
+            overflow: auto;
+
+            ::deep .quickgrid {
+                // The following rule ensures that the border *1 sticks to the thead element on scrolling
+                // in cases where this property is normally set to another value, like when using Bootstrap
+                border-collapse: separate;
+
+                // Make header sticky, rules adopted from https://aspnet.github.io/quickgridsamples/virtualizing
+                thead {
+                    top: 0;
+                    position: sticky;
+                    z-index: 2;
+                }
+            }
+
+            @include scrollbar.adjust-styles();
+        }
+
+        ::deep .quickgrid {
+            $column-header-padding-left-right: 16px;
+            $column-separator-width: 1px;
+
+            grid-area: grid;
+
+            width: 100%;
+
+            border-spacing: 0;
+            --col-gap: 0;
+
+            thead {
+                tr {
+                    height: 38px;
+                    background: colors.$background-dark;
+
+                    th {
+                        padding: 0;
+                        border-bottom: $grid-element-spacing solid color.adjust(colors.$background-dark, $lightness: -1%); // *1
+
+                        font-size: 14px;
+                        color: colors.$font-light;
+                        letter-spacing: 0.2px;
+                        font-weight: typography.$font-weight-extra-light;
+                        
+                        $th-overall-padding-top: 9px;
+                        $th-overall-padding-bottom: 10px;
+
+                        .col-header-content {
+                            .col-title {
+                                font-weight: inherit;
+
+                                padding-left: $column-header-padding-left-right;
+                                padding-right: $column-header-padding-left-right;
+                            }
+                        }
+
+                        &:first-child {
+                            border-top-left-radius: var(--grid-element-border-top-left-radius);
+                        }
+
+                        &:last-child {
+                            border-top-right-radius: $grid-element-border-radius;
+                        }
+
+                        &:not(:last-child) {
+                            .col-title {
+                                border-style: solid;
+                                border-color: colors.$background-darker;
+                                border-width: 0 $column-separator-width 0 0;
+                            }
+                        }
+                    }
+
+                    th:last-child {
+                        .col-header-content {
+                            padding-right: 0;
+                        }
+                    }
+                }
+            }
+
+            tbody {
+                $grid-row-height: calc(var(--quickgrid-item-size) - 1px);
+
+                position: relative;
+
+                tr {
+                    td {
+                        background: var(--grid-element-background);
+                        height: $grid-row-height;
+                        padding-bottom: 1px;
+
+                        font-size: 12px;
+                        color: color.change(colors.$font-light, $alpha: 0.8);
+                        letter-spacing: 0.4px;
+                        font-weight: typography.$font-weight-extra-light;
+
+                        padding-left: $column-header-padding-left-right;
+                        padding-right: $column-header-padding-left-right;
+
+                        &:first-child {
+                            border-bottom-left-radius: var(--grid-element-border-bottom-left-radius);
+                        }
+
+                        &:last-child {
+                            border-bottom-right-radius: $grid-element-border-radius;
+                        }
+                    }
+
+                    &:hover {
+                        background-color: color.change(colors.$font-light, $alpha: 0.05);
+                    }
+                }
+            } 
+        }
+
+        // ItemSelectColumn
+        ::deep .quickgrid {
+            $item-select-column-width: 1px; // make the column take only the space needed, min-content does not work
+            $item-select-column-padding-left: 22px;
+            $item-select-column-padding-right: 8px;
+
+            th.item-select-column {
+                width: $item-select-column-width;
+
+                .col-header-content {
+                    padding-left: $item-select-column-padding-left;
+                    padding-right: $item-select-column-padding-right;
+                }
+            }
+
+            tr {
+                td {
+                    &.item-select-column {
+                        width: $item-select-column-width;
+
+                        padding-left: $item-select-column-padding-left;
+                        padding-right: $item-select-column-padding-right;
+
+                        .check-box {
+                            display: flex; // corrects vertical alignment in cell
+                        }
+                    }
+
+                    .selected {
+                        color: colors.$accent;
+                    }
+                }
+
+                &:hover {
+                    td {
+                        .selected {
+                            color: colors.$accent-hover;
+                        }
+                    }
+                }
+            }
+        }
+
+        // NavigationColumn
+        ::deep .quickgrid {
+            tr {
+                .navigate-column {
+                    width: 1px;
+
+                    .navigate-button {
+                        visibility: hidden;
+                        display: flex;
+                        align-items: center;
+
+                        @mixin lucent-styling()
+                        {
+                            background-color: transparent;
+                            border: none;
+                            margin: 0;
+                            padding: 0;
+
+                            color: inherit;
+                            @include animations.color();
+
+                            &:hover {
+                                color: colors.$accent-hover;
+                            }
+
+                            &:focus {
+                                outline: none;
+                                color: colors.$accent;
+                            }
+                        }
+
+                        @include lucent-styling();
+                    }
+                }
+
+                &:hover {
+                    .navigate-column {
+                        .navigate-button {
+                            visibility: visible;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Pane-dependend styling
+        ::deep .left-pane + .quickgrid {
+            --grid-element-border-top-left-radius: 0;
+            --grid-element-border-bottom-left-radius: 0;
+        }
+    }
+
+    .footer {
+        grid-area: footer;
+        font-size: 12px;
+        padding: 16px;
+        color: color.change(colors.$font-light, $alpha: 0.8);
+        letter-spacing: 0.4px;
+        text-align: left;
+        font-weight: typography.$font-weight-semi-bold;
+    }
+}
+

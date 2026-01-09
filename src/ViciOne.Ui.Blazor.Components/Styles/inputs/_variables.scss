@@ -1,0 +1,7 @@
+﻿@use "../design/colors";
+
+@use "sass:color";
+
+$border-radius: 3px;
+$border-width: 1px;
+$border-color-default: color.change(colors.$theme-inverted, $alpha: 0.2);

@@ -1,0 +1,7 @@
+﻿@use "../Styles/mixins" as mixins;
+
+h1 {
+    margin-top: 10px;
+
+    @include mixins.header-and-content-padding();
+}

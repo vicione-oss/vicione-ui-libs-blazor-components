@@ -1,0 +1,10 @@
+﻿@inherits ContextMenuItemBase
+
+@if (ShouldBeShown())
+{
+    <li role="none">
+        <div role="menuitem" class="context-menu-header" @onclick:stopPropagation>
+            <span>@Text</span>
+        </div>
+    </li>
+}

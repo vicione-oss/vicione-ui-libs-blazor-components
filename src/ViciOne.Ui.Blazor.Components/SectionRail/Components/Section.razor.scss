@@ -1,0 +1,16 @@
+﻿@use "../../Styles/design/scrollbar" as scrollbar;
+
+.section {
+    grid-area: sections;
+
+    height: 100%;
+    position: relative;
+
+    overflow: auto;
+    @include scrollbar.adjust-styles();
+
+    &.hidden {
+        display: none;
+        visibility: hidden;
+    }
+}

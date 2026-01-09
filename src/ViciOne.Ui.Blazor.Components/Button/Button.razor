@@ -1,0 +1,32 @@
+﻿@using ViciOne.Ui.Blazor.Components.Button.Extensions
+@using ViciOne.Ui.Blazor.Components.Shared
+
+@{
+    var cssClasses = new List<string> { "button", Size.ToModifierCssClass() };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    var additionalAttributes = new Dictionary<string, object>();
+
+    if (!string.IsNullOrWhiteSpace(CssInline))
+        additionalAttributes.Add("style", CssInline);
+
+    if (!string.IsNullOrWhiteSpace(Title))
+        additionalAttributes.Add("title", Title);
+
+    if (!string.IsNullOrWhiteSpace(Id))
+        additionalAttributes.Add("id", Id);
+
+    if (!Enabled)
+        additionalAttributes.Add("disabled", "disabled");
+}
+
+<button type="button" class="@string.Join(" ", cssClasses)" @onclick="@ButtonClickAsync" @attributes="@additionalAttributes">
+    @RenderFragments.Icon(this)
+
+    @if (!string.IsNullOrWhiteSpace(Text))
+    {
+        <div class="text">@Text</div>
+    }
+</button>

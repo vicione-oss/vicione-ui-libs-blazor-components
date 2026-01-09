@@ -1,0 +1,105 @@
+{
+  "version": 2,
+  "dependencies": {
+    "net10.0": {
+      "Microsoft.AspNetCore.App.Internal.Assets": {
+        "type": "Direct",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "rafnWkNfJPA0nCZ5u9bFLiIhCv+aGDWBPJMejuROFMHEpsNhTdv8Cvhv+2jIH+b5485FhndbiwOQJUBMeBa6BQ=="
+      },
+      "Microsoft.AspNetCore.Components.WebAssembly.Server": {
+        "type": "Direct",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "fl9r0e2VGWcMgwBlGGVUFv84o8k1X6pxh9X3Ph6f5/hU8feqFpeqC9K9OrBXd7JhMD49GoLOl5jZW3pdp+9Fog==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.WebAssembly": "10.0.1"
+        }
+      },
+      "Roslynator.Analyzers": {
+        "type": "Direct",
+        "requested": "[4.14.1, )",
+        "resolved": "4.14.1",
+        "contentHash": "yMSjze/xMYDF6PCE60/ULWx0tttNyKAndw2KijNxbKil0FX8nvDeEneDZGma8Uifk17RlfZqIXxf1mmBmhRHjg=="
+      },
+      "Roslynator.Formatting.Analyzers": {
+        "type": "Direct",
+        "requested": "[4.14.1, )",
+        "resolved": "4.14.1",
+        "contentHash": "hALZsyELJXhj7WQw7Q7nLI7sELre8AlQIMyGxXpmpK+iBqShPcWHuJMGjIsTMa/bC8Q5xyQ4iFfRtm0bP1zisQ=="
+      },
+      "ViciOne.CodeAnalysis": {
+        "type": "Direct",
+        "requested": "[1.5.0, )",
+        "resolved": "1.5.0",
+        "contentHash": "wKct0pLyQfLpZkRIbF2SEGPD6RKsuWfPl6D2caMMeJj6asE2zuF/wly+Fdcnu3CDvfKSDzv0NgDvqR7W9ft6XA=="
+      },
+      "Microsoft.JSInterop.WebAssembly": {
+        "type": "Transitive",
+        "resolved": "10.0.1",
+        "contentHash": "oIkAEHUSFduhX7scm0+RXODv7FtA/D0KaGW0dPmO1W6LL//VLHjS+pzhpgsS6fBQ+RZfOEFaTLkZewqi6xt8rw=="
+      },
+      "shared": {
+        "type": "Project",
+        "dependencies": {
+          "Bogus": "[35.6.4, )",
+          "ViciOne.Ui.Blazor.Components": "[5.0.1, )",
+          "ViciOne.Ui.Localization": "[3.0.1, )",
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.0.1, )",
+          "ViciOne.Ui.MonochromeIcons.Core": "[4.0.1, )"
+        }
+      },
+      "vicione.ui.blazor.components": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.1, )",
+          "ViciOne.Ui.Localization": "[3.0.1, )",
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.0.1, )"
+        }
+      },
+      "Bogus": {
+        "type": "CentralTransitive",
+        "requested": "[35.6.4, )",
+        "resolved": "35.6.4",
+        "contentHash": "9ruy4agpXZ2L3B29IypUZJh61/lq+7Tbs03KyS0Uxrkx7c20JuWB1vMtZ0xBqwnekZGphjBhX7MkhM1nb5BA5g=="
+      },
+      "Microsoft.AspNetCore.Components.QuickGrid": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "p7+IZRNQgJg72k5uEVdceDUNbtt3j49G7PTp9lkIv2ALY6/kdzYWgp5IKBo1Vfogto4I6b6Gcz4rq4teI/YePA=="
+      },
+      "Microsoft.AspNetCore.Components.WebAssembly": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "qh5mkVhHCv/fxPl8XCIwx+ea9uLeTbbVs2rzgvWkWX0EgYLITEEH3AbX6OuvDW8UQVETjio2UZOh6JDAO2A4Lw==",
+        "dependencies": {
+          "Microsoft.JSInterop.WebAssembly": "10.0.1"
+        }
+      },
+      "ViciOne.Ui.Localization": {
+        "type": "CentralTransitive",
+        "requested": "[3.0.1, )",
+        "resolved": "3.0.1",
+        "contentHash": "8B3ssYUJ38bxV2bGUQUPSekmK2YQ9pwXptmdXsBHOsqIku0G22kXef57Wu0zo13g9Lsf6C7KTSdi5ouCW36z+g=="
+      },
+      "ViciOne.Ui.MonochromeIcons.Components": {
+        "type": "CentralTransitive",
+        "requested": "[4.0.1, )",
+        "resolved": "4.0.1",
+        "contentHash": "l7lleNq4fFH7xZFTwaDwQ4oWDuFcdFHbWxy0z/uokmNXoEhzfZlsDDq2wOeYO7vdHb/l6R5JDg3ARCrx/J0A/Q==",
+        "dependencies": {
+          "ViciOne.Ui.MonochromeIcons.Core": "4.0.1"
+        }
+      },
+      "ViciOne.Ui.MonochromeIcons.Core": {
+        "type": "CentralTransitive",
+        "requested": "[4.0.1, )",
+        "resolved": "4.0.1",
+        "contentHash": "8yfloh9yG4SOrpIMMkYXmnD74X38VSBvLnb4PchIov1DLrVSx5ZCNotGNPN6Nuyxf4IA4deOMPXRjIiK7eHTIw=="
+      }
+    }
+  }
+}

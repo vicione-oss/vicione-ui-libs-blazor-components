@@ -1,0 +1,24 @@
+﻿@using ViciOne.Ui.Blazor.Components.SpinEdit
+
+@typeparam TPropertyValue
+@typeparam TInterval
+@typeparam TLimit
+
+@inherits PropertyEditorBase<TPropertyValue>
+
+@{
+    var placeholder = AllowNull ? Constants.NullPlaceholder : null;
+}
+
+<SpinEdit @bind-Value:get="Value"
+          @bind-Value:set="ValueChanged"
+          Interval="@Interval"
+          Minimum="@Minimum"
+          Maximum="@Maximum"
+          IsRastered="@IsRastered"
+          Enabled="@Enabled"
+          ReadOnly="@ReadOnly"
+          Placeholder="@placeholder"
+          Valid="@Valid"
+          UpdateKey="@UpdateKey"
+          @ref="InnerEditorComponentReference" />

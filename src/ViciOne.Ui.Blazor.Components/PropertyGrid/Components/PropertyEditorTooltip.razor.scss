@@ -1,0 +1,40 @@
+﻿@use "../../Styles/design/colors";
+@use "Styles/tooltip-separator";
+
+.property-editor-tool-tip {
+    border-radius: 8px;
+    padding: 4px 8px 5px 8px;
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    transform: translateY(100%) translateY(6px);
+    background-color: colors.$error;
+
+    &::before {
+        content: "";
+        border-style: solid;
+        border-width: 4px;
+        left: 16px;
+        position: absolute;
+        top: -4px;
+        transform: rotate(45deg);
+        border-color: colors.$error;
+    }
+
+    .close-button {
+        // general resets
+        box-sizing: border-box;
+        border: none;
+        padding: 0;
+        margin: 0px -4px 0px 5px;
+        background-color: transparent;
+        color: colors.$font;
+
+        float: right;
+        display: inline-flex;
+
+        cursor: pointer;
+    }
+
+    @include tooltip-separator.styles(colors.$font);
+}

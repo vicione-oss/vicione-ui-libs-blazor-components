@@ -1,0 +1,78 @@
+@use "../../Styles/design/colors";
+@use "../../Styles/design/popup";
+@use "../../Styles/design/typography";
+
+.popup-header-body-layout {
+    height: 100%;
+
+    display: grid;
+    grid-template-areas:
+        "header"
+        "body";
+    grid-template-rows: auto minmax(10px, 1fr); // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+
+    backdrop-filter: popup.$content-backdrop-filter;
+    background-color: popup.$content-background-color-dark;
+    border-radius: inherit;
+
+    .header {
+        grid-area: header;
+
+        position: relative;
+
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+
+        $padding-x: 0.75rem;
+        $padding-y: 0.3125rem;
+        padding: $padding-y $padding-x;
+
+        font-size: popup.$font-size + 1px;
+        font-weight: typography.$font-weight-semi-bold;
+
+        display: grid;
+        grid-template-areas: "header-text spacer action-buttons";
+        grid-template-columns: minmax(10px, 1fr) 0.3125rem auto; // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+        grid-template-rows: 24px;
+        align-items: center;
+
+        .header-text {
+            grid-area: header-text;
+        }
+
+        .action-buttons {
+            grid-area: action-buttons;
+
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        &::before {
+            content: "";
+
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+
+            background-color: currentColor;
+            opacity: 5%;
+
+            z-index: -1;
+
+            border-radius: inherit;
+        }
+    }
+
+    .body {
+        grid-area: body;
+
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+
+        $padding-x: 0.75rem;
+        $padding-y: 0.75rem;
+        padding: $padding-y $padding-x;
+    }
+}

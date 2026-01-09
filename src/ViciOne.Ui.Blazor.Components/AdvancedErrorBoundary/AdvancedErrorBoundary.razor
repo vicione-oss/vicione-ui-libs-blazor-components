@@ -1,0 +1,34 @@
+﻿@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+@using Localization = ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localization
+
+@inherits ErrorBoundary
+
+@if (CurrentException is null)
+{
+    @ChildContent
+}
+else
+{
+    <div class="generic-error-hint">
+        <div class="heading">
+            <MonochromeIcon Name="MonochromeIconName.ErrorFull" Size="MonochromeIconSize.SmallMedium" />
+
+            <span class="text">
+                @Localization.Content.Heading
+            </span>
+        </div>
+
+        <div class="details">
+            @Localization.Content.Details
+        </div>
+
+        @if (PrepareRecover.HasDelegate)
+        {
+            <Button CssClass="try-to-recover-button"
+                    Text="@Localization.Content.TryToRecover"
+                    OnClick="@TryToRecoverButtonClickAsync" />
+        }
+    </div>
+}

@@ -1,0 +1,26 @@
+﻿@page "/advanced-error-boundary"
+
+@using ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.CheckBox
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<div class="options">
+    <div class="option">
+        <label>With <code>@nameof(AdvancedErrorBoundary.PrepareRecover)</code> event callback</label>
+
+        <Switch @bind-Value:get="_prepareRecoverEventCallback.HasDelegate"
+                @bind-Value:set="UpdatePrepareRecoverEventCallback" />
+    </div>
+</div>
+
+<div class="error-boundary-container">
+    <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+        <Button Text="Make it snap!" OnClick="@MakeItSnapButtonClick" />
+    </AdvancedErrorBoundary>
+</div>
+
+@if (!string.IsNullOrEmpty(_recoverMessage))
+{
+    <p>@_recoverMessage</p>
+}

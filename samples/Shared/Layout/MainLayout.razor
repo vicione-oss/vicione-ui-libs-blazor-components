@@ -1,0 +1,24 @@
+﻿@using Shared.Components
+@using ViciOne.Ui.Blazor.Components.ContextMenu.Components
+@using ViciOne.Ui.Blazor.Components.EditorLayout
+@using ViciOne.Ui.Blazor.Components.Popup.Components
+
+@inherits LayoutComponentBase
+
+<main>
+    <EditorLayout>
+        <Left>
+            <Navigation />
+        </Left>
+        <Top>
+            <Header />
+        </Top>
+        <Center>
+            <div class="body-container">
+                @Body
+            </div>
+        </Center>
+    </EditorLayout>
+
+    <PopupRoot />
+</main>

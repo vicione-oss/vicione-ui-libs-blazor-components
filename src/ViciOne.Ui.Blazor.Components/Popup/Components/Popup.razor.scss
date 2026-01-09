@@ -1,0 +1,77 @@
+﻿@use "../../Styles/design/popup";
+@use "../../Styles/design/scrollbar";
+@use "../../Styles/design/typography";
+@use "../../Styles/user-interaction";
+
+.modal-root {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+    overflow: auto;
+    @include scrollbar.adjust-styles();
+
+    z-index: var(--z-index, popup.$z-index);
+
+    .modal-dialog {
+        display: flex; // ensures content takes full height
+
+        margin: 1.75rem;
+
+        overflow: unset;
+
+        .modal-content {
+            flex-basis: auto;
+            flex-grow: 1;
+            flex-shrink: 1;
+
+            box-shadow: popup.$box-shadow;
+            border-radius: popup.$border-radius;
+
+            font-size: popup.$font-size;
+            font-weight: popup.$font-weight;
+            line-height: popup.$line-height;
+            letter-spacing: popup.$letter-spacing;
+
+            z-index: var(--z-index, popup.$z-index);
+        }
+
+        &.moving, &.moved {
+            position: absolute;
+            margin: 0;
+        }
+
+        &.moving {
+            @include user-interaction.prevent-text-selection();
+        }
+    }
+
+    &.with-backdrop {
+        &::after {
+            content: " ";
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: -1;
+
+            background-color: popup.$backdrop-color;
+            opacity: popup.$backdrop-opacity;
+        }
+    }
+
+    &:not(.with-backdrop) {
+        pointer-events: none; // make clicks go through modal root ...
+
+        .modal-dialog {
+            pointer-events: initial; // ... but make clicks on dialog register as normal
+        }
+    }
+}

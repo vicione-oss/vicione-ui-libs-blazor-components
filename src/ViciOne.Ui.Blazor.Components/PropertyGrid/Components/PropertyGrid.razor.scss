@@ -1,0 +1,13 @@
+﻿@use "../../Styles/design/colors";
+
+.property-grid {
+    font-size: 11px;
+
+    ::deep > .property-group:not(.sub-group) {
+        border-top: 1px solid colors.$border;
+
+        &:last-child {
+            border-bottom: 1px solid colors.$border;
+        }
+    }
+}

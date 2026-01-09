@@ -1,0 +1,20 @@
+﻿@typeparam TSectionIdentifier
+
+<div class="section-rail">
+    <div class="flyout @(Expanded ? string.Empty : "hidden")">
+        <CascadingValue Value="this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    </div>
+
+    <div class="buttons">
+        @foreach (var s in _sections)
+        {
+            <SectionRailButton Title="@s.Title"
+                               Active="@SectionIdentifierEqualityComparer.Equals(s.Id, ActiveSectionId)"
+                               IconCssClass="@s.IconCssClass"
+                               IconUrl="@s.IconUrl"
+                               OnClick="@(() => SectionButtonClickAsync(s))" />
+        }
+    </div>
+</div>

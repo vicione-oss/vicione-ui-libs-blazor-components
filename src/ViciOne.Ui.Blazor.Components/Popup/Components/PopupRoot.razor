@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Components.Sections
+
+<div class="popup-root">
+    @foreach (var popup in PopupRegistry)
+    {
+        <PopupCell SectionId="popup" @key="popup" />
+    }
+</div>

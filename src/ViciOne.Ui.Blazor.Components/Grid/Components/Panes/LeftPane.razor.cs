@@ -1,0 +1,24 @@
+﻿using Microsoft.AspNetCore.Components;
+using ViciOne.Ui.Blazor.Components.Grid.Models;
+
+namespace ViciOne.Ui.Blazor.Components.Grid.Components.Panes;
+
+/// <summary>
+/// Renders arbitrary content in a <see href="https://en.wikipedia.org/wiki/Paned_window_(computing)">pane</see>
+/// displayed on the left of <see cref="Grid{TGridItem}.ChildContent" />.
+/// </summary>
+public sealed partial class LeftPane : ComponentBase
+{
+    [CascadingParameter] private LeftPaneSectionId SectionId { get; set; } = default!;
+
+    /// <summary>
+    /// Text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Renders the pane content
+    /// </summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

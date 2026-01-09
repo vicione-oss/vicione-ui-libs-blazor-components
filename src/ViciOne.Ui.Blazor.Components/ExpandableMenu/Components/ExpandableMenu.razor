@@ -1,0 +1,26 @@
+﻿<div class="expandable-menu @(MenuService.IsCompact ? "compact" : string.Empty)">
+     <div class="content-area"
+          style="grid-template-rows: @GetAreaRowsDefinition()">
+
+            @foreach (var regularEntry in Entries.Where(e => !e.IsSticky))
+            {
+                <CascadingValue Value="@regularEntry">
+                    <ExpandableToolbarButton />
+                    <ExpandableContent />
+                </CascadingValue>
+            }
+
+            @if (MenuService.CurrentRegularEntry is null || MenuService.IsCompact)
+            {
+                <div />
+            }
+
+            @foreach (var stickyEntry in Entries.Where(e => e.IsSticky))
+            {
+                <CascadingValue Value="@stickyEntry">
+                    <ExpandableToolbarButton />
+                    <ExpandableContent />
+                </CascadingValue>
+            }
+    </div>
+</div>

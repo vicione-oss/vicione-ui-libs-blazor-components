@@ -1,0 +1,12 @@
+﻿@use "../../Styles/design/typography";
+
+.context-menu-header {
+    padding: 0px 4px;
+    text-transform: uppercase;
+    user-select: none;
+
+    span {
+        font-size: 10px;
+        font-weight: typography.$font-weight-bold;
+    }
+}

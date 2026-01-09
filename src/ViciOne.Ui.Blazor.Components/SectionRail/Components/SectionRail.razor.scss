@@ -1,0 +1,31 @@
+﻿@use "../../Styles/design/colors";
+
+.section-rail {
+    height: 100%;
+
+    display: grid;
+    grid-template-areas: "flyout buttons";
+    grid-template-columns: auto 48px;
+
+    color: colors.$font;
+
+    .flyout {
+        grid-area: flyout;
+
+        background-color: colors.$background-darker;
+
+        &.hidden {
+            visibility: hidden;
+            width: 0px;
+        }
+    }
+
+    .buttons {
+        grid-area: buttons;
+
+        display: grid;
+        grid-auto-rows: 48px;
+
+        background-color: colors.$background-light;
+    }
+}

@@ -1,0 +1,103 @@
+﻿{{
+    generateAttributeName = "GenerateNumericSpinBehavior"
+
+    func isGenerateAttribute(attribute)
+       ret attribute.Name == generateAttributeName
+    end
+
+    func isTypeArgument(argument)
+       ret argument.Name == "Type"
+    end
+
+    func isAliasArgument(argument)
+       ret argument.Name == "Alias"
+    end
+
+    capture output -}}
+// Auto-generated code
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using ViciOne.Ui.Blazor.Components.SpinEdit.Services.Behaviors;
+
+namespace ViciOne.Ui.Blazor.Components.SpinEdit.Extensions;
+
+/// <summary>
+/// Extension methods for <see cref="IServiceCollection"/>
+/// </summary>
+public static partial class IServiceCollectionExtensions
+{
+{{
+    func generateExtensionMethod(typeArgument, aliasArgument, forNullableValues)
+
+        nonNullableValueType = typeArgument.Value
+
+        if forNullableValues
+            valueType = nonNullableValueType + "?"
+        else
+            valueType = nonNullableValueType
+        end
+
+        intervalType = nonNullableValueType
+        limitType = nonNullableValueType
+
+        if forNullableValues
+            alias = "Nullable" + aliasArgument.Value
+        else
+            alias = aliasArgument.Value
+        end
+
+        spinBehaviorInterfaceName = $"I{alias}SpinBehavior";
+        spinBehaviorClassName = $"{alias}SpinBehavior"
+
+        if forNullableValues }}
+    /// <summary>
+    /// Adds services required for <see cref="SpinEdit{TValue, TInterval, TLimit}"/> where
+    /// TValue is of type nullable <see langword="{{ nonNullableValueType }}"/> and TInterval / TLimit is of type <see langword="{{ nonNullableValueType }}"/>.
+    /// </summary>
+        {{~ else }}
+    /// <summary>
+    /// Adds services required for <see cref="SpinEdit{TValue, TInterval, TLimit}"/> where
+    /// TValue, TInterval and TLimit is of type <see langword="{{ nonNullableValueType }}"/>.
+    /// </summary>
+        {{~ end ~}}
+    public static IServiceCollection Add{{ alias }}SpinEdit(this IServiceCollection services)
+    {
+        services.Add{{ spinBehaviorClassName }}();
+
+        return services;
+    }
+
+    private static IServiceCollection Add{{ spinBehaviorClassName }}(this IServiceCollection services)
+    {
+        services.TryAddScoped<{{ spinBehaviorInterfaceName }}, {{ spinBehaviorClassName }}>();
+
+        services.TryAddScoped<ISpinBehavior<{{ valueType }}, {{ intervalType }}, {{ limitType }}>>(
+            services => services.GetRequiredService<{{ spinBehaviorInterfaceName }}>());
+
+        return services;
+    }
+        {{~
+    end
+
+    interface = data.Interfaces | Symbols.ThatHaveAttribute generateAttributeName | Array.First
+
+    generateAttributes = interface.Attributes | Array.Filter @isGenerateAttribute
+    for generateAttribute in generateAttributes
+        typeArgument = generateAttribute.Arguments | Array.Filter @isTypeArgument | Array.First
+        aliasArgument = generateAttribute.Arguments | Array.Filter @isAliasArgument | Array.First
+
+        generateExtensionMethod(typeArgument, aliasArgument, forNullableValues: false)
+        generateExtensionMethod(typeArgument, aliasArgument, forNullableValues: true)
+    end ~}}
+}
+{{
+    end
+
+    # Save the captured output, this will add the source code to
+    # the current compilation due to file extension .cs, see https://github.com/NeVeSpl/NTypewriter/blob/f43e26df17faecb8d7acbe0ec2e40e674be2139f/NTypewriter.SourceGenerator/Adapters/GeneratedFileReaderWriter.cs#L42
+    Save output $"../IServiceCollectionExtensions.g.cs"
+
+    # Save it once again to create a temporary file in the project, transition from .g.cs.tmp to .g.cs will be done in .csproj
+    Save output $"../IServiceCollectionExtensions.g.cs.tmp"
+}}

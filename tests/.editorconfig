@@ -1,0 +1,90 @@
+[*]
+trim_trailing_whitespace = true
+
+[*.cs]
+dotnet_diagnostic.IDE0001.severity = warning # Simplify name
+dotnet_diagnostic.IDE0021.severity = warning # Use expression body for constructors
+dotnet_diagnostic.IDE0022.severity = warning # Use expression body for methods
+dotnet_diagnostic.IDE0025.severity = warning # Use expression body for properties
+dotnet_diagnostic.IDE0028.severity = warning # Use collection initializers
+dotnet_diagnostic.IDE0031.severity = warning # Use null propagation
+dotnet_diagnostic.IDE0036.severity = warning # Order modifiers
+dotnet_diagnostic.IDE0040.severity = warning # Add accessibility modifiers
+dotnet_diagnostic.IDE0055.severity = warning # Fix formatting
+dotnet_diagnostic.IDE0078.severity = warning # Use pattern matching
+dotnet_diagnostic.IDE0120.severity = warning # Simplify LINQ expression
+dotnet_diagnostic.IDE0161.severity = warning # Use file-scoped namespace
+dotnet_diagnostic.IDE0270.severity = warning # Null check can be simplified (if null check)
+dotnet_diagnostic.IDE0290.severity = warning # Use primary constructor
+
+dotnet_diagnostic.CA1812.severity = none # Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1822.severity = warning # Mark members as static
+dotnet_diagnostic.CA1849.severity = warning # Call async methods when in an async method
+dotnet_diagnostic.CA1852.severity = warning # Seal internal types
+dotnet_diagnostic.CA1859.severity = warning # Use concrete types when possible for improved performance
+
+dotnet_diagnostic.SYSLIB1006.severity = warning # Multiple logging methods cannot use the same event ID
+
+# https://aka.ms/editorconfigdocs
+
+[**{Tests}*.cs]
+
+#
+# Configure IDE1006 to somewhat check snake case naming for test methods.
+# ===========================
+
+# Define the 'test_method' symbol group:
+dotnet_naming_symbols.test_method.applicable_kinds = method
+dotnet_naming_symbols.test_method.applicable_accessibilities = public
+dotnet_naming_symbols.test_method.required_modifiers = 
+
+# Defining the 'test_method_naming_style' naming style
+dotnet_naming_style.test_method_naming_style.capitalization = first_word_upper
+dotnet_naming_style.test_method_naming_style.word_separator = _
+dotnet_naming_style.test_method_naming_style.required_suffix = 
+
+# Defining the 'test_method_naming_rule' naming rule
+dotnet_naming_rule.test_method_naming_rule.symbols  = test_method
+dotnet_naming_rule.test_method_naming_rule.style    = test_method_naming_style
+dotnet_naming_rule.test_method_naming_rule.severity = default
+
+#
+# Configure IDE1006 in a way that "Naming rule violation: Missing suffix: 'Async'" is not shown anymore
+# for facts and theories. This is done by relying on the rule order functionality where declaring a more
+# specific naming rule "async_facts_or_theories_naming_rule" overrides the default one shipped with Roslyn.
+#
+# Inspired by https://learn.microsoft.com/de-de/dotnet/fundamentals/code-analysis/style-rules/naming-rules#example-public-member-capitalization
+# ===========================
+
+# Defining the 'async_facts_or_theories' symbol group
+dotnet_naming_symbols.async_facts_or_theories.applicable_kinds = method
+dotnet_naming_symbols.async_facts_or_theories.applicable_accessibilities = public
+dotnet_naming_symbols.async_facts_or_theories.required_modifiers = async
+
+# Defining the 'async_facts_or_theories_naming_style' naming style
+dotnet_naming_style.async_facts_or_theories_naming_style.capitalization = first_word_upper
+dotnet_naming_style.async_facts_or_theories_naming_style.required_suffix = 
+
+# Defining the 'async_facts_or_theories_naming_rule' naming rule
+dotnet_naming_rule.async_facts_or_theories_naming_rule.symbols  = async_facts_or_theories
+dotnet_naming_rule.async_facts_or_theories_naming_rule.style = async_facts_or_theories_naming_style
+dotnet_naming_rule.async_facts_or_theories_naming_rule.severity = default
+
+#
+# Configure IDE1006 to allow CamelCase (PascalCase) for private const fields.
+# This allows patterns like "private const string CssSelector" without s_ prefix.
+# ===========================
+
+# Defining the 'private_const_fields' symbol group
+dotnet_naming_symbols.private_const_fields.applicable_kinds = field
+dotnet_naming_symbols.private_const_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_const_fields.required_modifiers = const
+
+# Defining the 'private_const_fields_naming_style' naming style (PascalCase, no prefix)
+dotnet_naming_style.private_const_fields_naming_style.capitalization = pascal_case
+dotnet_naming_style.private_const_fields_naming_style.required_prefix = 
+
+# Defining the 'private_const_fields_naming_rule' naming rule
+dotnet_naming_rule.private_const_fields_naming_rule.symbols = private_const_fields
+dotnet_naming_rule.private_const_fields_naming_rule.style = private_const_fields_naming_style
+dotnet_naming_rule.private_const_fields_naming_rule.severity = default

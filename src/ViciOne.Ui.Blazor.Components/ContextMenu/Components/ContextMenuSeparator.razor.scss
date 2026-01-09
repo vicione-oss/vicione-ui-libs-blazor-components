@@ -1,0 +1,7 @@
+﻿@use "../../Styles/design/colors";
+
+.context-menu-separator {
+    margin: 0;
+    height: 0;
+    border-top: 1px solid colors.$border;
+}

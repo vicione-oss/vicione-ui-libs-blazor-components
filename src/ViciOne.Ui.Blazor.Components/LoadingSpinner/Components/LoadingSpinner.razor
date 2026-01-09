@@ -1,0 +1,24 @@
+﻿@using ViciOne.Ui.Blazor.Components.LoadingSpinner.Models
+
+@if (_visible)
+{
+    var messageVisible = !_currentMessageExpired && !_fadeOutCurrentMessage;
+    var messageText = _currentMessage?.Message;
+
+    if (ChildContent is not null)
+    {
+        @ChildContent(new RenderContext { Message = new MessageRenderContext { Visible = messageVisible, Text = messageText } })
+    }
+    else
+    {
+        <div class="loading-spinner">
+            <div class="center-container">
+                <div class="dot-flashing"></div>
+
+                <LoadingSpinnerMessage Visible="@messageVisible">
+                    @messageText
+                </LoadingSpinnerMessage>
+            </div>
+        </div>
+    }
+}

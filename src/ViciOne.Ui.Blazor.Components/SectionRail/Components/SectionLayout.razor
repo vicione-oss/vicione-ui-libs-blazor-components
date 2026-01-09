@@ -1,0 +1,29 @@
+﻿<div class="section-layout">
+    <div class="header">
+        @if (Section is not null)
+        {
+            <div class="title">@Section.Title</div>
+        }
+
+        @if (ActionButtons is not null)
+        {
+            <div class="action-buttons">
+                @ActionButtons
+            </div>
+        }
+    </div>
+
+    @if (Tools is not null)
+    {
+        <div class="tools">
+            @Tools
+        </div>
+    }
+
+    @if (Content is not null)
+    {
+        <div class="content">
+            @Content
+        </div>
+    }
+</div>

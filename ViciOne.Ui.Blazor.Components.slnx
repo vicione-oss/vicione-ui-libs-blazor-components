@@ -1,0 +1,37 @@
+<Solution>
+  <Folder Name="/docs/">
+    <File Path="docs/csharp-coding-style.md" />
+  </Folder>
+  <Folder Name="/samples/">
+    <File Path="samples/.editorconfig" />
+    <Project Path="samples/Client/Client.csproj" />
+    <Project Path="samples/Server/Server.csproj" />
+    <Project Path="samples/Shared/Shared.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".gitlab-ci.yml" />
+    <File Path=".globalconfig" />
+    <File Path="CHANGELOG.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE.txt" />
+    <File Path="NuGet.Config" />
+    <File Path="README.md" />
+    <File Path="tests.runsettings" />
+    <File Path="VERSION" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src/.editorconfig" />
+    <Project Path="src/ViciOne.Ui.Blazor.Components.Resources/ViciOne.Ui.Blazor.Components.Resources.csproj" />
+    <Project Path="src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/.editorconfig" />
+    <File Path="tests/xunit.runner.json" />
+    <Project Path="tests/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
+    <Project Path="tests/ViciOne.Ui.Blazor.Components.Tests/ViciOne.Ui.Blazor.Components.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,15 @@
+﻿@typeparam TSectionIdentifier
+
+@{
+    var cssClasses = new List<string> { "section" };
+
+    var show = SectionIdentifierEqualityComparer.Equals(this.Id, SectionRail.ActiveSectionId) && SectionRail.Expanded;
+    if (!show)
+        cssClasses.Add("hidden");
+}
+
+<div class="@string.Join(" ", cssClasses)">
+    <CascadingValue TValue="ISection" Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>

@@ -1,0 +1,23 @@
+﻿@using ViciOne.Ui.Blazor.Components.Interfaces
+
+@code
+{
+    public static RenderFragment<IHasIcon> Icon = icon => __builder =>
+    {
+        @if (icon.IconCssClass is not null)
+        {
+            var iconCssClasses = new List<string> { "icon" };
+            iconCssClasses.AddRange(icon.IconCssClass.Split(" "));
+
+            <div class="@string.Join(" ", iconCssClasses)"></div>
+        }
+        else if (icon.IconUrl is not null)
+        {
+            <img class="icon" src="@icon.IconUrl.ToString()" />
+        }
+        else if (icon.IconData is not null)
+        {
+            <img class="icon" src="@icon.IconData" />
+        }
+    };
+}

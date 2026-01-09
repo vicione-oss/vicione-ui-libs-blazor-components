@@ -1,0 +1,37 @@
+﻿@page "/switch"
+
+@using ViciOne.Ui.Blazor.Components.Factories
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Switch.Enums
+
+<h3>Enabled</h3>
+
+<div class="inline-grid">
+    <Switch Enabled="true" Value="false" />
+    <Switch Enabled="true" Value="true" />
+</div>
+
+<h3>Disabled</h3>
+
+<div class="inline-grid">
+    <Switch Enabled="false" Value="false" />
+    <Switch Enabled="false" Value="true" />
+</div>
+
+<h3>Size</h3>
+
+@foreach (var switchSize in TypeSafeEnumFactory<SwitchSize>.CreateAll().Reverse())
+{
+    <h5>@switchSize.ToString()</h5>
+
+    <div class="inline-grid">
+        <Switch Size="switchSize" Value="false" />
+        <Switch Size="switchSize" Value="true" />
+    </div>
+}
+
+<h3>Value</h3>
+
+<div>
+    <Switch @bind-Value="_switchValue" /> is @_switchValue
+</div>

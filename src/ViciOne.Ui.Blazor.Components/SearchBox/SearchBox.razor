@@ -1,0 +1,37 @@
+﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Shared
+@using ViciOne.Ui.Blazor.Components.TextBox
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@{
+    var searchBoxCssClasses = new List<string> { "search-box" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        searchBoxCssClasses.AddRange(CssClass.Split(" "));
+
+    var labelCssClasses = new List<string> { "execute-search-label" };
+    if (!Enabled)
+        labelCssClasses.Add("disabled");
+}
+
+<div class="@string.Join(" ", searchBoxCssClasses)">
+    <TextBox Placeholder="@Placeholder"
+             Id="@_textBoxId"
+             @bind-Value:get="@Text"
+             @bind-Value:set="@TextBoxValueChangedAsync"
+             ValueChanging="@TextBoxValueChangingAsync"
+             EnterPressed="@TextBoxEnterPressedAsync"
+             Enabled="@Enabled" />
+
+    <label for="@_textBoxId" class="@string.Join(" ", labelCssClasses)" @onclick="@ExecuteSearchLabelClickAsync">
+        @if (this.IsAnyIconParameterSet())
+        {
+            @RenderFragments.Icon(this)
+        }
+        else
+        {
+            <MonochromeIcon Name="MonochromeIconName.Search" Size="@MonochromeIconSize.Small" />
+        }
+    </label>
+</div>

@@ -1,0 +1,76 @@
+﻿@page "/property-grid"
+
+@using Shared.Pages.PropertyGrid.Models
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.EditorLayout
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Components
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tooltip.Components
+
+<EditorLayout>
+    <Left>
+        <div class="options">
+            <div class="option">
+                <span>Group by category</span>
+
+                <Switch @bind-Value="@PropertyGridState.GroupByCategory" />
+            </div>
+
+            <div class="option">
+                <span>Keep messages</span>
+
+                <Switch @bind-Value="@PropertyGridState.KeepMessages" />
+            </div>
+
+            @foreach (var instanceState in _instanceStates)
+            {
+                <div class="option">
+                    <span>@instanceState.Instance.GetType().Name</span>
+
+                    <Switch @bind-Value="@instanceState.Selected" @bind-Value:after="InstanceSelectionChanged" />
+                </div>
+            }
+
+            <div class="option">
+                <span>Set <code>@nameof(IHasName.Name)</code> property to <code>Waldo</code></span>
+
+                <Button Text="Execute" onclick="SetNamePropertyToWaldoButtonClick" />
+            </div>
+
+            <div class="option">
+                <span>Focus <code>Name</code> property</span>
+
+                <Button Text="Execute" onclick="FocusNamePropertyButtonClick" />
+            </div>
+        </div>
+    </Left>
+
+    <Center>
+        <div class="property-grid-container">
+            <PropertyGrid Controller="PropertyGridController" />
+        </div>
+    </Center>
+
+    <Right>
+        <div class="change-log">
+            <div class="change-log-item">
+                @(PropertyGridState.Items.Count != 1 ? $"{PropertyGridState.Items.Count} items" : $"{PropertyGridState.Items.Count} item")
+            </div>
+
+            <div class="change-log-item">
+                @(_hasInfos ? "Has infos" : "Has no infos")
+            </div>
+
+            <div class="change-log-item">
+                @(_hasErrors ? "Has errors" : "Has no errors")
+            </div>
+
+            @foreach (var i in _changeLog)
+            {
+                <div class="change-log-item">@i</div>
+            }
+        </div>
+    </Right>
+</EditorLayout>
+
+<TooltipDisplay />

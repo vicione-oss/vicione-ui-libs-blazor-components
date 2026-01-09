@@ -1,0 +1,22 @@
+﻿@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<div class="popup-header-body-layout">
+    <div class="header" @ref="_headerElementReference">
+        <div class="header-text">
+            @HeaderText
+        </div>
+
+        <div class="action-buttons">
+            <CascadingValue Value="MonochromeIconSize.Small">
+                <PopupHeaderCloseActionButton />
+            </CascadingValue>
+        </div>
+    </div>
+
+    <div class="body">
+        @if (Body is not null)
+        {
+            @Body
+        }
+    </div>
+</div>

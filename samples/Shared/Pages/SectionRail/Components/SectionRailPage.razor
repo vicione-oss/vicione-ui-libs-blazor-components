@@ -1,0 +1,21 @@
+﻿@page "/section-rail"
+
+@using Shared.Pages.SectionRail.Enums
+@using ViciOne.Ui.Blazor.Components.SectionRail.Components
+
+<div class="section-rail-container">
+    <SectionRail @bind-ActiveSectionId="_activeSectionId" @bind-Expanded="_expanded">
+        <Section Id="SectionId.Dataflow" Title="Dataflow" IconCssClass="@_dataflowIconCssClass">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        </Section>
+        <Section Id="SectionId.Info" Title="Info" IconCssClass="@_infoOutlinedIconCssClass">
+            At vero eos et accusam et justo duo dolores et ea rebum.
+        </Section>
+    </SectionRail>
+</div>
+
+<p>
+    @_activeSectionId is active and @(_expanded ? string.Empty : "not ") expanded
+</p>
+

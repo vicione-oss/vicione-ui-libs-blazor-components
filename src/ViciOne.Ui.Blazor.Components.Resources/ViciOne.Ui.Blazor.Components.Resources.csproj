@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <ItemGroup>
+    <Compile Update="AdvancedErrorBoundary\Localization\Content.Designer.cs">
+      <DependentUpon>Content.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="CheckBox\SvgIcons.Designer.cs">
+      <DependentUpon>SvgIcons.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="ContextMenu\SvgIcons.Designer.cs">
+      <DependentUpon>SvgIcons.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="PropertyGrid\ContextMenu\Localization\PropertyEntryContextMenu.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyEntryContextMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\PropertyGridItem.Designer.cs">
+      <DependentUpon>PropertyGridItem.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\PropertyEntry.Designer.cs">
+      <DependentUpon>PropertyEntry.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\ValidationMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ValidationMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="SpinEdit\Localization\SpinButton.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SpinButton.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="AdvancedErrorBoundary\Localization\Content.resx">
+      <LastGenOutput>Content.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="CheckBox\SvgIcons.resx">
+      <LastGenOutput>SvgIcons.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ContextMenu\SvgIcons.resx">
+      <LastGenOutput>SvgIcons.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\ContextMenu\Localization\PropertyEntryContextMenu.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PropertyEntryContextMenu.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\PropertyGridItem.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>PropertyGridItem.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\PropertyEntry.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>PropertyEntry.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\ValidationMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ValidationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="SpinEdit\Localization\SpinButton.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SpinButton.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+</Project>

@@ -1,0 +1,268 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
+    <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NTypewriter.CodeModel">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+    </PackageReference>
+    <PackageReference Include="NTypewriter.SourceGenerator">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+    </PackageReference>
+    <PackageReference Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.Localization" />
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Assets">
+      <PrivateAssets>all</PrivateAssets><!-- avoids include of CSS isolation bundle -->
+      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Components" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViciOne.Ui.Blazor.Components.Resources\ViciOne.Ui.Blazor.Components.Resources.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Prevent Microsoft.NET.Sdk.Razor from copying unnecessary file -->
+  <ItemGroup>
+    <Content Update="sasscompiler.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="False" />
+    <Content Update="package*.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="False" />
+    <Content Update="tsconfig.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="False" />
+  </ItemGroup>
+
+  <!-- Configuration for resulting NuGet package -->
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath=""/>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- NTypewriter.SourceGenerator configuration -->
+  <ItemGroup>
+    <AdditionalFiles Include="PropertyGrid\Extensions\Templates\IServiceCollectionExtensions.cs.nt" />
+    <AdditionalFiles Include="PropertyGrid\Services\TypeDescriptors\Templates\NumericValueTypeDescriptor.cs.nt" />
+    <AdditionalFiles Include="SpinEdit\Extensions\Templates\IServiceCollectionExtensions.cs.nt" />
+    <AdditionalFiles Include="SpinEdit\Services\Behaviors\Templates\NumericSpinBehavior.cs.nt" />
+    <AdditionalFiles Include="Templates\Enum.cs.ts.nt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <GeneratedCsFile Include="$(ProjectDir)\**\*.g.cs" Exclude="$(ProjectDir)\obj\**\*.g.cs" />
+  </ItemGroup>
+
+  <Target Name="HideGeneratedCsFilesFromCompilerBeforeBuild" Outputs="%(GeneratedCsFile.Identity)" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <_GeneratedCsFileToHide>%(GeneratedCsFile.RecursiveDir)%(GeneratedCsFile.Filename)%(GeneratedCsFile.Extension)</_GeneratedCsFileToHide>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="$(_GeneratedCsFileToHide)" Condition="Exists($(_GeneratedCsFileToHide))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="MoveGeneratedCsTempFiles" AfterTargets="Build;Rebuild">
+    <ItemGroup>
+      <GeneratedCsTempFiles Include="$(ProjectDir)\**\*.g.cs.tmp" />
+    </ItemGroup>
+
+    <Move SourceFiles="@(GeneratedCsTempFiles)" DestinationFiles="%(RelativeDir)%(Filename)" />
+    <Move SourceFiles="PropertyGrid\Extensions\IServiceCollectionExtensions.PropertyGrid.g.cs" DestinationFiles="PropertyGrid\Extensions\IServiceCollectionExtensions.g.cs" Condition="Exists('PropertyGrid\Extensions\IServiceCollectionExtensions.PropertyGrid.g.cs')" />
+  </Target>
+
+  <!-- https://github.com/microsoft/TypeScript/issues/57695 -->
+  <Target Name="EnforceTypeScriptCompileAfterSourceGenerators" BeforeTargets="PreComputeCompileTypeScriptWithTSConfig" DependsOnTargets="CoreCompile" />
+
+  <ItemGroup>
+    <GeneratedStaticWebAsset Include="Scripts\PointerCapture.js">
+      <DestinationFile>wwwroot\js\pointer-capture.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
+      <DestinationFile>wwwroot\js\pointer-event-mixins.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Moveable\Services\MoveInteraction.cs.js">
+      <DestinationFile>wwwroot\moveable\move-interaction.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="ContextMenu\Enums\MouseLeaveDirection.cs.js">
+      <DestinationFile>wwwroot\context-menu\enums\mouse-leave-direction.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="ContextMenu\Models\ChildContextMenuPosition.cs.js">
+      <DestinationFile>wwwroot\context-menu\models\child-context-menu-position.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="ContextMenu\Models\ContextMenuPosition.cs.js">
+      <DestinationFile>wwwroot\context-menu\models\context-menu-position.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenu.razor.js">
+      <DestinationFile>wwwroot\context-menu\components\context-menu.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenuItem.razor.js">
+      <DestinationFile>wwwroot\context-menu\components\context-menu-item.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tooltip\Components\TooltipDisplay.razor.js">
+      <DestinationFile>wwwroot\tooltip\components\tooltip-display.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="TextBox\TextBox.razor.js">
+      <DestinationFile>wwwroot\text-box\text-box.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedStaticWebAsset;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>
+  </PropertyGroup>
+
+  <Target Name="IncludeGeneratedStaticWebAsset" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" DependsOnTargets="MoveGeneratedStaticWebAssets" Condition="'@(GeneratedStaticWebAsset)' != ''">
+    <!-- Skeleton adopted from https://github.com/dotnet/aspnetcore/blob/61e60dcf9436709a63e61da35417e2c4d30466ed/src/Components/CustomElements/src/Microsoft.AspNetCore.Components.CustomElements.csproj#L21 -->
+
+    <ItemGroup>
+      <_CandidateAsset Include="$(MSBuildProjectDirectory)\%(GeneratedStaticWebAsset.DestinationFile)" />
+      <_CandidateAsset>
+        <!-- 
+           https://regex101.com/r/PZZ45o
+           
+           wwwroot\foo.js -> foo.js
+        -->
+        <RelativePath>$([System.Text.RegularExpressions.Regex]::Replace(%(GeneratedStaticWebAsset.DestinationFile), '^wwwroot\\(.+)', '$1'))</RelativePath>
+      </_CandidateAsset>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <_CandidateAssetIdentity>%(_CandidateAsset.Identity)</_CandidateAssetIdentity>
+    </PropertyGroup>
+
+    <DefineStaticWebAssets SourceType="Computed" SourceId="$(PackageId)" ContentRoot="$(MSBuildProjectDirectory)\wwwroot\" BasePath="$(StaticWebAssetBasePath)" CandidateAssets="@(_CandidateAsset)">
+
+      <Output TaskParameter="Assets" ItemName="_DefinedGeneratedStaticWebAsset" />
+    </DefineStaticWebAssets>
+
+    <DefineStaticWebAssetEndpoints CandidateAssets="@(_DefinedGeneratedStaticWebAsset)" ExistingEndpoints="@()" ContentTypeMappings="@(StaticWebAssetContentTypeMapping)">
+
+      <Output TaskParameter="Endpoints" ItemName="_DefinedGeneratedStaticWebAssetEndpoint" />
+    </DefineStaticWebAssetEndpoints>
+
+    <ItemGroup>
+      <StaticWebAsset Include="@(_DefinedGeneratedStaticWebAsset)" Condition="!@(StaticWebAsset-&gt;AnyHaveMetadataValue('Identity', $(_CandidateAssetIdentity)))" />
+      <StaticWebAssetEndpoint Include="@(_DefinedGeneratedStaticWebAssetEndpoint)" Condition="!@(StaticWebAssetEndpoint-&gt;AnyHaveMetadataValue('Identity', $(_CandidateAssetIdentity)))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="MoveGeneratedStaticWebAssets" BeforeTargets="GetTypeScriptOutputForPublishing">
+    <!--
+      Move generated static web asset to destination file in the content root.
+
+      This also ensures that the source file is not included in any pack / publish process because source file
+      does not exist anymore after the operation.
+
+      Condition is needed to avoid the following error on build in VS:
+        NuGet package restore failed.
+        Error occurred while restoring NuGet packages: Object reference not set to an instance of an object.
+
+      It seems that our target is also executed on restore but moving non-existing files does not
+      result in the usual error, instead the restore fails unexpectedly which produces subsequent errors along the line.
+    -->
+    <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
+  </Target>
+
+  <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="GetTypeScriptOutputForPublishing">
+    <!--
+      Remove generated files from Content that were added in target 'GetTypeScriptOutputForPublishing' and got moved by
+      target 'MoveGeneratedStaticWebAssets', so that these generated files are not included in NuGet-package and staticwebassets.
+    -->
+    <ItemGroup>
+      <Content Remove="%(GeneratedStaticWebAsset.FullPath)" Condition="'$(CI)' != ''" />
+      <Content Remove="%(GeneratedStaticWebAsset.Identity)" Condition="'$(CI)' == ''" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CleanGeneratedStaticWebAssets" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" BeforeTargets="Clean">
+    <PropertyGroup>
+      <DestinationFile>%(GeneratedStaticWebAsset.DestinationFile)</DestinationFile>
+    </PropertyGroup>
+
+    <Delete Files="$(DestinationFile)" />
+
+   <ItemGroup>
+      <Content Remove="$(DestinationFile)" Condition="@(Content-&gt;AnyHaveMetadataValue('Identity', $(DestinationFile)))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
+    <ItemGroup>
+      <MonochromeIcon Include="chevron" Size="16" />
+      <MonochromeIcon Include="close-medium" Size="16" />
+      <MonochromeIcon Include="delete" Size="24" />
+      <MonochromeIcon Include="edit" Size="24" />
+      <MonochromeIcon Include="error-full" Size="24" />
+      <MonochromeIcon Include="expander-light-left" Size="24" />
+      <MonochromeIcon Include="expander-light-right" Size="24" />
+      <MonochromeIcon Include="filter-light" Size="16" />
+      <MonochromeIcon Include="folder" Size="32" />
+      <MonochromeIcon Include="info-outlined" Size="16" />
+      <MonochromeIcon Include="plus-slim" Size="24" />
+      <MonochromeIcon Include="reload" Size="16" />
+      <MonochromeIcon Include="search" Size="16" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <MonochromeIconSvgOutputFolder>$(MSBuildProjectDirectory)/wwwroot/icons/monochrome-icons</MonochromeIconSvgOutputFolder>
+      <MonochromeIconScssOutputFolder>$(MSBuildProjectDirectory)/Styles/icons/monochrome-icons</MonochromeIconScssOutputFolder>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
+    <PropertyGroup>
+      <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
+      <PopupScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/popup</PopupScssOutputFolder>
+      <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
+      <TypographyScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/typography</TypographyScssOutputFolder>
+    </PropertyGroup>
+  </Target>
+
+  <UsingTask TaskName="InjectCssImports" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <FilePath ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        var css = File.ReadAllText(FilePath);
+
+        var cssWithInjectedImports = "@import './icons/bundle.css';" + Environment.NewLine + css;
+
+        File.WriteAllText(FilePath, cssWithInjectedImports);
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="InjectImportsIntoCssBundle" AfterTargets="BundleScopedCssFiles">
+    <InjectCssImports FilePath="$(_ScopedCssProjectOutputPath)" />
+  </Target>
+
+</Project>

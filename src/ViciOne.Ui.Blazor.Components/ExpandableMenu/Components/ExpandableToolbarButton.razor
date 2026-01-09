@@ -1,0 +1,27 @@
+﻿@using ViciOne.Ui.Blazor.Components.Shared
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@if (Entry.Visible)
+{
+    <button type="button" class="toolbar-button expandable-button @(AddCssClasses())" @onclick="@OnClickAsync">
+        @RenderFragments.Icon(Entry)
+
+        @if (!MenuService.IsCompact && !string.IsNullOrWhiteSpace(Entry.Label))
+        {
+            <span>@(Entry.Label)</span>
+        }
+
+        @if (!MenuService.IsCompact)
+        {
+            <button type="button"
+                    class="toolbar-button collapse-button"
+                    @onclick="@OnCollapseButtonClicked"
+                    @onclick:preventDefault="true"
+                    @onclick:stopPropagation="true">
+
+                <MonochromeIcon Name="MonochromeIconName.ExpanderLightLeft" Size="MonochromeIconSize.SmallMedium" />
+            </button>
+        }
+    </button>
+}

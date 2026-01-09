@@ -1,0 +1,69 @@
+default:
+  image: mcr.microsoft.com/dotnet/sdk:10.0.101
+
+include:
+  - project: 'acx/tooling/templates'
+    file: '/CI-Templates/v2/dotnet.yml'
+
+.install_nodejs: &install_nodejs
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  - apt update && apt install -y nodejs
+
+.install_npm_packages: &install_npm_packages
+  - cd src/ViciOne.Ui.Blazor.Components
+  - npm install
+  - cd -
+  - cd samples/Shared
+  - npm install
+  - cd -
+
+.run_eslint: &run_eslint
+  - cd src/ViciOne.Ui.Blazor.Components
+  - npx eslint .
+  - cd -
+
+before_script:
+  - *install_nodejs
+  - *install_npm_packages
+  - !reference [.nuget_credentials]
+
+Build:
+  extends: .dotnet-build
+  script:
+    - *run_eslint
+    - dotnet build samples/Server -c Release
+
+Tests:
+  extends: .dotnet-test-xunit
+
+Deploy:
+  extends: .dotnet-deploy-nuget
+  variables:
+    PROJECT: 'src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj'
+    REPO: 'JFrogViciOne'
+
+Release:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj'
+    REPO: 'JFrogViciOne'
+
+Publish Pages:
+  stage: release
+  pages: true
+  before_script:
+    - *install_nodejs
+    - *install_npm_packages
+  script:
+    - !reference [.nuget_credentials]
+    - dotnet publish samples/Client -c Release -o artifacts
+    - mkdir public
+    - cp -R artifacts/wwwroot/* public
+    - echo "Publish Pages on \"$CI_PAGES_URL\""
+  rules:
+    - !reference [.rules_tag_manual]
+    - !reference [.rules_default_branch]
+  tags:
+    - linux
+    - docker
+    - x64

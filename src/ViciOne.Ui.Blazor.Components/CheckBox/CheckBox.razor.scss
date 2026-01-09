@@ -1,0 +1,131 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/animations/mixins" as animations;
+@use "../Styles/inputs";
+
+@use "sass:color";
+
+@property --vo-ui-bc-color-accent {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: colors.$accent;
+}
+
+@property --vo-ui-bc-color-accent-hover {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: colors.$accent-hover;
+}
+
+@property --vo-ui-bc-check-box-color-accent-focus {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: color.adjust(colors.$accent, $lightness: -10%);
+}
+
+@property --vo-ui-bc-check-box-color-accent-hover {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: color.adjust(colors.$accent, $lightness: -10%);
+}
+
+.check-box {
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 1.25rem;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    min-height: 1.25rem;
+    border-radius: 0.1875rem;
+    color: colors.$font-light;
+
+    // provide some invisible text to allow correct vertical alignment of the checkbox and leading / trailing text along a baseline
+    &::before {
+        content: "\200B"; // https://unicode-explorer.com/c/200B
+    }
+
+    &.unchecked {
+        &::after {
+            content: "";
+            position: absolute;
+            z-index: 0;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: color.change(colors.$theme, $alpha: 0.05);
+
+            @include inputs.border();
+        }
+
+        @include inputs.invalid-style($inner-selector: "&::after", $emit-border-color: true, $emit-background-color: false, $hover-focus-lightness: +10%);
+    }
+
+    &.checked, &.indeterminate {
+        background-color: var(--vo-ui-bc-color-accent);
+
+        @include animations.background-color();
+
+        &.disabled {
+            background-color: color.change(colors.$font, $alpha: 0.7);
+            color: colors.$background-dark;
+        }
+
+        @include inputs.invalid-style($emit-border-color: false, $emit-background-color: true, $hover-focus-lightness: -10%);
+    }
+
+    .input {
+        margin: 0;
+        appearance: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        position: absolute;
+    }
+
+    ::deep svg {
+        fill: currentcolor;
+        position: absolute;
+        width: 0.875rem;
+        height: 0.875rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    // interaction
+    @include inputs.disabled-style();
+
+    &:focus-within {
+        &.unchecked {
+            &::after {
+                border-color: var(--vo-ui-bc-color-accent);
+            }
+        }
+
+        &.checked, &.indeterminate {
+            background-color: var(--vo-ui-bc-check-box-color-accent-focus);
+        }
+    }
+
+    .input:focus {
+        outline: 0;
+    }
+
+    &:not(.disabled) {
+        &:hover {
+            &.unchecked {
+                &::after {
+                    border-color: var(--vo-ui-bc-color-accent-hover);
+                }
+            }
+
+            &.checked, &.indeterminate {
+                background-color: var(--vo-ui-bc-check-box-color-accent-hover);
+            }
+        }
+    }
+}

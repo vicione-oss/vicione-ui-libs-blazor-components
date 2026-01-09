@@ -1,0 +1,17 @@
+﻿@using ViciOne.Ui.Blazor.Components.ComboBox
+
+@typeparam TPropertyValue
+
+@inherits PropertyEditorBase<TPropertyValue>
+
+<ComboBox Items="@SelectableValues"
+          ValueSelector="@(item => item.Value)"
+          TextSelector="@(item => item.Text)"
+          Enabled="@Enabled"
+          ReadOnly="@ReadOnly"
+          NoOptionSelected="@NoOptionSelected"
+          Valid="@Valid"
+          UpdateKey="@UpdateKey"
+          @bind-Value:get="Value"
+          @bind-Value:set="ValueChanged"
+          @ref="InnerEditorComponentReference" />

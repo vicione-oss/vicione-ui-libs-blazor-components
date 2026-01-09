@@ -1,0 +1,108 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- Versioning -->
+    <PropertyGroup>
+        <VersionWithSuffix>$([System.IO.File]::ReadAllText('$(MsBuildThisFileDirectory)VERSION').Trim())</VersionWithSuffix>
+        <!-- Use version 0.1.0 when no version could be retrieved from VERSION file -->
+        <VersionPrefix Condition="$(VersionWithSuffix) == ''">0.1.0</VersionPrefix>
+        <VersionPrefix Condition="$(VersionWithSuffix.Contains('-')) == true">$(VersionWithSuffix.Substring(0, $(VersionWithSuffix.IndexOf('-'))))</VersionPrefix>
+        <VersionPrefix Condition="$(VersionWithSuffix.Contains('-')) == false">$(VersionWithSuffix)</VersionPrefix>
+        <!-- Append suffix optionally stated in VERSION file -->
+        <VersionSuffix></VersionSuffix>
+        <VersionSuffix Condition="$(VersionWithSuffix.Contains('-')) == true">$(VersionWithSuffix.Substring($(VersionWithSuffix.IndexOf('-'))))</VersionSuffix>
+        <VersionSuffix Condition="$(VersionSuffix.Contains('-')) == true">$(VersionSuffix.Substring(1))</VersionSuffix>
+        <!-- Set package version from VersionPrefix -->
+        <PackageVersion>$(VersionPrefix)</PackageVersion>
+        <PackageVersion Condition="$(PackageVersionSuffix) != ''">$(PackageVersion).$(PackageVersionSuffix)</PackageVersion>
+        <PackageVersion Condition="$(VersionSuffix) != ''">$(PackageVersion)-$(VersionSuffix)</PackageVersion>
+    </PropertyGroup>
+
+    <!-- Properties for all projects -->
+    <PropertyGroup>
+        <!-- General -->
+        <TargetFramework>net10.0</TargetFramework>
+        <RuntimeIdentifiers Condition="$(MSBuildProjectDirectory.Contains('src'))">linux-x64;linux-arm64;win-x64</RuntimeIdentifiers>
+        <Description>UI components for Blazor projects</Description>
+        <Product>ViciOne Blazor Components</Product>
+        <Company>ifm software</Company>
+        <Year>$([System.DateTime]::Now.Year)</Year>
+        <Copyright>Copyright © $(Company) $(Year)</Copyright>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <SatelliteResourceLanguages>en-US;de-DE</SatelliteResourceLanguages>
+
+        <!-- Compilation -->
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+
+        <!-- Code quality -->
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+        <!-- Enable XML documentation for all projects by default as EnforceCodeStyleInBuild relys on it, see https://github.com/dotnet/roslyn/issues/41640 -->
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+        <!-- NuGet lock file -->
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RestoreLockedMode Condition="'$(CI)' == 'true'">true</RestoreLockedMode>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <DisableImplicitLibraryPacksFolder>true</DisableImplicitLibraryPacksFolder>
+    </PropertyGroup>
+
+    <!-- NuGet package properties -->
+    <PropertyGroup>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <PackageProjectUrl>https://gitlab.i40.ifm-datalink.net/acx/vicione/ui-libs/blazor-components.git</PackageProjectUrl>
+        <Authors>$(Company)</Authors>
+    </PropertyGroup>
+
+    <!-- Performance optimization for CI pipelines -->
+    <PropertyGroup Condition="'$(CI)' != ''">
+        <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+        <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzers>true</RunAnalyzers>
+    </PropertyGroup>
+
+    <!-- Add package references to projects in tests folder -->
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('TestingHelpers'))">
+        <PackageReference Include="AwesomeAssertions" />
+        <PackageReference Include="NSubstitute" />
+        <PackageReference Include="NSubstitute.Analyzers.CSharp">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!-- Configure xunit runner for test projects -->
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+        <Content Include="$(MSBuildThisFileDirectory)/tests/xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <!-- Add package references to test projects -->
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="xunit.v3" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="coverlet.collector">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!-- Configure output type according to xUnit 3 documentation for test projects -->
+    <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <!-- No XML documentation for projects not shared as NuGet package -->
+    <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('samples')) Or $(MSBuildProjectDirectory.Contains('tests'))">
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+    </PropertyGroup>
+
+    <!-- Make internals visible to test projects -->
+    <ItemGroup Condition="$(MSBuildProjectDirectory.Contains('tests')) == false">
+        <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+        <InternalsVisibleTo Include="$(MSBuildProjectName).TestingHelpers" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
+</Project>

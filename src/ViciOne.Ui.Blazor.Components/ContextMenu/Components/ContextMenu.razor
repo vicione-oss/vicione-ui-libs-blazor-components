@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Components.Sections
+@using ViciOne.Ui.Blazor.Components.ConditionalCascadingValue
+
+@{
+    var attributes = new Dictionary<string, object>();
+
+    var styles = new Dictionary<string, object>();
+
+    if (!_visible)
+        styles.Add("visibility", "hidden");
+
+    if (_position is not null)
+        styles.Add("transform", $"translate({_position.X}px, {_position.Y}px)");
+
+    if (styles.Count > 0)
+        attributes.Add("style", string.Join("; ", styles.Select(s => $"{s.Key}: {s.Value}")));
+}
+
+<SectionContent SectionId="this">
+    <div role="menu" class="context-menu" @attributes="@attributes" @oncontextmenu:preventDefault @ref="_elementReference">
+        <ul role="none">
+
+            <ConditionalCascadingValue Value="@this" Name="@Constants.CascadingParameterNames.RootContextMenu" IsFixed="true" Condition="!_isChildContextMenu">
+                <CascadingValue Value="@this" Name="@Constants.CascadingParameterNames.ParentContextMenu" IsFixed="true">
+                    <CascadingValue Value="@_itemFilter">
+                        <CascadingValue Value="ApplicableTo">
+                            @if (ChildContent is not null)
+                            {
+                                @ChildContent
+                            }
+                        </CascadingValue>
+                    </CascadingValue>
+                </CascadingValue>
+            </ConditionalCascadingValue>
+        </ul>
+    </div>
+</SectionContent>

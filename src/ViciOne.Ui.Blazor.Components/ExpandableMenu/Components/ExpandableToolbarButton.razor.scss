@@ -1,0 +1,95 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/typography";
+
+@use "sass:color";
+
+.toolbar-button {
+    margin: 0;
+    text-transform: none;
+    -webkit-appearance: button;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    border-radius: 2px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    color: colors.$font;
+    line-height: 1.5;
+    font-weight: typography.$font-weight-regular;
+    font-size: 1rem;
+    background-color: transparent;
+    border: 1px solid transparent;
+    display: inline-block;
+
+    text-transform: none;
+}
+
+.toolbar-button:focus:not(:focus-visible) {
+    outline: 0;
+}
+
+.toolbar-button:not(:disabled) {
+    cursor: pointer;
+}
+
+.collapse-button {
+    --collapse-button-icon-color: #{color.change(colors.$font-light, $alpha: 0.3)};
+    height: 24px;
+    padding: 0;
+    visibility: var(--collapse-button-visibility);
+    width: 24px;
+    color: var(--collapse-button-icon-color);
+
+    &:hover {
+        --collapse-button-icon-color: #{colors.$font-light};
+    }
+}
+
+.expandable-button {
+    --collapse-button-visibility: hidden;
+    --expandable-button-foreground-color: rgb(176, 176, 176);
+    border: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 24px auto 24px;
+    padding: 8px;
+    padding-left: 16px;
+    user-select: none;
+    width: 100%;
+
+    &.compact {
+        display: block;
+        height: 40px;
+        margin-left: 8px;
+        margin-right: 8px;
+        padding: 8px;
+        width: 40px;
+    }
+
+    &:hover {
+        --collapse-button-visibility: visible;
+        background-color: color.adjust(colors.$background-darker, $lightness: -2%);
+    }
+
+    &.expanded {
+        --expandable-button-foreground-color: #{colors.$font-light};
+        background-color: #2f2f2f;
+
+        &:hover {
+            background-color: colors.$background-darker-hover;
+        }
+    }
+
+    > span {
+        align-self: center;
+        color: var(--expandable-button-foreground-color);
+        display: flex;
+        font-size: 13px;
+        margin-left: 16px;
+    }
+
+    ::deep > .icon {
+        color: var(--expandable-button-foreground-color);
+        height: 24px;
+        width: 24px;
+    }
+}

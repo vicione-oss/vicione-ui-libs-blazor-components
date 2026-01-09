@@ -1,0 +1,55 @@
+﻿@use "../../../Styles/design/colors";
+@use "../../../Styles/animations/mixins" as animations;
+@use "../../../Styles/inputs/mixins" as inputs;
+
+@use "sass:color";
+
+.section-action-button {
+    // general resets
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+
+    // general styles
+    display: grid;
+    grid-template-areas: "icon";
+
+    $size: 24px;
+
+    width: $size;
+    height: $size;
+
+    border-width: 0px;
+    border-radius: 4px;
+    outline: 1px solid colors.$border; // use outline instead of border to allow correct centering of any icon size *1
+
+    color: inherit;
+    background-color: inherit;
+
+    @include animations.multiple($color: true, $background-color: true);
+
+    ::deep .icon {
+        grid-area: icon;
+        justify-self: center; // *1
+        align-self: center; // *1
+
+        max-width: $size;
+        max-height: $size;
+    }
+
+    // interaction
+    @include inputs.disabled-style();
+
+    &:not(:disabled) {
+        cursor: pointer;
+
+        &:hover {
+            background-color: colors.$background-dark-hover;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        background-color: colors.$background-dark-hover;
+    }
+}

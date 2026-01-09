@@ -1,0 +1,119 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/mixins";
+@use "Styles/tooltip-separator";
+
+.expansion-placeholder {
+    grid-area: expansion;
+}
+
+.tooltip {
+    position: relative;
+    width: fit-content !important;
+    max-width: 200px;
+    left: -55px;
+    top: 8px;
+
+    padding: 5px 8px;
+
+    background-color: colors.$background-dark !important;
+
+    border-radius: 8px !important;
+    box-shadow: 0px 0px 12px -2px black !important;
+
+    align-content: center;
+}
+
+.name-tooltip {
+    @extend .tooltip;
+
+    .display-name, .description {
+        padding: 0px 5px;
+    }
+
+    .display-name {
+        @include mixins.overflow-ellipsis();
+    }
+
+    @include tooltip-separator.styles(colors.$border);
+}
+
+.information-tooltip {
+    @extend .tooltip;
+}
+
+.information-visible {
+    grid-gap: 4px;
+    grid-template-columns: auto 16px 0px;
+}
+
+.property-name-container {
+    cursor: default;
+    display: grid;
+    grid-area: name;
+    padding: 11px 5px;
+    padding-left: calc(5px + 16px * var(--indent-mult));
+    user-select: none;
+
+    & .property-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .information-icon-container {
+        display: contents; // ensures icon does not have default block element spacing, which would otherwise change the actual row height possibly leading to unwanted scrollbars
+    }
+}
+
+.property-row {
+    background-color: colors.$background-dark;
+    display: grid;
+    grid-template-columns: 16px 120px minmax(80px, 1fr) 30px; // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+    grid-template-areas: "expansion name value wizard";
+    height: 38px;
+    line-height: normal;
+
+    align-items: baseline;
+
+    &.hidden {
+        display: none;
+    }
+    
+    &.has-value-different-from-default-value {
+        .property-name {
+            font-weight: bold;
+        }
+
+        .property-wizard {
+            background-color: colors.$font-light;
+        }
+    }
+
+    &.has-multiple-values {
+        .property-name {
+            color: lightblue;
+        }
+    }
+}
+
+.property-value {
+    grid-area: value;
+    padding: 0px 5px;
+    position: relative;
+
+    // make input components span full width
+    display: flex;
+    flex-direction: column;
+}
+
+.property-wizard {
+    background-color: colors.$background-light;
+    border: 1px solid rgb(177, 177, 177);
+    display: flex;
+    grid-area: wizard;
+    height: 9px;
+    justify-self: center;
+    margin-right: 12px;
+    user-select: none;
+    width: 9px;
+}

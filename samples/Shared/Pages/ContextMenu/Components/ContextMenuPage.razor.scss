@@ -1,0 +1,15 @@
+﻿@use "../../../Styles/mixins";
+
+.context-menu-request-area {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+    height: 350px;
+
+    @include mixins.dotted-border();
+
+    &:not(:first-of-type) {
+        margin-top: 10px;
+    }
+}

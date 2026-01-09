@@ -1,0 +1,237 @@
+﻿{{
+    generateAttributeName = "GenerateNumericSpinBehavior"
+    generatedFileNamespace = "ViciOne.Ui.Blazor.Components.SpinEdit.Services.Behaviors"
+
+    func isGenerateAttribute(attribute)
+       ret attribute.Name == generateAttributeName
+    end
+
+    func isTypeArgument(argument)
+       ret argument.Name == "Type"
+    end
+
+    func isAliasArgument(argument)
+       ret argument.Name == "Alias"
+    end
+
+    func generateInterface(typeArgument, aliasArgument, forNullableValues)
+
+        valueTypeXmlDocLangWord = typeArgument.Value
+
+        if forNullableValues
+            valueType = typeArgument.Value + "?"
+            valueTypeXmlDocPrefix = "nullable "
+        else
+            valueType = typeArgument.Value
+            valueTypeXmlDocPrefix = ""
+        end
+
+        intervalType = typeArgument.Value
+        limitType = typeArgument.Value
+
+        if forNullableValues
+            alias = "Nullable" + aliasArgument.Value
+        else
+            alias = aliasArgument.Value
+        end
+
+        generatedInterfaceName = $"I{alias}SpinBehavior";
+
+        capture output -}}
+// Auto-generated code
+
+namespace {{ generatedFileNamespace }};
+
+/// <summary>
+/// Spin behavior for values of type {{ valueTypeXmlDocPrefix }}<see langword="{{ valueTypeXmlDocLangWord }}"/>
+/// </summary>
+public interface {{ generatedInterfaceName }} : ISpinBehavior<{{ valueType }}, {{ intervalType }}, {{ limitType }}>
+{
+}
+        {{~ end
+
+        # Save the captured output, this will add the source code to
+        # the current compilation due to file extension .cs, see https://github.com/NeVeSpl/NTypewriter/blob/f43e26df17faecb8d7acbe0ec2e40e674be2139f/NTypewriter.SourceGenerator/Adapters/GeneratedFileReaderWriter.cs#L42
+        Save output $"../{generatedInterfaceName}.g.cs"
+
+        # Save it once again to create a temporary file in the project, transition from .g.cs.tmp to .g.cs will be done in .csproj
+        Save output $"../{generatedInterfaceName}.g.cs.tmp"
+    end
+
+    func generateClass(typeArgument, aliasArgument, forNullableValues)
+
+        valueType = typeArgument.Value
+        intervalType = typeArgument.Value
+        limitType = typeArgument.Value
+
+        if valueType == "byte" || valueType == "ushort" || valueType == "uint" || valueType == "ulong"
+            isUnsignedValueType = true
+        else
+            isUnsignedValueType = false
+        end
+
+        alias = aliasArgument.Value
+
+        interfaceName = $"I{alias}SpinBehavior";
+        className = $"{alias}SpinBehavior";
+
+        capture output -}}
+// Auto-generated code
+
+namespace {{ generatedFileNamespace }};
+
+{{ if forNullableValues
+
+    nullableValueType = valueType + "?"
+    nullableAlias = "Nullable" + aliasArgument.Value
+
+    injectedSpinBehaviorType = interfaceName
+    injectedSpinBehaviorParameterName = $"{valueType}SpinBehavior";
+    interfaceName = $"I{nullableAlias}SpinBehavior";
+    className = "Nullable" + className
+
+    generatedInterfaceNameForNonNullableValueType = $"I{aliasArgument.Value}SpinBehavior";
+
+~}}
+internal sealed class {{ className }}({{ injectedSpinBehaviorType }} {{ injectedSpinBehaviorParameterName }}) : {{ interfaceName }}
+{
+    public {{ nullableValueType }} Increment({{ nullableValueType }} value, {{ intervalType }} interval, {{ limitType }} minimum, {{ limitType }} maximum)
+    {
+        if (value is null)
+        {
+            if (minimum > interval)
+                return minimum;
+            else
+                return interval;
+        }
+
+        return {{ injectedSpinBehaviorParameterName }}.Increment(value.Value, interval, minimum, maximum);
+    }
+
+    public {{ nullableValueType }} Decrement({{ nullableValueType }} value, {{ intervalType }} interval, {{ limitType }} minimum, {{ limitType }} maximum)
+    {
+        if (value is null)
+        {
+            {{~ if isUnsignedValueType ~}}
+            return minimum;
+            {{~ else ~}}
+            var zero = default({{ valueType }});
+
+            value = ({{ nullableValueType }})(zero - interval);
+
+            if (value < minimum)
+                return minimum;
+            else
+                return value;
+            {{~ end ~}}
+        }
+
+        return {{ injectedSpinBehaviorParameterName }}.Decrement(value.Value, interval, minimum, maximum);
+    }
+
+    public {{ nullableValueType }} EnsureRange({{ nullableValueType }} value, {{ limitType }} minimum, {{ limitType }} maximum)
+    {
+        if (value < minimum)
+            return minimum;
+
+        if (value > maximum)
+            return maximum;
+
+        return value;
+    }
+
+    public {{ nullableValueType }} EnsureRaster({{ nullableValueType }} value, {{ intervalType }} interval)
+    {
+        if (value is null)
+            return value;
+
+        return {{ injectedSpinBehaviorParameterName }}.EnsureRaster(value.Value, interval);
+    }
+
+    public bool TryParse(string valueStr, out {{ nullableValueType }} valueTyped)
+    {
+        if (string.IsNullOrEmpty(valueStr))
+        {
+            valueTyped = null;
+
+            return true;
+        }
+
+        if ({{ valueType }}.TryParse(valueStr, out var i))
+        {
+            valueTyped = i;
+
+            return true;
+        }
+
+        valueTyped = default;
+        return false;
+    }
+}
+{{ else ~}}
+internal sealed class {{ className }} : {{ interfaceName }}
+{
+    public {{ valueType }} Increment({{ valueType }} value, {{ intervalType }} interval, {{ limitType }} minimum, {{ limitType }} maximum)
+    {
+        if (value <= maximum - interval)
+            return ({{ valueType }})(value + interval);
+
+        return maximum;
+    }
+
+    public {{ valueType }} Decrement({{ valueType }} value, {{ intervalType }} interval, {{ limitType }} minimum, {{ limitType }} maximum)
+    {
+        if (value >= minimum + interval)
+            return ({{ valueType }})(value - interval);
+
+        return minimum;
+    }
+
+    public {{ valueType }} EnsureRange({{ valueType }} value, {{ limitType }} minimum, {{ limitType }} maximum)
+    {
+        if (value < minimum)
+            return minimum;
+
+        if (value > maximum)
+            return maximum;
+
+        return value;
+    }
+
+    public {{ valueType }} EnsureRaster({{ valueType }} value, {{ intervalType }} interval)
+    {
+        var remainder = value % interval;
+        if (remainder != 0)
+            value = ({{ valueType }})(value - remainder);
+
+        return value;
+    }
+
+    public bool TryParse(string valueStr, out {{ valueType }} valueTyped)
+        => {{ valueType }}.TryParse(valueStr, out valueTyped);
+}
+{{ end
+        end
+
+        # Save the captured output, this will add the source code to
+        # the current compilation due to file extension .cs, see https://github.com/NeVeSpl/NTypewriter/blob/f43e26df17faecb8d7acbe0ec2e40e674be2139f/NTypewriter.SourceGenerator/Adapters/GeneratedFileReaderWriter.cs#L42
+        Save output $"../{className}.g.cs"
+
+        # Save it once again to create a temporary file in the project, transition from .g.cs.tmp to .g.cs will be done in .csproj
+        Save output $"../{className}.g.cs.tmp"
+    end
+
+    for interface in data.Interfaces | Symbols.ThatHaveAttribute generateAttributeName
+
+        generateAttributes = interface.Attributes | Array.Filter @isGenerateAttribute
+        for generateAttribute in generateAttributes
+            typeArgument = generateAttribute.Arguments | Array.Filter @isTypeArgument | Array.First
+            aliasArgument = generateAttribute.Arguments | Array.Filter @isAliasArgument | Array.First
+
+            generateInterface(typeArgument, aliasArgument, forNullableValues: false)
+            generateInterface(typeArgument, aliasArgument, forNullableValues:true)
+            generateClass(typeArgument, aliasArgument, forNullableValues: false)
+            generateClass(typeArgument, aliasArgument, forNullableValues:true)
+        end
+    end
+}}

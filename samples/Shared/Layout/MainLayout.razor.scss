@@ -1,0 +1,27 @@
+﻿@use "../Styles/icons/monochrome-icons" with (
+    $svg-base-url: "./icons/monochrome-icons",
+    $base-selector: "::deep"
+);
+@use "../Styles/design/scrollbar" as scrollbar;
+@use "../Styles/mixins" as mixins;
+
+main {
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.body-container {
+    position: absolute;
+    left: 0;
+    top:0;
+    right: 0;
+    bottom: 0;
+
+    @include mixins.header-and-content-padding();
+
+    overflow: auto;
+    @include scrollbar.adjust-styles();
+}

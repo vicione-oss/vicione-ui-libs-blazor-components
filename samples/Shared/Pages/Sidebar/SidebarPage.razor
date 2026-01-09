@@ -1,0 +1,45 @@
+﻿@page "/sidebar"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.EditorLayout
+@using ViciOne.Ui.Blazor.Components.Sidebar
+@using ViciOne.Ui.Blazor.Components.Sidebar.Enums
+
+<EditorLayout>
+    <Left>
+        <Sidebar Placement="SidebarPlacement.Left"
+                 Mode="_leftSidebarMode"
+                 CompactWidth="150"
+                 FluidMinimumWidth="200"
+                 FluidMaximumWidth="300"
+                 @bind-FluidWidth="_leftSidebarFluidWidth">
+
+            <div class="sidebar-content">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+                sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+
+                <Button CssClass="toggle-button" Text="@_leftSidebarMode.GetName()" OnClick="@(() => ToggleSidebarMode(ref _leftSidebarMode))" />
+
+                @if(_leftSidebarMode == SidebarMode.Fluid && _leftSidebarFluidWidth.HasValue)
+                {
+                    <p>@nameof(Sidebar.FluidWidth) is @_leftSidebarFluidWidth</p>
+                }
+            </div>
+        </Sidebar>
+    </Left>
+
+    <Center />
+
+    <Right>
+        <Sidebar Placement="SidebarPlacement.Right" Mode="_rigthSidebarMode" CompactWidth="400" FluidMinimumWidth="200" FluidMaximumWidth="300">
+            <div class="sidebar-content">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+                sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+
+                <Button CssClass="toggle-button" Text="@_rigthSidebarMode.GetName()" OnClick="@(() => ToggleSidebarMode(ref _rigthSidebarMode))" />
+            </div>
+        </Sidebar>
+    </Right>
+</EditorLayout>

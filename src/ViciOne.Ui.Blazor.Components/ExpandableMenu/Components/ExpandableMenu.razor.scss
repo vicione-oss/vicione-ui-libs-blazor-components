@@ -1,0 +1,22 @@
+@use "../../Styles/design/colors";
+
+.content-area {
+    bottom: 0;
+    display: grid;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.expandable-menu {
+    background-color: colors.$background-darker;
+    color: colors.$font;
+    height: 100%;
+    position: relative;
+    width: 100%;
+
+    &.compact {
+        width: 56px;
+    }
+}

@@ -1,0 +1,41 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/inputs";
+
+@use "sass:color";
+
+.search-box {
+    position: relative;
+
+    display: inline-grid;
+    align-items: center;
+
+    ::deep .search-text-box {
+        padding-right: 35px;
+        align-self: stretch;
+    }
+
+    ::deep .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .execute-search-label {
+        position: absolute;
+        right: inputs.$border-width + 3px;
+
+        color: color.change(colors.$font-light, $alpha: 0.8);
+
+        display: flex;
+        align-items: center;
+
+        @include inputs.disabled-style();
+
+        &:not(.disabled) {
+            cursor: pointer;
+
+            &:hover {
+                color: colors.$font-light;
+            }
+        }
+    }
+}

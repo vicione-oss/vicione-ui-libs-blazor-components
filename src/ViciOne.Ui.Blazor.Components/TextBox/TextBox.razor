@@ -1,0 +1,43 @@
+﻿@using ViciOne.Ui.Blazor.Components.Extensions
+
+@{
+    var cssClasses = new List<string> { "text-box" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    this.WithInputValidationStyling(cssClasses);
+
+    var attributes = new Dictionary<string, object>();
+    if (ReadOnly)
+        attributes.Add("readonly", "readonly");
+
+    if (!Enabled)
+        attributes.Add("disabled", "disabled");
+
+    if (!string.IsNullOrWhiteSpace(Placeholder))
+        attributes.Add("placeholder", Placeholder);
+
+    if (!string.IsNullOrWhiteSpace(InputMode))
+        attributes.Add("inputmode", InputMode);
+
+    if (!string.IsNullOrWhiteSpace(AutoComplete))
+        attributes.Add("autocomplete", AutoComplete);
+
+    if (!string.IsNullOrWhiteSpace(Id))
+        attributes.Add("id", Id);
+
+    if (SpellCheck.HasValue)
+        attributes.Add("spellcheck", SpellCheck.Value ? "true" : "false");
+
+    var type = Password ? "password" : "text";
+}
+
+<input class="@string.Join(" ", cssClasses)"
+       type="@type"
+       @attributes="@attributes"
+       @bind="_valueEntered"
+       @bind:event="oninput"
+       @onkeyup="@InputKeyUpAsync"
+       @onblur="@InputBlurAsync"
+       @ref="_inputElementReference" />

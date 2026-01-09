@@ -1,0 +1,51 @@
+﻿@use "./../../Styles/design/colors";
+@use "./../../Styles/animations/mixins" as animations;
+
+@use "./../../node_modules/three-dots" with (
+    $dot-width: 32px,
+    $dot-height: 32px,
+    $dot-color: colors.$accent
+);
+
+@use 'sass:color';
+
+.loading-spinner {
+    --line-height: 6em;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+
+    background-color: color.change(colors.$background-darker, $alpha: 90%);
+
+    // center dots
+    display: flex;
+    place-content: center;
+    place-items: center;
+    padding-top: var(--line-height, 1em);
+
+    .center-container {
+        display: grid;
+        grid-row-gap: 16px;
+        grid-template-rows: min-content var(--line-height, 1em);
+        place-items: center;
+        width: 100%;
+
+        ::deep .message-container {
+            text-align: center;
+            width: 30%;
+        }
+
+        .message-container {
+            @include animations.opacity();
+
+            opacity: 0;
+
+            &.visible {
+                opacity: 1;
+            }
+        }
+    }
+}

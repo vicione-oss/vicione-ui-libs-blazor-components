@@ -1,0 +1,93 @@
+﻿{{
+    generateAttributeName = "GenerateNumericValueTypeDescriptor"
+
+    func isGenerateAttribute(attribute)
+       ret attribute.Name == generateAttributeName
+    end
+
+    func isTypeArgument(argument)
+       ret argument.Name == "Type"
+    end
+
+    func isAliasArgument(argument)
+       ret argument.Name == "Alias"
+    end
+
+    interface = data.Interfaces | Symbols.ThatHaveAttribute generateAttributeName | Array.First
+
+    generateAttributes = interface.Attributes | Array.Filter @isGenerateAttribute
+
+    capture output -}}
+// Auto-generated code
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Services.TypeDescriptors;
+
+namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
+
+/// <summary>
+/// Extension methods for <see cref="IServiceCollection"/>
+/// </summary>
+public static partial class IServiceCollectionExtensions
+{
+    internal static IServiceCollection AddNumericValueTypeDescriptors(this IServiceCollection services)
+    {
+{{~
+    func generateExtensionMethodCall(typeArgument, aliasArgument, forNullableValues)
+    
+        nonNullableValueType = typeArgument.Value
+
+        if forNullableValues
+            valueType = nonNullableValueType + "?"
+            alias = "Nullable" + aliasArgument.Value
+        else
+            valueType = nonNullableValueType
+            alias = aliasArgument.Value
+        end
+
+        implementationClassName = $"{alias}TypeDescriptor"
+
+        ~}}
+        services.AddNumericValueTypeDescriptor<{{valueType}}, {{implementationClassName}}>();
+        {{~
+    end
+
+    for generateAttribute in generateAttributes
+        typeArgument = generateAttribute.Arguments | Array.Filter @isTypeArgument | Array.First
+        aliasArgument = generateAttribute.Arguments | Array.Filter @isAliasArgument | Array.First
+
+        generateExtensionMethodCall(typeArgument, aliasArgument, forNullableValues: false)
+        generateExtensionMethodCall(typeArgument, aliasArgument, forNullableValues: true)
+    end ~}}
+
+        return services;
+    }
+
+    private static IServiceCollection AddNumericValueTypeDescriptor<TNumericValueType, TNumericValueTypeDescriptor>(
+        this IServiceCollection services)
+            where TNumericValueTypeDescriptor : class, INumericValueTypeDescriptor<TNumericValueType>
+    {
+        var serviceCountBefore = services.Count;
+
+        services.TryAddScoped<INumericValueTypeDescriptor<TNumericValueType>, TNumericValueTypeDescriptor>();
+
+        if (serviceCountBefore < services.Count)
+        {
+            services.AddScoped<INumericValueTypeDescriptor>(
+                serviceProvider => serviceProvider.GetRequiredService<INumericValueTypeDescriptor<TNumericValueType>>());
+        }
+
+        return services;
+    }
+}
+{{
+    end
+
+    # Save the captured output, this will add the source code to
+    # the current compilation due to file extension .cs, see https://github.com/NeVeSpl/NTypewriter/blob/f43e26df17faecb8d7acbe0ec2e40e674be2139f/NTypewriter.SourceGenerator/Adapters/GeneratedFileReaderWriter.cs#L42
+    Save output $"../IServiceCollectionExtensions.PropertyGrid.g.cs"
+
+    # Save it once again to create a temporary file in the project, transition from .g.cs.tmp to .g.cs will be done in .csproj
+    Save output $"../IServiceCollectionExtensions.PropertyGrid.g.cs.tmp"
+}}

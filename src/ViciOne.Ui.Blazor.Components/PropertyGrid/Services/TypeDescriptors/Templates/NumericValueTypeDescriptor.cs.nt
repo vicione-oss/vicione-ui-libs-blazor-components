@@ -1,0 +1,67 @@
+﻿{{
+    generateAttributeName = "GenerateNumericValueTypeDescriptor"
+    generatedFileNamespace = "ViciOne.Ui.Blazor.Components.PropertyGrid.Services.TypeDescriptors"
+
+    func isGenerateAttribute(attribute)
+       ret attribute.Name == generateAttributeName
+    end
+
+    func isTypeArgument(argument)
+       ret argument.Name == "Type"
+    end
+
+    func isAliasArgument(argument)
+       ret argument.Name == "Alias"
+    end
+
+    func generateClass(typeArgument, aliasArgument, forNullableValues)
+        valueTypeNonNullable = typeArgument.Value
+
+        if forNullableValues
+            valueType = valueTypeNonNullable + "?"
+            alias = "Nullable" + aliasArgument.Value
+        else
+            valueType = valueTypeNonNullable
+            alias = aliasArgument.Value
+        end
+
+        interfaceName = $"INumericValueTypeDescriptor<{valueType}>";
+        className = $"{alias}TypeDescriptor";
+
+        capture output -}}
+// Auto-generated code
+
+namespace {{ generatedFileNamespace }};
+
+internal sealed class {{ className }} : {{ interfaceName }}
+{
+    private Type _underlyingType = typeof({{ valueType }});
+
+    public Type UnderlyingType => _underlyingType;
+    public {{ valueType }} Minimum => {{ valueTypeNonNullable }}.MinValue;
+    public {{ valueType }} Maximum => {{ valueTypeNonNullable }}.MaxValue;
+    public {{ valueType }} One => 1;
+}
+{{
+        end
+
+        # Save the captured output, this will add the source code to
+        # the current compilation due to file extension .cs, see https://github.com/NeVeSpl/NTypewriter/blob/f43e26df17faecb8d7acbe0ec2e40e674be2139f/NTypewriter.SourceGenerator/Adapters/GeneratedFileReaderWriter.cs#L42
+        Save output $"../{className}.g.cs"
+
+        # Save it once again to create a temporary file in the project, transition from .g.cs.tmp to .g.cs will be done in .csproj
+        Save output $"../{className}.g.cs.tmp"
+    end
+
+    for interface in data.Interfaces | Symbols.ThatHaveAttribute generateAttributeName
+
+        generateAttributes = interface.Attributes | Array.Filter @isGenerateAttribute
+        for generateAttribute in generateAttributes
+            typeArgument = generateAttribute.Arguments | Array.Filter @isTypeArgument | Array.First
+            aliasArgument = generateAttribute.Arguments | Array.Filter @isAliasArgument | Array.First
+
+            generateClass(typeArgument, aliasArgument, forNullableValues: false)
+            generateClass(typeArgument, aliasArgument, forNullableValues: true)
+        end
+    end
+}}

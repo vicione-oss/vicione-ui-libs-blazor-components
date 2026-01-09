@@ -1,0 +1,13 @@
+﻿@{
+    var cssClasses = new List<string> { "loading-spinner-message" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    if (Visible)
+        cssClasses.Add("visible");
+}
+
+<div class="@string.Join(" ", cssClasses)">
+    @ChildContent
+</div>

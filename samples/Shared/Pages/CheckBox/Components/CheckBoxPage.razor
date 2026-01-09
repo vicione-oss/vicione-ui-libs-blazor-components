@@ -1,0 +1,44 @@
+﻿@page "/check-box"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.CheckBox
+
+<h3>Value</h3>
+
+<CheckBox @bind-Value="@_value" />
+
+contains @_value
+
+<h3>Nullable value</h3>
+
+<CheckBox @bind-Value="@_nullableValue" />
+
+contains @(_nullableValue is null ? "null" : _nullableValue.ToString())
+
+<h3>Unbound</h3>
+
+<CheckBox Value="@(_unboundCheckboxValue ?? false)" @ref="_unboundCheckbox" />
+
+<p>
+    <Button Text="Get value" Size="ButtonSize.Small" OnClick="GetUnboundCheckBoxValueClick" />
+
+    @if (_unboundCheckboxValue is not null)
+    {
+        <span>&nbsp;>&nbsp;</span> @_unboundCheckboxValue
+    }
+</p>
+
+<h3>Disabled</h3>
+
+<CheckBox Enabled="false" Value="_nullableValue" />
+
+<h3>Invalid</h3>
+
+<CheckBox Value="_nullableValue" Valid="false" />
+
+<h3>Custom theme</h3>
+
+<div class="custom-theme">
+    <CheckBox TValue="bool?" Value="true" />
+</div>

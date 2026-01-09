@@ -1,0 +1,74 @@
+﻿@use "../../Styles/design/scrollbar" as scrollbar;
+@use "../../Styles/design/typography";
+
+.section-layout {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    display: grid;
+    grid-template-areas:
+        "header"
+        "tools"
+        "content";
+    grid-template-rows: min-content min-content auto;
+
+    .header {
+        grid-area: header;
+
+        min-height: 48px;
+
+        $padding-top: 16px;
+        $horizontal-spacing: 15px;
+        padding-left: $horizontal-spacing;
+        padding-right: $horizontal-spacing;
+
+        display: grid;
+        grid-template-areas:
+            "title action-buttons";
+
+        grid-template-columns: 1fr auto;
+
+        .title {
+            grid-area: title;
+
+            padding-top: $padding-top;
+
+            font-size: 10px;
+            font-weight: typography.$font-weight-bold;
+            text-transform: uppercase;
+        }
+
+        .action-buttons {
+            grid-area: action-buttons;
+            
+            $vertical-spacing: $padding-top - 4px;
+
+            padding-left: $horizontal-spacing;
+            padding-top: $vertical-spacing;
+            padding-bottom: $vertical-spacing;
+
+            max-width: 135px; // allows as much as 4 action buttons horizontally, more buttons will wrap with help of *1
+
+            display: flex;
+            flex-wrap: wrap; // *1
+            justify-content: flex-end;
+            gap: 8px;
+        }
+    }
+
+    .tools {
+        grid-area: tools;
+    }
+
+    .content {
+        grid-area: content;
+
+        position: relative; // give content with absolute positioning something to align on
+
+        overflow: auto;
+        @include scrollbar.adjust-styles();
+    }
+}

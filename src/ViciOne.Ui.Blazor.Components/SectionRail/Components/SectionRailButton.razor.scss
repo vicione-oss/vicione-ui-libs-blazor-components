@@ -1,0 +1,38 @@
+﻿@use "../../Styles/design/colors";
+
+@use "sass:color";
+
+.section-rail-button {
+    padding: 8px 0px;
+    
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    
+    text-decoration: none;
+    color: colors.$font;
+
+    $background-color-active: rgb(200, 200, 200);
+    $color-active: colors.$background-darker;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+        background-color: color.change($background-color-active, $alpha: 0.8);
+        color: color.change($color-active, $alpha: 0.8);
+    }
+
+    &:focus-visible {
+        outline: none;
+    }
+
+    &.active {
+        background-color: $background-color-active;
+        color: $color-active;
+    }
+
+    ::deep > .icon {
+        width: 32px;
+        height: 32px;
+    }
+}

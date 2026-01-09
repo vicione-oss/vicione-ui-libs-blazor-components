@@ -1,0 +1,140 @@
+﻿@page "/tooltip"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tooltip.Components
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+@using ViciOne.Ui.MonochromeIcons.Core.Extensions
+
+<div class="options">
+    <label>With <code>UseThirds</code></label>
+
+    <Switch @bind-Value="Service.UseThirds" />
+</div>
+
+<div class="tooltip-grid">
+    <div class="tooltip-area"
+            style="grid-column: 1;
+                grid-row: 2;">
+
+        <TooltipContainer>
+            <ChildContent>
+                <div @onpointerenter="@(context.OnPointerEnter)"
+                     @onpointerleave="@(context.OnPointerLeave)"
+                     @onpointermove="@(context.OnPointerMove)"
+                     class="tooltipped-content">
+
+                    <span>The tooltip of this area is designed to feature a header and simple tabular data.</span>
+                </div>
+            </ChildContent>
+
+            <TooltipContent>
+                <div class="tabular-tooltip-content">
+                    <h4>This is the tooltip header</h4>
+                    <hr />
+
+                    <div class="data-table">
+                        @for (int j = 0; j < _tableRows; j++)
+                        {
+                            var rowLabelIndex = j.ToString();
+
+                            <label>row label [@rowLabelIndex]</label>
+                            <span>@Guid.NewGuid()</span>
+                        }
+                    </div>
+                </div>
+            </TooltipContent>
+        </TooltipContainer>
+    </div>
+
+    <div class="tooltip-area"
+            style="grid-column: 3;
+                grid-row: 3;">
+
+        <TooltipContainer>
+            <ChildContent>
+                <div @onpointerenter="@(context.OnPointerEnter)"
+                     @onpointerleave="@(context.OnPointerLeave)"
+                     @onpointermove="@(context.OnPointerMove)"
+                     class="tooltipped-content">
+ 
+                    @if (Service.UseThirds)
+                    {
+                        <span>The tooltip will be moved up and left to fit the screen nicely based of a 3x3 grid of the client size.</span>
+                    }
+                    else
+                    {
+                        <span>The tooltip will be moved up and left based on its width and height.</span>
+                    }
+                </div>
+            </ChildContent>
+
+            <TooltipContent>
+                <div class="tooltip-content">
+                    This will be the CONTENT of the tooltip for the test component.
+
+                    <MonochromeIcon Name="MonochromeIconName.Folder"
+                                    Size="MonochromeIconSize.Medium" />
+                </div>
+            </TooltipContent>
+        </TooltipContainer>
+    </div>
+
+    <div class="tooltip-area"
+            style="grid-column: 3;
+                grid-row: 1;">
+
+        <TooltipContainer>
+            <ChildContent>
+                <div @onpointerenter="@(context.OnPointerEnter)"
+                     @onpointerleave="@(context.OnPointerLeave)"
+                     @onpointermove="@(context.OnPointerMove)"
+                     class="tooltipped-content">
+
+                    <span>This is a test component to test the tooltip implementation</span>
+                </div>
+            </ChildContent>
+
+            <TooltipContent>
+                <div class="tooltip-content">
+                    This will be the CONTENT of the tooltip for the test component.
+
+                    <MonochromeIcon Name="MonochromeIconName.Folder"
+                                    Size="MonochromeIconSize.Medium" />
+                </div>
+            </TooltipContent>
+        </TooltipContainer>
+    </div>
+
+    <div class="tooltip-area"
+            style="grid-column: 1;
+                grid-row: 3;">
+
+        <TooltipContainer DisplayCondition="@(() => _random == 0)">
+            <ChildContent>
+                <div @onpointerenter="@(context.OnPointerEnter)"
+                     @onpointerleave="@(context.OnPointerLeave)"
+                     @onpointermove="@(context.OnPointerMove)"
+                     class="tooltipped-content">
+
+                    <span>
+                        It is random if the tooltip of this component will be displayed.
+                        Currently it <b>@(_random == 0 ? "will" : "won't'")</b> be displayed
+                        Reload the page to maybe change it.
+                    </span>
+                </div>
+            </ChildContent>
+
+            <TooltipContent>
+                <div class="tooltip-content">
+                    This will be the CONTENT of the tooltip for the test component.
+
+                    <MonochromeIcon Name="MonochromeIconName.Folder"
+                                    Size="MonochromeIconSize.Medium" />
+                </div>
+            </TooltipContent>
+        </TooltipContainer>
+    </div>
+</div>
+
+<TooltipDisplay />

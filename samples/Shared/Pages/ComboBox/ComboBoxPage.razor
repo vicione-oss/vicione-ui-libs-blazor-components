@@ -1,0 +1,53 @@
+﻿@page "/combo-box"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.ComboBox
+
+<h3>Available options</h3>
+
+<ComboBox Items="@_buttonSizeComboBoxItems"
+          @bind-Value="@_buttonSize"
+          ValueSelector="@(item => item.Value)"
+          TextSelector="@(item => item.Text)" />
+
+<Button Size="ButtonSize.Small" Text="Reset selection" OnClick="ResetSelectionButtonClick" />
+
+<h5>Selected option</h5>
+
+<Button Size="@_buttonSize" Text="@_buttonSize.GetName()" />
+
+<h3>Invalid</h3>
+
+<ComboBox Items="@_buttonSizeComboBoxItems"
+          Value="ButtonSize.Small"
+          ValueSelector="@(item => item.Value)"
+          TextSelector="@(item => item.Text)"
+          Valid="false" />
+
+<h3>Read-only</h3>
+
+<ComboBox ReadOnly="true"
+          Items="@_buttonSizeComboBoxItems"
+          Value="ButtonSize.Small"
+          ValueSelector="@(item => item.Value)"
+          TextSelector="@(item => item.Text)" />
+
+<h3>Disabled</h3>
+
+<ComboBox Enabled="false"
+          Items="@_buttonSizeComboBoxItems"
+          Value="ButtonSize.Small"
+          ValueSelector="@(item => item.Value)"
+          TextSelector="@(item => item.Text)" />
+
+<h3>Value assigned that is not selectable</h3>
+
+<ComboBox Items="@_buttonSizeComboBoxItems.Select(i => new { Value = i.Value.ToString(), Text = i.Text })"
+          Value="@("MediumLarge")"
+          ValueSelector="@(item => item.Value)"
+          TextSelector="@(item => item.Text)" />
+
+<h3>Simple items</h3>
+
+<ComboBox Items="@_simpleItems" @bind-Value="@_buttonSize" ReadOnly="true" />

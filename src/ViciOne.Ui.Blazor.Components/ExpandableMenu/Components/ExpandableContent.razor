@@ -1,0 +1,8 @@
+﻿@if (Entry.Visible)
+{
+    <div class="content-container  @((!MenuService.IsCompact && Entry.IsExpanded) ? "expanded" : string.Empty)">
+
+            <DynamicComponent Parameters="@Entry.ContentParameters"
+                              Type="@Entry.ContentType" />
+    </div>
+}

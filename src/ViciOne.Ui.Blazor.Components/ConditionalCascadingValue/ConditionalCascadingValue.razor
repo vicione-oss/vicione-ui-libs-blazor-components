@@ -1,0 +1,12 @@
+﻿@typeparam TValue
+
+@if (Condition)
+{
+    <CascadingValue Value="@Value" Name="@Name" IsFixed="IsFixed">
+        @ChildContent
+    </CascadingValue>
+}
+else
+{
+    @ChildContent
+}

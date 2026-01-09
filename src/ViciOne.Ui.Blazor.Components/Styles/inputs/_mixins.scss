@@ -1,0 +1,99 @@
+﻿@use "../animations/mixins" as animations;
+@use "../design/colors";
+@use "../design/typography";
+@use "../theme";
+@use "variables";
+
+@use "sass:color";
+
+@mixin border() {
+    border-radius: variables.$border-radius;
+    border-width: variables.$border-width;
+    border-style: solid;
+    border-color: variables.$border-color-default;
+
+    @include animations.border-color();
+}
+
+@mixin disabled-style() {
+    &:disabled, &.disabled {
+        opacity: 0.5;
+    }
+}
+
+@mixin invalid-style($inner-selector: null, $emit-border-color: true, $emit-background-color: false, $hover-focus-lightness: +10%) {
+    $color-invalid: colors.$error;
+    $color-invalid-focus: color.adjust(colors.$error, $lightness: $hover-focus-lightness);
+    $background-color-alpha: 0.7;
+
+    &.invalid {
+        $border-color: null;
+        $background-color: null;
+
+        @if ($emit-border-color) {
+            $border-color: $color-invalid;
+        }
+
+        @if ($emit-background-color) {
+            $background-color: color.change($color-invalid, $alpha: $background-color-alpha);
+        }
+
+        @include _emit-invalid-style-rule-set($inner-selector, $border-color, $background-color);
+
+        &:not(:disabled):not(.disabled) {
+            &:focus, &:focus-within, &:hover {
+                $border-color-hover: null;
+                $background-color-hover: null;
+
+                @if ($emit-border-color) {
+                    $border-color-hover: $color-invalid-focus;
+                }
+
+                @if ($emit-background-color) {
+                    $background-color-hover: color.change($color-invalid-focus, $alpha: $background-color-alpha);
+                }
+
+                @include _emit-invalid-style-rule-set($inner-selector, $border-color-hover, $background-color-hover);
+            }
+        }
+    }
+
+}
+
+@mixin _emit-invalid-style-rule-set($selector, $border-color, $background-color) {
+    @if ($selector)
+    {
+        #{$selector} {
+            @include _emit-invalid-style-declaration-block($border-color, $background-color);
+        }
+
+    } @else {
+          @include _emit-invalid-style-declaration-block($border-color, $background-color);
+    }
+}
+
+@mixin _emit-invalid-style-declaration-block($border-color, $background-color) {
+    @if ($border-color) {
+        border-color: $border-color;
+    }
+
+    @if ($background-color) {
+        background-color: $background-color;
+    }
+}
+
+@mixin typography() {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: typography.$font-weight-light;
+    letter-spacing: 0.2px;
+    line-height: normal;
+}
+
+@mixin padding($top: 3px, $right: 10px, $bottom: 4px, $left: 10px) {
+    padding: $top $right $bottom $left; // together with typography() the overall input height should be 24px
+}
+
+@mixin color-scheme() {
+    color-scheme: theme.$color-scheme;
+}

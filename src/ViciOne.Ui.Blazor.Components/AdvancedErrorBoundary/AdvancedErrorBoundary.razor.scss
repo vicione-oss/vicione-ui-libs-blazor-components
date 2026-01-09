@@ -1,0 +1,37 @@
+﻿@use "../Styles/design/colors";
+
+.generic-error-hint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    grid-row-gap: 5px;
+
+    .heading {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        ::deep .monochrome-icon {
+            color: colors.$font-light;
+        }
+
+        .text {
+            font-size: 18px;
+            color: colors.$accent;
+        }
+    }
+
+    .details {
+        font-size: 12px;
+    }
+
+    ::deep .try-to-recover-button {
+        margin-top: 16px;
+    }
+}

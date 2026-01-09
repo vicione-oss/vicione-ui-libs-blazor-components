@@ -1,0 +1,22 @@
+﻿@page "/expandable-menu"
+
+@using ViciOne.Ui.Blazor.Components.EditorLayout
+@using ViciOne.Ui.Blazor.Components.ExpandableMenu.Components
+@using ViciOne.Ui.Blazor.Components.Sidebar
+@using ViciOne.Ui.Blazor.Components.Sidebar.Enums
+
+<div class="editor-layout-container">
+    <EditorLayout>
+        <Left>
+            <Sidebar Placement="SidebarPlacement.Left" Mode="@_sidebarMode" CompactWidth="56" FluidMinimumWidth="300" FluidMaximumWidth="680">
+                <ExpandableMenu CompactMode="_sidebarMode == SidebarMode.Compact" CompactModeChanged="@OnCompactChanged" Entries="@_entries" />
+            </Sidebar>
+        </Left>
+
+        <Center>
+            <div class="center-content">
+                Menu is @(_sidebarMode == SidebarMode.Compact ? "compact" : "expanded")
+            </div>
+        </Center>
+    </EditorLayout>
+</div>

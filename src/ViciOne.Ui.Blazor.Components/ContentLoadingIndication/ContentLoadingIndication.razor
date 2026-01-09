@@ -1,0 +1,58 @@
+﻿@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication.Enums
+@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication
+
+@{
+    var cssClasses = new List<string> { "content-loading-indication" };
+
+    if (Visible)
+        cssClasses.Add("loading");
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+}
+
+<div class="@string.Join(" ", cssClasses)">
+    @{
+        var contentWrapperCssClasses = new List<string> {"content-wrapper"};
+
+        var showSpinner = false;
+        
+        if (Visible)
+        {
+            showSpinner = Kind == LoadingIndicationKind.SpinnerLeft ||
+                Kind == LoadingIndicationKind.SpinnerCenter ||
+                Kind == LoadingIndicationKind.SpinnerRight;
+
+            if (showSpinner)
+                contentWrapperCssClasses.Add("hidden");
+            else if (Kind == LoadingIndicationKind.Opacity)
+                contentWrapperCssClasses.Add("half-opacity");
+
+            if (_animateTransitions)
+                contentWrapperCssClasses.Add("animate-transition");
+        }
+    }
+
+    <div class="@string.Join(" ", contentWrapperCssClasses)">
+        @ChildContent
+    </div>
+
+    @if (showSpinner)
+    {
+        var loadingSpinnerCssClasses = new List<string> { "loading-spinner" };
+
+        if (Kind == LoadingIndicationKind.SpinnerLeft)
+            loadingSpinnerCssClasses.Add("left");
+        else if (Kind == LoadingIndicationKind.SpinnerCenter)
+            loadingSpinnerCssClasses.Add("center");
+        else if (Kind == LoadingIndicationKind.SpinnerRight)
+            loadingSpinnerCssClasses.Add("right");
+
+        if (_animateTransitions)
+            loadingSpinnerCssClasses.Add("animate-transition");
+
+        <div class="@string.Join(" ", loadingSpinnerCssClasses)">
+            <div class="dot-flashing"></div>
+        </div>
+    }
+</div>

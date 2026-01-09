@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ViciOne.Ui.Blazor.Components\ViciOne.Ui.Blazor.Components.csproj" />
+  </ItemGroup>
+
+</Project>

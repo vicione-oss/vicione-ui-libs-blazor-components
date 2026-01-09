@@ -1,0 +1,61 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/inputs";
+
+@use "sass:color";
+
+@property --vo-ui-bc-color-accent {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: colors.$accent;
+}
+
+@property --vo-ui-bc-color-accent-hover {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: colors.$accent-hover;
+}
+
+@property --vo-ui-bc-text-box-background-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: color.change(colors.$theme, $alpha: 0.05);
+}
+
+@property --vo-ui-bc-text-box-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: color.change(colors.$theme-inverted, $alpha: 0.8);
+}
+
+.text-box {
+    background-color: var(--vo-ui-bc-text-box-background-color);
+    color: var(--vo-ui-bc-text-box-color);
+
+    @include inputs.color-scheme();
+
+    @include inputs.typography();
+    @include inputs.padding();
+
+    @include inputs.border();
+
+    @include inputs.disabled-style();
+    @include inputs.invalid-style();
+
+    &:focus {
+        outline: none;
+
+        &:not(:disabled):not(:read-only) {
+            border-color: var(--vo-ui-bc-color-accent);
+        }
+    }
+
+    &:hover {
+        &:not(:disabled):not(:read-only) {
+            border-color: var(--vo-ui-bc-color-accent-hover);
+        }
+    }
+}
+
+::-ms-reveal {
+    filter: invert(100%); // https://stackoverflow.com/a/66646884/3936440
+}

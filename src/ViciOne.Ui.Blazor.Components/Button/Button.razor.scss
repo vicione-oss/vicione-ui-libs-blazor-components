@@ -1,0 +1,86 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/design/typography";
+@use "../Styles/animations/mixins" as animations;
+@use "../Styles/buttons/mixins" as buttons;
+@use "../Styles/inputs/mixins" as inputs;
+
+@use "sass:color";
+
+.button {
+    // general resets
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    
+    // general styles
+    border-width: 1px;
+    border-style: solid;
+    border-color: #b1b1b1;
+    border-radius: 4px;
+    @include animations.border-color();
+
+    background-color: inherit;
+    color: color.change(colors.$font-light, $alpha: 0.8);
+
+    font-family: inherit;
+    font-weight: typography.$font-weight-light;
+    letter-spacing: 0.4px;
+
+    display: inline-grid;
+    grid-template-areas: "icon text";
+    // grid-template-columns is set in modifier classes
+    align-items: center;
+
+    ::deep .icon {
+        grid-area: icon;
+    }
+
+    .text {
+        grid-area: text;
+    }
+
+    // size
+    @mixin size-modifier($size, $height, $icon-margin-left, $icon-size, $font-size, $text-padding-left-right)
+    {
+         &.button--#{$size} {
+            height: $height;
+
+            grid-template-columns: auto minmax($icon-margin-left, 1fr); // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+
+            ::deep .icon {
+                width: $icon-size;
+                height: $icon-size;
+
+                margin-left: $icon-margin-left;
+            }
+
+            .text {
+                font-size: $font-size;
+                line-height: $font-size;
+
+                padding-right: $text-padding-left-right;
+                padding-left: $text-padding-left-right;
+            }
+        }
+    }
+
+    @include size-modifier($size: "small", $height: 26px, $icon-margin-left: 6px, $icon-size: 16px, $font-size: 12px, $text-padding-left-right: 8px);
+    @include size-modifier($size: "medium", $height: 32px, $icon-margin-left: 8px, $icon-size: 24px, $font-size: 14px, $text-padding-left-right: 10px);
+    @include size-modifier($size: "large", $height: 36px, $icon-margin-left: 10px, $icon-size: 32px, $font-size: 16px, $text-padding-left-right: 13px);
+
+    // interaction
+    @include inputs.disabled-style();
+
+    @include buttons.show-cursor-when-not-disabled();
+    @include buttons.no-outline-on-focus();
+
+    &:not(:disabled) {
+         &:hover {
+            border-color: colors.$font-light;
+        }
+    }
+
+    &:focus {
+        border-color: colors.$font-light;
+    }
+}

@@ -1,0 +1,59 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/typography";
+@use "../../Styles/mixins";
+
+.property-group {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 16px 120px auto;
+    height: 40px;
+    user-select: none;
+    align-items: center;
+    grid-gap: 5px;
+    background-color: colors.$background-darker;
+
+    &.sub-group {
+        background-color: colors.$background-dark;
+        grid-template-columns: 16px 120px minmax(80px, 1fr) 30px; // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+        height: 38px;
+        padding-left: calc(16px * var(--indent-mult));
+
+        > .group-name {
+            font-weight: typography.$font-weight-bold;
+            padding-left: 0px;
+            text-transform: uppercase;
+        }
+    }
+
+    &:not(.sub-group) {
+        box-sizing: content-box;
+        font-weight: typography.$font-weight-bold;
+        padding-left: 14px;
+        text-transform: uppercase;
+    }
+
+    > .group-description {
+        padding: 12px 0px;
+
+        @include mixins.overflow-ellipsis();
+    }
+
+    > .group-dropdown {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+
+        &.expanded > ::deep .icon {
+            transform: rotate(90deg);
+        }
+    }
+
+    > .group-name {
+        @include mixins.overflow-ellipsis();
+
+        &.stretched {
+            grid-column: 2 / -1;
+        }
+    }
+}

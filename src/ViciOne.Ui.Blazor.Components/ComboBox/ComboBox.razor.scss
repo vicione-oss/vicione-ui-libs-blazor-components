@@ -1,0 +1,94 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/animations/mixins" as animations;
+@use "../Styles/inputs";
+
+@use "sass:color";
+
+.combo-box {
+    background-color: color.adjust(colors.$theme, $alpha: -0.95);
+
+    &.read-only {
+        pointer-events: none;
+    }
+
+    @include inputs.disabled-style();
+
+    select {
+        min-width: 0; // allow input to shrink when the outer element is smaller than the default minimum input width applied by the browser
+
+        background: transparent;
+        color: color.adjust(colors.$font-light, $alpha: -0.2);
+
+        border-width: 1px;
+        border-style: solid;
+        border-color: color.adjust(colors.$theme-inverted, $alpha: -0.8);
+        border-radius: 3px;
+        @include animations.border-color();
+
+        @include inputs.typography();
+        @include inputs.padding($right: 28px);
+
+        @include inputs.invalid-style();
+
+        option {
+            background-color: rgb(58, 58, 58);
+
+            padding: 3px;
+
+            &[selected] {
+                background-color: colors.$accent;
+                color: colors.$font-light;
+            }
+
+            &[disabled] {
+                display: none;
+            }
+        }
+
+        &:not(:disabled) {
+            &:focus, &.appear-focused {
+                outline: none;
+                border-color: colors.$accent;
+            }
+
+            &:hover {
+                border-color: colors.$accent-hover;
+            }
+        }
+    }
+
+    @mixin replace-default-chevron-with-custom-arrow() {
+        // hide default chevron
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        // custom arrow, https://moderncss.dev/custom-select-styles-with-pure-css/#custom-select-dropdown-arrow
+        & {
+            display: inline-grid;
+            grid-template-areas: "select";
+            align-items: center;
+        }
+
+        select {
+            grid-area: select;
+        }
+
+        ::deep .drop-down-icon {
+            grid-area: select;
+
+            justify-self: end;
+            transform: rotate(90deg);
+
+            margin: 0;
+            right: 5px;
+            position: relative;
+
+            pointer-events: none;
+        }
+    }
+
+    @include replace-default-chevron-with-custom-arrow();
+}

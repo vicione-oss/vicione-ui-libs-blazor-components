@@ -1,0 +1,14 @@
+﻿@use "../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.property-grid-container {
+    width: 350px;
+
+    position: relative;
+
+    margin-left: 32px;
+    margin-right: 32px;
+}

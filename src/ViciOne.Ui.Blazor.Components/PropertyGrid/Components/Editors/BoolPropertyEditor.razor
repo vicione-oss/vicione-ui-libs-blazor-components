@@ -1,0 +1,15 @@
+﻿@using ViciOne.Ui.Blazor.Components.CheckBox
+
+@typeparam TBooleanPropertyValue
+
+@inherits PropertyEditorBase<TBooleanPropertyValue>
+
+@{
+    var enabled = Enabled && !ReadOnly;
+}
+
+<CheckBox @bind-Value:get="Value"
+          @bind-Value:set="ValueChanged"
+          Enabled="@enabled"
+          Valid="@Valid"
+          @ref="InnerEditorComponentReference" />

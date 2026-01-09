@@ -1,0 +1,31 @@
+﻿@using ViciOne.Ui.Blazor.Components.Sidebar.Enums
+@using ViciOne.Ui.Blazor.Components.Sidebar.Extensions
+
+<div class="sidebar @Placement.ToModifierCssClass()" style="--width: @(_width)px">
+    @if (ChildContent is not null)
+    {
+        <div class="content">
+            @ChildContent
+        </div>
+    }
+
+    @if (Mode == SidebarMode.Fluid)
+    {
+        <div @onclick:stopPropagation
+             @onpointerdown:stopPropagation
+             @onpointerdown="@OnMoverPointerDown"
+             class="mover">
+
+            @if (_changingWidth)
+            {
+                <div @onpointerleave="OnMoverGhostPointerUpAsync"
+                     @onpointerleave:stopPropagation
+                     @onpointermove="@OnMoverGhostPointerMove"
+                     @onpointermove:stopPropagation
+                     @onpointerup="@OnMoverGhostPointerUpAsync"
+                     @onpointerup:stopPropagation
+                     class="mover-ghost" />
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,28 @@
+﻿@page "/context-menu"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.ContextMenu.Components
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<ul>
+    <li>First Context Menu Visible <b>@_firstContextMenuVisible</b></li>
+    <li>Second Context Menu Visible <b>@_secondContextMenuVisible</b></li>
+    <li>ContextMenuButtonClicked <b>@_contextMenuButtonClicked</b></li>
+    <li>ContextMenuItemClicked <b>@_contextMenuItemClicked</b></li>
+    <li>IContextMenuSettings.UseCustomMenu <Switch @bind-Value="ContextMenuSettings.UseCustomMenu" /></li>
+</ul>
+
+<div class="context-menu-request-area" @oncontextmenu="RequestFirstContextMenuAsync" @oncontextmenu:preventDefault="@ContextMenuSettings.UseCustomMenu">
+    Right click here to show first context menu
+</div>
+
+<div class="context-menu-request-area" @oncontextmenu="RequestSecondContextMenuAsync" @oncontextmenu:preventDefault="@ContextMenuSettings.UseCustomMenu">
+    Right click here to show second context menu
+</div>
+
+<FirstContextMenu VisibilityChanged="FirstContextMenuVisibilityChanged"
+                  MenuButtonClicked="ContextMenuButtonClicked"
+                  MenuItemClicked="ContextMenuItemClicked" />
+
+<SecondContextMenu MenuItemClicked="ContextMenuItemClicked"
+                   VisibilityChanged="SecondContextMenuVisibilityChanged" />

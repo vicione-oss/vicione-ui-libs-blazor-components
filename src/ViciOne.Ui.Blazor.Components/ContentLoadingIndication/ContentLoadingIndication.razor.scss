@@ -1,0 +1,83 @@
+﻿@use "./../Styles/design/colors";
+@use "./../Styles/animations";
+
+@use "./../node_modules/three-dots" with (
+    $dot-color: colors.$accent
+);
+
+@include animations.opacity-to-zero-keyframes();
+@include animations.opacity-to-one-keyframes();
+@include animations.opacity-to-point-five-keyframes();
+
+.content-loading-indication {
+    position: relative;
+
+    display: inline-block; // use inline behavior to adopt the dimension of wrapped content
+
+    &.loading {
+        pointer-events: none;
+    }
+
+    .content-wrapper {
+
+        &.hidden {
+            &.animate-transition {
+                opacity: 1;
+
+                @include animations.opacity-to-zero-declarations();
+            }
+            &:not(.animate-transition) {
+                opacity: 0;
+            }
+        }
+
+        &.half-opacity {
+            &.animate-transition {
+                opacity: 1;
+
+                @include animations.opacity-to-point-five-declarations();
+            }
+            &:not(.animate-transition) {
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .loading-spinner {
+        position: absolute;
+
+        display: grid;
+        align-items: center;
+
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+
+        &.animate-transition {
+            opacity: 0;
+
+            @include animations.opacity-to-one-declarations();
+        }
+
+        &:not(.animate-transition) {
+            opacity: 1;
+        }
+
+        &.left {
+            justify-items: left;
+            padding-left: three-dots.$dot-spacing;
+            padding-right: 0;
+        }
+        &.center {
+            justify-items: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        &.right {
+            justify-items: right;
+            padding-left: 0;
+            padding-right: three-dots.$dot-spacing;
+        }
+    }
+}

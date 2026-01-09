@@ -1,0 +1,7 @@
+﻿@mixin styles($color) {
+    & .separator {
+        height: 1px;
+        border-bottom: 1px solid $color;
+        margin: 4px 0px;
+    }
+}

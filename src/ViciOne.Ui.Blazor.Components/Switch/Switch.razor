@@ -1,0 +1,18 @@
+﻿@using ViciOne.Ui.Blazor.Components.Switch.Extensions
+
+@{
+    var cssClasses = new List<string> { "switch", Size.ToModifierCssClass() };
+
+    if (Value)
+        cssClasses.Add("on");
+
+    if (!Enabled)
+        cssClasses.Add("disabled");
+
+    if (CssClass is not null)
+        cssClasses.AddRange(CssClass.Split(" "));
+}
+
+<button type="button" class="@string.Join(" ", cssClasses)" @onclick="@ButtonClickAsync">
+    <div class="thumb" />
+</button>

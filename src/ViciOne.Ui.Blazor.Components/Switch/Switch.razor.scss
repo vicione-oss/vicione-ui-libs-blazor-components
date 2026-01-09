@@ -1,0 +1,78 @@
+﻿@use "../Styles/design/colors";
+@use "../Styles/inputs";
+
+$transition-duration: 0.3s;
+$thumb-align: 2px;
+
+.switch {
+    --background-on: #{colors.$accent};
+    --background-off: #5A5A5A; // rgb(90, 90, 90)
+    --background-thumb-on: #{colors.$font-light};
+    --background-thumb-off: #3B3B3B; // rgb(59, 59, 59)
+    --background-disabled: #555555; // rgb(85, 85, 85)
+    --background-thumb-disabled: #{colors.$font-light};
+    background-color: var(--background-off);
+    border-radius: var(--toggle-height);
+    border: none;
+    position: relative;
+    transition: background-color $transition-duration;
+    padding: 0;
+
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+
+    &.small {
+        --toggle-width: 24px;
+        --toggle-height: 12px;
+        --thumb-size: 8px;
+    }
+
+    &.medium {
+        --toggle-width: 32px;
+        --toggle-height: 16px;
+        --thumb-size: 12px;
+    }
+
+    &.large {
+        --toggle-width: 40px;
+        --toggle-height: 20px;
+        --thumb-size: 16px;
+    }
+
+    .thumb {
+        width: var(--thumb-size);
+        height: var(--thumb-size);
+        background-color: var(--background-thumb-off);
+        border-radius: 50%;
+        position: absolute;
+        top: $thumb-align;
+        left: $thumb-align;
+        transition: left $transition-duration;
+    }
+
+    &.on {
+        background-color: var(--background-on);
+
+        .thumb {
+            left: calc(var(--toggle-width) - var(--thumb-size) - $thumb-align);
+            background-color: var(--background-thumb-on);
+        }
+    }
+
+    @include inputs.disabled-style();
+
+    &.disabled {
+        background-color: var(--background-disabled);
+
+        .thumb {
+            background-color: var(--background-thumb-disabled) !important;
+            opacity: 0.1;
+        }
+
+        &.on {
+            .thumb {
+                opacity: 0.4;
+            }
+        }
+    }
+}

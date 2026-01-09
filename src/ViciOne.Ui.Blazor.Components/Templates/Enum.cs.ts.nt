@@ -1,0 +1,16 @@
+﻿
+{{ for enum in data.Enums | Symbols.ThatHaveAttribute "GenerateTypeScriptEnum" }}
+    {{- capture output -}}
+// Auto-generated code
+
+export enum {{ enum.BareName }} {
+{{ for value in enum.Values ~}}
+    {{ value.Name }}{{ if !for.last }},{{ end }}
+{{~ end ~}}
+}
+    {{~ end
+    
+    for l in enum.Locations
+        Save output l.Path + ".ts"
+    end
+end }}

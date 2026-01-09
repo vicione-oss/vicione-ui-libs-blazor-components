@@ -1,0 +1,58 @@
+﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.CheckBox.Enums
+@using ViciOne.Ui.Blazor.Components.Resources.CheckBox
+
+@typeparam TValue
+
+@{
+    var cssClasses = new List<string> { "check-box" };
+
+    var isChecked = false;
+    var isIndeterminate = false;
+
+    if (_mode == CheckBoxMode.Checked)
+    {
+        cssClasses.Add("checked");
+
+        isChecked = true;
+    }
+    else if (_mode == CheckBoxMode.Unchecked)
+    {
+        cssClasses.Add("unchecked");
+    }
+    else if (_mode == CheckBoxMode.Indeterminate)
+    {
+        cssClasses.Add("indeterminate");
+
+        isIndeterminate = true;
+    }
+
+    if (!Enabled)
+        cssClasses.Add("disabled");
+
+    this.WithInputValidationStyling(cssClasses);
+
+    var inputAttributes = new Dictionary<string, object>();
+
+    if (!Enabled)
+        inputAttributes.Add("disabled", "disabled");
+}
+
+<div class="@string.Join(" ", cssClasses)">
+    <input class="input"
+           type="checkbox"
+           checked="@isChecked"
+           value="@_inputValue"
+           @attributes="@inputAttributes"
+           @oninput="@InputChangeAsync"
+           @ref="_inputElementReference" />
+
+    @if (isChecked)
+    {
+        @((MarkupString)SvgIcons.EditorCheck)
+    }
+    else if (isIndeterminate)
+    {
+        @((MarkupString)SvgIcons.EditorIndeterminate)
+    }
+</div>

@@ -1,0 +1,61 @@
+﻿@use "../../../Styles/design/colors";
+@use "../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.data-table {
+    display: grid;
+    grid-column-gap: 16px;
+    grid-template-columns: 1fr 2fr;
+    padding: 8px;
+    white-space: nowrap;
+}
+
+.page-container {
+    display: grid;
+    grid-template-rows: repeat(2, min-content) auto;
+    height: 100%;
+}
+
+.tabular-tooltip-content {
+    padding: 8px;
+}
+
+.tooltip-area {
+    border: 1px solid colors.$accent;
+    border-radius: 8px;
+    display: flex;
+    margin: 8px;
+    padding: 8px;
+
+    &::before {
+        content: "for tooltip hover over text";
+        font-size: 10px;
+        position: absolute;
+    }
+}
+
+.tooltip-content {
+    border: 2px dashed colors.$accent;
+    border-radius: 8px;
+    display: grid;
+    grid-column-gap: 8px;
+    grid-template-columns: auto min-content;
+    padding: 8px;
+    width: 250px;
+}
+
+.tooltip-grid {
+    display: grid;
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.tooltipped-content {
+    place-self: center;
+    text-align: center;
+}

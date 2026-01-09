@@ -1,0 +1,11 @@
+﻿@use "./../../Styles/animations/mixins" as animations;
+
+.loading-spinner-message {
+    @include animations.opacity();
+
+    opacity: 0;
+
+    &.visible {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,65 @@
+﻿@page "/loading-spinner"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.LoadingSpinner.Components
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<div class="page-container">
+    <div class="demo-area">
+        <span>
+            This is simply some text that will be overlayed by the loading spinner
+        </span>
+
+        @if (_loadingSpinnerWithChildContent)
+        {
+            <LoadingSpinner @ref="@_loadingSpinner" Messages="@_timedMessages" Visible="@_loadingSpinnerVisible">
+                <div class="loading-spinner-child-content">
+                    <div class="loader">
+                        <div class="content">
+                            <code>Loader</code>
+                        </div>
+                    </div>
+
+                    <LoadingSpinnerMessage CssClass="message" Visible="@context.Message.Visible">
+                        @context.Message.Text
+                    </LoadingSpinnerMessage>
+                </div>
+            </LoadingSpinner>
+        }
+        else
+        {
+            <LoadingSpinner @ref="@_loadingSpinner" Messages="@_timedMessages" Visible="@_loadingSpinnerVisible" />
+        }
+    </div>
+
+    <div class="demo-sidebar">
+        <div class="options">
+            <div class="option">
+                <label>Show loading spinner</label>
+                <Switch @bind-Value="@_loadingSpinnerVisible" />
+            </div>
+
+            <div class="option">
+                <label>With timed messages</label>
+                <Switch Value="@(_timedMessages.Length != 0)" ValueChanged="OnToggleTimedMessagesChanged" />
+            </div>
+
+            <div class="option">
+                <label>With <code>ChildContent</code></label>
+                <Switch @bind-Value="@_loadingSpinnerWithChildContent" />
+            </div>
+        </div>
+
+        <div>
+            <Button OnClick="@OnNextMessageButtonClicked" Text="Next message" />
+        </div>
+
+        <div>
+            <Button OnClick="@OnEnqueueNewMessageButtonClicked" Text="Enqueue new random message" />
+        </div>
+
+        <div>
+            <Button OnClick="@OnDisplayNewMessageButtonClicked" Text="Display new random message" />
+        </div>
+    </div>
+</div>

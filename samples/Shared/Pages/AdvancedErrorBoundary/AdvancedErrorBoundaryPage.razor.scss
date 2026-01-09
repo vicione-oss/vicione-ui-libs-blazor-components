@@ -1,0 +1,19 @@
+﻿@use "../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.error-boundary-container {
+    position: relative;
+    margin-top: 30px;
+
+    display: grid;
+    justify-items: center;
+    align-items: center;
+
+    width: 480px;
+    height: 360px;
+
+    @include mixins.dotted-border();
+}

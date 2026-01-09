@@ -1,0 +1,24 @@
+@use "../../Styles/design/colors";
+@use "../../Styles/design/scrollbar";
+
+.content-container {
+    background-color: colors.$background-dark;
+    height: 0;
+    opacity: 0;
+    padding: 8px;
+    padding-left: 16px;
+    position: absolute;
+    transition: none;
+    visibility: hidden;
+
+    overflow: auto;
+    @include scrollbar.adjust-styles();
+
+    &.expanded {
+        height: auto;
+        opacity: 100%;
+        position: relative;
+        transition: opacity 0.3s ease-in-out;
+        visibility: visible;
+    }
+}

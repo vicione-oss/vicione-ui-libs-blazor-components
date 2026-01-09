@@ -1,0 +1,38 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/popup";
+
+.context-menu {
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: popup.$line-height;
+    color: colors.$font;
+    background-color: colors.$background-dark;
+    border: 1px solid colors.$border;
+    border-radius: popup.$border-radius;
+    box-shadow: popup.$box-shadow;
+    flex: 1 1 auto;
+    display: flex;
+    position: relative;
+    min-width: 9.9999375rem;
+    min-height: 0;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    outline: 0;
+
+    // Changed from 1050 to 1060 adopted from DX popup-root in ClusterEditor,
+    // which ensures context menus requested in DX dialogs are displayed above said dialogs.
+    // The 1060 seems to be a calculated value from some kind of internally known stacking
+    // context, but we need to make this a constant value for now because we don't have
+    // such a calculation functionality yet.
+    z-index: 1060;
+
+    ul {
+        margin: 0;
+        padding-left: 0;
+        list-style: none;
+        width: 100%;
+        min-height: 0;
+    }
+}

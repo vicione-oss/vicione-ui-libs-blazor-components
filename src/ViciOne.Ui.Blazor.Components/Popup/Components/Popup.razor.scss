@@ -1,7 +1,6 @@
 ﻿@use "../../Styles/design/popup";
 @use "../../Styles/design/scrollbar";
 @use "../../Styles/design/typography";
-@use "../../Styles/user-interaction";
 
 .modal-root {
     position: fixed;
@@ -43,10 +42,6 @@
         &.moving, &.moved {
             position: absolute;
             margin: 0;
-        }
-
-        &.moving {
-            @include user-interaction.prevent-text-selection();
         }
     }
 

@@ -526,7 +526,7 @@
         "dependencies": {
           "AwesomeAssertions": "[9.3.0, )",
           "NSubstitute": "[5.3.0, )",
-          "ViciOne.Ui.Blazor.Components": "[5.0.2, )"
+          "ViciOne.Ui.Blazor.Components": "[5.1.0, )"
         }
       },
       "Microsoft.AspNetCore.Components.QuickGrid": {

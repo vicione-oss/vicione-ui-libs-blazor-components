@@ -1,5 +1,6 @@
 ﻿@use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
+@use "../../Styles/user-interaction";
 
 @use "sass:color";
 
@@ -53,8 +54,9 @@
     grid-template-columns: 24px auto 24px;
     padding: 8px;
     padding-left: 16px;
-    user-select: none;
     width: 100%;
+
+    @include user-interaction.prevent-text-selection();
 
     &.compact {
         display: block;

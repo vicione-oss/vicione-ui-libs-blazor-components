@@ -6,6 +6,8 @@ export class PointerCapture {
     public onPointerMove?: (captureTarget: HTMLElement, x: number, y: number) => void;
     public onPointerUp?: (captureTarget: HTMLElement, x: number, y: number) => void;
 
+    private userSelectBefore?: string;
+
     public start(pointerEvent: PointerEvent, captureTarget: HTMLElement, boundingClientRect: DOMRect) {
         let captureTargetX: number;
         let captureTargetY: number;
@@ -43,6 +45,12 @@ export class PointerCapture {
             window.getSelection()?.empty();
         };
 
+        const avoidTextSelection = () => {
+            this.userSelectBefore = captureTarget.style.userSelect;
+
+            captureTarget.style.userSelect = 'none';
+        };
+
         const pointerMoveEventListener = (e: PointerEvent) => {
             const distanceX = e.clientX - pointerDownClientX;
             const distanceY = e.clientY - pointerDownClientY;
@@ -78,15 +86,18 @@ export class PointerCapture {
         };
 
         const pointerUpEventListener = async (e: PointerEvent) => {
+            captureTarget.removeEventListener('pointerup', pointerUpEventListener);
+            captureTarget.removeEventListener('pointermove', pointerMoveEventListener);
+            captureTarget.releasePointerCapture(e.pointerId);
+
             if (this.startedCssClass)
                 captureTarget.classList.remove(this.startedCssClass);
 
             if (this.endedCssClass)
                 captureTarget.classList.add(this.endedCssClass);
 
-            captureTarget.removeEventListener('pointerup', pointerUpEventListener);
-            captureTarget.removeEventListener('pointermove', pointerMoveEventListener);
-            captureTarget.releasePointerCapture(e.pointerId);
+            if (this.userSelectBefore)
+                captureTarget.style.userSelect = this.userSelectBefore;
 
             // Sometimes pointer up is selecting text, we revert it
             clearSelection();
@@ -111,8 +122,11 @@ export class PointerCapture {
             }
         };
 
-        // User could have selected text before start dragging, we clear the selection to avoid confusion
+        // User could have selected text before start dragging, we clear the selection to avoid confusion ...
         clearSelection();
+
+        // ... and we avoid that new text can be selected before start of the pointer captuure
+        avoidTextSelection();
 
         if (this.endedCssClass)
             captureTarget.classList.remove(this.endedCssClass);

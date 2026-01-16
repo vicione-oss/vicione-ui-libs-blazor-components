@@ -1,5 +1,6 @@
 ﻿@use "../../Styles/design/colors";
 @use "../../Styles/mixins";
+@use "../../Styles/user-interaction";
 @use "Styles/tooltip-separator";
 
 .expansion-placeholder {
@@ -52,7 +53,8 @@
     grid-area: name;
     padding: 11px 5px;
     padding-left: calc(5px + 16px * var(--indent-mult));
-    user-select: none;
+
+    @include user-interaction.prevent-text-selection();
 
     & .property-name {
         overflow: hidden;
@@ -114,6 +116,7 @@
     height: 9px;
     justify-self: center;
     margin-right: 12px;
-    user-select: none;
     width: 9px;
+
+    @include user-interaction.prevent-text-selection();
 }

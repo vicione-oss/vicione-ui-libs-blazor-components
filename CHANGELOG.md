@@ -1,5 +1,7 @@
 # Changelog
 
+## 5.0.2 - Unreleased
+
 ## 5.0.1 - 2026-01-09
 
 - Changed license to MIT

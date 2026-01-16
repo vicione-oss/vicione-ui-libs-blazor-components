@@ -2,8 +2,8 @@ default:
   image: mcr.microsoft.com/dotnet/sdk:10.0.101
 
 include:
-  - project: 'acx/tooling/templates'
-    file: '/CI-Templates/v2/dotnet.yml'
+  - project: 'vicione-oss/tooling/templates'
+    file: 'CI-Templates/v2/dotnet.yml'
 
 .install_nodejs: &install_nodejs
   - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
@@ -63,7 +63,3 @@ Publish Pages:
   rules:
     - !reference [.rules_tag_manual]
     - !reference [.rules_default_branch]
-  tags:
-    - linux
-    - docker
-    - x64

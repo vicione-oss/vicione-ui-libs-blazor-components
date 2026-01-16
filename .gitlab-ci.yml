@@ -1,5 +1,5 @@
 default:
-  image: mcr.microsoft.com/dotnet/sdk:10.0.101
+  image: mcr.microsoft.com/dotnet/sdk:10.0
 
 include:
   - project: 'vicione-oss/tooling/templates'

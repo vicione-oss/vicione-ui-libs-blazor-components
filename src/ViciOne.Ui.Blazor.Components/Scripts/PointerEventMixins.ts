@@ -29,6 +29,10 @@ class PointerEventMixins {
 
         return false;
     }
+
+    isModifierKeyPressed(this: PointerEvent): boolean {
+        return this.altKey || this.ctrlKey || this.shiftKey;
+    }
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions

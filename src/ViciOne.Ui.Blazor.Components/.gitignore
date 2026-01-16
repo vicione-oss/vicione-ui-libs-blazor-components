@@ -16,6 +16,7 @@ Styles/design
 wwwroot/js/pointer-capture.js
 wwwroot/js/pointer-event-mixins.js
 wwwroot/moveable/move-interaction.js
+wwwroot/moveable/move-interaction-context.js
 wwwroot/context-menu/**/*.js
 wwwroot/text-box/**/*.js
 wwwroot/tooltip/**/*.js

@@ -58,7 +58,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath=""/>
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
@@ -68,6 +68,7 @@
     <AdditionalFiles Include="PropertyGrid\Services\TypeDescriptors\Templates\NumericValueTypeDescriptor.cs.nt" />
     <AdditionalFiles Include="SpinEdit\Extensions\Templates\IServiceCollectionExtensions.cs.nt" />
     <AdditionalFiles Include="SpinEdit\Services\Behaviors\Templates\NumericSpinBehavior.cs.nt" />
+    <AdditionalFiles Include="Templates\Class.cs.ts.nt" />
     <AdditionalFiles Include="Templates\Enum.cs.ts.nt" />
   </ItemGroup>
 
@@ -103,6 +104,9 @@
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
       <DestinationFile>wwwroot\js\pointer-event-mixins.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Moveable\Models\MoveInteractionContext.cs.js">
+      <DestinationFile>wwwroot\moveable\move-interaction-context.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Moveable\Services\MoveInteraction.cs.js">
       <DestinationFile>wwwroot\moveable\move-interaction.js</DestinationFile>

@@ -1,5 +1,6 @@
 import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/js/pointer-capture.js';
 import '/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js';
+import { type MoveInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/moveable/move-interaction-context.js';
 
 class MoveInteraction {
     private readonly pointerDownEventListenerBinding: (e: PointerEvent) => void;
@@ -8,65 +9,56 @@ class MoveInteraction {
 
     // MoveContainer should not have any border / padding because PointerCapture is based on bounding client rects
     // to avoid rounding errors!
-    constructor(readonly moveableId: string, readonly moveable: HTMLElement, readonly moveHandle: HTMLElement,
-        readonly moveContainer: HTMLElement, readonly startedCssClass: string, readonly endedCssClass: string,
-        readonly dotNetObject: DotNet.DotNetObject) {
-
+    constructor(readonly context: MoveInteractionContext) {
         this.pointerDownEventListenerBinding = this.pointerDownEventListener.bind(this);
         this.pointerMoveEventListenerBinding = this.pointerMoveEventListener.bind(this);
         this.pointerUpEventListenerBinding = this.pointerUpEventListener.bind(this);
 
-        this.moveHandle.addEventListener('pointerdown', this.pointerDownEventListenerBinding);
-        this.moveHandle.addEventListener('pointerup', this.pointerUpEventListenerBinding);
+        this.context.moveHandle.addEventListener('pointerdown', this.pointerDownEventListenerBinding);
+        this.context.moveHandle.addEventListener('pointerup', this.pointerUpEventListenerBinding);
     }
 
     public dispose() {
-        this.moveHandle.removeEventListener('pointerup', this.pointerUpEventListenerBinding);
-        this.moveHandle.removeEventListener('pointermove', this.pointerMoveEventListenerBinding);
-        this.moveHandle.removeEventListener('pointerdown', this.pointerDownEventListenerBinding);
-    }
-
-    private hasRequiredKeyState(e: PointerEvent) {
-        return !e.altKey && !e.ctrlKey && !e.shiftKey; // No modifier key should be pressed as these are reserved for other interactions
+        this.context.moveHandle.removeEventListener('pointerup', this.pointerUpEventListenerBinding);
+        this.context.moveHandle.removeEventListener('pointermove', this.pointerMoveEventListenerBinding);
+        this.context.moveHandle.removeEventListener('pointerdown', this.pointerDownEventListenerBinding);
     }
 
     private pointerDownEventListener(e: PointerEvent) {
-        if (!this.hasRequiredKeyState(e))
+        if (e.isModifierKeyPressed())
             return;
 
-        if (e.isRaisedByNestableOf(this.moveHandle, 'moveable'))
+        if (e.isRaisedByNestableOf(this.context.moveHandle, 'moveable'))
             return; // Do nothing as nested moveable has its own handler
 
         // Start interaction when mouse is moved
-        this.moveHandle.addEventListener('pointermove', this.pointerMoveEventListenerBinding, { once: true });
+        this.context.moveHandle.addEventListener('pointermove', this.pointerMoveEventListenerBinding, { once: true });
     }
 
     private pointerMoveEventListener(e: PointerEvent) {
-        if (!this.hasRequiredKeyState(e))
+        if (e.isModifierKeyPressed())
             return;
 
-        const moveContainerBoundingClientRect = this.moveContainer.getBoundingClientRect();
+        const moveContainerBoundingClientRect = this.context.moveContainer.getBoundingClientRect();
 
         const pointerCapture = new PointerCapture();
         pointerCapture.onPointerUp = this.moveablePointerUp.bind(this);
-        pointerCapture.startedCssClass = this.startedCssClass;
-        pointerCapture.endedCssClass = this.endedCssClass;
-        pointerCapture.start(e, this.moveable, moveContainerBoundingClientRect);
+        pointerCapture.startedCssClass = this.context.startedCssClass;
+        pointerCapture.endedCssClass = this.context.endedCssClass;
+        pointerCapture.start(e, this.context.moveable, moveContainerBoundingClientRect);
     }
 
     private pointerUpEventListener(_e: PointerEvent) {
-        this.moveHandle.removeEventListener('pointermove', this.pointerMoveEventListenerBinding);
+        this.context.moveHandle.removeEventListener('pointermove', this.pointerMoveEventListenerBinding);
     }
 
     private async moveablePointerUp(_moveable: HTMLElement, x: number, y: number) {
-        await this.dotNetObject.invokeMethodAsync('OnMoveablePointerUp', this.moveableId, x, y);
+        await this.context.dotNetObject.invokeMethodAsync('OnMoveablePointerUp', this.context.moveableId, x, y);
     }
 }
 
-export async function attach(moveableId: string, moveable: HTMLElement, moveHandle: HTMLElement,
-    moveContainer: HTMLElement, startedCssClass: string, endedCssClass: string, dotNetObject: DotNet.DotNetObject) {
-
-    const moveInteraction = new MoveInteraction(moveableId, moveable, moveHandle, moveContainer, startedCssClass, endedCssClass, dotNetObject);
+export async function attach(context: MoveInteractionContext) {
+    const moveInteraction = new MoveInteraction(context);
 
     return moveInteraction;
 }

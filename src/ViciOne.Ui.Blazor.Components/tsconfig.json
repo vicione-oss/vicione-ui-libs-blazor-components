@@ -17,7 +17,8 @@
             "/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-extensions.js": [ "./Scripts/PointerEventMixins.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/context-menu/enums/mouse-leave-direction.js": [ "./ContextMenu/Enums/MouseLeaveDirection.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/child-context-menu-position.js": [ "./ContextMenu/Models/ChildContextMenuPosition.cs.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/context-menu-position.js": [ "./ContextMenu/Models/ContextMenuPosition.cs.ts" ]
+            "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/context-menu-position.js": [ "./ContextMenu/Models/ContextMenuPosition.cs.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/moveable/move-interaction-context.js": [ "./Moveable/Models/MoveInteractionContext.cs.ts" ]
         }
     },
     "exclude": [

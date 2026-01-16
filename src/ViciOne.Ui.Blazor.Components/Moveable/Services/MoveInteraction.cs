@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+using ViciOne.Ui.Blazor.Components.Moveable.Models;
 
 namespace ViciOne.Ui.Blazor.Components.Moveable.Services;
 
@@ -26,13 +27,17 @@ internal sealed partial class MoveInteraction(ILogger<MoveInteraction> logger, I
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
             var moveableId = Guid.NewGuid();
-            var moveableElementReference = moveable.GetElementReference();
-            var moveHandleElementReference = moveable.GetMoveHandle().GetElementReference();
-            var moveContainerElementReference = moveable.GetMoveContainer().GetElementReference();
 
-            var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach",
-                moveableId, moveableElementReference, moveHandleElementReference, moveContainerElementReference, StartedCssClass, EndedCssClass,
-                _dotNetObjectReference);
+            var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", new MoveInteractionContext
+            {
+                MoveableId = moveableId,
+                Moveable = moveable.GetElementReference(),
+                MoveHandle = moveable.GetMoveHandle().GetElementReference(),
+                MoveContainer = moveable.GetMoveContainer().GetElementReference(),
+                StartedCssClass = StartedCssClass,
+                EndedCssClass = EndedCssClass,
+                DotNetObject = _dotNetObjectReference
+            });
 
             _jsAttachResults.Add(moveable, jsAttachResult);
 

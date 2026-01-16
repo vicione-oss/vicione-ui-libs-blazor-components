@@ -1,0 +1,32 @@
+﻿
+{{ for class in data.Classes | Symbols.ThatHaveAttribute "GenerateTypeScriptClass" }}
+    {{- capture output -}}
+// Auto-generated code
+{{ class | Custom.GenerateImports ~}}
+
+export class {{ class.Name }} {
+    {{~
+    properties = class.Properties | Symbols.ThatArePublic
+
+    if properties | Array.Size > 4 ~}}
+    // eslint-disable-next-line max-params
+    {{~ end ~}}
+    constructor({{ for property in properties }}{{ if !for.first }}
+        {{ end -}}
+        readonly {{ property.Name | String.ToCamelCase }}: {{ if property.Type == "Guid"
+                  "string"
+              else if property.Type == "ElementReference"
+                  "HTMLElement"
+              else if property.Type | String.StartsWith "DotNetObjectReference<"
+                  "DotNet.DotNetObject"
+              else
+                  property.Type | Type.ToTypeScriptType
+            end }}{{ if !for.last }},{{ end ~}}
+{{ end }}) {}
+}
+    {{~ end
+    
+    for l in class.Locations
+        Save output l.Path + ".ts"
+    end
+end }}

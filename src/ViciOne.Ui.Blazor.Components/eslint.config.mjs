@@ -24,6 +24,7 @@ export default [
             'wwwroot/js/pointer-capture.js',
             'wwwroot/js/pointer-event-mixins.js',
             'wwwroot/moveable/move-interaction.js',
+            'wwwroot/moveable/move-interaction-context.js',
             'Scripts/*.js',
             '**/*.cs.js',
             '**/*.razor.js',
@@ -35,7 +36,6 @@ export default [
     ...xoTypeScript,
     {
         rules: {
-            'max-params': ['error', 7],
             'no-unused-vars': 'error',
             curly: ['error', 'multi-or-nest', 'consistent'],
             '@stylistic/padded-blocks': 'off',

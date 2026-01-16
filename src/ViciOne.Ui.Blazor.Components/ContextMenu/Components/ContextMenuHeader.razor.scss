@@ -1,9 +1,11 @@
 ﻿@use "../../Styles/design/typography";
+@use "../../Styles/user-interaction";
 
 .context-menu-header {
     padding: 0px 4px;
     text-transform: uppercase;
-    user-select: none;
+
+    @include user-interaction.prevent-text-selection();
 
     span {
         font-size: 10px;

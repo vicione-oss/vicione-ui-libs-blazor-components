@@ -1,6 +1,8 @@
 # Changelog
 
-## 5.0.2 - Unreleased
+## 5.1.0 - Unreleased
+
+- `Moveable`, `user-select: none` is now applied to moveable element on move automatically
 
 ## 5.0.1 - 2026-01-09
 

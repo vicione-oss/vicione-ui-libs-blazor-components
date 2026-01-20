@@ -3,6 +3,7 @@
 ## 5.1.0 - Unreleased
 
 - `Moveable`, `user-select: none` is now applied to moveable element on move automatically
+- Updated package project URL to reflect the migration to gitlab.com
 
 ## 5.0.1 - 2026-01-09
 

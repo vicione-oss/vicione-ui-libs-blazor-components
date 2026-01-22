@@ -58,7 +58,10 @@ public sealed partial class ContextMenuButton : ContextMenuItemBase, IDisposable
     protected override void OnParametersSet()
     {
         if (Parent == null)
-            throw new ArgumentNullException(nameof(Parent), $"{nameof(ContextMenuButton)} must exist within a {nameof(ContextMenuButtonRow)}");
+        {
+            throw new ArgumentNullException(nameof(Parent),
+                $"{nameof(ContextMenuButton)} must exist within a {nameof(ContextMenuButtonRow)}");
+        }
 
         _isEnabled = Parent.Enabled && Enabled;
     }

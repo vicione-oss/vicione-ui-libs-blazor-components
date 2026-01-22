@@ -6,7 +6,8 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Extensions;
 
 internal static class ColumnBaseExtensions
 {
-    public static void BeforeCellContent<TGridItem>(this ColumnBase<TGridItem> _, RenderTreeBuilder builder, TGridItem item, Grid<TGridItem> grid)
+    public static void BeforeCellContent<TGridItem>(this ColumnBase<TGridItem> _,
+        RenderTreeBuilder builder, TGridItem item, Grid<TGridItem> grid)
     {
         if (IsGridItemSelected(item, grid))
         {
@@ -16,7 +17,8 @@ internal static class ColumnBaseExtensions
         }
     }
 
-    public static void AfterCellContent<TGridItem>(this ColumnBase<TGridItem> _, RenderTreeBuilder builder, TGridItem item, Grid<TGridItem> grid)
+    public static void AfterCellContent<TGridItem>(this ColumnBase<TGridItem> _,
+        RenderTreeBuilder builder, TGridItem item, Grid<TGridItem> grid)
     {
         if (IsGridItemSelected(item, grid))
         {

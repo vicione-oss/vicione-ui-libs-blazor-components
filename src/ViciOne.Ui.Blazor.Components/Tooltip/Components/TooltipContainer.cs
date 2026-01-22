@@ -54,11 +54,18 @@ public sealed class TooltipContainer : ComponentBase, IDisposable
     {
         var injectedService = ServiceProvider.GetService(typeof(TooltipService));
         if (injectedService is not null)
+        {
             _tooltipService = (TooltipService)injectedService;
+        }
         else if (CascadedTooltipService is not null)
+        {
             _tooltipService = CascadedTooltipService;
+        }
         else
-            throw new ArgumentNullException(nameof(_tooltipService), $"Either a cascading value or a dependency injected service of type {nameof(TooltipService)} have to be available.");
+        {
+            throw new ArgumentNullException(nameof(_tooltipService),
+                $"Either a cascading value or a dependency injected service of type {nameof(TooltipService)} have to be available.");
+        }
 
         _handler = new(_tooltipService, _info);
     }

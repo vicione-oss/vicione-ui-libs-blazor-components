@@ -300,7 +300,7 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
                     var newItemText = getText(newItem);
 
                     if (valueEqualityComparer.Equals(getValue(newItem), oldItemValue) &&
-                        string.CompareOrdinal(getText(newItem), oldItemText) == 0)
+                        string.Equals(getText(newItem), oldItemText, StringComparison.Ordinal))
                     {
                         newItemsMap.Remove(p.Key);
 

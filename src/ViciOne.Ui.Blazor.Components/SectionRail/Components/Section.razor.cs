@@ -47,11 +47,12 @@ public sealed partial class Section<TSectionIdentifier> : ComponentBase, ISectio
         }
         else
         {
-            const string Section = nameof(Section<TSectionIdentifier>);
+            const string Section = nameof(Section<>);
             var sectionIdentifier = typeof(TSectionIdentifier).Name;
-            const string SectionRail = nameof(ISectionRail<TSectionIdentifier>);
+            const string SectionRail = nameof(ISectionRail<>);
 
-            throw new ArgumentNullException(nameof(Section<TSectionIdentifier>.SectionRail), $"{Section}<{sectionIdentifier}> must exist within a {SectionRail}<{sectionIdentifier}>.");
+            throw new ArgumentNullException(nameof(Section<>.SectionRail),
+                $"{Section}<{sectionIdentifier}> must exist within a {SectionRail}<{sectionIdentifier}>.");
         }
     }
 

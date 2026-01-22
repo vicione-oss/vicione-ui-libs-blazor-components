@@ -68,7 +68,8 @@ internal static class IPropertyOperationIterationExtensions
     public static bool ReadUnifiedResettable(this IReadOnlyList<PropertyOperationIteration> iterations)
         => iterations.ReadUnified(@delegate: IPropertyDescriptorExtensions.ReadUnifiedResettable, defaultValue: true);
 
-    public static List<ISelectableValue<TPropertyValue>>? ReadUnifiedSelectableValues<TPropertyValue>(this IReadOnlyList<PropertyOperationIteration> iterations,
+    public static List<ISelectableValue<TPropertyValue>>? ReadUnifiedSelectableValues<TPropertyValue>(
+        this IReadOnlyList<PropertyOperationIteration> iterations,
         IEqualityComparer<TPropertyValue> valueEqualityComparer)
     {
         var result = new List<ISelectableValue<TPropertyValue>>();
@@ -78,7 +79,9 @@ internal static class IPropertyOperationIterationExtensions
         foreach (var i in iterations)
         {
             var readUnifiedSelectableValuesDelegate = IPropertyDescriptorExtensions.ReadUnifiedSelectableValues<object, TPropertyValue>;
-            var readUnifiedSelectableValuesMethod = readUnifiedSelectableValuesDelegate.Method.GetGenericMethodDefinition().MakeGenericMethod(i.InstanceType, i.PropertyValueType);
+            var readUnifiedSelectableValuesMethod = readUnifiedSelectableValuesDelegate.Method
+                .GetGenericMethodDefinition()
+                .MakeGenericMethod(i.InstanceType, i.PropertyValueType);
 
             var invokeResult = readUnifiedSelectableValuesMethod.Invoke(null,
                 [i.PropertyDescriptor, i.Instances, valueEqualityComparer]);
@@ -164,7 +167,8 @@ internal static class IPropertyOperationIterationExtensions
 
     private static ValueOf<TPropertyValue>? ReadUnified<TPropertyValue>(
         this IReadOnlyList<PropertyOperationIteration> iterations, IEqualityComparer<TPropertyValue> valueEqualityComparer,
-        Func<IPropertyDescriptor<object, TPropertyValue>, IReadOnlyList<object>, IEqualityComparer<TPropertyValue>, ValueOf<TPropertyValue>?> tryReadUnifiedDelegate)
+        Func<IPropertyDescriptor<object, TPropertyValue>, IReadOnlyList<object>,
+            IEqualityComparer<TPropertyValue>, ValueOf<TPropertyValue>?> tryReadUnifiedDelegate)
     {
         ValueOf<TPropertyValue>? previousValue = null;
 

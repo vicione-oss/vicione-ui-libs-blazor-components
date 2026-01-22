@@ -50,7 +50,8 @@ public sealed partial class PropertyEntryTests
         var instance2 = new Foo<AOrB> { Bar = AOrB.B };
 
         // Act / Assert
-        TestTooltipAndSelectionEditorWithTheAssumptionOfSelectableValuesBeingMutuallyExclusive(instance => instance.Bar, instance1, instance2);
+        TestTooltipAndSelectionEditorWithTheAssumptionOfSelectableValuesBeingMutuallyExclusive(
+            instance => instance.Bar, instance1, instance2);
     }
 
     [Fact]
@@ -61,7 +62,8 @@ public sealed partial class PropertyEntryTests
         var instance2 = new Foo<AOrB?> { Bar = AOrB.B };
 
         // Act / Assert
-        TestTooltipAndSelectionEditorWithTheAssumptionOfSelectableValuesBeingMutuallyExclusive(instance => instance.Bar, instance1, instance2);
+        TestTooltipAndSelectionEditorWithTheAssumptionOfSelectableValuesBeingMutuallyExclusive(
+            instance => instance.Bar, instance1, instance2);
     }
 
     private static void TestTooltipAndSelectionEditorWithTheAssumptionOfSelectableValuesBeingMutuallyExclusive<TPropertyValue>(
@@ -138,7 +140,7 @@ public sealed partial class PropertyEntryTests
                     {
                         builder2.OpenComponent<PropertyEntry<TPropertyValue>>(1);
                         {
-                            builder2.AddComponentParameter(2, nameof(PropertyEntry<TPropertyValue>.PropertyGridItem), PropertyGridItem);
+                            builder2.AddComponentParameter(2, nameof(PropertyEntry<>.PropertyGridItem), PropertyGridItem);
                         }
                         builder2.CloseComponent();
                     }));

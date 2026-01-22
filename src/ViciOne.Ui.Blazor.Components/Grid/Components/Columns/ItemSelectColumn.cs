@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.QuickGrid;
 using Microsoft.AspNetCore.Components.Rendering;
 using ViciOne.Ui.Blazor.Components.CheckBox;
 using ViciOne.Ui.Blazor.Components.Grid.Services;
+using QuickGrid = Microsoft.AspNetCore.Components.QuickGrid;
 
 namespace ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 
@@ -14,7 +14,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 /// <typeparam name="TGridItemKey">Grid item key type</typeparam>
 public sealed class ItemSelectColumn<TGridItem, TGridItemKey> : ColumnBase<TGridItem>, IItemSelectColumn<TGridItem>, IDisposable
 {
-    private static readonly RenderFragment<Microsoft.AspNetCore.Components.QuickGrid.ColumnBase<TGridItem>> s_ownHeaderContent = column => builder =>
+    private static readonly RenderFragment<QuickGrid.ColumnBase<TGridItem>> s_ownHeaderContent = column => builder =>
     {
         if (column is not ItemSelectColumn<TGridItem, TGridItemKey> itemSelectColumn)
             return;
@@ -40,10 +40,10 @@ public sealed class ItemSelectColumn<TGridItem, TGridItemKey> : ColumnBase<TGrid
         var valueChangedCallback = EventCallback.Factory.Create<bool?>(itemSelectColumn, itemSelectColumn.HeaderCheckBoxValueChanged);
 
         builder.OpenComponent<CheckBox<bool?>>(1);
-        builder.AddComponentParameter(2, nameof(CheckBox<bool?>.Enabled), enabled);
-        builder.AddComponentParameter(3, nameof(CheckBox<bool?>.AllowIndeterminateState), allowIndeterminateState);
-        builder.AddComponentParameter(4, nameof(CheckBox<bool?>.Value), value);
-        builder.AddComponentParameter(5, nameof(CheckBox<bool?>.ValueChanged), valueChangedCallback);
+        builder.AddComponentParameter(2, nameof(CheckBox<>.Enabled), enabled);
+        builder.AddComponentParameter(3, nameof(CheckBox<>.AllowIndeterminateState), allowIndeterminateState);
+        builder.AddComponentParameter(4, nameof(CheckBox<>.Value), value);
+        builder.AddComponentParameter(5, nameof(CheckBox<>.ValueChanged), valueChangedCallback);
         builder.CloseComponent();
     };
 
@@ -73,7 +73,7 @@ public sealed class ItemSelectColumn<TGridItem, TGridItemKey> : ColumnBase<TGrid
     public int? TotalItemCount { get; set; }
 
     /// <inheritdoc/>
-    public override GridSort<TGridItem>? SortBy { get; set; }
+    public override QuickGrid.GridSort<TGridItem>? SortBy { get; set; }
 
     /// <inheritdoc/>
     protected override void OnInitialized()

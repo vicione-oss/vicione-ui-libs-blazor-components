@@ -34,7 +34,10 @@ public class PropertyDescriptor<TInstance, TPropertyValue> : IPropertyDescriptor
         set
         {
             if (value && !GenericParameterHelper.IsNullable<TPropertyValue>())
-                throw new ArgumentException($"{nameof(CanBeSetToNull)} was set to true but {nameof(TPropertyValue)} is not nullable", nameof(value));
+            {
+                throw new ArgumentException(
+                    $"{nameof(CanBeSetToNull)} was set to true but {nameof(TPropertyValue)} is not nullable", nameof(value));
+            }
 
             _canBeSetToNull = value;
         }

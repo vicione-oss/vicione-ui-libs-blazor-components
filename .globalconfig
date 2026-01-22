@@ -13,9 +13,13 @@ dotnet_diagnostic.VO2009.severity = none # Property assignments in the construct
 
 dotnet_diagnostic.ROS0003.severity = error # Report missing options leading to non-working analyzers
 
+dotnet_diagnostic.RCS0056.severity = warning # A line is too long
+roslynator_max_line_length = 140
+
 dotnet_diagnostic.RCS0061.severity = warning # Add / remove blank line between switch sections
 roslynator_blank_line_between_switch_sections = include
 
+dotnet_diagnostic.RCS1001.severity = warning # Add braces (when expression spans over multiple lines)
 dotnet_diagnostic.RCS1021.severity = warning # Convert lambda expression body to expression body
 dotnet_diagnostic.RCS1037.severity = warning # Remove trailing white-space
 dotnet_diagnostic.RCS1047.severity = warning # Non-asynchronous method name should not end with 'Async'
@@ -34,6 +38,7 @@ dotnet_diagnostic.RCS1235.severity = warning # Optimize method call
 dotnet_diagnostic.RCS1243.severity = warning # Duplicate word in a comment
 dotnet_diagnostic.RCS1246.severity = warning # Use element access
 dotnet_diagnostic.RCS1251.severity = warning # Remove unnecessary braces from record declaration
+dotnet_diagnostic.RCS1266.severity = warning # Use raw string literal
 
 dotnet_diagnostic.RCS1254.severity = warning # Normalize format of enum flag value
 roslynator_enum_flag_value_style = decimal_number

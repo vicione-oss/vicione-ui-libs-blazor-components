@@ -101,7 +101,8 @@ public sealed class PropertyGridControllerTests
         var propretyGridStateChangedTaskCompletionSource = new TaskCompletionSource<bool>();
         propretyGridState.PropertiesChanged += _ => propretyGridStateChangedTaskCompletionSource.SetResult(true);
 
-        var updatePropertyRequestedTaskCompletionSource = new TaskCompletionSource<PropertyGridControllerUpdatePropertyRequestedEventArgs?>();
+        var updatePropertyRequestedTaskCompletionSource
+            = new TaskCompletionSource<PropertyGridControllerUpdatePropertyRequestedEventArgs?>();
         propertyGridController.UpdatePropertyRequested += updatePropertyRequestedTaskCompletionSource.SetResult;
 
         var instance = new Foo();
@@ -110,12 +111,14 @@ public sealed class PropertyGridControllerTests
         // Act
         propertyGridController.SetInstances([instance], context);
 
-        var propretyGridStateChanged = await propretyGridStateChangedTaskCompletionSource.Task.WaitAsync(s_waitTimeout, CancellationToken.None);
+        var propretyGridStateChanged = await propretyGridStateChangedTaskCompletionSource.Task
+            .WaitAsync(s_waitTimeout, CancellationToken.None);
 
         propertyGridController.UpdateProperty(nameof(Foo.Brief));
         propertyGridController.UpdateProperty(nameof(Foo.Abstract));
 
-        var updatePropertyRequestedEventArgs = await updatePropertyRequestedTaskCompletionSource.Task.WaitAsync(s_waitTimeout, CancellationToken.None);
+        var updatePropertyRequestedEventArgs = await updatePropertyRequestedTaskCompletionSource.Task
+            .WaitAsync(s_waitTimeout, CancellationToken.None);
 
         // Assert
         propretyGridStateChanged.Should().BeTrue();
@@ -215,7 +218,8 @@ public sealed class PropertyGridControllerTests
         // Act, Assert
         propertyGridController.SetInstances([instance], context);
 
-        var propretyGridStateChanged = await propretyGridStateChangedTaskCompletionSource.Task.WaitAsync(s_waitTimeout, CancellationToken.None);
+        var propretyGridStateChanged = await propretyGridStateChangedTaskCompletionSource.Task
+            .WaitAsync(s_waitTimeout, CancellationToken.None);
         propretyGridStateChanged.Should().BeTrue();
 
         var briefPropertyGridItem = propretyGridState.Items.First(i => i.PropertyDescriptors.Contains(s_briefPropertyDescriptor));

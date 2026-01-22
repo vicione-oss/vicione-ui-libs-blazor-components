@@ -24,7 +24,8 @@ internal sealed class ExampleFooInstancePropertyDescriptorProvider
             ResetValue = (instance) => instance.Name = "default",
             Description = "A string property showing how validation can be done for properties.",
             GetValue = (instance) => instance.Name,
-            InformationTooltip = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna",
+            InformationTooltip = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
+                "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna",
             Name = nameof(ExampleFooInstance.Name),
             SetValue = (instance, value) => instance.Name = value,
             ValueValidators = [_stringMustNotBeEmptyPropertyValueValidator]

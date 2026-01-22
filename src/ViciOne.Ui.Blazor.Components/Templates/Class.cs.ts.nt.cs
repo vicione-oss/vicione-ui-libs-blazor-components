@@ -24,7 +24,9 @@ public static class CustomFunctions
         {
             if (property.Type.Attributes.Any(attribute => attribute.Name is "GenerateTypeScriptClass" or "GenerateTypeScriptEnum"))
             {
-                imports.Add($"import {{ type {property.Type.Name} }} from '/_content/ViciOne.Ui.Blazor.Components/js/{property.Type.Name.ToDashCase()}.js';");
+                var tsType = property.Type.Name;
+
+                imports.Add($"import {{ type {tsType} }} from '/_content/ViciOne.Ui.Blazor.Components/js/{tsType.ToDashCase()}.js';");
             }
         }
 

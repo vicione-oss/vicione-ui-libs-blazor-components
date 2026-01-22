@@ -13,7 +13,8 @@ internal sealed class PropertyValueEqualityComparerProvider<TContext>(IEnumerabl
         var methodDelegate = GetPropertyValueEqualityComparer<object>;
         var methodInfo = methodDelegate.Method.GetGenericMethodDefinition().MakeGenericMethod(valueType);
 
-        var result = methodInfo.Invoke(this, []) ?? throw new InvalidOperationException($"Could not get an equality comparer for type {valueType.Name}");
+        var result = methodInfo.Invoke(this, [])
+            ?? throw new InvalidOperationException($"Could not get an equality comparer for type {valueType.Name}");
         _valueEqualityComparerCache.Add(valueType, result);
 
         return result;

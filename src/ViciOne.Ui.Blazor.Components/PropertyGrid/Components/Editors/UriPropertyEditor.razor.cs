@@ -35,7 +35,7 @@ public sealed partial class UriPropertyEditor
         base.OnParametersSet();
 
         var value = Value?.ToString();
-        if (string.CompareOrdinal(_valuePassed, value) != 0 || UpdateKey != _updateKey)
+        if (!string.Equals(_valuePassed, value, StringComparison.Ordinal) || UpdateKey != _updateKey)
         {
             _valuePassed = value;
             _valueEnteredInvalid = false;

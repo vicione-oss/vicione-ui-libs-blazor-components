@@ -5,15 +5,15 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Factories;
 
 internal sealed class CommonPropertyKeyFactory
 {
-    public static ICommonPropertyKey CreateCommonPropertyKey(IPropertyDescriptor propertyDescriptor)
+    public static ICommonPropertyKey CreateCommonPropertyKey(IPropertyDescriptor p)
     {
-        if (propertyDescriptor is INumericPropertyDescriptor numericPropertyDescriptor)
+        if (p is INumericPropertyDescriptor numericPropertyDescriptor)
         {
             var createDelegate = CreateCommonNumericPropertyKey<int, int>;
             var createMethodInfo = createDelegate.Method.GetGenericMethodDefinition()
                 .MakeGenericMethod(numericPropertyDescriptor.IntervalType, numericPropertyDescriptor.LimitType);
 
-            object?[] parameters = [propertyDescriptor.Category, propertyDescriptor.Name, propertyDescriptor.ValueType, numericPropertyDescriptor];
+            object?[] parameters = [p.Category, p.Name, p.ValueType, numericPropertyDescriptor];
 
             var createResult = createMethodInfo.Invoke(null, parameters);
             if (createResult is ICommonPropertyKey commonPropertyKey)
@@ -21,22 +21,22 @@ internal sealed class CommonPropertyKeyFactory
             else
                 throw new InvalidOperationException("Creating common property key failed"); // this should never happen
         }
-        else if (propertyDescriptor is ISelectionPropertyDescriptor)
+        else if (p is ISelectionPropertyDescriptor selectionPropertyDescriptor)
         {
             return new CommonSelectionPropertyKey
             {
-                Category = propertyDescriptor.Category,
-                Name = propertyDescriptor.Name,
-                ValueType = propertyDescriptor.ValueType
+                Category = p.Category,
+                Name = p.Name,
+                ValueType = p.ValueType
             };
         }
         else
         {
             return new CommonPropertyKey()
             {
-                Category = propertyDescriptor.Category,
-                Name = propertyDescriptor.Name,
-                ValueType = propertyDescriptor.ValueType
+                Category = p.Category,
+                Name = p.Name,
+                ValueType = p.ValueType
             };
         }
     }

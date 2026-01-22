@@ -10,7 +10,8 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Components.ContextMenu;
 /// <summary>
 /// Context menu for providing specific actions for a property entry
 /// </summary>
-public sealed partial class PropertyEntryContextMenu : SpecializedContextMenuWithStateBase<PropertyEntryContextMenuContext, PropertyEntryContextMenuState>
+public sealed partial class PropertyEntryContextMenu
+    : SpecializedContextMenuWithStateBase<PropertyEntryContextMenuContext, PropertyEntryContextMenuState>
 {
     private readonly string _resetIconCssClass = MonochromeIconName.Reload.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
 

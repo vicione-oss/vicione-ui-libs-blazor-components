@@ -15,6 +15,7 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
         : IPropertyGridItem<TPropertyValue>
 {
     private static readonly Type s_valueType = typeof(TPropertyValue);
+
     private static readonly CompositeFormat s_propertyDoesNotHaveNullableValueTypeAlthoughValueIsNull =
         CompositeFormat.Parse(ValidationMessages.PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull);
 
@@ -221,8 +222,11 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
         if (PropertyOperationIterations.ReadUnifiedDefaultValue(valueEqualityComparer) is not ValueOf<TPropertyValue> defaultValue)
             return false; // no uniform default value, hence we should not indicate difference
 
-        if (PropertyOperationIterations.ReadUnifiedHasValueDifferentFromDefaultValue(defaultValue.Value) is bool hasValueDifferentFromDefaultValue)
+        if (PropertyOperationIterations
+            .ReadUnifiedHasValueDifferentFromDefaultValue(defaultValue.Value) is bool hasValueDifferentFromDefaultValue)
+        {
             return hasValueDifferentFromDefaultValue;
+        }
 
         if (value is null)
             return defaultValue != null;

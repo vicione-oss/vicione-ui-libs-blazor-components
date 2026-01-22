@@ -150,8 +150,9 @@ internal static class IPropertyDescriptorExtensions
         }
     }
 
-    private static void SetValueWithExceptionHandling<TInstance, TPropertyValue>(this IPropertyDescriptor<TInstance, TPropertyValue> propertyDescriptor,
-        TInstance instance, TPropertyValue value, List<Exception> exceptions)
+    private static void SetValueWithExceptionHandling<TInstance, TPropertyValue>(
+        this IPropertyDescriptor<TInstance, TPropertyValue> propertyDescriptor, TInstance instance, TPropertyValue value,
+        List<Exception> exceptions)
             where TInstance : notnull
     {
         try
@@ -168,8 +169,9 @@ internal static class IPropertyDescriptorExtensions
         }
     }
 
-    public static void SetValueForInstances<TInstance, TPropertyValue>(this IPropertyDescriptor<TInstance, TPropertyValue> propertyDescriptor,
-        IReadOnlyList<TInstance> instances, TPropertyValue value, List<Exception> exceptions)
+    public static void SetValueForInstances<TInstance, TPropertyValue>(
+        this IPropertyDescriptor<TInstance, TPropertyValue> propertyDescriptor, IReadOnlyList<TInstance> instances,
+        TPropertyValue value, List<Exception> exceptions)
             where TInstance : notnull
     {
         if (!propertyDescriptor.CanSetValue(instances))

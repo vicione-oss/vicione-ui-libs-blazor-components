@@ -36,7 +36,10 @@ internal static class CustomFunctions
 
                 var relativeStaticWebAssetPath = string.Join("/", typeNamespace.Split('.').Select(n => n.ToDashCase()));
 
-                imports.Add($"import {{ type {property.Type.Name} }} from '/_content/{ProjectNamespace}/{relativeStaticWebAssetPath}/{property.Type.Name.ToDashCase()}.js';");
+                var tsType = property.Type.Name;
+                var tsFilePath = $"/_content/{ProjectNamespace}/{relativeStaticWebAssetPath}";
+
+                imports.Add($"import {{ type {tsType} }} from '{tsFilePath}/{tsType.ToDashCase()}.js';");
             }
         }
 

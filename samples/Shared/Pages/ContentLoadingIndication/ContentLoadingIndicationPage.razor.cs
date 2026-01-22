@@ -41,5 +41,6 @@ public sealed partial class ContentLoadingIndicationPage
     }
 
     private void ToggleVisible()
-        => _noAnimatedTransitionOnFirstRenderContentLoadingIndicationVisible = !_noAnimatedTransitionOnFirstRenderContentLoadingIndicationVisible;
+        => _noAnimatedTransitionOnFirstRenderContentLoadingIndicationVisible =
+            !_noAnimatedTransitionOnFirstRenderContentLoadingIndicationVisible;
 }

@@ -43,7 +43,12 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
             {
                 if (UpdateLock == 0)
                 {
-                    Changed?.Invoke(new PropertyGridMessageStoreChangedEventArgs { Sender = this, Added = new HashSet<IPropertyGridItem> { propertyGridItem }, Removed = _noItems });
+                    Changed?.Invoke(new()
+                    {
+                        Sender = this,
+                        Added = new HashSet<IPropertyGridItem> { propertyGridItem },
+                        Removed = _noItems
+                    });
                 }
                 else
                 {
@@ -87,7 +92,12 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
 
             if (UpdateLock == 0 && _itemsRemoved.Count > 0)
             {
-                Changed?.Invoke(new PropertyGridMessageStoreChangedEventArgs { Sender = this, Added = _noItems, Removed = _itemsRemoved });
+                Changed?.Invoke(new()
+                {
+                    Sender = this,
+                    Added = _noItems,
+                    Removed = _itemsRemoved
+                });
 
                 _itemsRemoved.Clear();
             }
@@ -120,7 +130,12 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
             {
                 if (UpdateLock == 0)
                 {
-                    Changed?.Invoke(new PropertyGridMessageStoreChangedEventArgs { Sender = this, Added = _noItems, Removed = _itemsRemoved });
+                    Changed?.Invoke(new()
+                    {
+                        Sender = this,
+                        Added = _noItems,
+                        Removed = _itemsRemoved
+                    });
 
                     _itemsRemoved.Clear();
                 }
@@ -162,7 +177,13 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
 
             if (_itemsAdded.Count > 0 || _itemsRemoved.Count > 0)
             {
-                Changed?.Invoke(new PropertyGridMessageStoreChangedEventArgs { Sender = this, Added = _itemsAdded, Removed = _itemsRemoved });
+                Changed?.Invoke(
+                    new PropertyGridMessageStoreChangedEventArgs
+                    {
+                        Sender = this,
+                        Added = _itemsAdded,
+                        Removed = _itemsRemoved
+                    });
 
                 _itemsAdded.Clear();
                 _itemsRemoved.Clear();

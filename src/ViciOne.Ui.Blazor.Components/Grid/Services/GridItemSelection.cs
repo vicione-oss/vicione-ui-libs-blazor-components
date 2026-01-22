@@ -24,7 +24,7 @@ internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGrid
             {
                 if (UpdateLock == 0)
                 {
-                    Changed?.Invoke(new GridItemSelectionChangedEventArgs<TGridItemKey> { Sender = this, ItemsAdded = new HashSet<TGridItemKey> { item }, ItemsRemoved = _noItems });
+                    Changed?.Invoke(new() { Sender = this, ItemsAdded = new HashSet<TGridItemKey> { item }, ItemsRemoved = _noItems });
                 }
                 else
                 {
@@ -72,7 +72,7 @@ internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGrid
             }
 
             if (UpdateLock == 0)
-                Changed?.Invoke(new GridItemSelectionChangedEventArgs<TGridItemKey> { Sender = this, ItemsAdded = itemsAdded, ItemsRemoved = _noItems });
+                Changed?.Invoke(new() { Sender = this, ItemsAdded = itemsAdded, ItemsRemoved = _noItems });
         }
     }
 
@@ -107,7 +107,7 @@ internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGrid
             {
                 if (UpdateLock == 0)
                 {
-                    Changed?.Invoke(new GridItemSelectionChangedEventArgs<TGridItemKey> { Sender = this, ItemsAdded = _noItems, ItemsRemoved = _itemsRemoved });
+                    Changed?.Invoke(new() { Sender = this, ItemsAdded = _noItems, ItemsRemoved = _itemsRemoved });
 
                     _itemsRemoved.Clear();
                 }
@@ -149,7 +149,7 @@ internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGrid
 
             if (_itemsAdded.Count > 0 || _itemsRemoved.Count > 0)
             {
-                Changed?.Invoke(new GridItemSelectionChangedEventArgs<TGridItemKey> { Sender = this, ItemsAdded = _itemsAdded, ItemsRemoved = _itemsRemoved });
+                Changed?.Invoke(new() { Sender = this, ItemsAdded = _itemsAdded, ItemsRemoved = _itemsRemoved });
 
                 _itemsAdded.Clear();
                 _itemsRemoved.Clear();

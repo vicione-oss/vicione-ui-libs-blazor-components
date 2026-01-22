@@ -48,24 +48,27 @@ public static partial class IServiceCollectionExtensions
         return builder;
     }
 
-    internal static IServiceCollection AddPropertyDescriptorProvider<TContext, TPropertyDescriptorProvider>(this IServiceCollection services)
-        where TPropertyDescriptorProvider : class, IPropertyDescriptorProvider<TContext>
+    internal static IServiceCollection AddPropertyDescriptorProvider<TContext, TPropertyDescriptorProvider>(
+        this IServiceCollection services)
+            where TPropertyDescriptorProvider : class, IPropertyDescriptorProvider<TContext>
     {
         services.AddScoped<IPropertyDescriptorProvider<TContext>, TPropertyDescriptorProvider>();
 
         return services;
     }
 
-    internal static IServiceCollection AddPropertyValueEqualityComparer<TContext, TPropertyValue, TEqualityComparer>(this IServiceCollection services)
-        where TPropertyValue : allows ref struct
-        where TEqualityComparer : class, IPropertyValueEqualityComparer<TPropertyValue>
+    internal static IServiceCollection AddPropertyValueEqualityComparer<TContext, TPropertyValue, TEqualityComparer>(
+        this IServiceCollection services)
+            where TPropertyValue : allows ref struct
+            where TEqualityComparer : class, IPropertyValueEqualityComparer<TPropertyValue>
     {
         var serviceKey = typeof(TContext);
 
         services.TryAddKeyedSingleton<IPropertyValueEqualityComparer<TPropertyValue>, TEqualityComparer>(serviceKey);
 
         services.AddKeyedSingleton<IPropertyValueEqualityComparer>(serviceKey,
-            (serviceProvider, serviceKey) => serviceProvider.GetRequiredKeyedService<IPropertyValueEqualityComparer<TPropertyValue>>(serviceKey));
+            (serviceProvider, serviceKey) => serviceProvider
+                .GetRequiredKeyedService<IPropertyValueEqualityComparer<TPropertyValue>>(serviceKey));
 
         return services;
     }

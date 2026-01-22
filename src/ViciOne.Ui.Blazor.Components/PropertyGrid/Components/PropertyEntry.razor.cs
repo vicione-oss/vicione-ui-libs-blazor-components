@@ -159,7 +159,7 @@ public sealed partial class PropertyEntry<TPropertyValue> : ComponentBase, IDisp
 
     private async void FocusPropertyRequestedAsync(PropertyGridControllerFocusPropertyRequestedEventArgs args)
     {
-        if (string.CompareOrdinal(args.Name, PropertyGridItem.Name) == 0)
+        if (string.Equals(args.Name, PropertyGridItem.Name, StringComparison.Ordinal))
         {
             if (_dynamicComponent?.Instance is PropertyEditorBase<TPropertyValue> propertyEditorComponent)
             {

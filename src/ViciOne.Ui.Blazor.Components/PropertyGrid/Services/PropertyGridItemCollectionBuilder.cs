@@ -40,8 +40,11 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
             if (commonProperty.Key is ICommonNumericPropertyKey commonNumericPropertyKey)
             {
                 var createDelegate = CreateNumericPropertyGridItem<int, int, int>;
-                var createMethodInfo = createDelegate.Method.GetGenericMethodDefinition()
-                    .MakeGenericMethod(commonNumericPropertyKey.ValueType, commonNumericPropertyKey.IntervalType, commonNumericPropertyKey.LimitType);
+
+                var createMethodInfo = createDelegate.Method
+                    .GetGenericMethodDefinition()
+                    .MakeGenericMethod(commonNumericPropertyKey.ValueType, commonNumericPropertyKey.IntervalType,
+                        commonNumericPropertyKey.LimitType);
 
                 object?[] parameters = [instancesByType, propertyDescriptors, valueComparer, messageStore, commonNumericPropertyKey];
 
@@ -50,7 +53,10 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
             else if (commonProperty.Key is ICommonSelectionPropertyKey commonPossibleValuesPropertyKey)
             {
                 var createDelegate = CreateSelectionPropertyGridItem<object>;
-                var createMethodInfo = createDelegate.Method.GetGenericMethodDefinition().MakeGenericMethod(commonPossibleValuesPropertyKey.ValueType);
+
+                var createMethodInfo = createDelegate.Method
+                    .GetGenericMethodDefinition()
+                    .MakeGenericMethod(commonPossibleValuesPropertyKey.ValueType);
 
                 object?[] parameters = [instancesByType, propertyDescriptors, valueComparer, messageStore];
 
@@ -59,7 +65,10 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
             else if (commonProperty.Key is ICommonPropertyKey commonMishMashPropertyKey)
             {
                 var createDelegate = CreatePropertyGridItem<object>;
-                var createMethodInfo = createDelegate.Method.GetGenericMethodDefinition().MakeGenericMethod(commonMishMashPropertyKey.ValueType);
+
+                var createMethodInfo = createDelegate.Method
+                    .GetGenericMethodDefinition()
+                    .MakeGenericMethod(commonMishMashPropertyKey.ValueType);
 
                 object?[] parameters = [instancesByType, propertyDescriptors, valueComparer, messageStore];
 
@@ -75,10 +84,13 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
         return result.Values;
     }
 
-    private static IEnumerable<IPropertyDescriptor> GetPropertyDescriptors(IPropertyDescriptorProvider propertyDescriptorProvider, TContext context)
+    private static IEnumerable<IPropertyDescriptor> GetPropertyDescriptors(
+        IPropertyDescriptorProvider propertyDescriptorProvider, TContext context)
     {
         var methodDelegate = GetPropertyDescriptors<TargetInstanceType>;
-        var methodInfo = methodDelegate.Method.GetGenericMethodDefinition()
+
+        var methodInfo = methodDelegate.Method
+            .GetGenericMethodDefinition()
             .MakeGenericMethod(propertyDescriptorProvider.GetTargetInstanceType());
 
         var propertyDescriptors = methodInfo.Invoke(null, [propertyDescriptorProvider, context]) as IEnumerable<IPropertyDescriptor>;
@@ -86,16 +98,21 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
         return propertyDescriptors ?? [];
     }
 
-    private static IEnumerable<IPropertyDescriptor<TInstance>> GetPropertyDescriptors<TInstance>(IPropertyDescriptorProvider<TContext, TInstance> propertyDescriptorProvider, TContext context)
-        => propertyDescriptorProvider.GetPropertyDescriptors(context);
+    private static IEnumerable<IPropertyDescriptor<TInstance>> GetPropertyDescriptors<TInstance>(
+        IPropertyDescriptorProvider<TContext, TInstance> propertyDescriptorProvider, TContext context)
+            => propertyDescriptorProvider.GetPropertyDescriptors(context);
 
     private static bool ShouldConsiderPropertyDescriptor(IPropertyDescriptor propertyDescriptor, IEnumerable<object> instances)
     {
         var shouldConsiderPropertyDescriptorDelegate = ShouldConsiderPropertyDescriptor<TargetInstanceType>;
-        var shouldConsiderPropertyDescriptorMethodInfo = shouldConsiderPropertyDescriptorDelegate.Method.GetGenericMethodDefinition().MakeGenericMethod(propertyDescriptor.TargetType);
+        var shouldConsiderPropertyDescriptorMethodInfo = shouldConsiderPropertyDescriptorDelegate.Method.GetGenericMethodDefinition()
+            .MakeGenericMethod(propertyDescriptor.TargetType);
 
         var ofTypeExtensionDelegate = Enumerable.OfType<TargetInstanceType>;
-        var ofTypeExtensionMethod = ofTypeExtensionDelegate.Method.GetGenericMethodDefinition().MakeGenericMethod(propertyDescriptor.TargetType);
+
+        var ofTypeExtensionMethod = ofTypeExtensionDelegate.Method
+            .GetGenericMethodDefinition()
+            .MakeGenericMethod(propertyDescriptor.TargetType);
 
         var relevantInstances = ofTypeExtensionMethod.Invoke(null, [instances]);
 
@@ -106,7 +123,8 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
             return false;
     }
 
-    private static bool ShouldConsiderPropertyDescriptor<TInstance>(IPropertyDescriptor<TInstance> propertyDescriptor, IEnumerable<TInstance> instances)
+    private static bool ShouldConsiderPropertyDescriptor<TInstance>(
+        IPropertyDescriptor<TInstance> propertyDescriptor, IEnumerable<TInstance> instances)
     {
         if (propertyDescriptor.ConsiderPredicate is not null)
             return instances.All(propertyDescriptor.ConsiderPredicate);
@@ -114,7 +132,8 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
             return true;
     }
 
-    private Dictionary<ICommonPropertyKey, List<IPropertyDescriptor>>? FindCommonProperties(ILookup<TargetInstanceType, object> instancesByType, TContext context)
+    private Dictionary<ICommonPropertyKey, List<IPropertyDescriptor>>? FindCommonProperties(
+        ILookup<TargetInstanceType, object> instancesByType, TContext context)
     {
         _propertyDescriptorProviderLookup ??= propertyDescriptorProviders.ToLookup(k => k.GetTargetInstanceType());
 
@@ -203,12 +222,13 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
         return result;
     }
 
-    private static NumericPropertyGridItem<TPropertyValue, TInterval, TLimit> CreateNumericPropertyGridItem<TPropertyValue, TInterval, TLimit>(
-        ILookup<TargetInstanceType, object> instancesByType, IEnumerable<IPropertyDescriptor> propertyDescriptors,
-        IEqualityComparer<TPropertyValue> valueEqualityComparer, IPropertyGridMessageStore messageStore,
-        ICommonNumericPropertyKey<TInterval, TLimit> propertyKey)
-            where TInterval : struct
-            where TLimit : struct
+    private static NumericPropertyGridItem<TPropertyValue, TInterval, TLimit>
+        CreateNumericPropertyGridItem<TPropertyValue, TInterval, TLimit>(
+            ILookup<TargetInstanceType, object> instancesByType, IEnumerable<IPropertyDescriptor> propertyDescriptors,
+            IEqualityComparer<TPropertyValue> valueEqualityComparer, IPropertyGridMessageStore messageStore,
+            ICommonNumericPropertyKey<TInterval, TLimit> propertyKey)
+                where TInterval : struct
+                where TLimit : struct
     {
         var result = new NumericPropertyGridItem<TPropertyValue, TInterval, TLimit>(instancesByType, propertyDescriptors,
             valueEqualityComparer, messageStore, propertyKey.Interval, propertyKey.IsRastered,

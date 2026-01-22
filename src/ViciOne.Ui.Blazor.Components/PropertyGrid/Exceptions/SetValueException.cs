@@ -23,14 +23,16 @@ public sealed class SetValueException : Exception
     public object? Value { get; }
 
     /// <inheritdoc/>
-    public SetValueException(string message, object instance, object? value) : base(message)
+    public SetValueException(string message, object instance, object? value)
+        : base(message)
     {
         Instance = instance;
         Value = value;
     }
 
     /// <inheritdoc/>
-    public SetValueException(string message, object instance, object? value, Exception innerException) : base(message, innerException)
+    public SetValueException(string message, object instance, object? value, Exception innerException)
+        : base(message, innerException)
     {
         Instance = instance;
         Value = value;
@@ -52,8 +54,9 @@ public sealed class SetValueException : Exception
     }
 
     /// <inheritdoc/>
-    internal SetValueException(string message, IPropertyDescriptor propertyDescriptor, object instance, object? value, Exception innerException)
-        : base(message, innerException)
+    internal SetValueException(string message, IPropertyDescriptor propertyDescriptor,
+        object instance, object? value, Exception innerException)
+            : base(message, innerException)
     {
         PropertyDescriptor = propertyDescriptor;
         Instance = instance;

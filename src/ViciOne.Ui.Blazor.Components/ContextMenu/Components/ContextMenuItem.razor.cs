@@ -289,8 +289,13 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private async void ShowChildContentMenuTimerElapsedAsync(object? sender, ElapsedEventArgs e)
     {
-        if (_jsAttachResult is null || _htmlElementReference is null || _childContextMenu is null || _childContextMenuMouseEventArgs is null)
+        if (_jsAttachResult is null ||
+            _htmlElementReference is null ||
+            _childContextMenu is null ||
+            _childContextMenuMouseEventArgs is null)
+        {
             return;
+        }
 
         var childContextMenuPosition = await _jsAttachResult.InvokeAsync<ChildContextMenuPosition>("calculateChildContextMenuPosition",
             _htmlElementReference, _childContextMenu.ElementReference);

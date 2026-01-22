@@ -90,7 +90,7 @@ public sealed partial class PropertyGridPage : ComponentBase, IDisposable
     }
 
     private void PassSelectedInstancesToPropertyGridController()
-        => PropertyGridController.SetInstances(_instanceStates.Where(s => s.Selected).Select(s => s.Instance), new ExamplePropertyGridContext());
+        => PropertyGridController.SetInstances(_instanceStates.Where(s => s.Selected).Select(s => s.Instance), new());
 
     private void InstanceSelectionChanged()
         => PassSelectedInstancesToPropertyGridController();

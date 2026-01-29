@@ -9,7 +9,9 @@
                 <Configuration>
                     <!-- Cover coverage can be determined via Coverlet, see https://github.com/coverlet-coverage/coverlet#vstest-integration-preferred-due-to-known-issue -->
                     <Format>cobertura</Format>
-                    <Exclude>[*Test*]*,[*Fact*]*</Exclude>
+                    <Exclude>[*Test*]*, [*Fact*]*</Exclude>
+                    <!-- Exclude by source file path (generated NTypewriter outputs) -->
+                    <ExcludeByFile>**/*.nt.cs, **/*.g.cs</ExcludeByFile>
                     <ExcludeByAttribute>GeneratedCode,Migration,DbContext</ExcludeByAttribute>
                     <IncludeTestAssembly>false</IncludeTestAssembly>
                 </Configuration>

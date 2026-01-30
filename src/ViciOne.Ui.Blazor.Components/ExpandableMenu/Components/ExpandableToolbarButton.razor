@@ -4,24 +4,43 @@
 
 @if (Entry.Visible)
 {
-    <button type="button" class="toolbar-button expandable-button @(AddCssClasses())" @onclick="@OnClickAsync">
-        @RenderFragments.Icon(Entry)
+    var cssClasses = new List<string> { "expandable-toolbar-button" };
 
-        @if (!MenuService.IsCompact && !string.IsNullOrWhiteSpace(Entry.Label))
-        {
-            <span>@(Entry.Label)</span>
-        }
+    var expanded = Entry.IsExpanded;
+    if (expanded)
+        cssClasses.Add("expanded");
 
-        @if (!MenuService.IsCompact)
+    var isCompact = MenuService.IsCompact;
+    if (isCompact)
+        cssClasses.Add("compact");
+
+    var buttonAttributes = new Dictionary<string, object>();
+
+    if (expanded && !isCompact)
+        buttonAttributes.Add("tabindex", "-1");
+    else
+        buttonAttributes.Add("onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClickAsync));
+
+    <div class="@string.Join(" ", cssClasses)">
+        <button type="button" class="expand-button" @attributes="buttonAttributes">
+            @RenderFragments.Icon(Entry)
+
+            @if (!isCompact)
+            {
+                <span>@Entry.Label</span>
+            }
+        </button>
+
+        @if (!isCompact)
         {
             <button type="button"
-                    class="toolbar-button collapse-button"
+                    class="collapse-button"
                     @onclick="@OnCollapseButtonClicked"
-                    @onclick:preventDefault="true"
-                    @onclick:stopPropagation="true">
+                    @onclick:preventDefault
+                    @onclick:stopPropagation>
 
                 <MonochromeIcon Name="MonochromeIconName.ExpanderLightLeft" Size="MonochromeIconSize.SmallMedium" />
             </button>
         }
-    </button>
+    </div>
 }

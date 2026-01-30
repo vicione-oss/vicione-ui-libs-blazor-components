@@ -15,19 +15,6 @@ public sealed partial class ExpandableToolbarButton : ComponentBase, IDisposable
     [Inject]
     private ExpandableMenuService MenuService { get; set; } = default!;
 
-    private string AddCssClasses()
-    {
-        List<string> classes = [];
-
-        if (Entry.IsExpanded)
-            classes.Add("expanded");
-
-        if (MenuService.IsCompact)
-            classes.Add("compact");
-
-        return string.Join(' ', classes);
-    }
-
     /// <inheritdoc/>
     public void Dispose()
     {

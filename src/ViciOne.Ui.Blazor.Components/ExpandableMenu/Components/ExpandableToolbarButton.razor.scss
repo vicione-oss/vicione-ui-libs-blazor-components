@@ -4,94 +4,108 @@
 
 @use "sass:color";
 
-.toolbar-button {
-    margin: 0;
-    text-transform: none;
-    -webkit-appearance: button;
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    border-radius: 2px;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    color: colors.$font;
-    line-height: 1.5;
-    font-weight: typography.$font-weight-regular;
-    font-size: 1rem;
-    background-color: transparent;
-    border: 1px solid transparent;
-    display: inline-block;
-
-    text-transform: none;
-}
-
-.toolbar-button:focus:not(:focus-visible) {
-    outline: 0;
-}
-
-.toolbar-button:not(:disabled) {
-    cursor: pointer;
-}
-
-.collapse-button {
-    --collapse-button-icon-color: #{color.change(colors.$font-light, $alpha: 0.3)};
-    height: 24px;
-    padding: 0;
-    visibility: var(--collapse-button-visibility);
-    width: 24px;
-    color: var(--collapse-button-icon-color);
-
-    &:hover {
-        --collapse-button-icon-color: #{colors.$font-light};
-    }
-}
-
-.expandable-button {
-    --collapse-button-visibility: hidden;
-    --expandable-button-foreground-color: rgb(176, 176, 176);
-    border: none;
-    cursor: pointer;
+.expandable-toolbar-button {
     display: grid;
-    grid-template-columns: 24px auto 24px;
-    padding: 8px;
-    padding-left: 16px;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+
     width: 100%;
 
-    @include user-interaction.prevent-text-selection();
+    --background-color: transparent;
+    --expandable-button-font-color: rgb(176, 176, 176);
+    --collapse-button-font-color: transparent;
 
-    &.compact {
-        display: block;
-        height: 40px;
-        margin-left: 8px;
-        margin-right: 8px;
-        padding: 8px;
-        width: 40px;
-    }
-
-    &:hover {
-        --collapse-button-visibility: visible;
-        background-color: color.adjust(colors.$background-darker, $lightness: -2%);
+    &:hover, &:focus-within {
+        --background-color: #{color.adjust(colors.$background-darker, $lightness: -2%)};
+        --collapse-button-font-color: #{color.change(colors.$font-light, $alpha: 0.3)};
     }
 
     &.expanded {
-        --expandable-button-foreground-color: #{colors.$font-light};
-        background-color: #2f2f2f;
+        --background-color: #2f2f2f;
+        --expandable-button-font-color: #{colors.$font-light};
 
         &:hover {
-            background-color: colors.$background-darker-hover;
+            --background-color: #{colors.$background-darker-hover};
         }
     }
 
-    > span {
-        align-self: center;
-        color: var(--expandable-button-foreground-color);
-        display: flex;
-        font-size: 13px;
-        margin-left: 16px;
+    background-color: var(--background-color);
+    transition: background-color .15s ease-in-out;
+
+    button {
+        background-color: transparent;
+        border: none;
+        margin: 0;
+        text-transform: none;
+        -webkit-appearance: button;
+        transition: color .15s ease-in-out;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        background-color: transparent;
+        line-height: 1.5;
+
+        text-transform: none;
+
+        &:focus:not(:focus-visible) {
+            outline: 0;
+        }
+
+        &:not(:disabled) {
+            cursor: pointer;
+        }
     }
 
-    ::deep > .icon {
-        color: var(--expandable-button-foreground-color);
-        height: 24px;
-        width: 24px;
+    .expand-button {
+        display: grid;
+        grid-template-columns: 24px auto;
+        align-items: center;
+        justify-items: start;
+
+        padding: 8px;
+
+        color: var(--expandable-button-font-color);
+
+        ::deep > .icon {
+            height: 24px;
+            width: 24px;
+        }
+
+        > span {
+            padding-left: 16px;
+            
+            font-size: 13px;
+            font-weight: typography.$font-weight-regular;
+        }
+    }
+
+    &:not(.compact) {
+        .expand-button {
+            padding-left: 16px;
+        }
+
+        &.expanded {
+            .expand-button {
+                cursor: default;
+            }
+        }
+    }
+
+    .collapse-button {
+        display: inline-flex;
+
+        padding: 8px;
+
+        color: var(--collapse-button-font-color);
+
+        &:hover {
+            --collapse-button-font-color: #{colors.$font-light};
+        }
+    }
+
+    &.compact {
+        width: 40px;
+        margin-left: 8px;
+        border-radius: 2px;
     }
 }

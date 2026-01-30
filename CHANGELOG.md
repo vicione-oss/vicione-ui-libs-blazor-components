@@ -1,7 +1,8 @@
 # Changelog
 
-## 5.1.0 - Unreleased
+## 5.1.0 - 2026-01-30
 
+- `ExpandableMenu`, fixed jumping on initial render / improved accessibility
 - `Moveable`, `user-select: none` is now applied to moveable element on move automatically
 - Updated package project URL to reflect the migration to gitlab.com
 

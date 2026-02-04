@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.AspNetCore.Components.Sections
+@using ViciOne.Ui.Blazor.Components.Grid.Components.Columns
 @using ViciOne.Ui.Blazor.Components.Grid.Components.Footers
 
 @typeparam TGridItem
@@ -37,7 +38,18 @@
 
         <CascadingValue Value="_leftPaneSectionId" IsFixed="true">
             <CascadingValue Value="this" IsFixed="true">
-                <QuickGrid @key="Virtualize" Items="Items" ChildContent="ChildContent" Virtualize="Virtualize" ItemSize="quickGridItemSize" />
+                <QuickGrid @key="Virtualize" Items="Items" Virtualize="Virtualize" ItemSize="quickGridItemSize">
+                    @ChildContent
+
+                    @if (NavigationColumn is not null)
+                    {
+                        // render column again when it was rendered in ChildContent
+                        // as it somehow gets optimized away seemingly due to non-complex parameters
+                        <NavigationColumn NavigationButtonTitle="@NavigationColumn.NavigationButtonTitle"
+                                          Navigate="@NavigationColumn.Navigate"
+                                          @key="Guid.NewGuid()" />
+                    }
+                </QuickGrid>
             </CascadingValue>
         </CascadingValue>
     </div>

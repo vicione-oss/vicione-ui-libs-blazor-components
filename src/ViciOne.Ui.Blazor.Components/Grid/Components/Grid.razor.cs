@@ -65,4 +65,5 @@ public sealed partial class Grid<TGridItem> : ComponentBase
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     internal IItemSelectColumn<TGridItem>? ItemSelectColumn { get; set; }
+    internal INavigationColumn<TGridItem>? NavigationColumn { get; set; }
 }

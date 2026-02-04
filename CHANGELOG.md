@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.1 - 2026-02-06
+
+- `Grid`, forced re-render of `NavigationColumn` to fix missing navigation columns on use of this component
+
 ## 5.1.0 - 2026-01-30
 
 - `ExpandableMenu`, fixed jumping on initial render / improved accessibility

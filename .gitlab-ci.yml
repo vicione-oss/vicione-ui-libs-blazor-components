@@ -10,12 +10,7 @@ include:
   - apt update && apt install -y nodejs
 
 .install_npm_packages: &install_npm_packages
-  - cd src/ViciOne.Ui.Blazor.Components
   - npm install
-  - cd -
-  - cd samples/Shared
-  - npm install
-  - cd -
 
 .run_eslint: &run_eslint
   - cd src/ViciOne.Ui.Blazor.Components

@@ -1,7 +1,7 @@
 ﻿@use "./../../Styles/design/colors";
 @use "./../../Styles/animations/mixins" as animations;
 
-@use "./../../node_modules/three-dots" with (
+@use "./../../../../node_modules/three-dots" with (
     $dot-width: 32px,
     $dot-height: 32px,
     $dot-color: colors.$accent

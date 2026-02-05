@@ -1,0 +1,13 @@
+﻿{
+  "name": "vicione-blazor-components-root",
+  "private": true,
+  "workspaces": [
+    "src/ViciOne.Ui.Blazor.Components",
+    "samples/Shared"
+  ],
+  "scripts": {
+    "build": "npm --workspaces --if-present run build",
+    "lint": "npm --workspaces --if-present run lint",
+    "lint-with-fix": "npm --workspaces --if-present run lint-with-fix"
+  }
+}

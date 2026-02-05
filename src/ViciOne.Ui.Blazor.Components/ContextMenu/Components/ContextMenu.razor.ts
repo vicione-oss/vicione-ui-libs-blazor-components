@@ -52,7 +52,7 @@ class ContextMenu {
     }
 
     private addPointerDownEventListener() {
-        this.windowPointerDownEventListenerBinding ||= this.windowPointerDownEventListener.bind(this);
+        this.windowPointerDownEventListenerBinding ??= this.windowPointerDownEventListener.bind(this);
 
         if (this.windowPointerDownEventListenerBinding)
             window.addEventListener('pointerdown', this.windowPointerDownEventListenerBinding);

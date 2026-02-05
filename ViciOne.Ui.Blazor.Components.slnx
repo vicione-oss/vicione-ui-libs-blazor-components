@@ -19,6 +19,7 @@
     <File Path="global.json" />
     <File Path="LICENSE.txt" />
     <File Path="NuGet.Config" />
+    <File Path="package.json" />
     <File Path="README.md" />
     <File Path="tests.runsettings" />
     <File Path="VERSION" />

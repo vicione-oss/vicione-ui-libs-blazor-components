@@ -1,5 +1,7 @@
 # Changelog
 
+## 5.2.0 - Unreleased
+
 ## 5.1.1 - 2026-02-06
 
 - `Grid`, forced re-render of `NavigationColumn` to fix missing navigation columns on use of this component

@@ -9,11 +9,8 @@ This repository contains Blazor components for use in ViciOne applications.
 ## Get started
 
 - Clone repository
-- Open console at `samples/Shared`
-- Run `npm install`
-- Change directory to `src/ViciOne.Ui.Blazor.Components`
-- Run `npm install`
-- Change directory to root directory of cloned repository
+- Open console at root of cloned repositor
+- Run `npm i`
 - Run `dotnet build`
 - Run the sample application
 

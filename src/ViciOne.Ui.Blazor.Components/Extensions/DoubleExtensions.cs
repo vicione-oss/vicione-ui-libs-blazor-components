@@ -1,13 +1,14 @@
 ﻿using System.Globalization;
 
-namespace ViciOne.Ui.Blazor.Components.Popup.Extensions;
+namespace ViciOne.Ui.Blazor.Components.Extensions;
 
 /// <summary>
 /// Extension methods to localize values of type <see cref="double"/>
 /// </summary>
-internal static class DoubleExtensions
+public static class DoubleExtensions
 {
     private static readonly Dictionary<int, string> s_attributeValueFormats = [];
+
     /// <summary>
     /// Converts the given <paramref name="value"/> to a custom invariant notation for use in HTML attributes.
     /// The notation only includes decimal digits when <paramref name="value"/> contains decimal digits.

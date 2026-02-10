@@ -1,0 +1,27 @@
+﻿@use "../../../Styles/design/colors";
+
+.shape {
+    width: 160px;
+    height: 160px;
+
+    background-color: colors.$theme-inverted;
+    color: colors.$theme;
+
+    display: grid;
+    grid-auto-flow: row;
+    align-content: center;
+    justify-items: center;
+    font-size: smaller;
+
+    &:not(.moveable) {
+        opacity: 0.3;
+    }
+
+    &.moving, &.moved, &.positioned {
+        position: absolute;
+    }
+
+    &.moving {
+        background-color: colors.$accent-hover;
+    }
+}

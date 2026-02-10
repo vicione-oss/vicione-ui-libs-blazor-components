@@ -170,12 +170,12 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     public IMoveContainer GetMoveContainer() => this;
 
     /// <inheritdoc/>
-    public void UpdatePosition(double x, double y)
+    public async Task UpdatePositionAsync(double x, double y)
     {
         _x = x;
         _y = y;
 
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task RemoveMoveInteractionAsync()

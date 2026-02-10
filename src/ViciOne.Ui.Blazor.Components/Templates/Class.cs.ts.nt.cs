@@ -20,6 +20,16 @@ public static class CustomFunctions
     {
         var imports = new List<string>();
 
+        var generateTypeScriptImportAttributes = @class.Attributes.Where(attribute => attribute.Name is "GenerateTypeScriptImport");
+        foreach (var attribute in generateTypeScriptImportAttributes)
+        {
+            var typeArgument = attribute.Arguments.FirstOrDefault(a => a.Name == "Type");
+            var modulePathArgument = attribute.Arguments.FirstOrDefault(a => a.Name == "ModulePath");
+
+            if (typeArgument is not null && modulePathArgument is not null)
+                imports.Add($"import {{ type {typeArgument.Value} }} from '{modulePathArgument.Value}';");
+        }
+
         foreach (var property in @class.Properties)
         {
             if (property.Type.Attributes.Any(attribute => attribute.Name is "GenerateTypeScriptClass" or "GenerateTypeScriptEnum"))

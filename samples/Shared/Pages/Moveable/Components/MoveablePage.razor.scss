@@ -1,0 +1,9 @@
+﻿@use "../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.content {
+    margin-top: 30px;
+}

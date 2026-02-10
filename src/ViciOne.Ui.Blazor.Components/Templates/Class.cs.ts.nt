@@ -1,5 +1,44 @@
-﻿
-{{ for class in data.Classes | Symbols.ThatHaveAttribute "GenerateTypeScriptClass" }}
+﻿{{
+
+func isTypeScriptPropertyInfoAttribute(attribute)
+    ret attribute.Name == "TypeScriptPropertyInfo"
+end
+
+func isTypeArgument(argument)
+    ret argument.Name == "Type"
+end
+
+func getPropertyType(property)
+    if property.Type.IsNullable
+        nullability = " | undefined"
+    else
+        nullability = ""
+    end
+
+    if property.Type == "Guid"
+        ret "string" + nullability
+    else if property.Type == "ElementReference"
+        ret "HTMLElement" + nullability
+    else if property.Type | String.StartsWith "DotNetObjectReference<"
+        ret "DotNet.DotNetObject" + nullability
+    else
+        attribute = property.Attributes | Array.Filter @isTypeScriptPropertyInfoAttribute | Array.First
+
+        if attribute != null
+            typeArgument = attribute.Arguments | Array.Filter @isTypeArgument | Array.First;
+
+            if typeArgument != null
+                ret typeArgument.Value + nullability
+            end
+        end
+
+        typeScriptType = property.Type | Type.ToTypeScriptType
+
+        ret typeScriptType + nullability
+    end
+end
+
+for class in data.Classes | Symbols.ThatHaveAttribute "GenerateTypeScriptClass" }}
     {{- capture output -}}
 // Auto-generated code
 {{ class | Custom.GenerateImports ~}}
@@ -13,15 +52,7 @@ export class {{ class.Name }} {
     {{~ end ~}}
     constructor({{ for property in properties }}{{ if !for.first }}
         {{ end -}}
-        readonly {{ property.Name | String.ToCamelCase }}: {{ if property.Type == "Guid"
-                  "string"
-              else if property.Type == "ElementReference"
-                  "HTMLElement"
-              else if property.Type | String.StartsWith "DotNetObjectReference<"
-                  "DotNet.DotNetObject"
-              else
-                  property.Type | Type.ToTypeScriptType
-            end }}{{ if !for.last }},{{ end ~}}
+        readonly {{ property.Name | String.ToCamelCase }}: {{ getPropertyType property }}{{ if !for.last }},{{ end ~}}
 {{ end }}) {}
 }
     {{~ end

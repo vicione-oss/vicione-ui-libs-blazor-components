@@ -52,16 +52,6 @@
     <Content Update="tsconfig.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="False" />
   </ItemGroup>
 
-  <!-- Configuration for resulting NuGet package -->
-  <PropertyGroup>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
-    <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
   <!-- NTypewriter.SourceGenerator configuration -->
   <ItemGroup>
     <AdditionalFiles Include="PropertyGrid\Extensions\Templates\IServiceCollectionExtensions.cs.nt" />
@@ -99,8 +89,11 @@
   <Target Name="EnforceTypeScriptCompileAfterSourceGenerators" BeforeTargets="PreComputeCompileTypeScriptWithTSConfig" DependsOnTargets="CoreCompile" />
 
   <ItemGroup>
-    <GeneratedStaticWebAsset Include="Scripts\PointerCapture.js">
-      <DestinationFile>wwwroot\js\pointer-capture.js</DestinationFile>
+    <GeneratedStaticWebAsset Include="Scripts\ArrayIterator.js">
+      <DestinationFile>wwwroot\js\array-iterator.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\Point.js">
+      <DestinationFile>wwwroot\js\point.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
       <DestinationFile>wwwroot\js\pointer-event-mixins.js</DestinationFile>
@@ -110,6 +103,18 @@
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Moveable\Services\MoveInteraction.cs.js">
       <DestinationFile>wwwroot\moveable\move-interaction.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCapture.js">
+      <DestinationFile>wwwroot\pointer-capture\pointer-capture.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehavior.js">
+      <DestinationFile>wwwroot\pointer-capture\pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehaviorContext.js">
+      <DestinationFile>wwwroot\pointer-capture\pointer-capture-behavior-context.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Services\Behaviors\SnapToGridPointerCaptureBehavior.cs.js">
+      <DestinationFile>wwwroot\pointer-capture\snap-to-grid-pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Enums\MouseLeaveDirection.cs.js">
       <DestinationFile>wwwroot\context-menu\enums\mouse-leave-direction.js</DestinationFile>

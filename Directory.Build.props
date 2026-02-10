@@ -50,10 +50,17 @@
 
     <!-- NuGet package properties -->
     <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageProjectUrl>https://gitlab.com/vicione-oss/vicione/ui-libs/blazor-components.git</PackageProjectUrl>
         <Authors>$(Company)</Authors>
     </PropertyGroup>
+
+    <!-- Configuration for resulting NuGet package -->
+    <ItemGroup Condition="'$(IsPackable)' == 'true'">
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
     <!-- Performance optimization for CI pipelines -->
     <PropertyGroup Condition="'$(CI)' != ''">

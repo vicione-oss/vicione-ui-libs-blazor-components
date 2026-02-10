@@ -1,0 +1,42 @@
+﻿@using ViciOne.Ui.Blazor.Components.Extensions
+
+@{
+    var cssClasses = new List<string> { "shape" };
+
+    if (Moveable)
+        cssClasses.Add("moveable");
+
+    var inlineStyles = new Dictionary<string, object>();
+    string? left = null;
+    string? top = null;
+
+    if (X is not null && Y is not null)
+    {
+        cssClasses.Add("positioned");
+
+        left = $"{X.Value.ToAttributeValue(precision: 3)}px";
+
+        inlineStyles.Add("left", left);
+
+        top = $"{Y.Value.ToAttributeValue(precision: 3)}px";
+
+        inlineStyles.Add("top", top);
+    }
+
+    var attributes = new Dictionary<string, object> { { "class", string.Join(" ", cssClasses) } };
+
+    if (inlineStyles.Count > 0)
+        attributes.Add("style", string.Join("; ", inlineStyles.Select(s => $"{s.Key}: {s.Value}")));
+}
+
+<div @attributes="attributes" @ref="_elementReference">
+    @if (left is not null)
+    {
+        <span>left: @left</span>
+    }
+
+    @if (top is not null)
+    {
+        <span>top: @top</span>
+    }
+</div>

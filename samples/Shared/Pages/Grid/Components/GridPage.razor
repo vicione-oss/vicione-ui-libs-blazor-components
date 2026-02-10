@@ -7,7 +7,9 @@
 @using ViciOne.Ui.Blazor.Components.Grid.Components.Columns
 @using ViciOne.Ui.Blazor.Components.Grid.Components.Footers
 @using ViciOne.Ui.Blazor.Components.Grid.Components.Panes
+@using ViciOne.Ui.Blazor.Components.Grid.Models
 @using ViciOne.Ui.Blazor.Components.Switch
+@using QuickGrid = Microsoft.AspNetCore.Components.QuickGrid;
 
 <div class="layout">
     <div class="virtualize-wrapper">
@@ -50,7 +52,7 @@
 
                 <ItemSelectColumn KeySelector="@(item => item.Id)" Selection="@ItemSelection" />
 
-                <TemplateColumn Title="Key">
+                <TemplateColumn Title="Key" Sort="GridSort<ExampleGridItem>.ByAscending(i => i.Key)">
                     @{
                         var key = new MarkupString(context.Key);
 
@@ -64,7 +66,7 @@
                     }
                 </TemplateColumn>
 
-                <TemplateColumn Title="Value">
+                <TemplateColumn Title="Value" Sort="GridSort<ExampleGridItem>.ByAscending(i => i.Value)">
                     @{
                         var value = new MarkupString(context.Value);
 
@@ -78,7 +80,7 @@
                     }
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(item => item.Timestamp)" />
+                <PropertyColumn Property="@(item => item.Timestamp)" Sortable="true"/>
 
                 <NavigationColumn NavigationButtonTitle="Show details" Navigate="@((ExampleGridItem item) => ShowDetails(item))" />
             </ChildContent>

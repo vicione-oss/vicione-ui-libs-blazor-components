@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.Components.Web;
+@using ViciOne.Ui.MonochromeIcons.Components;
+@using ViciOne.Ui.MonochromeIcons.Core.Enums;
+@using QuickGrid = Microsoft.AspNetCore.Components.QuickGrid;
+
+@code
+{
+    /// <summary>
+    /// Header template for a non-sortable column.
+    /// </summary>
+    internal static RenderFragment<QuickGrid.ColumnBase<TGridItem>> NonSortableColumnHeader<TGridItem>() => column => builder =>
+    {
+        builder.OpenElement(1, "div");
+        {
+            builder.AddAttribute(2, "class", "col-title");
+
+            builder.OpenElement(3, "div");
+            {
+                builder.AddAttribute(4, "class", "col-title-text");
+                builder.AddContent(5, column.Title);
+            }
+            builder.CloseElement();
+        }
+        builder.CloseElement();
+    };
+
+    /// <summary>
+    /// Header template for a sortable column (includes click handler + sort icons).
+    /// </summary>
+    internal static RenderFragment<QuickGrid.ColumnBase<TGridItem>> SortableColumnHeader<TGridItem>() => column => builder =>
+    {
+        builder.OpenElement(1, "button");
+        {
+            builder.AddAttribute(2, "class", "col-title");
+            builder.AddAttribute(3, "type", "button");
+            builder.AddAttribute(4, "onclick", EventCallback.Factory.Create<MouseEventArgs>(column,
+                () => column.Grid.SortByColumnAsync(column)));
+
+            builder.OpenElement(5, "div");
+            {
+                builder.AddAttribute(6, "class", "col-title-text");
+                builder.AddContent(7, column.Title);
+            }
+            builder.CloseElement();
+
+            builder.OpenElement(8, "div");
+            {
+                builder.AddAttribute(9, "class", "sort-icon-asc");
+
+                builder.OpenComponent<MonochromeIcon>(10);
+                {
+                    builder.AddComponentParameter(11, "Name", MonochromeIconName.MoveUp);
+                    builder.AddComponentParameter(12, "Size", MonochromeIconSize.SmallMedium);
+                }
+                builder.CloseComponent();
+            }
+            builder.CloseElement();
+
+            builder.OpenElement(13, "div");
+            {
+                builder.AddAttribute(14, "class", "sort-icon-des");
+
+                builder.OpenComponent<MonochromeIcon>(15);
+                {
+                    builder.AddComponentParameter(16, "Name", MonochromeIconName.MoveDown);
+                    builder.AddComponentParameter(17, "Size", MonochromeIconSize.SmallMedium);
+                }
+                builder.CloseComponent();
+            }
+            builder.CloseElement();
+        }
+        builder.CloseElement();
+    };
+}

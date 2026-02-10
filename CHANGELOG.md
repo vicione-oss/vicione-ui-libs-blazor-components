@@ -2,6 +2,9 @@
 
 ## 5.2.0 - Unreleased
 
+- Added `ViciOne.Ui.Blazor.Components.TestingHelpers`
+- `PointerCapture`, added `SnapToGridPointerCaptureBehavior`
+
 ## 5.1.1 - 2026-02-06
 
 - `Grid`, forced re-render of `NavigationColumn` to fix missing navigation columns on use of this component

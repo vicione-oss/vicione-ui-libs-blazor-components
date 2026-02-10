@@ -1,13 +1,20 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
 using ViciOne.Ui.Blazor.Components.Moveable.Models;
+using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 
 namespace ViciOne.Ui.Blazor.Components.Moveable.Services;
 
-internal sealed partial class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntime jsRuntime)
+internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntime jsRuntime)
     : IMoveInteraction, IAsyncDisposable
 {
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private readonly SemaphoreSlim _semaphore = new(1);
+    private bool _disposedAsync;
+
+    private string? _assemblyName;
     private readonly Dictionary<IMoveable, Guid> _moveableIds = [];
     private readonly Dictionary<Guid, IMoveable> _moveables = [];
     private readonly Dictionary<IMoveable, IJSObjectReference> _jsAttachResults = [];
@@ -17,115 +24,233 @@ internal sealed partial class MoveInteraction(ILogger<MoveInteraction> logger, I
     public string StartedCssClass => "moving";
     public string EndedCssClass => "moved";
 
-    public async Task AttachAsync(IMoveable moveable)
+    public async Task AttachAsync(IMoveable moveable, IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null)
     {
-        if (!_jsAttachResults.ContainsKey(moveable))
+        if (_disposedAsync)
+            return;
+
+        try
         {
-            _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import",
-                $"./_content/{typeof(MoveInteraction).Assembly.GetName().Name}/moveable/move-interaction.js");
+            var cancellationToken = _cancellationTokenSource.Token;
 
-            _dotNetObjectReference ??= DotNetObjectReference.Create(this);
-
-            var moveableId = Guid.NewGuid();
-
-            var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", new MoveInteractionContext
+            await _semaphore.WaitAsync(cancellationToken);
+            try
             {
-                MoveableId = moveableId,
-                Moveable = moveable.GetElementReference(),
-                MoveHandle = moveable.GetMoveHandle().GetElementReference(),
-                MoveContainer = moveable.GetMoveContainer().GetElementReference(),
-                StartedCssClass = StartedCssClass,
-                EndedCssClass = EndedCssClass,
-                DotNetObject = _dotNetObjectReference
-            });
+                if (_jsAttachResults.ContainsKey(moveable))
+                    return;
 
-            _jsAttachResults.Add(moveable, jsAttachResult);
+                _assemblyName ??= typeof(MoveInteraction).Assembly.GetName().Name;
 
-            _moveableIds.Add(moveable, moveableId);
-            _moveables.Add(moveableId, moveable);
+                _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken,
+                    $"./_content/{_assemblyName}/moveable/move-interaction.js");
+
+                _dotNetObjectReference ??= DotNetObjectReference.Create(this);
+
+                var moveableId = Guid.NewGuid();
+
+                var moveInteractionContext = new MoveInteractionContext
+                {
+                    MoveableId = moveableId,
+                    Moveable = moveable.GetElementReference(),
+                    MoveHandle = moveable.GetMoveHandle().GetElementReference(),
+                    MoveContainer = moveable.GetMoveContainer().GetElementReference(),
+                    StartedCssClass = StartedCssClass,
+                    EndedCssClass = EndedCssClass,
+                    DotNetObject = _dotNetObjectReference
+                };
+
+                if (pointerCaptureBehaviors is not null)
+                {
+                    var pointerCaptureBehaviorJsObjects = await Task.WhenAll(pointerCaptureBehaviors.Select(b => b.GetJsObjectAsync()));
+
+                    moveInteractionContext.PointerCaptureBehaviors = [.. pointerCaptureBehaviorJsObjects.OfType<IJSObjectReference>()];
+                }
+
+                var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", cancellationToken, moveInteractionContext);
+
+                _moveableIds.Add(moveable, moveableId);
+                _moveables.Add(moveableId, moveable);
+
+                _jsAttachResults.Add(moveable, jsAttachResult);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
         }
     }
 
     public async Task RemoveAsync(IMoveable moveable)
     {
-        await DisposeJsAttachResultAsync(moveable);
+        if (_disposedAsync)
+            return;
 
-        if (_moveableIds.TryGetValue(moveable, out var moveableId))
+        try
         {
-            _moveables.Remove(moveableId);
-            _moveableIds.Remove(moveable);
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _semaphore.WaitAsync(cancellationToken);
+            try
+            {
+                if (_moveableIds.TryGetValue(moveable, out var moveableId))
+                {
+                    _moveables.Remove(moveableId);
+                    _moveableIds.Remove(moveable);
+                }
+
+                if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
+                {
+                    await jsAttachResult.InvokeVoidAsync("dispose", logger, cancellationToken);
+                    await jsAttachResult.DisposeAsync(logger);
+
+                    _jsAttachResults.Remove(moveable);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
         }
     }
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsAttachResult.dispose() failed")]
-    public static partial void InvokingJsAttachResultDisposeFailed(ILogger logger, Exception ex);
-
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    public static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
-
-    private async Task DisposeJsAttachResultAsync(IMoveable moveable)
+    public async Task AddPointerCaptureBehaviorAsync(IMoveable moveable, IPointerCaptureBehavior pointerCaptureBehavior)
     {
-        if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
+        if (_disposedAsync)
+            return;
+
+        try
         {
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _semaphore.WaitAsync(cancellationToken);
             try
             {
-                await jsAttachResult.InvokeVoidAsync("dispose");
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            catch (Exception ex)
-            {
-                InvokingJsAttachResultDisposeFailed(logger, ex);
-            }
+                if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
+                    return;
 
+                if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
+                    await jsAttachResult.InvokeVoidAsync("addPointerCaptureBehavior", logger, cancellationToken, jsObject);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
+        }
+    }
+
+    public async Task RemovePointerCaptureBehaviorAsync(IMoveable moveable, IPointerCaptureBehavior pointerCaptureBehavior)
+    {
+        if (_disposedAsync)
+            return;
+
+        try
+        {
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _semaphore.WaitAsync(cancellationToken);
             try
             {
-                await jsAttachResult.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            catch (Exception ex)
-            {
-                DisposingJsAttachResultFailed(logger, ex);
-            }
+                if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
+                    return;
 
-            _jsAttachResults.Remove(moveable);
+                if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
+                    await jsAttachResult.InvokeVoidAsync("removePointerCaptureBehavior", logger, cancellationToken, jsObject);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
         }
     }
 
     public async ValueTask DisposeAsync()
     {
-        var moveables = _jsAttachResults.Keys.ToList();
+        if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
+            return;
 
-        foreach (var moveable in moveables)
-            await RemoveAsync(moveable);
+        await _cancellationTokenSource.CancelAsync();
+        _cancellationTokenSource.Dispose();
 
-        _dotNetObjectReference?.Dispose();
-        _dotNetObjectReference = null;
-
-        if (_jsModule is not null)
+        await _semaphore.WaitAsync();
+        try
         {
-            try
-            {
-                await _jsModule.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
+            _moveables.Clear();
+            _moveableIds.Clear();
 
-            _jsModule = null;
+            var jsDisposeTasks = _jsAttachResults.Values.Select(jsAttachResult => jsAttachResult.InvokeVoidAsync("dispose", logger));
+            await Task.WhenAll(jsDisposeTasks);
+
+            foreach (var jsAttachResult in _jsAttachResults.Values)
+                await jsAttachResult.DisposeAsync(logger);
+
+            _jsAttachResults.Clear();
+
+            _dotNetObjectReference?.Dispose();
+
+            await _jsModule.DisposeAsync(logger);
+        }
+        finally
+        {
+            _semaphore.Release();
+            _semaphore.Dispose();
         }
     }
 
     [JSInvokable]
-    public void OnMoveablePointerUp(Guid moveableId, double x, double y)
+    public async Task OnMoveablePointerUpAsync(Guid moveableId, double x, double y)
     {
-        if (_moveables.TryGetValue(moveableId, out var moveable))
-            moveable.UpdatePosition(x, y);
+        try
+        {
+            await _semaphore.WaitAsync(_cancellationTokenSource.Token);
+            try
+            {
+                if (_moveables.TryGetValue(moveableId, out var moveable))
+                    await moveable.UpdatePositionAsync(x, y);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
+        }
     }
 }

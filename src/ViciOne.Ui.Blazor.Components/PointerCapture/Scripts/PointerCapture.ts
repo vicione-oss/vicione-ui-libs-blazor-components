@@ -1,7 +1,13 @@
+import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
+import { PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
+import { Point } from '/_content/ViciOne.Ui.Blazor.Components/js/point.js';
+import { ArrayIterator } from '/_content/ViciOne.Ui.Blazor.Components/js/array-iterator.js';
+
 export class PointerCapture {
     public startedCssClass?: string;
     public endedCssClass?: string;
     public adjustForScrollValues = false;
+    public behaviors?: PointerCaptureBehavior[];
 
     public onPointerMove?: (captureTarget: HTMLElement, x: number, y: number) => void;
     public onPointerUp?: (captureTarget: HTMLElement, x: number, y: number) => void;
@@ -9,8 +15,7 @@ export class PointerCapture {
     private userSelectBefore?: string;
 
     public start(pointerEvent: PointerEvent, captureTarget: HTMLElement, boundingClientRect: DOMRect) {
-        let captureTargetX: number;
-        let captureTargetY: number;
+        let captureTargetPosition: Point;
 
         const pointerDownClientX = pointerEvent.clientX;
         const pointerDownClientY = pointerEvent.clientY;
@@ -70,19 +75,49 @@ export class PointerCapture {
             if (captureTargetClientY > captureTargetClientYmaximum)
                 captureTargetClientY = captureTargetClientYmaximum;
 
-            captureTargetX = captureTargetClientX - captureTargetClientXminimum;
-            captureTargetY = captureTargetClientY - captureTargetClientYminimum;
+            let captureTargetX = captureTargetClientX - captureTargetClientXminimum;
+            let captureTargetY = captureTargetClientY - captureTargetClientYminimum;
 
             if (this.adjustForScrollValues) {
                 captureTargetX += window.scrollX;
                 captureTargetY += window.scrollY;
             }
 
-            captureTarget.style.left = `${captureTargetX}px`;
-            captureTarget.style.top = `${captureTargetY}px`;
+            captureTargetPosition = new Point(captureTargetX, captureTargetY);
+
+            if (this.behaviors?.length) {
+                const behaviorContext = new PointerCaptureBehaviorContext(captureTarget, captureTargetPosition);
+
+                applyBehaviors(new ArrayIterator(this.behaviors), behaviorContext);
+            }
+
+            captureTarget.style.left = `${captureTargetPosition.x}px`;
+            captureTarget.style.top = `${captureTargetPosition.y}px`;
 
             if (this.onPointerMove)
-                this.onPointerMove(captureTarget, captureTargetX, captureTargetY);
+                this.onPointerMove(captureTarget, captureTargetPosition.x, captureTargetPosition.y);
+        };
+
+        const applyBehaviors = (behaviors: Iterator<PointerCaptureBehavior, PointerCaptureBehavior, PointerCaptureBehavior>,
+            behaviorContext: PointerCaptureBehaviorContext) => {
+
+            const currentBehaviorIteratorResult = behaviors.next();
+            if (currentBehaviorIteratorResult.done)
+                return;
+
+            const currentBehavior = currentBehaviorIteratorResult.value;
+
+            const next = (behaviorContext: PointerCaptureBehaviorContext) => {
+                const nextBehaviorIteratorResult = behaviors.next();
+                if (nextBehaviorIteratorResult.done)
+                    return;
+
+                const nextBehavior = nextBehaviorIteratorResult.value;
+
+                nextBehavior.apply(behaviorContext, next);
+            };
+
+            currentBehavior.apply(behaviorContext, next);
         };
 
         const pointerUpEventListener = async (e: PointerEvent) => {
@@ -103,22 +138,27 @@ export class PointerCapture {
             clearSelection();
 
             if (this.onPointerUp) {
+
                 // Handle missing pointerMove event, this can happen when the user clicks but does not move the mouse
-                if (!captureTargetX) {
-                    captureTargetX = captureTarget.offsetLeft;
+                if (!captureTargetPosition) {
+                    let captureTargetX = captureTarget.offsetLeft;
+                    let captureTargetY = captureTarget.offsetTop;
 
-                    if (this.adjustForScrollValues)
+                    if (this.adjustForScrollValues) {
                         captureTargetX += window.scrollX;
-                }
-
-                if (!captureTargetY) {
-                    captureTargetY = captureTarget.offsetTop;
-
-                    if (this.adjustForScrollValues)
                         captureTargetY += window.scrollY;
+                    }
+
+                    captureTargetPosition = new Point(captureTargetX, captureTargetY);
+
+                    if (this.behaviors?.length) {
+                        const behaviorContext = new PointerCaptureBehaviorContext(captureTarget, captureTargetPosition);
+
+                        applyBehaviors(new ArrayIterator(this.behaviors), behaviorContext);
+                    }
                 }
 
-                this.onPointerUp(captureTarget, captureTargetX, captureTargetY);
+                this.onPointerUp(captureTarget, captureTargetPosition.x, captureTargetPosition.y);
             }
         };
 

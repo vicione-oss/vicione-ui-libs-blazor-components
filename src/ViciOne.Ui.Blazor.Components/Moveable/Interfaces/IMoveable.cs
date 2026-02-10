@@ -32,5 +32,5 @@ public interface IMoveable
     /// </summary>
     /// <param name="x">Horizontal position</param>
     /// <param name="y">Vertical position</param>
-    void UpdatePosition(double x, double y);
+    Task UpdatePositionAsync(double x, double y);
 }

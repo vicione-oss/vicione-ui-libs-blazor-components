@@ -21,14 +21,15 @@ tsxConfigurationObject.files.push('**/*.ts');
 export default [
     {
         ignores: [
-            'wwwroot/js/pointer-capture.js',
-            'wwwroot/js/pointer-event-mixins.js',
-            'wwwroot/moveable/move-interaction.js',
-            'wwwroot/moveable/move-interaction-context.js',
             'Scripts/*.js',
             '**/*.cs.js',
             '**/*.razor.js',
             'wwwroot/context-menu/**/*.js',
+            'wwwroot/js/array-iterator.js',
+            'wwwroot/js/point.js',
+            'wwwroot/js/pointer-event-mixins.js',
+            'wwwroot/moveable/*.js',
+            'wwwroot/pointer-capture/*.js',
             'wwwroot/text-box/**/*.js',
             'wwwroot/tooltip/**/*.js'
         ]

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;
 
-namespace ViciOne.Ui.Blazor.Components.TestingHelpers.Extensions;
+namespace ViciOne.Ui.Blazor.Components.TestingHelpers.Moveable.Extensions;
 
 public static class IServiceProviderExtensions
 {

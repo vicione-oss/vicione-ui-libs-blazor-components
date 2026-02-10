@@ -1,0 +1,32 @@
+﻿@page "/moveable"
+
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Switch
+
+@if (!_initialized) return;
+
+<div class="options">
+    <div class="option">
+        <label>Moveable</label>
+
+        <Switch @bind-Value="@_moveable" />
+    </div>
+
+    <div class="option">
+        <label>Snap to grid</label>
+
+        <Switch @bind-Value="@_snapToGrid" />
+    </div>
+
+    <div class="option">
+        <label>Grid size</label>
+
+        <SpinEdit @bind-Value="@_gridSize" @bind-Value:after="GridSizeChangedAsync" Interval="10" Minimum="10" Maximum="50" />
+    </div>
+</div>
+
+<div class="content">
+    <MoveableContainer GridSize="@_gridSize">
+        <Shape Moveable="@_moveable" @bind-X="_x" @bind-Y="_y" SnapToGrid="@_snapToGrid" />
+    </MoveableContainer>
+</div>

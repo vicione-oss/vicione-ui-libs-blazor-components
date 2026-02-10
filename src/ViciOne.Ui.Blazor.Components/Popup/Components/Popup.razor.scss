@@ -39,7 +39,7 @@
             z-index: var(--z-index, popup.$z-index);
         }
 
-        &.moving, &.moved {
+        &.moving, &.moved, &.positioned {
             position: absolute;
             margin: 0;
         }

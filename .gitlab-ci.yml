@@ -37,10 +37,22 @@ Deploy:
     PROJECT: 'src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj'
     REPO: 'JFrogViciOne'
 
+Deploy TestingHelpers:
+  extends: .dotnet-deploy-nuget
+  variables:
+    PROJECT: 'tests/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj'
+    REPO: 'JFrogViciOne'
+
 Release:
   extends: .dotnet-release-nuget
   variables:
     PROJECT: 'src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj'
+    REPO: 'JFrogViciOne'
+
+Release TestingHelpers:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'tests/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj'
     REPO: 'JFrogViciOne'
 
 Publish Pages:

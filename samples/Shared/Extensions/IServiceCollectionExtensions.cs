@@ -3,6 +3,7 @@ using Shared.Pages.CheckBox.Extensions;
 using Shared.Pages.ContextMenu.Extensions;
 using Shared.Pages.ExpandableMenu.Extensions;
 using Shared.Pages.Grid.Extensions;
+using Shared.Pages.Moveable.Extensions;
 using Shared.Pages.PropertyGrid.Extensions;
 using Shared.Pages.SectionRail.Extensions;
 using Shared.Pages.SpinEdit.Extensions;
@@ -18,6 +19,7 @@ public static class IServiceCollectionExtensions
             .AddContextMenuPage()
             .AddExpandableMenuPage()
             .AddGridPage()
+            .AddMoveablePage()
             .AddPropertyGridPage()
             .AddSectionRailPage()
             .AddSpinEditPage()

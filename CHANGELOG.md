@@ -1,9 +1,12 @@
 # Changelog
 
-## 5.2.0 - Unreleased
+## 5.2.0 - 2026-02-10
 
+- `Grid`, added optional sorting of `PropertyColumn` and `TemplateColumn`
 - Added `ViciOne.Ui.Blazor.Components.TestingHelpers`
 - `PointerCapture`, added `SnapToGridPointerCaptureBehavior`
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.2.0`
+- `.NET` packages, updated to version `10.0.2`
 
 ## 5.1.1 - 2026-02-06
 

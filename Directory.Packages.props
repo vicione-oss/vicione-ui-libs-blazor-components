@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <ViciOneUiMonochromeIconsVersion>4.0.1</ViciOneUiMonochromeIconsVersion>
-    <DotNetVersion>10.0.1</DotNetVersion>
+    <ViciOneUiMonochromeIconsVersion>4.2.0</ViciOneUiMonochromeIconsVersion>
+    <DotNetVersion>10.0.2</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="ViciOne.CodeAnalysis" Version="1.5.0" />

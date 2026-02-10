@@ -109,10 +109,12 @@
                         }
 
                         &:not(:last-child) {
-                            .col-title {
-                                border-style: solid;
-                                border-color: colors.$background-darker;
-                                border-width: 0 $column-separator-width 0 0;
+                            .col-header-content {
+                                .col-title {
+                                    border-style: solid;
+                                    border-color: colors.$background-darker;
+                                    border-width: 0 $column-separator-width 0 0;
+                                }
                             }
                         }
                     }
@@ -198,6 +200,73 @@
                         .selected {
                             color: colors.$accent-hover;
                         }
+                    }
+                }
+            }
+        }
+
+        // PropertyColumn, TemplateColumn
+        ::deep .quickgrid {
+            th.property-column, th.template-column {
+                .col-header-content {
+                    .col-title {
+                        display: flex;
+                        flex-grow: 1;
+                        align-items: center;
+                        position: relative;
+
+                        .col-title-text {
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            position: relative;
+                        }
+                    }
+
+                    button.col-title {
+                        background: none;
+                        color: inherit;
+                        border-style: inherit;
+                        font-size: inherit;
+                        font-family: inherit;
+                        cursor: pointer;
+
+                        .sort-icon-des, .sort-icon-asc {
+                            display: none;
+                        }
+
+                        &:hover, &:focus-visible {
+                            outline: none;
+
+                            .col-title-text::before {
+                                content: '';
+                                position: absolute;
+                                width: 100%;
+                                bottom: 0;
+                                height: 1px;
+                                background-color: colors.$accent-hover;
+                            }
+                        }
+                    }
+                }
+
+                &[aria-sort="ascending"] {
+                    .sort-icon-des {
+                        display: none;
+                    }
+
+                    .sort-icon-asc {
+                        display: flex !important;
+                    }
+                }
+
+                &[aria-sort="descending"] {
+                    .sort-icon-des {
+                        display: flex !important;
+                    }
+
+                    .sort-icon-asc {
+                        display: none;
                     }
                 }
             }

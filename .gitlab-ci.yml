@@ -40,7 +40,7 @@ Deploy:
 Deploy TestingHelpers:
   extends: .dotnet-deploy-nuget
   variables:
-    PROJECT: 'tests/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj'
+    PROJECT: 'src/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj'
     REPO: 'JFrogViciOne'
 
 Release:
@@ -52,7 +52,7 @@ Release:
 Release TestingHelpers:
   extends: .dotnet-release-nuget
   variables:
-    PROJECT: 'tests/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj'
+    PROJECT: 'src/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj'
     REPO: 'JFrogViciOne'
 
 Publish Pages:

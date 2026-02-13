@@ -27,12 +27,12 @@
   <Folder Name="/src/">
     <File Path="src/.editorconfig" />
     <Project Path="src/ViciOne.Ui.Blazor.Components.Resources/ViciOne.Ui.Blazor.Components.Resources.csproj" />
+    <Project Path="src/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
     <Project Path="src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/.editorconfig" />
     <File Path="tests/xunit.runner.json" />
-    <Project Path="tests/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
     <Project Path="tests/ViciOne.Ui.Blazor.Components.Tests/ViciOne.Ui.Blazor.Components.Tests.csproj" />
   </Folder>
 </Solution>

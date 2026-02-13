@@ -1,0 +1,30 @@
+﻿<div class="breadcrumb">
+    <HorizontalScrollContainer LastShownPixel="_lastShownPixel" MaxScrollStepCount="_itemContexts.Count" OnScroll="HandleScrollAsync">
+        @{
+            var itemCssClasses = new List<string> { "breadcrumb-item" };
+
+            foreach (var itemContext in _itemContexts)
+            {
+                var item = itemContext.Instance;
+
+                if (item == CurrentItem)
+                    itemCssClasses.Add("disabled");
+                else
+                    itemCssClasses.Remove("disabled");
+
+                <div @key="item" @ref="itemContext.ElementReference" class="item-container">
+                    <div class="@string.Join(" ", itemCssClasses)" @onclick="async () => await ItemClickAsync(item)">
+                        @item.Name
+                    </div>
+
+                    @if (item.Children.Any())
+                    {
+                        var nextItem = GetNextBreadcrumbItem(itemContext);
+
+                        <BreadcrumbItemSeparator Items="item.Children" ActiveItem="nextItem" OnItemClick="ItemClickAsync" />
+                    }
+                </div>
+            }
+        }
+    </HorizontalScrollContainer>
+</div>

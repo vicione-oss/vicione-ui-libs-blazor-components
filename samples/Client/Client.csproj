@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-
-    <!-- Fix restore error in CI pipeline complaining about missing Microsoft.DotNet.HotReload.WebAssembly.Browser package reference -->
-    <RestoreLockedMode Condition="'$(CI)' == 'true'">false</RestoreLockedMode>
   </PropertyGroup>
 
   <ItemGroup>

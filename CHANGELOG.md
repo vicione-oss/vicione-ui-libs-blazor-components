@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.3.0 - Unreleased
+
+- Added `Breadcrumb`
+- Added `ResizeObserver`
+
 ## 5.2.0 - 2026-02-10
 
 - `Grid`, added optional sorting of `PropertyColumn` and `TemplateColumn`
@@ -69,7 +74,6 @@
 ## 3.12.0 - 2025-10-02
 
 - `PropertyGrid` added (experimental)
-- `UniversalInput` added
 - `CheckBox`
   - Added `ValueExpression` and `Valid` parameter
   - Added `FocusAsync()`

@@ -1,0 +1,32 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/user-interaction";
+
+.breadcrumb {
+    display: flex; // to ensure vertical centering of HorizontalScrollContainer
+
+    height: 32px;
+
+    font-size: 11px;
+
+    background-color: colors.$background-light;
+
+    @include user-interaction.prevent-text-selection();
+
+    .item-container {
+        display: flex;
+
+        .breadcrumb-item {
+            padding: 0px 5px;
+
+            white-space: nowrap;
+
+            &:not(.disabled) {
+                &:hover {
+                    cursor: pointer;
+
+                    background-color: colors.$background-light-hover;
+                }
+            }
+        }
+    }
+}

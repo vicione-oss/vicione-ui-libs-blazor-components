@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Pages.Breadcrumb.Extensions;
 using Shared.Pages.CheckBox.Extensions;
 using Shared.Pages.ContextMenu.Extensions;
 using Shared.Pages.ExpandableMenu.Extensions;
@@ -15,7 +16,8 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddShared(this IServiceCollection services)
     {
-        services.AddCheckBoxPage()
+        services.AddBreadcrumbPage()
+            .AddCheckBoxPage()
             .AddContextMenuPage()
             .AddExpandableMenuPage()
             .AddGridPage()

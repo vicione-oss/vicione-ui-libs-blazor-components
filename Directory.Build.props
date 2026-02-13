@@ -112,4 +112,9 @@
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 
+    <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('samples'))">
+        <!-- Fix restore error in CI pipeline complaining about missing Microsoft package reference -->
+        <RestoreLockedMode Condition="'$(CI)' == 'true'">false</RestoreLockedMode>
+    </PropertyGroup>
+
 </Project>

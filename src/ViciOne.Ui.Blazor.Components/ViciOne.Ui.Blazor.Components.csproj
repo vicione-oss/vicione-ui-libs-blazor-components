@@ -98,6 +98,12 @@
     <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
       <DestinationFile>wwwroot\js\pointer-event-mixins.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizing\Services\ResizeObserver.cs.js">
+      <DestinationFile>wwwroot\resizing\resize-observer.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Breadcrumb\Services\HtmlElementHelper.cs.js">
+      <DestinationFile>wwwroot\breadcrumb\html-element-helper.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Moveable\Models\MoveInteractionContext.cs.js">
       <DestinationFile>wwwroot\moveable\move-interaction-context.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -226,7 +232,7 @@
       <MonochromeIcon Include="edit" Size="24" />
       <MonochromeIcon Include="error-full" Size="24" />
       <MonochromeIcon Include="expander-light-left" Size="24" />
-      <MonochromeIcon Include="expander-light-right" Size="24" />
+      <MonochromeIcon Include="expander-light-right" Size="16;24" />
       <MonochromeIcon Include="filter-light" Size="16" />
       <MonochromeIcon Include="folder" Size="32" />
       <MonochromeIcon Include="info-outlined" Size="16" />

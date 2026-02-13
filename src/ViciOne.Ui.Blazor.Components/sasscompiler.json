@@ -3,6 +3,7 @@
     "ScopedCssFolders": [
         "AdvancedErrorBoundary",
         "Button",
+        "Breadcrumb",
         "CheckBox",
         "ComboBox",
         "AdvancedErrorBoundary",

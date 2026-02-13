@@ -31,7 +31,9 @@ export default [
             'wwwroot/moveable/*.js',
             'wwwroot/pointer-capture/*.js',
             'wwwroot/text-box/**/*.js',
-            'wwwroot/tooltip/**/*.js'
+            'wwwroot/tooltip/**/*.js',
+            'wwwroot/resizing/*.js',
+            'wwwroot/breadcrumb/*.js'
         ]
     },
     ...xoTypeScript,

@@ -1,0 +1,80 @@
+﻿@use "../../Styles/design/colors";
+
+.horizontal-scroll-container {
+    display: grid;
+    grid-template-areas: "icons content";
+    grid-template-columns: auto 1fr;
+
+    .icon-container {
+        grid-area: icons;
+        display: flex;
+        align-items: center;
+
+        .icon {
+            &.active {
+                pointer-events: initial;
+
+                &:hover {
+                    &::before {
+                        cursor: pointer;
+                        color: colors.$accent;
+                    }
+                }
+            }
+
+            &:not(.active) {
+                pointer-events: none;
+
+                &::before {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+
+    .content-container {
+        grid-area: content;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+
+        .content {
+            display: flex;
+            position: relative;
+
+            &.smooth-transition {
+                transition: left 0.3s ease-out;
+            }
+        }
+
+        &::after {
+            content: '';
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        &.overflow-left:not(.overflow-right) {
+            &::after {
+                background: linear-gradient(-90deg, transparent 95%, colors.$background-light 100%);
+            }
+        }
+
+        &.overflow-right:not(.overflow-left) {
+            &::after {
+                background: linear-gradient(90deg, transparent 96%, colors.$background-light 98%);
+            }
+        }
+
+        &.overflow-left.overflow-right {
+            &::after {
+                background: linear-gradient(90deg, colors.$background-light 0%, transparent 6%, transparent 94%, colors.$background-light 100%);
+            }
+        }
+    }
+}

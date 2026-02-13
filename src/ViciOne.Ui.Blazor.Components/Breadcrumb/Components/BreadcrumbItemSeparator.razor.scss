@@ -1,0 +1,40 @@
+﻿@use "../../Styles/design/colors";
+
+.breadcrumb-item-separator {
+    display: flex;
+
+    .popup {
+        position: fixed;
+        transform: translate(0px, -100%);
+        width: max-content;
+
+        padding: 2px;
+
+        background-color: colors.$background-light;
+        border: 1px solid colors.$border;
+
+        z-index: 10;
+
+        .popup-item {
+            padding: 2px 5px;
+
+            &:hover {
+                background-color: colors.$background-light-hover;
+
+                cursor: pointer;
+            }
+
+            &.active {
+                color: colors.$accent;
+            }
+        }
+    }
+
+    .icon {
+        &:hover {
+            background-color: colors.$background-light-hover;
+
+            cursor: pointer;
+        }
+    }
+}

@@ -1,0 +1,69 @@
+﻿<div class="horizontal-scroll-container">
+    @{
+        var canScrollLeft = CanScrollLeft();
+        var canScrollRight = CanScrollRight();
+
+        if (_hasScroll)
+        {
+            var leftIconCssClasses = new List<string> { "icon", _leftIcon };
+
+            if (canScrollLeft)
+                leftIconCssClasses.Add("active");
+
+            var rightIconCssClasses = new List<string> { "icon", _rightIcon };
+
+            if (canScrollRight)
+                rightIconCssClasses.Add("active");
+
+            <div class="icon-container">
+                <div class="@string.Join(" ", leftIconCssClasses)" @onclick="ScrollLeftAsync" />
+
+                <div class="@string.Join(" ", rightIconCssClasses)" @onclick="ScrollRightAsync" />
+            </div>
+        }
+
+        var contentContainerCssClasses = new List<string> { "content-container" };
+
+        if (canScrollLeft)
+            contentContainerCssClasses.Add("overflow-left");
+
+        if (canScrollRight)
+            contentContainerCssClasses.Add("overflow-right");
+
+        var contentContainerStyles = new Dictionary<string, object>();
+        if (_offset is null)
+            contentContainerStyles["justify-content"] = "flex-end"; // make sure breadcrumb starts visually with "scrolled to last step"
+
+        var contentContainerAttributes = new Dictionary<string, object>
+        {
+            { "class", string.Join(" ", contentContainerCssClasses) },
+            { "data-observer-id", _contentContainerId }
+        };
+
+        if (contentContainerStyles.Count > 0)
+            contentContainerAttributes["style"] = string.Join("; ", contentContainerStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
+
+        var contentStyles = new Dictionary<string, object>();
+        if (_offset is not null)
+            contentStyles["left"] = $"{Math.Floor(-_offset.Value)}px";
+
+        var contentAttributes = new Dictionary<string, object>
+        {
+            { "class", "content smooth-transition" },
+            { "data-observer-id", _contentId }
+        };
+
+        if (contentStyles.Count > 0)
+            contentAttributes["style"] = string.Join("; ", contentStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
+    }
+ 
+    <div @ref="_contentContainer" @attributes="contentContainerAttributes">
+        <div @ref="_content" @attributes="contentAttributes">
+
+            @if (ChildContent != null)
+            {
+                @ChildContent
+            }
+        </div>
+    </div>
+</div>

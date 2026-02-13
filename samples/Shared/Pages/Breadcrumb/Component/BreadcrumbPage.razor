@@ -1,0 +1,36 @@
+﻿@page "/breadcrumb"
+
+@using ViciOne.Ui.Blazor.Components.Breadcrumb.Components
+@using ViciOne.Ui.Blazor.Components.Button
+
+<h3>Minimal</h3>
+
+<Breadcrumb CurrentItem="@GetMinimalTree()" OnItemClick="ItemClick"/>
+
+<h3>Minimal with child</h3>
+
+<Breadcrumb CurrentItem="@GetMinimalTreeWithChild()" OnItemClick="ItemClick"/>
+
+<h3>Normal</h3>
+
+<Breadcrumb CurrentItem="@GetNormalTree()" OnItemClick="ItemClick"/>
+
+<h3>With scrolling due to size and differing child sizes</h3>
+
+<Breadcrumb CurrentItem="@GetBigTree()" OnItemClick="ItemClick"/>
+
+<h3>Grow / Shrink</h3>
+
+<Breadcrumb CurrentItem="_adaptiveTreeItem" OnItemClick="ItemClick"/>
+
+<p>
+    <Button Text="Add" OnClick="AddClickAsync" />
+    <Button Text="Remove" OnClick="RemoveClickAsync" />
+</p>
+
+<h3>Last clicked item (in any of the samples):</h3>
+
+@if (_lastClickedBreadcrumbItem is not null)
+{
+    <label>@_lastClickedBreadcrumbItem.Name</label>
+}

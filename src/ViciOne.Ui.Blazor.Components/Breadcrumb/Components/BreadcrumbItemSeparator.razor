@@ -1,0 +1,23 @@
+﻿<div class="breadcrumb-item-separator" @onpointerleave="PointerLeave">
+    @if (Expanded)
+    {
+        var popupItemCssClasses = new List<string> { "popup-item" };
+        var items = Items.OrderBy(n => n.Name).ToList();
+
+        <div class="popup">
+            @foreach (var item in items)
+            {
+                if (item == ActiveItem)
+                    popupItemCssClasses.Add("active");
+                else
+                    popupItemCssClasses.Remove("active");
+
+                <div @key="item" class="@string.Join(" ", popupItemCssClasses)" @onclick="@(() => ItemClickAsync(item))">
+                    @item.Name
+                </div>
+            }
+        </div>
+    }
+
+    <div class="icon @_icon" @onclick="IconClick" />
+</div>

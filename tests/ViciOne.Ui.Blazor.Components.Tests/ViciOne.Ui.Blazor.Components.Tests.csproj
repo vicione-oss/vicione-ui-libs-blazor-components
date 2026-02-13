@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ViciOne.Ui.Blazor.Components\ViciOne.Ui.Blazor.Components.csproj" />
-    <ProjectReference Include="..\ViciOne.Ui.Blazor.Components.TestingHelpers\ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
+    <ProjectReference Include="..\..\src\ViciOne.Ui.Blazor.Components.TestingHelpers\ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
   </ItemGroup>
 
 </Project>

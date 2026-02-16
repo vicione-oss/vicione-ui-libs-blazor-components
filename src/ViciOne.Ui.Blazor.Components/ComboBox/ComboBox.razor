@@ -49,6 +49,7 @@
             @onchange="SelectChangedAsync"
             @onfocus="SelectFocus"
             @onblur="SelectBlur">
+
         @foreach (var optionDescriptor in _optionDescriptors)
         {
             <option @attributes="optionDescriptor.Attributes">@optionDescriptor.Text</option>

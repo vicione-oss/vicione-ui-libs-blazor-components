@@ -16,6 +16,7 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
         public required Dictionary<string, object> Attributes { get; set; }
         public required string Text { get; init; }
         public required TValue? Value { get; init; }
+        public bool ValueAttributeHasGuid { get; set; }
     }
 
     private bool _firstParameterSet = true;
@@ -132,10 +133,14 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
             _optionDescriptorMap.Clear();
             _isAnyOptionSelected = false;
 
+            var useGuidKeys = false;
+
             foreach (var item in Items)
             {
                 var optionValueStr = $"{item}";
+                var optionValueStrContainsGuid = false;
                 var optionValueTyped = item is TValue itemTyped ? itemTyped : default;
+
                 var optionText = optionValueStr;
 
                 var optionSelected = false;
@@ -159,16 +164,21 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
                     }
                 }
 
-                if (_getTextFunc is not null)
-                {
-                    if (_getTextFunc.Invoke(item) is string str)
-                        optionText = str;
-                }
+                if (_getTextFunc?.Invoke(item) is string str)
+                    optionText = str;
 
                 if (NoOptionSelected is not true && valueEqualityComparer.Equals(optionValueTyped, Value))
                     optionSelected = true;
 
-                var optionAttributes = new Dictionary<string, object>() { { "value", optionValueStr } };
+                if (_optionDescriptorMap.ContainsKey(optionValueStr))
+                {
+                    optionValueStr = Guid.NewGuid().ToString(); // switch to GUID as value is not uniquely stringified
+
+                    optionValueStrContainsGuid = true;
+                    useGuidKeys = true;
+                }
+
+                var optionAttributes = new Dictionary<string, object> { { "value", optionValueStr } };
 
                 if (optionSelected)
                 {
@@ -177,10 +187,36 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
                     _isAnyOptionSelected = true;
                 }
 
-                var optionDescriptor = new OptionDescriptor { Text = optionText, Attributes = optionAttributes, Value = optionValueTyped };
+                var optionDescriptor = new OptionDescriptor
+                {
+                    Text = optionText,
+                    Attributes = optionAttributes,
+                    Value = optionValueTyped,
+                    ValueAttributeHasGuid = optionValueStrContainsGuid
+                };
 
                 _optionDescriptors.Add(optionDescriptor);
                 _optionDescriptorMap.Add(optionValueStr, optionDescriptor);
+            }
+
+            // If we use GUIDs as keys, ensure all keys are actually GUIDs and replace where not
+            if (useGuidKeys)
+            {
+                var pairs = _optionDescriptorMap.Where(p => !p.Value.ValueAttributeHasGuid).ToList();
+
+                foreach (var pair in pairs)
+                {
+                    var oldKey = pair.Key;
+                    var optionDescriptor = pair.Value;
+
+                    var newKey = Guid.NewGuid().ToString();
+
+                    optionDescriptor.Attributes["value"] = newKey;
+                    optionDescriptor.ValueAttributeHasGuid = true;
+
+                    _optionDescriptorMap.Remove(oldKey);
+                    _optionDescriptorMap.Add(newKey, optionDescriptor);
+                }
             }
 
             _items = Items;
@@ -256,8 +292,8 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
         EqualityComparer<TValue> valueEqualityComparer, Func<TItem, TValue>? getValue,
         Func<TItem, string>? getText)
     {
-        IEnumerable<TItem> oldItemsEnumerable = [];
-        IEnumerable<TItem> newItemsEnumerable = [];
+        IEnumerable<TItem> oldItemsEnumerable;
+        IEnumerable<TItem> newItemsEnumerable;
 
         if (oldItems.TryGetNonEnumeratedCount(out var oldItemsCount))
         {
@@ -265,8 +301,9 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
         }
         else
         {
-            oldItemsEnumerable = [.. oldItems];
-            oldItemsCount = oldItemsEnumerable.Count();
+            List<TItem> oldItemsList = [.. oldItems];
+            oldItemsCount = oldItemsList.Count;
+            oldItemsEnumerable = oldItemsList;
         }
 
         if (!newItems.TryGetNonEnumeratedCount(out var newItemsCount))
@@ -275,8 +312,9 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
         }
         else
         {
-            newItemsEnumerable = [.. newItems];
-            newItemsCount = newItems.Count();
+            List<TItem> newItemsList = [.. newItems];
+            newItemsCount = newItemsList.Count;
+            newItemsEnumerable = newItemsList;
         }
 
         if (newItemsCount != oldItemsCount)
@@ -299,17 +337,15 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
                     var newItemValue = getValue(newItem);
                     var newItemText = getText(newItem);
 
-                    if (valueEqualityComparer.Equals(getValue(newItem), oldItemValue) &&
-                        string.Equals(getText(newItem), oldItemText, StringComparison.Ordinal))
+                    if (valueEqualityComparer.Equals(newItemValue, oldItemValue) &&
+                        string.Equals(newItemText, oldItemText, StringComparison.Ordinal))
                     {
-                        newItemsMap.Remove(p.Key);
+                        newItemsMap.Remove(newItemIndex);
 
                         break;
                     }
-                    else
-                    {
-                        return true;
-                    }
+
+                    return true;
                 }
             }
         }
@@ -321,7 +357,6 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
             {
                 foreach (var p in newItemsMap)
                 {
-                    var newItemIndex = p.Key;
                     var newItem = p.Value;
 
                     if (itemEqualityComparer.Equals(newItem, oldItem))
@@ -330,10 +365,8 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
 
                         break;
                     }
-                    else
-                    {
-                        return true;
-                    }
+
+                    return true;
                 }
             }
         }

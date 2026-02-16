@@ -1,9 +1,10 @@
 # Changelog
 
-## 5.3.0 - Unreleased
+## 5.3.0 - 2026-02-16
 
 - Added `Breadcrumb`
 - Added `ResizeObserver`
+- `ComboBox`, improved value handling to avoid possible `ArgumentException` (An element with the same key already exists)
 
 ## 5.2.0 - 2026-02-10
 

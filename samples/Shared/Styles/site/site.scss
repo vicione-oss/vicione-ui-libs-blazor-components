@@ -88,3 +88,12 @@ h1:focus-visible {
 .inverted {
     filter: invert(.8);
 }
+
+code {
+    border-color: black;
+    border-width: 1px;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 2px 4px;
+    background-color: darkslategray;
+}

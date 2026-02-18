@@ -1,21 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Versioning -->
-    <PropertyGroup>
-        <VersionWithSuffix>$([System.IO.File]::ReadAllText('$(MsBuildThisFileDirectory)VERSION').Trim())</VersionWithSuffix>
-        <!-- Use version 0.1.0 when no version could be retrieved from VERSION file -->
-        <VersionPrefix Condition="$(VersionWithSuffix) == ''">0.1.0</VersionPrefix>
-        <VersionPrefix Condition="$(VersionWithSuffix.Contains('-')) == true">$(VersionWithSuffix.Substring(0, $(VersionWithSuffix.IndexOf('-'))))</VersionPrefix>
-        <VersionPrefix Condition="$(VersionWithSuffix.Contains('-')) == false">$(VersionWithSuffix)</VersionPrefix>
-        <!-- Append suffix optionally stated in VERSION file -->
-        <VersionSuffix></VersionSuffix>
-        <VersionSuffix Condition="$(VersionWithSuffix.Contains('-')) == true">$(VersionWithSuffix.Substring($(VersionWithSuffix.IndexOf('-'))))</VersionSuffix>
-        <VersionSuffix Condition="$(VersionSuffix.Contains('-')) == true">$(VersionSuffix.Substring(1))</VersionSuffix>
-        <!-- Set package version from VersionPrefix -->
-        <PackageVersion>$(VersionPrefix)</PackageVersion>
-        <PackageVersion Condition="$(PackageVersionSuffix) != ''">$(PackageVersion).$(PackageVersionSuffix)</PackageVersion>
-        <PackageVersion Condition="$(VersionSuffix) != ''">$(PackageVersion)-$(VersionSuffix)</PackageVersion>
-    </PropertyGroup>
-
+    
     <!-- Properties for all projects -->
     <PropertyGroup>
         <!-- General -->
@@ -23,7 +7,7 @@
         <RuntimeIdentifiers Condition="$(MSBuildProjectDirectory.Contains('src'))">linux-x64;linux-arm64;win-x64</RuntimeIdentifiers>
         <Description>UI components for Blazor projects</Description>
         <Product>ViciOne Blazor Components</Product>
-        <Company>ifm software</Company>
+        <Company>ifm software gmbh</Company>
         <Year>$([System.DateTime]::Now.Year)</Year>
         <Copyright>Copyright © $(Company) $(Year)</Copyright>
         <NeutralLanguage>en-US</NeutralLanguage>
@@ -62,6 +46,11 @@
         <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
+    <!-- Update packages.lock.json with the correct version in local development environment -->
+    <PropertyGroup Condition="'$(CI)' == ''">
+        <PackageVersion>$([System.IO.File]::ReadAllText('$(MsBuildThisFileDirectory)VERSION').Trim())</PackageVersion>
+    </PropertyGroup>
+
     <!-- Performance optimization for CI pipelines -->
     <PropertyGroup Condition="'$(CI)' != ''">
         <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
@@ -86,18 +75,17 @@
 
     <!-- Add package references to test projects -->
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="xunit.v3" />
-        <PackageReference Include="xunit.runner.visualstudio" />
-        <PackageReference Include="coverlet.collector">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+      <PackageReference Include="xunit.v3.mtp-v2" />
+      <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     </ItemGroup>
 
     <!-- Configure output type according to xUnit 3 documentation for test projects -->
     <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <OutputType>Exe</OutputType>
+      <OutputType>Exe</OutputType>      
+      <IsPackable>false</IsPackable>
+      <IsPublishable>true</IsPublishable>
+      <!-- Microsoft Testing Platform command line experience -->
+      <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
 
     <!-- No XML documentation for projects not shared as NuGet package -->

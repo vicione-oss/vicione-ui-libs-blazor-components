@@ -1,5 +1,7 @@
 # Changelog
 
+## 5.4.0 - Unreleased
+
 ## 5.3.0 - 2026-02-16
 
 - Added `Breadcrumb`

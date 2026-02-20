@@ -25,10 +25,6 @@
       <PrivateAssets>all</PrivateAssets>
       <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
     </PackageReference>
-    <PackageReference Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="ViciOne.Ui.Design">
       <PrivateAssets>all</PrivateAssets>
       <ExcludeAssets>runtime</ExcludeAssets>
@@ -42,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ViciOne.Ui.Blazor.Components.Resources\ViciOne.Ui.Blazor.Components.Resources.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ViciOne.Ui.Blazor.Components.Resources\ViciOne.Ui.Blazor.Components.Resources.csproj" />
   </ItemGroup>
 
   <!-- Prevent Microsoft.NET.Sdk.Razor from copying unnecessary file -->

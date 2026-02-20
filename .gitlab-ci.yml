@@ -76,6 +76,7 @@ Version:
 
 ### CI Components ###
 include:
+  ### Restore
   - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.1.1
     inputs:
       image: ${IMAGE_NAME}
@@ -98,7 +99,7 @@ include:
         - 'echo "Version: ${Version:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
-  ### Test 
+  ### Test
   - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.1.1
     inputs:
       image: ${IMAGE_NAME}
@@ -110,36 +111,22 @@ include:
       tags:
         - ${RUNNER_TAG}
       coverage: true
-  ### NuGet packages
+  ### Pack
   - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.1.1
     inputs:
       image: ${IMAGE_NAME}
-      name: "Pack NuGet Package TestingHelpers"
-      project: "src/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj"
       rules: *rules_manual
       before_script:
         - *activate_mise
         - 'echo "PackageVersion: ${PackageVersion:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.1.1
-    inputs:
-      image: ${IMAGE_NAME}
-      name: "Pack NuGet Package Components"
-      project: "src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj"
-      rules: *rules_manual
-      before_script:
-        - *activate_mise
-        - 'echo "PackageVersion: ${PackageVersion:-notAssigned}"'
-      tags:
-        - ${RUNNER_TAG}
+  ### Push
   - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.1.1
     inputs:
       image: ${IMAGE_NAME}
-      name: "Push NuGet Packages src"
       source: "JFrogViciOne"
       filename_pattern: "*/src/*"
-      pack_job_name: "Pack NuGet Package Components"
       rules: *rules_manual
       before_script:
         - *activate_mise

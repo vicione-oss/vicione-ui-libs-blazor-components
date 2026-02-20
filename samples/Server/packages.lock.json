@@ -54,9 +54,13 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.2, )",
+          "ViciOne.Ui.Blazor.Components.Resources": "[5.4.0, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
           "ViciOne.Ui.MonochromeIcons.Components": "[4.2.0, )"
         }
+      },
+      "vicione.ui.blazor.components.resources": {
+        "type": "Project"
       },
       "Bogus": {
         "type": "CentralTransitive",

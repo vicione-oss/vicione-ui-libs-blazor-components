@@ -81,9 +81,9 @@
 
     <!-- Configure output type according to xUnit 3 documentation for test projects -->
     <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-      <OutputType>Exe</OutputType>      
-      <IsPackable>false</IsPackable>
+      <OutputType>Exe</OutputType>
       <IsPublishable>true</IsPublishable>
+
       <!-- Microsoft Testing Platform command line experience -->
       <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
@@ -100,9 +100,14 @@
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 
+    <!-- Fix restore error in CI pipeline complaining about missing Microsoft package reference -->
     <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('samples'))">
-        <!-- Fix restore error in CI pipeline complaining about missing Microsoft package reference -->
         <RestoreLockedMode Condition="'$(CI)' == 'true'">false</RestoreLockedMode>
+    </PropertyGroup>
+
+    <!-- Ensure executing 'dotnet pack' in solution root only packs those projects that should be released as NuGet packages -->
+    <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('samples')) Or $(MSBuildProjectDirectory.Contains('tests'))">
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
 </Project>

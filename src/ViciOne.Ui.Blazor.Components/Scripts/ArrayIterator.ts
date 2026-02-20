@@ -1,8 +1,7 @@
 export class ArrayIterator<T> {
     private i = 0;
 
-    constructor(readonly array: T[]) {
-    }
+    constructor(readonly array: T[]) {}
 
     public next(): IteratorResult<T> {
         if (this.i < this.array.length)

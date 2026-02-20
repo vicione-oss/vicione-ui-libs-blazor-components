@@ -3,8 +3,7 @@ import { ContextMenuPosition } from '/_content/ViciOne.Ui.Blazor.Components/cont
 class ContextMenu {
     private windowPointerDownEventListenerBinding: ((e: PointerEvent) => void) | undefined = undefined;
 
-    constructor(readonly dotNetObject: DotNet.DotNetObject) {
-    }
+    constructor(readonly dotNetObject: DotNet.DotNetObject) {}
 
     /**
      * Returns a position based on the given mouse event that ensures the context menu is fully visible

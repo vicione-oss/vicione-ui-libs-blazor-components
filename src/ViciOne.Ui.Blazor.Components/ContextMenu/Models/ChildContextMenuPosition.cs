@@ -1,5 +1,9 @@
-﻿using ViciOne.Ui.Blazor.Components.ContextMenu.Enums;
+﻿using ViciOne.Ui.Blazor.Components.Attributes;
+using ViciOne.Ui.Blazor.Components.ContextMenu.Enums;
 
 namespace ViciOne.Ui.Blazor.Components.ContextMenu.Models;
 
-internal record class ChildContextMenuPosition(int X, int Y, MouseLeaveDirection MouseLeaveDirection);
+[GenerateTypeScriptImport(Type = "MouseLeaveDirection",
+    ModulePath = "/_content/ViciOne.Ui.Blazor.Components/context-menu/enums/mouse-leave-direction.js")]
+[GenerateTypeScriptClass]
+internal record ChildContextMenuPosition(int X, int Y, MouseLeaveDirection MouseLeaveDirection);

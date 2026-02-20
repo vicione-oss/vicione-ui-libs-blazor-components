@@ -1,3 +1,6 @@
-﻿namespace ViciOne.Ui.Blazor.Components.ContextMenu.Models;
+﻿using ViciOne.Ui.Blazor.Components.Attributes;
 
-internal record class ContextMenuPosition(int X, int Y);
+namespace ViciOne.Ui.Blazor.Components.ContextMenu.Models;
+
+[GenerateTypeScriptClass]
+internal record ContextMenuPosition(int X, int Y);

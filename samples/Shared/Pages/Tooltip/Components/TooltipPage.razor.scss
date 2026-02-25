@@ -30,10 +30,13 @@
     margin: 8px;
     padding: 8px;
 
-    &::before {
-        content: "for tooltip hover over text";
-        font-size: 10px;
-        position: absolute;
+    &:not(.tooltip-wont-display) {
+        &::before {
+            content: "Hover over text to see the associated tooltip";
+            font-size: 10px;
+            position: absolute;
+            pointer-events: none;
+        }
     }
 }
 
@@ -58,4 +61,6 @@
 .tooltipped-content {
     place-self: center;
     text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }

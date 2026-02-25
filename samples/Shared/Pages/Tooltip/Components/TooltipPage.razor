@@ -106,9 +106,7 @@
         </TooltipContainer>
     </div>
 
-    <div class="tooltip-area"
-            style="grid-column: 1;
-                grid-row: 3;">
+    <div class="tooltip-area @(_random != 0 ? "tooltip-wont-display" : "")" style="grid-column: 1; grid-row: 3;">
 
         <TooltipContainer DisplayCondition="@(() => _random == 0)">
             <ChildContent>

@@ -23,7 +23,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
         Enabled = false,
         Interval = 50,
     };
-    private TooltipInfo[] _renderingTooltips = [];
+    private ICollection<TooltipInfo> _renderingTooltips = [];
     private bool _shouldRender;
     private bool _shouldRenderDelayElapsed;
 #pragma warning disable CA2213 // Disposable fields should be disposed - we cannot know if the service is still used by something else
@@ -114,7 +114,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
                 $"./_content/{typeof(TooltipDisplay).Assembly.GetName().Name}/tooltip/components/tooltip-display.js");
         }
 
-        if (_renderingTooltips.Length == 0 || _jsModule is null)
+        if (_renderingTooltips.Count == 0 || _jsModule is null)
             return;
 
         _windowSize = await _jsModule.InvokeAsync<Size>("getWindowSize");
@@ -128,7 +128,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
 
     private async void OnTooltipsChangedAsync()
     {
-        _renderingTooltips = [.. _tooltipService.Tooltips];
+        _renderingTooltips = _tooltipService.GetTooltipInfos();
 
         _shouldRender = true;
         await InvokeAsync(StateHasChanged);
@@ -160,7 +160,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
 
     private async void OnPreRenderingRequestedAsync()
     {
-        _renderingTooltips = _renderingTooltips = [.. _tooltipService.Tooltips];
+        _renderingTooltips = _tooltipService.GetTooltipInfos();
 
         _shouldRender = true;
         await InvokeAsync(StateHasChanged);

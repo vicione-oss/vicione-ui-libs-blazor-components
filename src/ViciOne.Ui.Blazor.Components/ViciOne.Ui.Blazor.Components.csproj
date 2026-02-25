@@ -278,4 +278,8 @@
     <InjectCssImports FilePath="$(_ScopedCssProjectOutputPath)" />
   </Target>
 
+  <ItemGroup>
+      <InternalsVisibleTo Include="Shared" />
+  </ItemGroup>
+
 </Project>

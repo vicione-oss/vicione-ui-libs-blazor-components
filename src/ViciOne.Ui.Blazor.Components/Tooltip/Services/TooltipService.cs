@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Concurrent;
+using System.Drawing;
 using System.Timers;
 using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.Tooltip.Models;
@@ -8,7 +9,7 @@ namespace ViciOne.Ui.Blazor.Components.Tooltip.Services;
 /// <summary>
 /// A service to provide functionality for tooltip components.
 /// </summary>
-public sealed class TooltipService : IDisposable
+internal sealed class TooltipService : IDisposable
 {
     private readonly System.Timers.Timer _displayDelayTimer = new()
     {
@@ -16,17 +17,14 @@ public sealed class TooltipService : IDisposable
         Enabled = false,
         Interval = 1000,
     };
-    private readonly List<TooltipInfo> _tooltips = [];
 
-    /// <summary>
-    /// Gets the currently active tooltips.
-    /// </summary>
-    internal IEnumerable<TooltipInfo> Tooltips
-        => _tooltips;
+    private readonly ConcurrentDictionary<string, TooltipInfo> _tooltipMap = [];
+
     /// <summary>
     /// The base z-index to use for displaying the tooltips
     /// </summary>
     internal int BaseZIndex { get; init; } = 1000000;
+
     /// <summary>
     /// Get or set if the tooltip is moved left and/or up depending on its real size or on thirds of the window size.
     /// </summary>
@@ -49,6 +47,12 @@ public sealed class TooltipService : IDisposable
         => _displayDelayTimer.Elapsed += OnDisplayDelayTimerElapsed;
 
     /// <summary>
+    /// Gets the currently active tooltips.
+    /// </summary>
+    internal ICollection<TooltipInfo> GetTooltipInfos()
+        => _tooltipMap.Values;
+
+    /// <summary>
     /// Displays the provided tooltip.
     /// </summary>
     ///
@@ -65,9 +69,11 @@ public sealed class TooltipService : IDisposable
 
         info.Reset();
 
-        _tooltips.Add(info);
-        PreRenderingRequested?.Invoke();
-        _displayDelayTimer.Start();
+        if (_tooltipMap.TryAdd(info.Id, info))
+        {
+            PreRenderingRequested?.Invoke();
+            _displayDelayTimer.Start();
+        }
     }
 
     /// <inheritdoc/>
@@ -79,10 +85,14 @@ public sealed class TooltipService : IDisposable
 
     private void OnDisplayDelayTimerElapsed(object? _1, ElapsedEventArgs _2)
     {
-        foreach (var tooltip in _tooltips.Where(dt => !dt.Displaying && dt.PreRendered))
-            tooltip.Displaying = true;
+        var tooltips = _tooltipMap.Values.Where(dt => !dt.Displaying && dt.PreRendered).ToList();
+        if (tooltips.Count > 0)
+        {
+            foreach (var tooltip in tooltips)
+                tooltip.Displaying = true;
 
-        TooltipsChanged?.Invoke();
+            TooltipsChanged?.Invoke();
+        }
     }
 
     /// <summary>
@@ -136,7 +146,7 @@ public sealed class TooltipService : IDisposable
     /// </param>
     public void RemoveTooltip(string tooltipId)
     {
-        _tooltips.RemoveAll(tt => tt.Id == tooltipId);
-        TooltipsChanged?.Invoke();
+        if (_tooltipMap.TryRemove(tooltipId, out _))
+            TooltipsChanged?.Invoke();
     }
 }

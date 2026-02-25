@@ -2,6 +2,8 @@
 
 ## 5.4.0 - Unreleased
 
+- `Tooltip`, made `TooltipService` internal as it is not used anywhere
+
 ## 5.3.0 - 2026-02-16
 
 - Added `Breadcrumb`

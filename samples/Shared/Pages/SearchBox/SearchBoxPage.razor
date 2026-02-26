@@ -23,7 +23,7 @@
 
 <div class="grid-container">
     <div class="search-box-container">
-        <SearchBox @bind-Text="@_demo2SearchTerm" />
+        <SearchBox @bind-Text="@_demo2SearchTerm" @bind-Text:event="TextChanging" />
     </div>
     <span class="search-term">Search term: @_demo2SearchTerm</span>
 

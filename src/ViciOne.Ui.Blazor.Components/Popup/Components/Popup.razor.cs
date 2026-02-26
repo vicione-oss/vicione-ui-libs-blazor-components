@@ -136,8 +136,6 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
         await RemoveMoveInteractionAsync();
 
         PopupRegistry.Remove(this);
-
-        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>

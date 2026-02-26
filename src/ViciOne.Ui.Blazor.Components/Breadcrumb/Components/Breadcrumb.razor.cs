@@ -36,13 +36,13 @@ public sealed partial class Breadcrumb : ComponentBase
     {
         base.OnParametersSet();
 
-        var newItemComtexts = CurrentItem.GetAncestorsIncludingSelf()
+        var newItemContexts = CurrentItem.GetAncestorsIncludingSelf()
             .ConvertAll(breadcrumbItem => new BreadcrumbItemContext { Instance = breadcrumbItem });
 
         // Adopt ElementReference from existing item contexts to new item contexts as
         // items are rendered with @key="item" instead of @key="itemContext" resulting in Blazor not updating
         // BreadcrumbItemContext.ElementReference for existing items.
-        foreach (var newItemContext in newItemComtexts)
+        foreach (var newItemContext in newItemContexts)
         {
             var existingItemContext = _itemContexts.FirstOrDefault(i => i.Instance == newItemContext.Instance);
             if (existingItemContext != null)
@@ -50,7 +50,7 @@ public sealed partial class Breadcrumb : ComponentBase
         }
 
         _itemContexts.Clear();
-        _itemContexts.AddRange(newItemComtexts);
+        _itemContexts.AddRange(newItemContexts);
     }
 
     private async Task HandleScrollAsync(int targetScrollStep)

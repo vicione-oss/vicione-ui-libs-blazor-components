@@ -68,11 +68,7 @@ public sealed partial class ContextMenuButton : ContextMenuItemBase, IDisposable
 
     /// <inheritdoc/>
     public void Dispose()
-    {
-        Parent?.RemoveButton(this);
-
-        GC.SuppressFinalize(this);
-    }
+        => Parent?.RemoveButton(this);
 
     private async Task ButtonClickAsync()
     {

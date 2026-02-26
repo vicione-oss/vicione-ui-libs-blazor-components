@@ -6,9 +6,7 @@ using ViciOne.Ui.Blazor.Components.Interfaces;
 
 namespace ViciOne.Ui.Blazor.Components.CheckBox;
 
-/// <summary>
-/// Component that allows users to toggle between two states
-/// </summary>
+/// <inheritdoc cref="ICheckBox{TValue}"/>
 public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheckBox<TValue>, IHasValidFlag
 {
     private CheckBoxMode _mode;
@@ -40,27 +38,19 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
     [Parameter]
     public Expression<Func<TValue>>? ValueExpression { get; set; }
 
-    /// <summary>
-    /// Specifies the value that corresponds to the checked state
-    /// </summary>
+    /// <inheritdoc/>
     [Parameter]
     public TValue ValueChecked { get; set; } = default!;
 
-    /// <summary>
-    /// Specifies the value that corresponds to the indeterminate state
-    /// </summary>
+    /// <inheritdoc/>
     [Parameter]
     public TValue ValueIndeterminate { get; set; } = default!;
 
-    /// <summary>
-    /// Specifies the value that corresponds to the unchecked state
-    /// </summary>
+    /// <inheritdoc/>
     [Parameter]
     public TValue ValueUnchecked { get; set; } = default!;
 
-    /// <summary>
-    /// Specifies whether the check-box supports the indeterminate state
-    /// </summary>
+    /// <inheritdoc/>
     [Parameter]
     public bool AllowIndeterminateState { get; set; }
 
@@ -68,17 +58,11 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
     [Parameter]
     public bool? Valid { get; set; }
 
-#pragma warning disable IDE0051 // Remove unused private members
     /// <summary>
-    /// Inject target for an instance that applies parameter defaults
+    /// Constructor to apply parameter defaults
     /// </summary>
-    [Inject]
-    private ICheckBoxParameterDefaults<TValue> CheckBoxParameterDefaults
-    {
-        set => value.Apply(this);
-    }
-#pragma warning restore IDE0051 // Remove unused private members
-
+    public CheckBox(ICheckBoxParameterDefaults<TValue> parameterDefaults)
+        => parameterDefaults.Apply(this);
 
     /// <inheritdoc/>
     protected override void OnParametersSet()

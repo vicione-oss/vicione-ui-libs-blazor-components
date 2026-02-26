@@ -1,7 +1,6 @@
 import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
 import { PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
 import { Point } from '/_content/ViciOne.Ui.Blazor.Components/js/point.js';
-import { ArrayIterator } from '/_content/ViciOne.Ui.Blazor.Components/js/array-iterator.js';
 
 export class PointerCapture {
     public startedCssClass?: string;
@@ -12,7 +11,7 @@ export class PointerCapture {
     public onPointerMove?: (captureTarget: HTMLElement, x: number, y: number) => void;
     public onPointerUp?: (captureTarget: HTMLElement, x: number, y: number) => void;
 
-    private userSelectBefore?: string;
+    #userSelectBefore?: string;
 
     public start(pointerEvent: PointerEvent, captureTarget: HTMLElement, boundingClientRect: DOMRect) {
         let captureTargetPosition: Point;
@@ -51,7 +50,7 @@ export class PointerCapture {
         };
 
         const avoidTextSelection = () => {
-            this.userSelectBefore = captureTarget.style.userSelect;
+            this.#userSelectBefore = captureTarget.style.userSelect;
 
             captureTarget.style.userSelect = 'none';
         };
@@ -88,7 +87,7 @@ export class PointerCapture {
             if (this.behaviors?.length) {
                 const behaviorContext = new PointerCaptureBehaviorContext(captureTarget, captureTargetPosition);
 
-                applyBehaviors(new ArrayIterator(this.behaviors), behaviorContext);
+                applyBehaviors(this.behaviors.values(), behaviorContext);
             }
 
             captureTarget.style.left = `${captureTargetPosition.x}px`;
@@ -98,7 +97,7 @@ export class PointerCapture {
                 this.onPointerMove(captureTarget, captureTargetPosition.x, captureTargetPosition.y);
         };
 
-        const applyBehaviors = (behaviors: Iterator<PointerCaptureBehavior, PointerCaptureBehavior, PointerCaptureBehavior>,
+        const applyBehaviors = (behaviors: IterableIterator<PointerCaptureBehavior>,
             behaviorContext: PointerCaptureBehaviorContext) => {
 
             const currentBehaviorIteratorResult = behaviors.next();
@@ -131,8 +130,8 @@ export class PointerCapture {
             if (this.endedCssClass)
                 captureTarget.classList.add(this.endedCssClass);
 
-            if (this.userSelectBefore)
-                captureTarget.style.userSelect = this.userSelectBefore;
+            if (this.#userSelectBefore)
+                captureTarget.style.userSelect = this.#userSelectBefore;
 
             // Sometimes pointer up is selecting text, we revert it
             clearSelection();
@@ -154,7 +153,7 @@ export class PointerCapture {
                     if (this.behaviors?.length) {
                         const behaviorContext = new PointerCaptureBehaviorContext(captureTarget, captureTargetPosition);
 
-                        applyBehaviors(new ArrayIterator(this.behaviors), behaviorContext);
+                        applyBehaviors(this.behaviors.values(), behaviorContext);
                     }
                 }
 

@@ -40,17 +40,9 @@ interface PointerEvent extends PointerEventMixins { }
 
 applyMixins(PointerEvent, [PointerEventMixins]);
 
-function applyMixins(derivedCtor: any, constructors: any[]) {
-    constructors.forEach(baseCtor => {
+function applyMixins(targetType: any, mixinClasses: any[]) {
+    for (const mixinClass of mixinClasses) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-            Object.defineProperty(
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                derivedCtor.prototype,
-                name,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-                Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ?? Object.create(null)
-            );
-        });
-    });
+        Object.defineProperties(targetType.prototype, Object.getOwnPropertyDescriptors(mixinClass.prototype));
+    }
 }

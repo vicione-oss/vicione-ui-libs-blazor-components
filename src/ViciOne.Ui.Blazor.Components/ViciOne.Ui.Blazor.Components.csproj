@@ -85,9 +85,6 @@
   <Target Name="EnforceTypeScriptCompileAfterSourceGenerators" BeforeTargets="PreComputeCompileTypeScriptWithTSConfig" DependsOnTargets="CoreCompile" />
 
   <ItemGroup>
-    <GeneratedStaticWebAsset Include="Scripts\ArrayIterator.js">
-      <DestinationFile>wwwroot\js\array-iterator.js</DestinationFile>
-    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
       <DestinationFile>wwwroot\js\point.js</DestinationFile>
     </GeneratedStaticWebAsset>

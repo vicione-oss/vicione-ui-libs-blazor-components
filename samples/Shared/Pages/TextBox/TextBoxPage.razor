@@ -50,11 +50,15 @@ contains @_textBoxInputValue4, <code>ValueChanged</code> raised @_textBoxInputVa
 
 <h3>Value / EnterPressed</h3>
 
-<TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue2" EnterPressed="@((value) => _textBoxInputValue2 = value)" /> contains @_textBoxInputValue2
+<TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue2" EnterPressed="@(value => _textBoxInputValue2 = value)" /> contains @_textBoxInputValue2
+
+<h3>Value / EnterPressed removes content</h3>
+
+<TextBox Placeholder="e.g. sed diam voluptua" @bind-Value="@_textBoxInputValue5" @bind-Value:event="ValueChanging" EnterPressed="@(() => _textBoxInputValue5 = string.Empty)" />
 
 <h3>Value / FocusLost</h3>
 
-<TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue3" FocusLost="@((value) => _textBoxInputValue3 = value)" /> contains @_textBoxInputValue3
+<TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue3" FocusLost="@(value => _textBoxInputValue3 = value)" /> contains @_textBoxInputValue3
 
 <h3>Unbound / no event</h3>
 

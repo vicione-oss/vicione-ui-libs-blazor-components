@@ -10,6 +10,7 @@ public sealed partial class TextBoxPage : ComponentBase
     private string? _textBoxInputValue2 = "Lorem ipsum";
     private string? _textBoxInputValue3 = "Lorem ipsum";
     private string? _textBoxInputValue4 = "Lorem ipsum";
+    private string? _textBoxInputValue5 = "Lorem ipsum";
     private int _textBoxInputValueChangingCount;
     private int _textBoxInputValueChangedCount;
 

@@ -1,7 +1,8 @@
 ﻿@inherits ContextMenuItemBase
 
 @using ViciOne.Ui.Blazor.Components.Extensions
-@using ViciOne.Ui.Blazor.Components.Resources.ContextMenu
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
 
 @if (ShouldBeShown())
 {
@@ -37,8 +38,8 @@
 
             @if (ChildContent is not null)
             {
-                <div class="chevron">
-                    @((MarkupString)SvgIcons.ChevronRightSmall)
+                <div class="expander-icon-container">
+                    <MonochromeIcon Name="@MonochromeIconName.ExpanderLightRight" Size="@MonochromeIconSize.SmallMedium" />
                 </div>
 
                 <ContextMenu ApplicableTo="CascadingApplicableTo"

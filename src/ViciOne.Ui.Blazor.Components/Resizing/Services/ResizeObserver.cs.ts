@@ -3,13 +3,13 @@
  * When a resize occurs, the subcriber is notified and receives the new dimension.
  */
 export class HtmlElementResizeObserver {
-    private readonly _observers = new Map<string, DotNet.DotNetObject>();
+    readonly #observers = new Map<string, DotNet.DotNetObject>();
 
-    private readonly _resizeObserver = new ResizeObserver(entries => {
+    readonly #resizeObserver = new ResizeObserver(entries => {
         for (const entry of entries) {
             const observerId = entry.target.getAttribute('data-observer-id');
             if (observerId) {
-                const dotNetRef = this._observers.get(observerId);
+                const dotNetRef = this.#observers.get(observerId);
 
                 void dotNetRef?.invokeMethodAsync(
                     'SizeChanged',
@@ -32,8 +32,8 @@ export class HtmlElementResizeObserver {
         if (!elementRef?.dataset.observerId || !dotNetObjectReference)
             return;
 
-        this._observers.set(elementRef.dataset.observerId, dotNetObjectReference);
-        this._resizeObserver.observe(elementRef);
+        this.#observers.set(elementRef.dataset.observerId, dotNetObjectReference);
+        this.#resizeObserver.observe(elementRef);
     }
 
     /**
@@ -44,10 +44,10 @@ export class HtmlElementResizeObserver {
         if (!elementRef)
             return;
 
-        this._resizeObserver.unobserve(elementRef);
+        this.#resizeObserver.unobserve(elementRef);
 
         const id = elementRef.dataset.observerId!;
-        this._observers.delete(id);
+        this.#observers.delete(id);
     }
 }
 

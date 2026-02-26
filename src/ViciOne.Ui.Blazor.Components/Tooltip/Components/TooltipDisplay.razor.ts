@@ -3,14 +3,11 @@
  * @param {string} tooltipId
 */
 export function getTooltipSize(tooltipId: string) {
-    const elem = document.getElementById(tooltipId);
-
-    if (!elem)
-        return { height: 0, width: 0 };
+    const element = document.getElementById(tooltipId);
 
     return {
-        height: elem.offsetHeight,
-        width: elem.offsetWidth
+        height: element?.offsetHeight ?? 0,
+        width: element?.offsetWidth ?? 0
     };
 }
 

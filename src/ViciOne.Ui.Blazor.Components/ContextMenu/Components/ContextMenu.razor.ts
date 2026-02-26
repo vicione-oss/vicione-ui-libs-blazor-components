@@ -1,9 +1,11 @@
 import { ContextMenuPosition } from '/_content/ViciOne.Ui.Blazor.Components/context-menu/models/context-menu-position.js';
 
 class ContextMenu {
-    private windowPointerDownEventListenerBinding: ((e: PointerEvent) => void) | undefined = undefined;
+    readonly #dotNetObject: DotNet.DotNetObject;
 
-    constructor(readonly dotNetObject: DotNet.DotNetObject) {}
+    constructor(dotNetObject: DotNet.DotNetObject) {
+        this.#dotNetObject = dotNetObject;
+    }
 
     /**
      * Returns a position based on the given mouse event that ensures the context menu is fully visible
@@ -38,32 +40,28 @@ class ContextMenu {
     }
 
     public startObserveWindowPointerDown() {
-        this.removePointerDownEventListener();
-        this.addPointerDownEventListener();
+        this.#removePointerDownEventListener();
+        this.#addPointerDownEventListener();
     }
 
     public endObserveWindowPointerDown() {
-        this.removePointerDownEventListener();
+        this.#removePointerDownEventListener();
     }
 
     public dispose() {
         this.endObserveWindowPointerDown();
     }
 
-    private addPointerDownEventListener() {
-        this.windowPointerDownEventListenerBinding ??= this.windowPointerDownEventListener.bind(this);
-
-        if (this.windowPointerDownEventListenerBinding)
-            window.addEventListener('pointerdown', this.windowPointerDownEventListenerBinding);
+    #addPointerDownEventListener() {
+        window.addEventListener('pointerdown', this.#windowPointerDownEventListener);
     }
 
-    private removePointerDownEventListener() {
-        if (this.windowPointerDownEventListenerBinding)
-            window.removeEventListener('pointerdown', this.windowPointerDownEventListenerBinding);
+    #removePointerDownEventListener() {
+        window.removeEventListener('pointerdown', this.#windowPointerDownEventListener);
     }
 
-    private async windowPointerDownEventListener(e: PointerEvent) {
-        const contextMenuHtmlElements = await this.dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElementsAsync');
+    readonly #windowPointerDownEventListener = async (e: PointerEvent) => {
+        const contextMenuHtmlElements = await this.#dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElementsAsync');
 
         let clickedInsideAnyContextMenu = false;
 
@@ -89,8 +87,8 @@ class ContextMenu {
         }
 
         if (!clickedInsideAnyContextMenu)
-            await this.dotNetObject.invokeMethodAsync('HideAsync');
-    }
+            await this.#dotNetObject.invokeMethodAsync('HideAsync');
+    };
 }
 
 export async function attach(dotNetObject: DotNet.DotNetObject) {

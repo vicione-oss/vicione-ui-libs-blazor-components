@@ -2,24 +2,23 @@ import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Compone
 import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
 
 class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
-    private gridSize = 10;
+    #gridSize = 10;
 
     constructor(gridSize?: number) {
-        if (gridSize)
-            this.gridSize = gridSize;
+        this.#gridSize = gridSize ?? 10;
     }
 
     public apply(context: PointerCaptureBehaviorContext, next: (context: PointerCaptureBehaviorContext) => void) {
         let positionChanged = false;
 
-        let remainder = context.position.x % this.gridSize;
+        let remainder = context.position.x % this.#gridSize;
         if (remainder !== 0) {
             context.position.x -= remainder;
 
             positionChanged = true;
         }
 
-        remainder = context.position.y % this.gridSize;
+        remainder = context.position.y % this.#gridSize;
         if (remainder !== 0) {
             context.position.y -= remainder;
 
@@ -31,7 +30,7 @@ class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
     }
 
     public setGridSize(value: number) {
-        this.gridSize = value;
+        this.#gridSize = value;
     }
 }
 

@@ -66,6 +66,12 @@
         "resolved": "4.14.1",
         "contentHash": "hALZsyELJXhj7WQw7Q7nLI7sELre8AlQIMyGxXpmpK+iBqShPcWHuJMGjIsTMa/bC8Q5xyQ4iFfRtm0bP1zisQ=="
       },
+      "Tenekon.MSBuild.Packaging.ProjectBuildInPackage": {
+        "type": "Direct",
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "Ow37PSUBuOI+y34MpTlpMSnnAAX40RC+SP3ZH1ud8D38dR5fH/IwKGsLAfPK0mQTqM8GyNIfcJ5uq1/p2X5wiQ=="
+      },
       "ViciOne.CodeAnalysis": {
         "type": "Direct",
         "requested": "[1.5.0, )",

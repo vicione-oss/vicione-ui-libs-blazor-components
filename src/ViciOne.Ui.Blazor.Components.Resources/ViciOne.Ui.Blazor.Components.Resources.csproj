@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Update="AdvancedErrorBoundary\Localization\Content.Designer.cs">
       <DependentUpon>Content.resx</DependentUpon>

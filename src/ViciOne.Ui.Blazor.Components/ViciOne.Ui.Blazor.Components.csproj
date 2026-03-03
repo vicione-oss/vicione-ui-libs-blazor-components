@@ -93,57 +93,69 @@
   <!-- https://github.com/microsoft/TypeScript/issues/57695 -->
   <Target Name="EnforceTypeScriptCompileAfterSourceGenerators" BeforeTargets="PreComputeCompileTypeScriptWithTSConfig" DependsOnTargets="CoreCompile" />
 
+  <PropertyGroup>
+    <!--
+      Using "dist" instead of "wwwroot" as otherwise the files will be included in NuGet package as "content" and "contentFiles"
+      because artifacts from "dotnet-build" include the wwwroot folder and a subsequent "dotnet-pack ... no-build" then handles
+      "wwwroot" as it would be handled without Blazor RCL magic, that is, include all files in that folder as content.
+
+      Having generated static web assets included as content in NuGet package is not only increasing the package size unnecessarily,
+      it also breaks JSInterop.
+    -->
+    <GeneratedStaticWebAssetDestinationFolder>dist</GeneratedStaticWebAssetDestinationFolder>
+  </PropertyGroup>
+  
   <ItemGroup>
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
-      <DestinationFile>wwwroot\js\point.js</DestinationFile>
+      <DestinationFile>js\point.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
-      <DestinationFile>wwwroot\js\pointer-event-mixins.js</DestinationFile>
+      <DestinationFile>js\pointer-event-mixins.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Resizing\Services\ResizeObserver.cs.js">
-      <DestinationFile>wwwroot\resizing\resize-observer.js</DestinationFile>
+      <DestinationFile>resizing\resize-observer.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Breadcrumb\Services\HtmlElementHelper.cs.js">
-      <DestinationFile>wwwroot\breadcrumb\html-element-helper.js</DestinationFile>
+      <DestinationFile>breadcrumb\html-element-helper.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Moveable\Models\MoveInteractionContext.cs.js">
-      <DestinationFile>wwwroot\moveable\move-interaction-context.js</DestinationFile>
+      <DestinationFile>moveable\move-interaction-context.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Moveable\Services\MoveInteraction.cs.js">
-      <DestinationFile>wwwroot\moveable\move-interaction.js</DestinationFile>
+      <DestinationFile>moveable\move-interaction.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCapture.js">
-      <DestinationFile>wwwroot\pointer-capture\pointer-capture.js</DestinationFile>
+      <DestinationFile>pointer-capture\pointer-capture.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehavior.js">
-      <DestinationFile>wwwroot\pointer-capture\pointer-capture-behavior.js</DestinationFile>
+      <DestinationFile>pointer-capture\pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehaviorContext.js">
-      <DestinationFile>wwwroot\pointer-capture\pointer-capture-behavior-context.js</DestinationFile>
+      <DestinationFile>pointer-capture\pointer-capture-behavior-context.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Services\Behaviors\SnapToGridPointerCaptureBehavior.cs.js">
-      <DestinationFile>wwwroot\pointer-capture\snap-to-grid-pointer-capture-behavior.js</DestinationFile>
+      <DestinationFile>pointer-capture\snap-to-grid-pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Enums\MouseLeaveDirection.cs.js">
-      <DestinationFile>wwwroot\context-menu\enums\mouse-leave-direction.js</DestinationFile>
+      <DestinationFile>context-menu\enums\mouse-leave-direction.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Models\ChildContextMenuPosition.cs.js">
-      <DestinationFile>wwwroot\context-menu\models\child-context-menu-position.js</DestinationFile>
+      <DestinationFile>context-menu\models\child-context-menu-position.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Models\ContextMenuPosition.cs.js">
-      <DestinationFile>wwwroot\context-menu\models\context-menu-position.js</DestinationFile>
+      <DestinationFile>context-menu\models\context-menu-position.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenu.razor.js">
-      <DestinationFile>wwwroot\context-menu\components\context-menu.js</DestinationFile>
+      <DestinationFile>context-menu\components\context-menu.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenuItem.razor.js">
-      <DestinationFile>wwwroot\context-menu\components\context-menu-item.js</DestinationFile>
+      <DestinationFile>context-menu\components\context-menu-item.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Tooltip\Components\TooltipDisplay.razor.js">
-      <DestinationFile>wwwroot\tooltip\components\tooltip-display.js</DestinationFile>
+      <DestinationFile>tooltip\components\tooltip-display.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="TextBox\TextBox.razor.js">
-      <DestinationFile>wwwroot\text-box\text-box.js</DestinationFile>
+      <DestinationFile>text-box\text-box.js</DestinationFile>
     </GeneratedStaticWebAsset>
   </ItemGroup>
 
@@ -151,18 +163,13 @@
     <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedStaticWebAsset;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>
   </PropertyGroup>
 
-  <Target Name="IncludeGeneratedStaticWebAsset" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" DependsOnTargets="MoveGeneratedStaticWebAssets" Condition="'@(GeneratedStaticWebAsset)' != ''">
+  <Target Name="IncludeGeneratedStaticWebAsset" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" BeforeTargets="ResolveJSModuleStaticWebAssets;ResolveJsInitializerModuleStaticWebAssets" DependsOnTargets="MoveGeneratedStaticWebAssets" Condition="'@(GeneratedStaticWebAsset)' != ''">
     <!-- Skeleton adopted from https://github.com/dotnet/aspnetcore/blob/61e60dcf9436709a63e61da35417e2c4d30466ed/src/Components/CustomElements/src/Microsoft.AspNetCore.Components.CustomElements.csproj#L21 -->
 
     <ItemGroup>
-      <_CandidateAsset Include="$(MSBuildProjectDirectory)\%(GeneratedStaticWebAsset.DestinationFile)" />
+      <_CandidateAsset Include="$(MSBuildProjectDirectory)\$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" />
       <_CandidateAsset>
-        <!-- 
-           https://regex101.com/r/PZZ45o
-           
-           wwwroot\foo.js -> foo.js
-        -->
-        <RelativePath>$([System.Text.RegularExpressions.Regex]::Replace(%(GeneratedStaticWebAsset.DestinationFile), '^wwwroot\\(.+)', '$1'))</RelativePath>
+        <RelativePath>%(GeneratedStaticWebAsset.DestinationFile)</RelativePath>
       </_CandidateAsset>
     </ItemGroup>
 
@@ -170,13 +177,11 @@
       <_CandidateAssetIdentity>%(_CandidateAsset.Identity)</_CandidateAssetIdentity>
     </PropertyGroup>
 
-    <DefineStaticWebAssets SourceType="Computed" SourceId="$(PackageId)" ContentRoot="$(MSBuildProjectDirectory)\wwwroot\" BasePath="$(StaticWebAssetBasePath)" CandidateAssets="@(_CandidateAsset)">
-
+    <DefineStaticWebAssets SourceType="Computed" SourceId="$(PackageId)" ContentRoot="$(MSBuildProjectDirectory)\$(GeneratedStaticWebAssetDestinationFolder)\" BasePath="$(StaticWebAssetBasePath)" CandidateAssets="@(_CandidateAsset)">
       <Output TaskParameter="Assets" ItemName="_DefinedGeneratedStaticWebAsset" />
     </DefineStaticWebAssets>
 
     <DefineStaticWebAssetEndpoints CandidateAssets="@(_DefinedGeneratedStaticWebAsset)" ExistingEndpoints="@()" ContentTypeMappings="@(StaticWebAssetContentTypeMapping)">
-
       <Output TaskParameter="Endpoints" ItemName="_DefinedGeneratedStaticWebAssetEndpoint" />
     </DefineStaticWebAssetEndpoints>
 
@@ -200,7 +205,7 @@
       It seems that our target is also executed on restore but moving non-existing files does not
       result in the usual error, instead the restore fails unexpectedly which produces subsequent errors along the line.
     -->
-    <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
+    <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
   </Target>
 
   <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="GetTypeScriptOutputForPublishing">
@@ -216,12 +221,12 @@
 
   <Target Name="CleanGeneratedStaticWebAssets" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" BeforeTargets="Clean">
     <PropertyGroup>
-      <DestinationFile>%(GeneratedStaticWebAsset.DestinationFile)</DestinationFile>
+      <DestinationFile>$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)</DestinationFile>
     </PropertyGroup>
 
     <Delete Files="$(DestinationFile)" />
 
-   <ItemGroup>
+    <ItemGroup>
       <Content Remove="$(DestinationFile)" Condition="@(Content-&gt;AnyHaveMetadataValue('Identity', $(DestinationFile)))" />
     </ItemGroup>
   </Target>
@@ -285,7 +290,7 @@
   </Target>
 
   <ItemGroup>
-      <InternalsVisibleTo Include="Shared" />
+    <InternalsVisibleTo Include="Shared" />
   </ItemGroup>
 
 </Project>

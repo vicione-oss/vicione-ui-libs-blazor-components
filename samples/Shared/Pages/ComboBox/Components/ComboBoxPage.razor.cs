@@ -21,22 +21,12 @@ public sealed partial class ComboBoxPage : ComponentBase
 
     private readonly List<ButtonSize> _simpleItems = [.. TypeSafeEnumFactory<ButtonSize>.CreateAll()];
 
-    private readonly List<SampleObject> _sampleObjects = [
-        new()
+    private readonly List<SampleObject> _sampleObjects = [..
+        Enumerable.Range(1, 100).Select(i => new SampleObject
         {
-            Name = "First",
-            Value = 1
-        },
-        new()
-        {
-            Name = "Second",
-            Value = 2
-        },
-        new()
-        {
-            Name = "Third",
-            Value = 3
-        }
+            Name = $"Sample Object {i}",
+            Value = i
+        })
     ];
 
     private void ResetSelectionButtonClick()

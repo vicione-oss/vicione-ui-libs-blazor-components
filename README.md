@@ -9,7 +9,7 @@ This repository contains Blazor components for use in ViciOne applications.
 ## Get started
 
 - Clone repository
-- Open console at root of cloned repositor
+- Open console at root of cloned repository
 - Run `npm i`
 - Run `dotnet build`
 - Run the sample application
@@ -22,5 +22,4 @@ This repository contains Blazor components for use in ViciOne applications.
 ## Packages
 
 - [`Components`](src/ViciOne.Ui.Blazor.Components/README.md)
-- [`Resources`](src/ViciOne.Ui.Blazor.Components.Resources/README.md)
 - [`TestingHelpers`](src/ViciOne.Ui.Blazor.Components.TestingHelpers/README.md)

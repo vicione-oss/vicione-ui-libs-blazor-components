@@ -59,6 +59,13 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
     public bool? Valid { get; set; }
 
     /// <summary>
+    /// Text rendered into <see href="https://html.spec.whatwg.org/#naming-form-controls:-the-name-attribute">name</see> attribute
+    /// of the underlying <see href="https://html.spec.whatwg.org/#the-input-element">input</see> element.
+    /// </summary>
+    [Parameter]
+    public string Name { get; set; } = default!;
+
+    /// <summary>
     /// Constructor to apply parameter defaults
     /// </summary>
     public CheckBox(ICheckBoxParameterDefaults<TValue> parameterDefaults)

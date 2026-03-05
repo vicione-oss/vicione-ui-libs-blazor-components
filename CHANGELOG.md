@@ -1,9 +1,11 @@
 # Changelog
 
-## 5.4.0 - Unreleased
+## 5.4.0 - 2026-03-05
 
 - `ComboBox`, added scrollbar styling
 - `Tooltip`, made `TooltipService` internal as it is not used anywhere
+- `ComboBox`, added `Name` parameter
+- `TextBox`, added `Name` parameter
 
 ## 5.3.0 - 2026-02-16
 

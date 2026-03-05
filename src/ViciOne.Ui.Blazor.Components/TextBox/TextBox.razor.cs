@@ -116,6 +116,13 @@ public sealed partial class TextBox
     [Parameter]
     public string? AutoComplete { get; set; }
 
+    /// <summary>
+    /// Text rendered into <see href="https://html.spec.whatwg.org/#naming-form-controls:-the-name-attribute">name</see> attribute
+    /// of the underlying <see href="https://html.spec.whatwg.org/#the-input-element">input</see> element.
+    /// </summary>
+    [Parameter]
+    public string Name { get; set; } = default!;
+
     /// <inheritdoc/>
     [Parameter]
     public bool? Valid { get; set; }

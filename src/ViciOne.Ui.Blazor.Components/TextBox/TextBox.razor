@@ -24,6 +24,9 @@
     if (!string.IsNullOrWhiteSpace(AutoComplete))
         attributes.Add("autocomplete", AutoComplete);
 
+    if (!string.IsNullOrWhiteSpace(Name))
+        attributes.Add("name", Name);
+
     if (!string.IsNullOrWhiteSpace(Id))
         attributes.Add("id", Id);
 

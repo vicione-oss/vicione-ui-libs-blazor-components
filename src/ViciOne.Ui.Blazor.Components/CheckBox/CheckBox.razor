@@ -12,13 +12,11 @@
 
     if (_mode == CheckBoxMode.Checked)
     {
-        cssClasses.Add("checked");
-
         isChecked = true;
     }
     else if (_mode == CheckBoxMode.Unchecked)
     {
-        cssClasses.Add("unchecked");
+        isChecked = false;
     }
     else if (_mode == CheckBoxMode.Indeterminate)
     {
@@ -36,6 +34,9 @@
 
     if (!Enabled)
         inputAttributes.Add("disabled", "disabled");
+
+    if (!string.IsNullOrWhiteSpace(Name))
+        inputAttributes.Add("name", Name);
 }
 
 <div class="@string.Join(" ", cssClasses)">
@@ -47,11 +48,11 @@
            @oninput="@InputChangeAsync"
            @ref="_inputElementReference" />
 
-    @if (isChecked)
-    {
+    <div class="icon-checked">
         @((MarkupString)SvgIcons.EditorCheck)
-    }
-    else if (isIndeterminate)
+    </div>
+
+    @if (isIndeterminate)
     {
         @((MarkupString)SvgIcons.EditorIndeterminate)
     }

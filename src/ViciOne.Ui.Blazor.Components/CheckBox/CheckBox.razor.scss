@@ -46,7 +46,10 @@
         content: "\200B"; // https://unicode-explorer.com/c/200B
     }
 
-    &.unchecked {
+    $unchecked-selector: ':has(.input[type="checkbox"]:not(:checked))';
+    $checked-selector: ':has(.input[type="checkbox"]:checked)';
+
+    &#{$unchecked-selector} {
         &::after {
             content: "";
             position: absolute;
@@ -63,7 +66,7 @@
         @include inputs.invalid-style($inner-selector: "&::after", $emit-border-color: true, $emit-background-color: false, $hover-focus-lightness: +10%);
     }
 
-    &.checked, &.indeterminate {
+    &#{$checked-selector}, &.indeterminate {
         background-color: var(--vo-ui-bc-color-accent);
 
         @include animations.background-color();
@@ -87,6 +90,22 @@
         position: absolute;
     }
 
+    &#{$checked-selector} {
+        .icon-checked {
+            display: block;
+        }
+    }
+
+    &.indeterminate {
+        .icon-checked {
+            display: none !important;
+        }
+    }
+
+    .icon-checked {
+        display: none;
+    }
+
     ::deep svg {
         fill: currentcolor;
         position: absolute;
@@ -100,13 +119,13 @@
     @include inputs.disabled-style();
 
     &:focus-within {
-        &.unchecked {
+        &#{$unchecked-selector} {
             &::after {
                 border-color: var(--vo-ui-bc-color-accent);
             }
         }
 
-        &.checked, &.indeterminate {
+        &#{$checked-selector}, &.indeterminate {
             background-color: var(--vo-ui-bc-check-box-color-accent-focus);
         }
     }
@@ -117,13 +136,13 @@
 
     &:not(.disabled) {
         &:hover {
-            &.unchecked {
+            &#{$unchecked-selector} {
                 &::after {
                     border-color: var(--vo-ui-bc-color-accent-hover);
                 }
             }
 
-            &.checked, &.indeterminate {
+            &#{$checked-selector}, &.indeterminate {
                 background-color: var(--vo-ui-bc-check-box-color-accent-hover);
             }
         }

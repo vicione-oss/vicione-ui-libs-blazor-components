@@ -35,18 +35,23 @@
 
   <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
     <ItemGroup>
-      <MonochromeIcon Include="align-bottom" Size="16" />
-      <MonochromeIcon Include="align-left" Size="16" />
-      <MonochromeIcon Include="align-right" Size="16" />
-      <MonochromeIcon Include="align-top" Size="16" />
+      <MonochromeIcon Include="align-bottom" Size="16;24" />
+      <MonochromeIcon Include="align-left" Size="16;24" />
+      <MonochromeIcon Include="align-right" Size="16;24" />
+      <MonochromeIcon Include="align-top" Size="16;24" />
+      <MonochromeIcon Include="align-top-by-lowest-element" Size="24" />
       <MonochromeIcon Include="dataflow-solid" Size="24;32" />
       <MonochromeIcon Include="edit" Size="16;24;32" />
       <MonochromeIcon Include="filter-light" Size="16" />
       <MonochromeIcon Include="folder" Size="24" />
+      <MonochromeIcon Include="gear-solid" Size="24" />
       <MonochromeIcon Include="hamburger-menu" Size="24" />
       <MonochromeIcon Include="info-outlined" Size="24;32" />
+      <MonochromeIcon Include="minimap-light" Size="24;32" />
+      <MonochromeIcon Include="lock-active" Size="24" />
       <MonochromeIcon Include="open" Size="16;24" />
       <MonochromeIcon Include="reload" Size="16" />
+      <MonochromeIcon Include="show" Size="24" />
     </ItemGroup>
 
     <PropertyGroup>

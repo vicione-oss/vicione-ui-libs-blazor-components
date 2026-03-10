@@ -254,10 +254,10 @@
         "dependencies": {
           "Bogus": "[35.6.4, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.2, )",
-          "ViciOne.Ui.Blazor.Components": "[5.4.0, )",
+          "ViciOne.Ui.Blazor.Components": "[5.5.0, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.2.0, )",
-          "ViciOne.Ui.MonochromeIcons.Core": "[4.2.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.3.0, )",
+          "ViciOne.Ui.MonochromeIcons.Core": "[4.3.0, )"
         }
       },
       "vicione.ui.blazor.components": {
@@ -266,7 +266,7 @@
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.2, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.2, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.2.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.3.0, )"
         }
       },
       "Bogus": {
@@ -331,19 +331,19 @@
       },
       "ViciOne.Ui.MonochromeIcons.Components": {
         "type": "CentralTransitive",
-        "requested": "[4.2.0, )",
-        "resolved": "4.2.0",
-        "contentHash": "ywunsiKyHE5XbbQuQnxdq9ACwdpsE7NNSnQ1Gf/XVizntR2nYcEu52w6VFOyjOZ6LMWzO4nFo+Sjg7F81JD5aA==",
+        "requested": "[4.3.0, )",
+        "resolved": "4.3.0",
+        "contentHash": "MHPs9b8DHVBXnScKGY9Bdmi8vvlmmz2+DGVHJQh3J/nJ//JVWX/NL/Ck0s9+jGiqwTz8Ghw6FSCy5EUQftKMdQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Components.Web": "10.0.1",
-          "ViciOne.Ui.MonochromeIcons.Core": "4.2.0"
+          "ViciOne.Ui.MonochromeIcons.Core": "4.3.0"
         }
       },
       "ViciOne.Ui.MonochromeIcons.Core": {
         "type": "CentralTransitive",
-        "requested": "[4.2.0, )",
-        "resolved": "4.2.0",
-        "contentHash": "FdJrEJWbvT23kfwM5JozMXS8tFiVFe3+F8C0JbCrEBR7LYlOWsN48moy6cegrJjt7DG7/hw5QlMBP9PyCzYE/w=="
+        "requested": "[4.3.0, )",
+        "resolved": "4.3.0",
+        "contentHash": "b41mqM1SpMoCZBBbzmYhIvIuH0NdzUVZ1KMkBiHW4beJJlQNSEW7SnWLzbKv6m14lllz2/dHGXmyIjreSEjV8w=="
       }
     },
     "net10.0/browser-wasm": {}

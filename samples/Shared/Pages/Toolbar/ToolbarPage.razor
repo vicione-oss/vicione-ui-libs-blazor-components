@@ -1,0 +1,100 @@
+﻿@page "/toolbar"
+
+@using Shared.Pages.ComboBox.Models
+@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.SearchBox
+@using ViciOne.Ui.Blazor.Components.Toolbar.Components
+@using ViciOne.Ui.Blazor.Components.Toolbar.Enums
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<h3>Basic</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarButton IconName="@MonochromeIconName.AlignTop" Tooltip="Align top" />
+        <ToolbarButton IconName="@MonochromeIconName.AlignTopByLowestElement" Tooltip="Align top by lowest" />
+        <ToolbarButton IconName="@MonochromeIconName.AlignBottom" Tooltip="Align bottom" />
+        <ToolbarButton IconName="@MonochromeIconName.AlignLeft" Tooltip="Align left" />
+        <ToolbarButton IconName="@MonochromeIconName.AlignRight" Tooltip="Align right" />
+        <ToolbarButton IconName="@MonochromeIconName.MinimapLight" Tooltip="Minimap" Active />
+    </Toolbar>
+</div>
+
+<h3>Groupings &amp; group alignment</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarGroup>
+            <ToolbarButton IconName="@MonochromeIconName.AlignTop" Tooltip="Align top" />
+            <ToolbarButton IconName="@MonochromeIconName.AlignTopByLowestElement" Tooltip="Align top by lowest" />
+            <ToolbarButton IconName="@MonochromeIconName.AlignBottom" Tooltip="Align bottom" />
+        </ToolbarGroup>
+        <ToolbarGroup AlignRight>
+            <ToolbarButton IconName="@MonochromeIconName.AlignLeft" Tooltip="Align left" />
+            <ToolbarButton IconName="@MonochromeIconName.AlignRight" Tooltip="Align right" />
+        </ToolbarGroup>
+        <ToolbarGroup AlignRight>
+            <ToolbarButton IconName="@MonochromeIconName.MinimapLight" Tooltip="Minimap" />
+        </ToolbarGroup>
+    </Toolbar>
+</div>
+
+<h3>Text &amp; text visiblity</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarButton IconName="@MonochromeIconName.AlignTop" Text="Align top" />
+        <ToolbarButton IconName="@MonochromeIconName.AlignTopByLowestElement" Text="Align top by lowest" TextVisibility="TextVisibility.ToolbarOnly" />
+        <ToolbarButton IconName="@MonochromeIconName.AlignBottom" Text="Align bottom" TextVisibility="TextVisibility.MenuOnly" />
+    </Toolbar>
+</div>
+
+<h3>Custom content &amp; context</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarContent>
+            <SearchBox Placeholder="Search"/>
+        </ToolbarContent>
+        <ToolbarContent>
+            @(context.IsInMenu() ? "In Menu" : "Not in Menu")
+        </ToolbarContent>
+        <ToolbarGroup>
+            <ToolbarContent>
+            <ComboBox Items="@_sampleObjects" Value="@_sampleObjects.First()" TextSelector="@(item => item.Name)"/>
+            </ToolbarContent>
+        </ToolbarGroup>
+    </Toolbar>
+</div>
+
+<h3>Toggleable activation state</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarGroup>
+            <ToolbarButton IconName="MonochromeIconName.GearSolid" Text="Click to toggle" OnClick="ToggleActive" />
+            <ToolbarButton IconName="@MonochromeIconName.MinimapLight" Text="Map" Tooltip="Map" Active="_active" />
+        </ToolbarGroup>
+    </Toolbar>
+</div>
+
+<h3>Toggleable visibility</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarGroup>
+            <ToolbarButton IconName="MonochromeIconName.GearSolid" Text="Click to hide sibling" OnClick="ToggleVisible" />
+            <ToolbarButton IconName="MonochromeIconName.Show" Text="Visible" Visible="_visible" />
+        </ToolbarGroup>
+    </Toolbar>
+</div>
+
+<h3>Disabled items</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarGroup>
+            <ToolbarButton IconName="MonochromeIconName.LockActive" Text="Disabled" Enabled="false" />
+        </ToolbarGroup>
+    </Toolbar>
+</div>

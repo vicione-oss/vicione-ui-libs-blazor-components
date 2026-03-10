@@ -21,6 +21,7 @@
         "SpinEdit",
         "Switch",
         "TextBox",
+        "Toolbar",
         "Tooltip"
     ],
     "Compilations": [

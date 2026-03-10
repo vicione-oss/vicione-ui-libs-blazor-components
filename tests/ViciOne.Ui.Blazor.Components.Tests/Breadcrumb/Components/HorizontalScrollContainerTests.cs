@@ -1,10 +1,11 @@
 ﻿using AwesomeAssertions;
 using Bunit;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Components;
-using ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
 using ViciOne.Ui.Blazor.Components.Models;
+using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using Xunit;
 using TestContext = Bunit.TestContext;
@@ -16,13 +17,16 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     private readonly IResizeObserver _resizeObserver;
     private readonly TestContext _testContext;
 
+    private readonly List<ElementReference> _elementReferences = [];
+
     public HorizontalScrollContainerTests()
     {
         _resizeObserver = Substitute.For<IResizeObserver>();
 
         _testContext = new TestContext();
-        _testContext.Services.AddScoped(_ => Substitute.For<IHtmlElementHelper>())
-            .AddScoped(_ => _resizeObserver);
+        _testContext.Services.AddScoped(_ => _resizeObserver);
+
+        _resizeObserver.ObserveAsync(Arg.Do<ElementReference>(_elementReferences.Add));
     }
 
     public void Dispose()
@@ -42,10 +46,10 @@ public sealed class HorizontalScrollContainerTests : IDisposable
             .Add(p => p.OnScroll, input => { receivedScrollEvent = true; scrollStep = input; }));
 
         // Act
-        SetContainerSizes(renderedComponent, 10, 100);
+        SetContainerSizes(10, 100);
 
         // simulate scroll appearing and taking some space
-        SetContainerSizes(renderedComponent, 10, 90);
+        SetContainerSizes(10, 90);
         renderedComponent.Render();
 
         // Assert
@@ -68,7 +72,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
             .Add(p => p.OnScroll, () => { }));
 
         // Act
-        SetContainerSizes(renderedComponent, availableSpace, contentSize);
+        SetContainerSizes(availableSpace, contentSize);
         renderedComponent.SetParametersAndRender(b => b.Add(p => p.LastShownPixel, contentSize));
 
         // Assert
@@ -87,14 +91,14 @@ public sealed class HorizontalScrollContainerTests : IDisposable
             .Add(p => p.MaxScrollStepCount, 10)
             .Add(p => p.OnScroll, input => receivedScrollStep = input));
 
-        SetContainerSizes(renderedComponent, 10, 100);
+        SetContainerSizes(10, 100);
 
         renderedComponent.SetParametersAndRender(parameters => parameters
             .Add(p => p.LastShownPixel, 100)
         );
 
         // simulate scroll appearing and taking some space
-        SetContainerSizes(renderedComponent, 10, 90);
+        SetContainerSizes(10, 90);
         renderedComponent.Render();
 
         // Act & Assert
@@ -117,13 +121,13 @@ public sealed class HorizontalScrollContainerTests : IDisposable
             .Add(p => p.MaxScrollStepCount, 3)
             .Add(p => p.OnScroll, _ => { }));
 
-        SetContainerSizes(renderedComponent, 10, 100);
+        SetContainerSizes(10, 100);
 
         // Act & Assert
         renderedComponent.SetParametersAndRender(b => b.Add(p => p.LastShownPixel, 100));
 
         // simulate scroll appearing and taking some space
-        SetContainerSizes(renderedComponent, 10, 99);
+        SetContainerSizes(10, 99);
         renderedComponent.Render();
 
         renderedComponent.Find(".monochrome-icon-expander-light-left.active").Should().NotBeNull();
@@ -139,20 +143,25 @@ public sealed class HorizontalScrollContainerTests : IDisposable
         renderedComponent.Find(".monochrome-icon-expander-light-right.active").Should().NotBeNull();
     }
 
-    private void SetContainerSizes(IRenderedComponent<HorizontalScrollContainer> renderedComponent,
-        int outerContainerWidth, int innerContainerWidth)
+    private void SetContainerSizes(int outerContainerWidth, int innerContainerWidth)
     {
-        var outerContainerId = Guid.Parse(renderedComponent.Find(".content-container").GetAttribute("data-observer-id")!);
-        var innerContainerId = Guid.Parse(renderedComponent.Find(".content").GetAttribute("data-observer-id")!);
+        var outerContainerElementReference = _elementReferences[0];
+        var innerContainerElementReference = _elementReferences[1];
 
-        _resizeObserver.ElementSizeChangedAsync += Raise.Event<Func<Guid, DomRect, Task>>(
-            outerContainerId,
-            new DomRect { Width = outerContainerWidth, Height = 50 }
+        _resizeObserver.ElementSizeChangedAsync += Raise.Event<Func<ElementSizeChangedEventArgs, Task>>(
+            new ElementSizeChangedEventArgs
+            {
+                ElementReference = outerContainerElementReference,
+                DomRect = new() { Width = outerContainerWidth, Height = 50 }
+            }
         );
 
-        _resizeObserver.ElementSizeChangedAsync += Raise.Event<Func<Guid, DomRect, Task>>(
-            innerContainerId,
-            new DomRect { Width = innerContainerWidth, Height = 50 }
+        _resizeObserver.ElementSizeChangedAsync += Raise.Event<Func<ElementSizeChangedEventArgs, Task>>(
+            new ElementSizeChangedEventArgs
+            {
+                ElementReference = innerContainerElementReference,
+                DomRect = new DomRect { Width = innerContainerWidth, Height = 50 }
+            }
         );
     }
 

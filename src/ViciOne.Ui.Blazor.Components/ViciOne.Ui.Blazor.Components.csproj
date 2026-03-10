@@ -104,7 +104,7 @@
     -->
     <GeneratedStaticWebAssetDestinationFolder>dist</GeneratedStaticWebAssetDestinationFolder>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
       <DestinationFile>js\point.js</DestinationFile>
@@ -243,6 +243,7 @@
       <MonochromeIcon Include="filter-light" Size="16" />
       <MonochromeIcon Include="folder" Size="32" />
       <MonochromeIcon Include="info-outlined" Size="16" />
+      <MonochromeIcon Include="kebab-menu" Size="24" />
       <MonochromeIcon Include="move-down" Size="24" />
       <MonochromeIcon Include="move-up" Size="24" />
       <MonochromeIcon Include="plus-slim" Size="24" />

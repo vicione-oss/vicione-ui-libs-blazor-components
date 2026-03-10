@@ -1,0 +1,6 @@
+﻿@use "../../Styles/design/colors";
+
+.toolbar-container {
+    border: 1px solid colors.$border;
+    padding: 8px;
+}

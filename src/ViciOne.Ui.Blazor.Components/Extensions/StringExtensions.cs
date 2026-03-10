@@ -43,14 +43,4 @@ public static class StringExtensions
 
         return sb.ToString();
     }
-
-    /// <summary>
-    /// Joins the given values with a single space as the separator.
-    /// </summary>
-    /// <param name="values">The sequence of strings to join.</param>
-    /// <returns>
-    /// A space-separated string in the form {value1} {value2} {value3}.
-    /// </returns>
-    public static string ToSpaceSeparated(this IEnumerable<string> values)
-        => string.Join(" ", values);
 }

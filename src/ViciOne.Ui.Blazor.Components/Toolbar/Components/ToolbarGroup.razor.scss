@@ -1,0 +1,27 @@
+﻿@use "../../Styles/design/colors";
+
+.toolbar-group-alignment-spacer {
+    margin-left: auto;
+}
+
+.toolbar-group {
+    display: flex;
+
+    &.hidden {
+        display: none;
+    }
+
+    &.in-menu {
+        display: contents;
+    }
+
+    &:not(:first-child) {
+        border-left: 1px solid colors.$border;
+        padding-left: 6.5px;
+        margin-left: 6.5px;
+
+        &.invisible {
+            visibility: hidden;
+        }
+    }
+}

@@ -20,7 +20,7 @@ public sealed partial class Breadcrumb : ComponentBase
     /// The component uses this item's ancestors to build the full breadcrumb trail.
     /// </summary>
     [Parameter, EditorRequired]
-    public required BreadcrumbItem CurrentItem { get; set; } = null!;
+    public required BreadcrumbItem CurrentItem { get; set; } = default!;
 
     /// <summary>
     /// A callback that is invoked when an item is clicked.
@@ -29,7 +29,7 @@ public sealed partial class Breadcrumb : ComponentBase
     [Parameter]
     public EventCallback<BreadcrumbItem> OnItemClick { get; set; }
 
-    [Inject] private IHtmlElementHelper HtmlElementHelper { get; init; } = null!;
+    [Inject] private IHtmlElementHelper HtmlElementHelper { get; init; } = default!;
 
     /// <inheritdoc/>
     protected override void OnParametersSet()

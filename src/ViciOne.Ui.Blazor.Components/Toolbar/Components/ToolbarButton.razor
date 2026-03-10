@@ -1,0 +1,36 @@
+﻿@using ViciOne.Ui.Blazor.Components.Toolbar.Enums
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@inherits ToolbarItemBase
+
+@{
+    var cssClasses = new List<string> { "toolbar-button" };
+    cssClasses.AddRange(GetBaseCssClasses());
+
+    if (Active)
+        cssClasses.Add("active");
+}
+
+<div @ref="_container" tabindex="0" class=@string.Join(" ", cssClasses) title="@Tooltip" @onclick="OnClick" @onkeydown="HandleKeyDownAsync">
+    @if (IconName != null)
+    {
+        <MonochromeIcon Name="IconName.Value" Size="MonochromeIconSize.SmallMedium" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Text))
+    {
+        if (TextVisibility == TextVisibility.ToolbarOnly && !InMenu)
+        {
+            @Text
+        }
+        else if (TextVisibility == TextVisibility.MenuOnly && InMenu)
+        {
+            @Text
+        }
+        else if (TextVisibility == TextVisibility.Always)
+        {
+            @Text
+        }
+    }
+</div>

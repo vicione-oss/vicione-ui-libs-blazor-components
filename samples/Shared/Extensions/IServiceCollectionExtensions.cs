@@ -8,6 +8,7 @@ using Shared.Pages.Moveable.Extensions;
 using Shared.Pages.PropertyGrid.Extensions;
 using Shared.Pages.SectionRail.Extensions;
 using Shared.Pages.SpinEdit.Extensions;
+using Shared.Pages.Toolbar.Extensions;
 using Shared.Pages.ToolTip.Extensions;
 
 namespace Shared.Extensions;
@@ -25,6 +26,7 @@ public static class IServiceCollectionExtensions
             .AddPropertyGridPage()
             .AddSectionRailPage()
             .AddSpinEditPage()
+            .AddToolbarPage()
             .AddTooltipPage();
 
         return services;

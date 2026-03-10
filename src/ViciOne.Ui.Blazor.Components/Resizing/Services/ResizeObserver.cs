@@ -3,12 +3,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Models;
+using ViciOne.Ui.Blazor.Components.Resizing.Models;
 
 namespace ViciOne.Ui.Blazor.Components.Resizing.Services;
 
 internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
 {
     private readonly ILogger<ResizeObserver> _logger;
+
+    private readonly Dictionary<string, ElementReference> _elementReferences = [];
 
     private readonly IJSRuntime _jsRuntime;
     private DotNetObjectReference<ResizeObserver>? _objRef;
@@ -20,8 +23,8 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
-    public event Action<Guid, DomRect>? ElementSizeChanged;
-    public event Func<Guid, DomRect, Task>? ElementSizeChangedAsync;
+    public event Action<ElementSizeChangedEventArgs>? ElementSizeChanged;
+    public event Func<ElementSizeChangedEventArgs, Task>? ElementSizeChangedAsync;
 
     public ResizeObserver(IJSRuntime jsRuntime, ILogger<ResizeObserver> logger)
     {
@@ -69,23 +72,31 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
     }
 
     [JSInvokable]
-    public void SizeChanged(string elementId, DomRect elementRect)
+    public void SizeChanged(string elementId, DomRect domRect, CssStyleDeclaration? style)
     {
-        var elementGuid = new Guid(elementId);
+        if (!_elementReferences.TryGetValue(elementId, out var elementReference))
+            return;
 
-        ElementSizeChanged?.Invoke(elementGuid, elementRect);
-        ElementSizeChangedAsync?.Invoke(elementGuid, elementRect);
+        var args = new ElementSizeChangedEventArgs { ElementReference = elementReference, DomRect = domRect, Style = style };
+        ElementSizeChanged?.Invoke(args);
+        ElementSizeChangedAsync?.Invoke(args);
     }
 
-    public async Task ObserveAsync(ElementReference elementRef)
+    public async Task ObserveAsync(ElementReference elementReference, bool includeStyle = false)
     {
+        if (elementReference.Id == null)
+            return;
+
         var instance = await GetInstanceAsync();
         if (instance == null)
             return;
 
+        _elementReferences.Add(elementReference.Id, elementReference);
+
         try
         {
-            await instance.InvokeVoidAsync("observe", _cancellationTokenSource.Token, elementRef, _objRef);
+            await instance.InvokeVoidAsync("observe", _cancellationTokenSource.Token, elementReference, elementReference.Id,
+                _objRef, includeStyle);
         }
         catch (OperationCanceledException)
         {
@@ -97,15 +108,18 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
         }
     }
 
-    public async Task UnobserveAsync(ElementReference elementRef)
+    public async Task UnobserveAsync(ElementReference elementReference)
     {
         var instance = await GetInstanceAsync();
         if (instance == null)
             return;
 
+        // will break if we have several observers on same element
+        _elementReferences.Remove(elementReference.Id);
+
         try
         {
-            await instance.InvokeVoidAsync("unobserve", _cancellationTokenSource.Token, elementRef);
+            await instance.InvokeVoidAsync("unobserve", _cancellationTokenSource.Token, elementReference);
         }
         catch (OperationCanceledException)
         {
@@ -114,6 +128,10 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
         catch (ObjectDisposedException)
         {
             // CancellationTokenSource already disposed, nothing we can do, return gracefully
+        }
+        catch (JSDisconnectedException)
+        {
+            // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
         }
     }
 

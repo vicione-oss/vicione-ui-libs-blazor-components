@@ -1,11 +1,15 @@
 # Changelog
 
+## 5.5.0 - 2026-03-10
+
+- Added `Toolbar`
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.3.0`
+
 ## 5.4.0 - 2026-03-05
 
-- `ComboBox`, added scrollbar styling
-- `Tooltip`, made `TooltipService` internal as it is not used anywhere
-- `ComboBox`, added `Name` parameter
+- `ComboBox`, added `Name` parameter and scrollbar styling
 - `TextBox`, added `Name` parameter
+- `Tooltip`, made `TooltipService` internal as it is not used anywhere
 
 ## 5.3.0 - 2026-02-16
 

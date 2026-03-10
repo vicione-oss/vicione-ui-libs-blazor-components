@@ -1,0 +1,13 @@
+﻿@inherits ToolbarItemBase
+
+@{
+    var cssClasses = new List<string> { "toolbar-content" };
+    cssClasses.AddRange(GetBaseCssClasses());
+}
+
+<div @ref="_container" tabindex="0" class=@string.Join(" ", cssClasses) title="@Tooltip" @onclick="OnClick" @onkeydown="HandleKeyDownAsync">
+    @if (ChildContent != null)
+    {
+        @ChildContent(this)
+    }
+</div>

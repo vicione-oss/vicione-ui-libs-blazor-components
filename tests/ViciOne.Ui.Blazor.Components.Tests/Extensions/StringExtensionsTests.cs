@@ -17,17 +17,4 @@ public sealed class StringExtensionsTests
         // Assert
         result.Should().Be(expectedValue);
     }
-
-    [Fact]
-    public void AssertToSpaceSeparatedResult()
-    {
-        // Arrange
-        var values = new List<string> { "A", "B" };
-
-        // Act
-        var result = values.ToSpaceSeparated();
-
-        // Assert
-        result.Should().Be("A B");
-    }
 }

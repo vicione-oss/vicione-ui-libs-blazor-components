@@ -1,0 +1,12 @@
+﻿@use "../../Styles/design/colors";
+@use "../Styles/mixins";
+
+.toolbar-button {
+    @include mixins.toolbar-item-styles();
+
+    gap: 8px;
+
+    &.active {
+        color: colors.$accent;
+    }
+}

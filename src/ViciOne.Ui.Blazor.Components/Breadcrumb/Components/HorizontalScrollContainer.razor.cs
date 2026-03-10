@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using ViciOne.Ui.Blazor.Components.Models;
+using ViciOne.Ui.Blazor.Components.Extensions;
+using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using ViciOne.Ui.MonochromeIcons.Core.Extensions;
@@ -11,7 +12,7 @@ namespace ViciOne.Ui.Blazor.Components.Breadcrumb.Components;
 /// It monitors its own dimensions and content size to manage overflow.
 /// It supports scrolling in steps where the step size is handled by the caller to support non-equidistant steps.
 /// </summary>
-public sealed partial class HorizontalScrollContainer : ComponentBase, IDisposable
+public sealed partial class HorizontalScrollContainer : ComponentBase, IAsyncDisposable
 {
     private static readonly MonochromeIconSize s_iconSize = MonochromeIconSize.SmallMedium;
 
@@ -23,9 +24,6 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IDisposab
 
     private ElementReference _contentContainer;
     private ElementReference _content;
-
-    private readonly Guid _contentContainerId = Guid.NewGuid();
-    private readonly Guid _contentId = Guid.NewGuid();
 
     private double? _contentContainerWidth;
     private double? _contentWidth;
@@ -72,12 +70,12 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IDisposab
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    [Inject] private IResizeObserver ResizeObserver { get; init; } = null!;
+    [Inject] private IResizeObserver ResizeObserver { get; init; } = default!;
 
     /// <inheritdoc/>
     protected override void OnParametersSet()
     {
-        if (!Equal(_lastShownPixel, LastShownPixel))
+        if (!_lastShownPixel.NearlyEquals(LastShownPixel))
         {
             _lastShownPixel = LastShownPixel;
             SetScrollPosition(_lastShownPixel);
@@ -96,25 +94,25 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IDisposab
     }
 
     /// <inheritdoc/>
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        _ = ResizeObserver.UnobserveAsync(_content);
-        _ = ResizeObserver.UnobserveAsync(_contentContainer);
+        await ResizeObserver.UnobserveAsync(_content);
+        await ResizeObserver.UnobserveAsync(_contentContainer);
 
         ResizeObserver.ElementSizeChangedAsync -= OnElementSizeChangedAsync;
     }
 
-    private async Task OnElementSizeChangedAsync(Guid elementId, DomRect rect)
+    private async Task OnElementSizeChangedAsync(ElementSizeChangedEventArgs args)
     {
-        var width = rect.Width;
+        var width = args.DomRect.Width;
 
         var changedValue = false;
-        if (elementId == _contentContainerId && !Equal(width, _contentContainerWidth))
+        if (args.ElementReference.Id == _contentContainer.Id && !width.NearlyEquals(_contentContainerWidth))
         {
             _contentContainerWidth = width;
             changedValue = true;
         }
-        else if (elementId == _contentId && !Equal(width, _contentWidth))
+        else if (args.ElementReference.Id == _content.Id && !width.NearlyEquals(_contentWidth))
         {
             _contentWidth = width;
             changedValue = true;
@@ -140,16 +138,6 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IDisposab
             // sufficient to  rerender here, since adding the scrolling triggers a resize which then handles it
             await InvokeAsync(StateHasChanged);
         }
-    }
-
-    private static bool Equal(double? a, double? b)
-    {
-        if (a == null && b == null)
-            return true;
-        if (a == null || b == null)
-            return false;
-
-        return Math.Abs((double)a - (double)b) < 0.01;
     }
 
     private bool RequiresScroll()

@@ -10,7 +10,7 @@ namespace ViciOne.Ui.Blazor.Components.Tooltip.Components;
 /// </summary>
 public sealed class TooltipContainer : ComponentBase, IDisposable
 {
-    private TooltipHandler _handler = null!;
+    private TooltipHandler _handler = default!;
     private readonly TooltipInfo _info = new();
 #pragma warning disable CA2213 // Disposable fields should be disposed - we cannot know if the service is still used by something else
     private TooltipService _tooltipService = default!;

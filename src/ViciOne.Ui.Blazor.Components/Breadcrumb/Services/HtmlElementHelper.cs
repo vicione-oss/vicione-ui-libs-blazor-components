@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Extensions;
+using ViciOne.Ui.Blazor.Components.Models;
 
 namespace ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
 

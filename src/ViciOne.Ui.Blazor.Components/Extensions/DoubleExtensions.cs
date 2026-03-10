@@ -32,4 +32,43 @@ public static class DoubleExtensions
 
         return string.Format(culture, format, value);
     }
+
+    /// <summary>
+    /// Compares the given values against each other. If they are within one <paramref name="epsilon"/> of each other, returns true.
+    /// Also returns true if both values are null.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Note: This function is <b>not transitive</b>.
+    /// If <c>a.NearlyEquals(b)</c> is <see langword="true"/> and <c>b.NearlyEquals(c)</c> is <see langword="true"/>,
+    /// do not rely on <c>a.NearlyEquals(c)</c> being <see langword="true"/>.
+    /// </para>
+    /// </remarks>
+    internal static bool NearlyEquals(this double? a, double? b, double epsilon = 0.001)
+    {
+        if (a == null && b == null)
+            return true;
+        if (a == null || b == null)
+            return false;
+
+        return a.Value.NearlyEquals(b, epsilon);
+    }
+
+    /// <summary>
+    /// Compares the given values against each other. If they are within one <paramref name="epsilon"/> of each other, returns true.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Note: This function is <b>not transitive</b>.
+    /// If <c>a.NearlyEquals(b)</c> is <see langword="true"/> and <c>b.NearlyEquals(c)</c> is <see langword="true"/>,
+    /// do not rely on <c>a.NearlyEquals(c)</c> being <see langword="true"/>.
+    /// </para>
+    /// </remarks>
+    internal static bool NearlyEquals(this double a, double? b, double epsilon = 0.001)
+    {
+        if (b == null)
+            return false;
+
+        return Math.Abs(a - b.Value) < epsilon;
+    }
 }

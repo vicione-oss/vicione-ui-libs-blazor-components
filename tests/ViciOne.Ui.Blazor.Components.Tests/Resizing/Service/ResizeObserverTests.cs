@@ -23,7 +23,7 @@ public class ResizeObserverTests
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
 
         // Act
-        await sut.ObserveAsync(new ElementReference());
+        await sut.ObserveAsync(new ElementReference("id"));
 
         // Assert
         ctx.JSInterop.VerifyInvoke("observe");
@@ -41,7 +41,7 @@ public class ResizeObserverTests
 
         // Act
         await sut.DisposeAsync();
-        await sut.ObserveAsync(new ElementReference());
+        await sut.ObserveAsync(new ElementReference("id"));
 
         // Assert
         ctx.JSInterop.VerifyNotInvoke("observe");
@@ -58,7 +58,7 @@ public class ResizeObserverTests
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
 
         // Act
-        await sut.UnobserveAsync(new ElementReference());
+        await sut.UnobserveAsync(new ElementReference("id"));
 
         // Assert
         ctx.JSInterop.VerifyInvoke("unobserve");
@@ -76,7 +76,7 @@ public class ResizeObserverTests
 
         // Act
         await sut.DisposeAsync();
-        await sut.UnobserveAsync(new ElementReference());
+        await sut.UnobserveAsync(new ElementReference("id"));
 
         // Assert
         ctx.JSInterop.VerifyNotInvoke("unobserve");

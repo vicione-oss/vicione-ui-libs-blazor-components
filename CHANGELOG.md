@@ -1,5 +1,7 @@
 # Changelog
 
+## 5.6.0 - Unreleased
+
 ## 5.5.0 - 2026-03-10
 
 - Added `Toolbar`

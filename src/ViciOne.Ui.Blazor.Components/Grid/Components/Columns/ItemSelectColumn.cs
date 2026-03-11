@@ -104,8 +104,7 @@ public sealed class ItemSelectColumn<TGridItem, TGridItemKey> : ColumnBase<TGrid
 
         if (_itemSelection != Selection)
         {
-            if (_itemSelection is not null)
-                _itemSelection.Changed -= ItemSelectionChangedAsync;
+            _itemSelection?.Changed -= ItemSelectionChangedAsync;
 
             _itemSelection = Selection;
             _itemSelection.Changed += ItemSelectionChangedAsync;
@@ -133,8 +132,7 @@ public sealed class ItemSelectColumn<TGridItem, TGridItemKey> : ColumnBase<TGrid
         if (Grid is not null && Grid.ItemSelectColumn == this)
             Grid.ItemSelectColumn = null;
 
-        if (_itemSelection is not null)
-            _itemSelection.Changed -= ItemSelectionChangedAsync;
+        _itemSelection?.Changed -= ItemSelectionChangedAsync;
     }
 
     private async void ItemSelectionChangedAsync(GridItemSelectionChangedEventArgs<TGridItemKey> args)

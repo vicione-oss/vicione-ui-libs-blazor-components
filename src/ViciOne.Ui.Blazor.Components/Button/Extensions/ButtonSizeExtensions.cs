@@ -28,11 +28,9 @@ public static class ButtonSizeExtensions
     {
         if (buttonSize == ButtonSize.Small)
             return MonochromeIconSize.Small;
-        else
-        if (buttonSize == ButtonSize.Medium)
+        else if (buttonSize == ButtonSize.Medium)
             return MonochromeIconSize.SmallMedium;
-        else
-        if (buttonSize == ButtonSize.Large)
+        else if (buttonSize == ButtonSize.Large)
             return MonochromeIconSize.Medium;
         else
             throw new NotImplementedException();

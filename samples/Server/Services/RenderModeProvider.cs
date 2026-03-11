@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace Server.Services;
 
-public class RenderModeProvider(bool useWasm = false)
+internal sealed class RenderModeProvider(bool useWasm = false)
 {
     public IComponentRenderMode ContentRenderMode { get; }
         = useWasm ? new InteractiveWebAssemblyRenderMode(prerender: false) : new InteractiveServerRenderMode();

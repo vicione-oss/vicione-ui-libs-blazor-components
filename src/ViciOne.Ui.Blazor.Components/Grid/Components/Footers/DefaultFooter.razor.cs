@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Localization.Resources;
 
 namespace ViciOne.Ui.Blazor.Components.Grid.Components.Footers;
@@ -9,7 +9,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Footers;
 public sealed partial class DefaultFooter
 {
     [CascadingParameter]
-    private int ItemCount { get; set; } = default!;
+    private int ItemCount { get; set; }
 
     private string GetContentString()
     {

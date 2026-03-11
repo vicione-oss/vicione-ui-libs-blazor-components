@@ -1,8 +1,8 @@
-﻿using Shared.Components;
+using Shared.Components;
 
 namespace Server.Extensions;
 
-public static class IServiceCollectionExtensions
+internal static class IServiceCollectionExtensions
 {
     public static WebApplication UseRenderMode(this WebApplication app, bool useWebAssembly)
     {

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 using ViciOne.Ui.Blazor.Components.Tests.Extensions;
@@ -8,7 +8,7 @@ namespace ViciOne.Ui.Blazor.Components.Tests.Interfaces;
 /// <summary>
 /// Tests for types of <typeparamref name="T"/> which implement <see cref="IHasChangeableProperties"/>
 /// </summary>
-public sealed class IHasChangeablePropertiesTests<T>
+public class IHasChangeablePropertiesTests<T>
     where T : IHasChangeableProperties, new()
 {
     public void AssertChangedEventHandlingWhenPropertyIsSet<TProperty>(Expression<Func<T, TProperty>> propertySelector,

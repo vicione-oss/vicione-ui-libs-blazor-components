@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Grid.Services;
 using ViciOne.Ui.Localization.Resources;
 
@@ -13,7 +13,7 @@ public sealed partial class SelectionFooter<TGridItemKey> : IDisposable
     private IGridItemSelection<TGridItemKey>? _attachedSelection;
 
     [CascadingParameter]
-    private int ItemCount { get; set; } = default!;
+    private int ItemCount { get; set; }
 
     /// <summary>
     /// List of the selected values

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.CheckBox.Enums;
 using ViciOne.Ui.Blazor.Components.CheckBox.Services;
@@ -23,7 +23,7 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
     /// Value of the check-box
     /// </summary>
     [Parameter]
-    public TValue Value { get; set; } = default!;
+    public TValue Value { get; set; }
 
     /// <summary>
     /// Raised when <see cref="Value" /> has changed
@@ -40,15 +40,15 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
 
     /// <inheritdoc/>
     [Parameter]
-    public TValue ValueChecked { get; set; } = default!;
+    public TValue ValueChecked { get; set; }
 
     /// <inheritdoc/>
     [Parameter]
-    public TValue ValueIndeterminate { get; set; } = default!;
+    public TValue ValueIndeterminate { get; set; }
 
     /// <inheritdoc/>
     [Parameter]
-    public TValue ValueUnchecked { get; set; } = default!;
+    public TValue ValueUnchecked { get; set; }
 
     /// <inheritdoc/>
     [Parameter]
@@ -63,13 +63,20 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
     /// of the underlying <see href="https://html.spec.whatwg.org/#the-input-element">input</see> element.
     /// </summary>
     [Parameter]
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; }
 
     /// <summary>
     /// Constructor to apply parameter defaults
     /// </summary>
     public CheckBox(ICheckBoxParameterDefaults<TValue> parameterDefaults)
-        => parameterDefaults.Apply(this);
+    {
+        Value = default!;
+        ValueChecked = default!;
+        ValueIndeterminate = default!;
+        ValueUnchecked = default!;
+
+        parameterDefaults.Apply(this);
+    }
 
     /// <inheritdoc/>
     protected override void OnParametersSet()

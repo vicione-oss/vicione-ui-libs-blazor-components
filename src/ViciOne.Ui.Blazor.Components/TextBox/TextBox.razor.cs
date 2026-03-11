@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
@@ -121,7 +121,7 @@ public sealed partial class TextBox
     /// of the underlying <see href="https://html.spec.whatwg.org/#the-input-element">input</see> element.
     /// </summary>
     [Parameter]
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; }
 
     /// <inheritdoc/>
     [Parameter]

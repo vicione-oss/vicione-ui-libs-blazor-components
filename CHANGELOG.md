@@ -2,6 +2,8 @@
 
 ## 5.6.0 - Unreleased
 
+- `.NET` packages, updated to version `10.0.4`
+
 ## 5.5.0 - 2026-03-10
 
 - Added `Toolbar`

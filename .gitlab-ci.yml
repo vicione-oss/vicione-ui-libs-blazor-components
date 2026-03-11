@@ -57,6 +57,7 @@ stages:
   - build
   - test
   - pack
+  - push
   - publish
 
 Version:
@@ -77,7 +78,7 @@ Version:
 ### CI Components ###
 include:
   ### Restore
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.2.2
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.2.4
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -87,7 +88,7 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Build
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.2.2
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.2.4
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -100,8 +101,9 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Test
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.2.2
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.2.4
     inputs:
+      name: "dotnet Test"
       image: ${IMAGE_NAME}
       rules: *rules
       before_script:
@@ -112,7 +114,7 @@ include:
         - ${RUNNER_TAG}
       coverage: true
   ### Pack
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.2.2
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.2.4
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules_manual
@@ -123,12 +125,13 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Push
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.2.2
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.2.4
     inputs:
+      stage: "push"
       image: ${IMAGE_NAME}
       source: "JFrogViciOne"
       filename_pattern: "*/src/*"
-      rules: *rules_manual
+      rules: *rules
       before_script:
         - *activate_mise
         - *update_nuget_source_rw
@@ -140,6 +143,7 @@ Publish Pages:
   stage: publish
   image: ${IMAGE_NAME}
   pages: true
+  needs: ["dotnet Test"]
   before_script:
     - *activate_mise
     - *update_nuget_source_ro

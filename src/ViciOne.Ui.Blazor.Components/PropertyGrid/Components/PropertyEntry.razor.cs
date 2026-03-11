@@ -72,8 +72,7 @@ public sealed partial class PropertyEntry<TPropertyValue> : ComponentBase, IDisp
 
         if (PropertyGridItem != _propertyGridItem)
         {
-            if (_messageStore is not null)
-                _messageStore.Changed -= MessageStoreChangedAsync;
+            _messageStore?.Changed -= MessageStoreChangedAsync;
 
             _propertyGridItem = PropertyGridItem;
 
@@ -113,14 +112,12 @@ public sealed partial class PropertyEntry<TPropertyValue> : ComponentBase, IDisp
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_messageStore is not null)
-            _messageStore.Changed -= MessageStoreChangedAsync;
+        _messageStore?.Changed -= MessageStoreChangedAsync;
 
         Controller.FocusPropertyRequested -= FocusPropertyRequestedAsync;
         Controller.UpdatePropertyRequested -= UpdatePropertyRequestedAsync;
 
-        if (_contextMenuContext is not null)
-            _contextMenuContext.OnSetValue -= ContextMenuContexSetValue;
+        _contextMenuContext?.OnSetValue -= ContextMenuContexSetValue;
     }
 
     /// <inheritdoc/>

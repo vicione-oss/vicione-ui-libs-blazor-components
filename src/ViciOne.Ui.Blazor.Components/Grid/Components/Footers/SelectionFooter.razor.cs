@@ -28,8 +28,7 @@ public sealed partial class SelectionFooter<TGridItemKey> : IDisposable
 
         if (!ReferenceEquals(_attachedSelection, GridSelection))
         {
-            if (_attachedSelection is not null)
-                _attachedSelection.Changed -= GridSelectionChangedAsync;
+            _attachedSelection?.Changed -= GridSelectionChangedAsync;
 
             GridSelection.Changed += GridSelectionChangedAsync;
             _attachedSelection = GridSelection;
@@ -54,8 +53,5 @@ public sealed partial class SelectionFooter<TGridItemKey> : IDisposable
 
     /// <inheritdoc/>
     public void Dispose()
-    {
-        if (_attachedSelection is not null)
-            _attachedSelection.Changed -= GridSelectionChangedAsync;
-    }
+        => _attachedSelection?.Changed -= GridSelectionChangedAsync;
 }

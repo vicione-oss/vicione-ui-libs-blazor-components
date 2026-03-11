@@ -30,8 +30,7 @@ public sealed partial class PropertyGrid<TContext> : ComponentBase, IDisposable
         {
             _controller = Controller;
 
-            if (_state is not null)
-                _state.PropertiesChanged -= StatePropertiesChangedAsync;
+            _state?.PropertiesChanged -= StatePropertiesChangedAsync;
 
             _state = Controller.State;
             _state.PropertiesChanged += StatePropertiesChangedAsync;
@@ -42,10 +41,7 @@ public sealed partial class PropertyGrid<TContext> : ComponentBase, IDisposable
 
     /// <inheritdoc/>
     public void Dispose()
-    {
-        if (_state is not null)
-            _state.PropertiesChanged -= StatePropertiesChangedAsync;
-    }
+        => _state?.PropertiesChanged -= StatePropertiesChangedAsync;
 
     private async void StatePropertiesChangedAsync(PropertiesChangedEventArgs args)
     {

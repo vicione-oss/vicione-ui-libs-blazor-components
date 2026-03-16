@@ -3,6 +3,7 @@
 ## 5.6.0 - Unreleased
 
 - `.NET` packages, updated to version `10.0.4`
+- `TextBox`, input change is now detected properly when something is entered via mouse in Windows emoji panel
 
 ## 5.5.0 - 2026-03-10
 

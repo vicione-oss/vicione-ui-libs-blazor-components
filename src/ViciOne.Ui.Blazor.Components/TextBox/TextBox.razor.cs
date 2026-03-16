@@ -292,6 +292,13 @@ public sealed partial class TextBox
             await FocusLost.InvokeAsync(_valueEntered);
     }
 
+    private async Task InputChangedAsync(ChangeEventArgs args)
+    {
+        _valueEntered = $"{args.Value}";
+
+        await HandleValueChangingAsync(_valueEntered);
+    }
+
     private async Task InputKeyUpAsync(KeyboardEventArgs args)
     {
         if (args.Code == "Escape")
@@ -314,10 +321,6 @@ public sealed partial class TextBox
 
             if (EnterPressed.HasDelegate)
                 await EnterPressed.InvokeAsync(_valueEntered);
-        }
-        else
-        {
-            await HandleValueChangingAsync(_valueEntered);
         }
     }
 }

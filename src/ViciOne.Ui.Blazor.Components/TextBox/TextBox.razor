@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Extensions
 
 @{
     var cssClasses = new List<string> { "text-box" };
@@ -38,9 +38,9 @@
 
 <input class="@string.Join(" ", cssClasses)"
        type="@type"
-       @attributes="@attributes"
-       @bind="_valueEntered"
-       @bind:event="oninput"
+       value="@_valueEntered"
+       @oninput="@InputChangedAsync"
        @onkeyup="@InputKeyUpAsync"
        @onblur="@InputBlurAsync"
+       @attributes="@attributes"
        @ref="_inputElementReference" />

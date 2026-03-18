@@ -46,8 +46,8 @@
           "Bogus": "[35.6.4, )",
           "ViciOne.Ui.Blazor.Components": "[5.6.0, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.3.0, )",
-          "ViciOne.Ui.MonochromeIcons.Core": "[4.3.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.5.0, )",
+          "ViciOne.Ui.MonochromeIcons.Core": "[4.5.0, )"
         }
       },
       "vicione.ui.blazor.components": {
@@ -55,7 +55,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.5, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.3.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.5.0, )"
         }
       },
       "Bogus": {
@@ -87,18 +87,18 @@
       },
       "ViciOne.Ui.MonochromeIcons.Components": {
         "type": "CentralTransitive",
-        "requested": "[4.3.0, )",
-        "resolved": "4.3.0",
-        "contentHash": "MHPs9b8DHVBXnScKGY9Bdmi8vvlmmz2+DGVHJQh3J/nJ//JVWX/NL/Ck0s9+jGiqwTz8Ghw6FSCy5EUQftKMdQ==",
+        "requested": "[4.5.0, )",
+        "resolved": "4.5.0",
+        "contentHash": "p8TlJg+V4mPcfYC6YCTPolstxi9MMI5WkXPzMqpoYpotOuI5E/UXck+gYAl2Y3X9EXkufX1uiTxTNEu55buHZQ==",
         "dependencies": {
-          "ViciOne.Ui.MonochromeIcons.Core": "4.3.0"
+          "ViciOne.Ui.MonochromeIcons.Core": "4.5.0"
         }
       },
       "ViciOne.Ui.MonochromeIcons.Core": {
         "type": "CentralTransitive",
-        "requested": "[4.3.0, )",
-        "resolved": "4.3.0",
-        "contentHash": "b41mqM1SpMoCZBBbzmYhIvIuH0NdzUVZ1KMkBiHW4beJJlQNSEW7SnWLzbKv6m14lllz2/dHGXmyIjreSEjV8w=="
+        "requested": "[4.5.0, )",
+        "resolved": "4.5.0",
+        "contentHash": "AURCzsnfh9/07sVma81MxulCDababdNyIaC6ITnc8pvkahf54EnM5oYFBXY9igzlk+3yvP5D3zArob+JHsMYTw=="
       }
     }
   }

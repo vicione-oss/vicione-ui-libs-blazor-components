@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using ViciOne.Ui.MonochromeIcons.Core.Extensions;
+using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
 
 namespace Shared.Pages.SearchBox;
 
@@ -8,7 +9,6 @@ public sealed partial class SearchBoxPage : ComponentBase
 {
     private string? _demo1SearchTerm;
     private string _demo2SearchTerm = string.Empty;
-    private string _searchBoxText = string.Empty;
 
     private readonly MarkupString _loremText1 = new(@"
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
@@ -28,11 +28,5 @@ public sealed partial class SearchBoxPage : ComponentBase
     ");
 
     private readonly string _customIconCssClass =
-        MonochromeIconName.FilterLight.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
-
-    private void SearchBoxTextChanged(string text)
-        => _searchBoxText = text;
-
-    private void SearchBoxExecuteSearch()
-        => _demo1SearchTerm = _searchBoxText;
+        MonochromeIconName.FilterLight.GetCssClasses(SearchBoxComponent.IconSize).ToSpaceSeparated();
 }

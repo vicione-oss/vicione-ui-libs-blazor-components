@@ -233,6 +233,7 @@
 
   <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
     <ItemGroup>
+      <MonochromeIcon Include="clear" Size="18" />
       <MonochromeIcon Include="chevron" Size="16" />
       <MonochromeIcon Include="close-medium" Size="16" />
       <MonochromeIcon Include="delete" Size="24" />
@@ -240,7 +241,7 @@
       <MonochromeIcon Include="error-full" Size="24" />
       <MonochromeIcon Include="expander-light-left" Size="24" />
       <MonochromeIcon Include="expander-light-right" Size="16;24" />
-      <MonochromeIcon Include="filter-light" Size="16" />
+      <MonochromeIcon Include="filter-light" Size="18" />
       <MonochromeIcon Include="folder" Size="32" />
       <MonochromeIcon Include="info-outlined" Size="16" />
       <MonochromeIcon Include="kebab-menu" Size="24" />
@@ -248,7 +249,7 @@
       <MonochromeIcon Include="move-up" Size="24" />
       <MonochromeIcon Include="plus-slim" Size="24" />
       <MonochromeIcon Include="reload" Size="16" />
-      <MonochromeIcon Include="search" Size="16" />
+      <MonochromeIcon Include="search" Size="18" />
     </ItemGroup>
 
     <PropertyGroup>

@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Extensions
 @using ViciOne.Ui.Blazor.Components.Shared
 @using ViciOne.Ui.Blazor.Components.TextBox
 @using ViciOne.Ui.MonochromeIcons.Components
@@ -9,29 +9,60 @@
 
     if (!string.IsNullOrWhiteSpace(CssClass))
         searchBoxCssClasses.AddRange(CssClass.Split(" "));
-
-    var labelCssClasses = new List<string> { "execute-search-label" };
-    if (!Enabled)
-        labelCssClasses.Add("disabled");
 }
 
 <div class="@string.Join(" ", searchBoxCssClasses)">
     <TextBox Placeholder="@Placeholder"
-             Id="@_textBoxId"
-             @bind-Value:get="@Text"
-             @bind-Value:set="@TextBoxValueChangedAsync"
+             Value="@Text"
              ValueChanging="@TextBoxValueChangingAsync"
-             EnterPressed="@TextBoxEnterPressedAsync"
-             Enabled="@Enabled" />
+             ValueChanged="@TextBoxValueChangedAsync"
+             Enabled="@Enabled"
+             @ref="_textBox" />
 
-    <label for="@_textBoxId" class="@string.Join(" ", labelCssClasses)" @onclick="@ExecuteSearchLabelClickAsync">
+    @{
+        var showClearButton = _isSomeTextEntered && Enabled;
+        
+        var clearButtonAttributes = new Dictionary<string, object>();
+        var clearButtonCssClasses = new List<string> { "clear-button" };
+        
+        if (!showClearButton)
+        {
+            clearButtonCssClasses.Add("hidden");
+
+            clearButtonAttributes.Add("tabindex", "-1"); // do not focus when tabbing
+        }
+
+        if (_animateTransitions)
+            clearButtonCssClasses.Add("animate-transition");
+
+        clearButtonAttributes.Add("class", string.Join(" ", clearButtonCssClasses));
+
+        if (!showClearButton || !Enabled)
+            clearButtonAttributes.Add("disabled", "disabled");
+    }
+    <button @attributes="clearButtonAttributes" @onclick="@ClearButtonClickAsync">
+        <MonochromeIcon Name="MonochromeIconName.Clear" Size="@IconSize" />
+    </button>
+
+    @{
+        var iconContainerCssClasses = new List<string> { "icon-container" };
+
+        if (showClearButton)
+            iconContainerCssClasses.Add("hidden");
+        else if (!Enabled)
+            iconContainerCssClasses.Add("disabled");
+
+        if (_animateTransitions)
+            iconContainerCssClasses.Add("animate-transition");
+    }
+    <div class="@string.Join(" ", iconContainerCssClasses)">
         @if (this.IsAnyIconParameterSet())
         {
             @RenderFragments.Icon(this)
         }
         else
         {
-            <MonochromeIcon Name="MonochromeIconName.Search" Size="@MonochromeIconSize.Small" />
+            <MonochromeIcon Name="MonochromeIconName.Search" Size="@IconSize" />
         }
-    </label>
+    </div>
 </div>

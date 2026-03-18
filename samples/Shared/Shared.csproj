@@ -42,7 +42,7 @@
       <MonochromeIcon Include="align-top-by-lowest-element" Size="24" />
       <MonochromeIcon Include="dataflow-solid" Size="24;32" />
       <MonochromeIcon Include="edit" Size="16;24;32" />
-      <MonochromeIcon Include="filter-light" Size="16" />
+      <MonochromeIcon Include="filter-light" Size="18" />
       <MonochromeIcon Include="folder" Size="24" />
       <MonochromeIcon Include="gear-solid" Size="24" />
       <MonochromeIcon Include="hamburger-menu" Size="24" />

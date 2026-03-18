@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Localization.Resources;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using ViciOne.Ui.MonochromeIcons.Core.Extensions;
+using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
 
 namespace ViciOne.Ui.Blazor.Components.Grid.Components;
 
@@ -11,7 +12,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components;
 public sealed partial class GridFilterControl : ComponentBase
 {
     private readonly string _iconCssClass =
-        MonochromeIconName.FilterLight.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
+        MonochromeIconName.FilterLight.GetCssClasses(SearchBoxComponent.IconSize).ToSpaceSeparated();
 
     private string? _placeholder;
 
@@ -44,12 +45,6 @@ public sealed partial class GridFilterControl : ComponentBase
     /// </summary>
     [Parameter]
     public string? CssClass { get; set; }
-
-    /// <summary>
-    /// Raised when the entered value was confirmed, that is either by pressing Enter or clicking the filter icon
-    /// </summary>
-    [Parameter]
-    public EventCallback ApplyFilter { get; set; }
 
     /// <inheritdoc/>
     protected override void OnParametersSet()

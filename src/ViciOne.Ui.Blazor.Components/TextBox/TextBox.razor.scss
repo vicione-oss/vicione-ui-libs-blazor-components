@@ -1,4 +1,4 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/design/colors";
 @use "../Styles/inputs";
 
 @use "sass:color";
@@ -40,6 +40,8 @@
 
     @include inputs.disabled-style();
     @include inputs.invalid-style();
+
+    height: 24px; // ensure that display height is exactly 24px, otherwise a smaller value is calculated when using display scaling > 100%
 
     &:focus {
         outline: none;

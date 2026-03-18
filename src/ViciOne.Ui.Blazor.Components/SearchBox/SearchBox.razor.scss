@@ -1,11 +1,44 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/animations";
+@use "../Styles/design/colors";
+@use "../Styles/buttons/mixins" as buttons;
 @use "../Styles/inputs";
 
 @use "sass:color";
 
+@include animations.opacity-to-zero-keyframes();
+@include animations.opacity-to-one-keyframes();
+
+@mixin hidden-styles()
+{
+    &.hidden {
+        &.animate-transition {
+            opacity: 1;
+
+            @include animations.opacity-to-zero-declarations();
+        }
+
+        &:not(.animate-transition) {
+            opacity: 0;
+        }
+    }
+
+    &:not(.hidden) {
+        &:not(.disabled) { // don't apply hidden styles when disabled, as otherwise opacity set by .disabled is overriden
+            &.animate-transition {
+                opacity: 0;
+
+                @include animations.opacity-to-one-declarations();
+            }
+
+            &:not(.animate-transition) {
+                opacity: 1;
+            }
+        }
+    }
+}
+
 .search-box {
     position: relative;
-
     display: inline-grid;
     align-items: center;
 
@@ -14,28 +47,32 @@
         align-self: stretch;
     }
 
-    ::deep .icon {
-        width: 16px;
-        height: 16px;
-    }
-
-    .execute-search-label {
+    .icon-container {
         position: absolute;
         right: inputs.$border-width + 3px;
-
+        display: flex;
+        align-items: center;
         color: color.change(colors.$font-light, $alpha: 0.8);
+        pointer-events: none;
 
+        ::deep .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        @include inputs.disabled-style();
+        @include hidden-styles();
+    }
+
+    .clear-button {
+        position: absolute;
+        right: inputs.$border-width + 3px;
         display: flex;
         align-items: center;
 
-        @include inputs.disabled-style();
-
-        &:not(.disabled) {
-            cursor: pointer;
-
-            &:hover {
-                color: colors.$font-light;
-            }
-        }
+        @include buttons.lucent-styling();
+        @include buttons.no-outline-on-focus();
+        @include buttons.show-cursor-when-not-disabled();
+        @include hidden-styles();
     }
 }

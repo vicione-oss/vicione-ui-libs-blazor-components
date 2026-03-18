@@ -1,9 +1,18 @@
 # Changelog
 
-## 5.6.0 - Unreleased
+## 5.6.0 - 2026-03-18
 
 - `.NET` packages, updated to version `10.0.5`
-- `TextBox`, input change is now detected properly when something is entered via mouse in Windows emoji panel
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.5.0`
+- `GridFilterControl`, removed `ApplyFilter`
+- `SearchBox`
+  - Show reset icon instead of search or configured icon when some text is entered
+  - Removed `ExecuteSearch`
+  - Changed icon size from 16px to 18px
+- `Section`, no reset of CSS animation state when hidden
+- `TextBox`
+  - Input change is now detected properly when something is entered via mouse in Windows emoji panel
+  - Height set to `24px` to avoid scaling issues
 
 ## 5.5.0 - 2026-03-10
 

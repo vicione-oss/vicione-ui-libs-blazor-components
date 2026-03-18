@@ -1,4 +1,4 @@
-﻿@use "../../Styles/design/scrollbar";
+@use "../../Styles/design/scrollbar";
 
 .section {
     grid-area: sections;
@@ -10,7 +10,10 @@
     @include scrollbar.adjust-styles();
 
     &.hidden {
-        display: none;
-        visibility: hidden;
+        visibility: hidden; // adjust visibility instead of "display: none" to avoid reset of CSS animation state that might exists in section content ...
+
+        // ... which also requires a height of 0px to ensure the now invisible section is not interfering with layout
+        height: 0px;
+        overflow: hidden;
     }
 }

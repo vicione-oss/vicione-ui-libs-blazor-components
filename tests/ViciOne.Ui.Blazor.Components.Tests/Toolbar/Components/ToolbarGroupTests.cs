@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -41,7 +41,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleAddChild(IToolbarChild c) => child = c;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .AddChildContent<ToolbarGroup>());
 
@@ -61,7 +61,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleRemoveChild(IToolbarChild c) => removedChild = c;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .Add(x => x.HandleRemoveChild, HandleRemoveChild)
             .AddChildContent<ToolbarGroup>());
@@ -85,7 +85,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarGroup>());
 
@@ -110,7 +110,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarGroup>());
@@ -135,7 +135,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarGroup>());
 
@@ -147,6 +147,39 @@ public sealed class ToolbarGroupTests : IDisposable
 
         // Assert
         childSizeChangedCount.Should().Be(1);
+    }
+
+    [Theory]
+    [InlineData(1, false)]
+    [InlineData(2, false)]
+    [InlineData(3, false)]
+    [InlineData(1, true)]
+    [InlineData(2, true)]
+    [InlineData(3, true)]
+    public void Should_show_separator_only_when_group_is_not_only_child(int groupCount, bool alignRight)
+    {
+        // Arrange & Act
+        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+            .AddChildContent(builder =>
+            {
+                var sequence = 1;
+
+                for (var i = 0; i < groupCount; i++)
+                {
+                    builder.OpenComponent<ToolbarGroup>(sequence++);
+                    builder.AddComponentParameter(sequence++, nameof(ToolbarGroup.AlignRight), alignRight);
+                    builder.CloseComponent();
+                }
+            }));
+
+        // Assert
+        var groups = renderedComponent.FindAll(".toolbar-group");
+        groups.Should().HaveCount(groupCount);
+
+        groups[0].ClassList.Should().NotContain("with-separator");
+
+        for (var i = 1; i < groupCount; i++)
+            groups[i].ClassList.Should().Contain("with-separator");
     }
 
     private void SetContainerSize(ElementReference elementReference, int width = 0, int paddingX = 0, int marginX = 0, int borderX = 0)
@@ -167,8 +200,10 @@ public sealed class ToolbarGroupTests : IDisposable
             }
         );
 
-    private sealed class ToolbarFakeParent : ComponentBase, IToolbarItemParent
+    private sealed class ToolbarGroupParent : ComponentBase, IToolbarItemParent
     {
+        private readonly List<IToolbarChild> _children = [];
+
         [Parameter]
         public Action<IToolbarChild>? HandleAddChild { get; set; }
 
@@ -181,11 +216,21 @@ public sealed class ToolbarGroupTests : IDisposable
         [Parameter]
         public RenderFragment? ChildContent { get; set; }
 
+        public IReadOnlyList<IToolbarChild> Children => _children;
+
         public void AddChild(IToolbarChild child)
-            => HandleAddChild?.Invoke(child);
+        {
+            _children.Add(child);
+
+            HandleAddChild?.Invoke(child);
+        }
 
         public void RemoveChild(IToolbarChild child)
-            => HandleRemoveChild?.Invoke(child);
+        {
+            _children.Remove(child);
+
+            HandleRemoveChild?.Invoke(child);
+        }
 
         public void ChildSizeChanged()
             => HandleChildChanged?.Invoke();

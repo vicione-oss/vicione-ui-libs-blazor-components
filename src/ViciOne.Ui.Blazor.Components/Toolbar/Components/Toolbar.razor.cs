@@ -1,4 +1,4 @@
-﻿using System.Timers;
+using System.Timers;
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
@@ -42,6 +42,8 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
     /// </remarks>
     [Parameter]
     public RenderFragment? ChildContent { get; init; }
+
+    IReadOnlyList<IToolbarChild> IToolbarItemParent.Children => _children;
 
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Models;
@@ -19,6 +19,7 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
 
     private bool _hidden;
     private bool _initialized;
+    private bool _withSeparator;
 
     // needs to be a distinct variable from AlignRight since on rerender, the value will get overwritten
     private bool _suppressAlignRight;
@@ -52,9 +53,8 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
 
     DomRect? IToolbarChild.DomRect => _previousElementSizeChangedEventArgs?.DomRect;
     CssStyleDeclaration? IToolbarChild.Style => _previousElementSizeChangedEventArgs?.Style;
-
-    IReadOnlyList<IToolbarChild> IToolbarChild.Children
-        => _children.AsReadOnly();
+    IReadOnlyList<IToolbarChild> IToolbarChild.Children => _children;
+    IReadOnlyList<IToolbarChild> IToolbarItemParent.Children => _children;
 
     /// <inheritdoc/>
     protected override void OnInitialized()
@@ -66,6 +66,8 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
 
         if (Parent == null)
             throw new InvalidOperationException($"{GetType().FullName} must be placed inside a {typeof(Toolbar).FullName}.");
+
+        _withSeparator = Parent.Children.Count > 0;
 
         Parent.AddChild(this);
     }

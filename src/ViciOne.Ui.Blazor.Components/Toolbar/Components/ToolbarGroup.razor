@@ -1,16 +1,22 @@
-﻿@{
+@{
     List<string> groupCssClasses = ["toolbar-group"];
+
     if (_hidden)
         groupCssClasses.Add("hidden");
+
     if (!_initialized)
         groupCssClasses.Add("invisible");
+
     if (InMenu)
         groupCssClasses.Add("in-menu");
+
+    if (_withSeparator)
+        groupCssClasses.Add("with-separator");
 }
 
 @if (!InMenu && AlignRight && !_suppressAlignRight)
 {
-    <div class="toolbar-group-alignment-spacer" />
+    <div class="toolbar-group-alignment-spacer"></div>
 }
 
 <div @ref="_container" class=@string.Join(" ", groupCssClasses)>

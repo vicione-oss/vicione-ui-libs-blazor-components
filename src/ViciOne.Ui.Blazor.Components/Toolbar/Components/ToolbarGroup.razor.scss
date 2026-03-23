@@ -1,4 +1,4 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 
 .toolbar-group-alignment-spacer {
     margin-left: auto;
@@ -15,8 +15,11 @@
         display: contents;
     }
 
-    &:not(:first-child) {
+    &.with-separator {
         border-left: 1px solid colors.$border;
+    }
+
+    &:not(:first-child) {
         padding-left: 6.5px;
         margin-left: 6.5px;
 

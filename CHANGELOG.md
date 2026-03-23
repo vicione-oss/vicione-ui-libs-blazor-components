@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.7.0 - Unreleased
+
+- `ToolbarGroup`, separator is displayed only if the group is not the only child element
+
 ## 5.6.0 - 2026-03-18
 
 - `.NET` packages, updated to version `10.0.5`
@@ -282,7 +286,7 @@
 
 ## 1.8.1 - 2024-10-30
 
-- `SectionRail`, left seperator removed
+- `SectionRail`, left separator removed
 
 ## 1.8.0 - 2024-10-28
 

@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -180,6 +180,8 @@ public sealed class ToolbarItemBaseTests : IDisposable
 
         [Parameter]
         public RenderFragment? ChildContent { get; set; }
+
+        public IReadOnlyList<IToolbarChild> Children => [];
 
         public void AddChild(IToolbarChild child)
             => HandleAddChild?.Invoke(child);

@@ -4,6 +4,7 @@
 
 - `bunit` package, updated to version `2.6.2`
 - `ToolbarGroup`, separator is displayed only if the group is not the only child element
+- `ToolbarItemBase`, added `CssClass` parameter
 
 ## 5.6.0 - 2026-03-18
 

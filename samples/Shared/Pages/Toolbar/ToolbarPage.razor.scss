@@ -1,6 +1,10 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 
 .toolbar-container {
     border: 1px solid colors.$border;
     padding: 8px;
+
+    ::deep .error {
+        color: colors.$error;
+    }
 }

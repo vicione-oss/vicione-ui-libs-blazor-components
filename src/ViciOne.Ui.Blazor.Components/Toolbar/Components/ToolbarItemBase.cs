@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Models;
@@ -31,6 +31,12 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
     /// </summary>
     [CascadingParameter(Name = "InMenu")]
     protected bool InMenu { get; set; }
+
+    /// <summary>
+    /// The text additionally rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
 
     /// <summary>
     /// Callback that is executed when the item is clicked.
@@ -166,6 +172,12 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
     /// </summary>
     protected IEnumerable<string> GetBaseCssClasses()
     {
+        if (!string.IsNullOrWhiteSpace(CssClass))
+        {
+            foreach (var cssClass in CssClass.Split(" "))
+                yield return cssClass;
+        }
+
         if (!Enabled)
             yield return "disabled";
 

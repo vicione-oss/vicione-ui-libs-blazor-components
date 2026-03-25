@@ -9,14 +9,13 @@ using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using ViciOne.Ui.Blazor.Components.Toolbar.Components;
 using Xunit;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Toolbar.Components;
 
 public sealed class ToolbarGroupTests : IDisposable
 {
     private readonly IResizeObserver _resizeObserver;
-    private readonly TestContext _testContext;
+    private readonly BunitContext _testContext;
 
     private readonly List<ElementReference> _elementReferences = [];
 
@@ -24,7 +23,7 @@ public sealed class ToolbarGroupTests : IDisposable
     {
         _resizeObserver = Substitute.For<IResizeObserver>();
 
-        _testContext = new TestContext();
+        _testContext = new BunitContext();
         _testContext.Services.AddScoped(_ => _resizeObserver);
 
         _resizeObserver.ObserveAsync(Arg.Do<ElementReference>(_elementReferences.Add), Arg.Any<bool>());
@@ -41,7 +40,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleAddChild(IToolbarChild c) => child = c;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarGroupParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .AddChildContent<ToolbarGroup>());
 
@@ -61,7 +60,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleRemoveChild(IToolbarChild c) => removedChild = c;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarGroupParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .Add(x => x.HandleRemoveChild, HandleRemoveChild)
             .AddChildContent<ToolbarGroup>());
@@ -85,7 +84,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarGroupParent>(b => b
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarGroup>());
 
@@ -110,7 +109,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarGroupParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarGroup>());
@@ -135,7 +134,7 @@ public sealed class ToolbarGroupTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarGroupParent>(b => b
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarGroup>());
 
@@ -159,7 +158,7 @@ public sealed class ToolbarGroupTests : IDisposable
     public void Should_show_separator_only_when_group_is_not_only_child(int groupCount, bool alignRight)
     {
         // Arrange & Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarGroupParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarGroupParent>(b => b
             .AddChildContent(builder =>
             {
                 var sequence = 1;

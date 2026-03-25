@@ -3,17 +3,16 @@ using Bunit;
 using Microsoft.AspNetCore.Components;
 using Xunit;
 using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.SearchBox;
 
 public sealed class SearchBoxTests : IDisposable
 {
-    private readonly TestContext _testContext;
+    private readonly BunitContext _testContext;
 
     public SearchBoxTests()
     {
-        _testContext = new TestContext();
+        _testContext = new BunitContext();
 
         // TextBox imports a JS module; set up a catch-all so bUnit doesn't throw
         _testContext.JSInterop.Mode = JSRuntimeMode.Loose;
@@ -26,7 +25,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_render_without_parameters()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>();
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
 
         // Assert
         renderedComponent.Find(".search-box").Should().NotBeNull();
@@ -39,7 +38,7 @@ public sealed class SearchBoxTests : IDisposable
         const string Placeholder = "Search here...";
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Placeholder, Placeholder));
 
         // Assert
@@ -51,7 +50,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_apply_custom_css_class()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.CssClass, "my-custom-class"));
 
         // Assert
@@ -63,7 +62,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_render_disabled_input_when_not_enabled()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Enabled, false));
 
         // Assert
@@ -75,7 +74,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_hide_clear_button_when_text_is_empty()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>();
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
 
         // Assert
         var clearButton = renderedComponent.Find("button");
@@ -86,7 +85,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_show_clear_button_when_text_is_set()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello"));
 
         // Assert
@@ -98,7 +97,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_disable_clear_button_when_not_enabled_even_with_text()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello")
             .Add(s => s.Enabled, false));
 
@@ -111,7 +110,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_hide_icon_container_when_text_is_entered()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello"));
 
         // Assert
@@ -123,7 +122,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_show_icon_container_when_text_is_empty()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>();
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
 
         // Assert
         var iconContainer = renderedComponent.Find(".icon-container");
@@ -134,7 +133,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_add_disabled_class_to_icon_container_when_not_enabled()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Enabled, false));
 
         // Assert
@@ -147,7 +146,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Arrange
         string? receivedValue = null;
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.TextChanging, EventCallback.Factory.Create<string?>(this, v => receivedValue = v)));
 
         // Act
@@ -163,7 +162,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Arrange
         string? receivedValue = null;
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.TextChanged, EventCallback.Factory.Create<string?>(this, v => receivedValue = v)));
 
         // Act
@@ -181,7 +180,7 @@ public sealed class SearchBoxTests : IDisposable
         // Arrange
         var changingValue = (string?)"initial";
         var changedValue = (string?)"initial";
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello")
             .Add(s => s.TextChanging, EventCallback.Factory.Create<string?>(this, v => changingValue = v))
             .Add(s => s.TextChanged, EventCallback.Factory.Create<string?>(this, v => changedValue = v)));
@@ -199,7 +198,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_hide_clear_button_after_clearing()
     {
         // Arrange
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello"));
 
         // Precondition
@@ -216,7 +215,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_show_icon_container_after_clearing()
     {
         // Arrange
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello"));
 
         // Precondition
@@ -233,7 +232,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_apply_animate_transition_class_after_input_changes()
     {
         // Arrange
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>();
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
 
         // Act – type into the input to trigger animation flag
         renderedComponent.Find("input").Input("x");
@@ -250,7 +249,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_set_tabindex_negative_one_on_hidden_clear_button()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>();
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
 
         // Assert
         var clearButton = renderedComponent.Find("button");
@@ -261,7 +260,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_not_set_tabindex_on_visible_clear_button()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello"));
 
         // Assert
@@ -273,7 +272,7 @@ public sealed class SearchBoxTests : IDisposable
     public void Should_render_default_search_icon_when_no_icon_parameters_set()
     {
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>();
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
 
         // Assert – the icon-container should contain the default MonochromeIcon (svg element)
         var iconContainer = renderedComponent.Find(".icon-container");
@@ -287,7 +286,7 @@ public sealed class SearchBoxTests : IDisposable
         const string CustomIconCss = "my-custom-icon";
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<SearchBoxComponent>(b => b
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.IconCssClass, CustomIconCss));
 
         // Assert

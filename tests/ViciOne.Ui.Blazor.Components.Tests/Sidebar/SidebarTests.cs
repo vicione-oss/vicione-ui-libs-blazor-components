@@ -1,4 +1,4 @@
-﻿using Bunit;
+using Bunit;
 using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Factories;
 using ViciOne.Ui.Blazor.Components.Sidebar.Enums;
@@ -17,10 +17,10 @@ public sealed class SidebarTests
     public void ShouldRenderComponent()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.RenderComponent<SidebarComponent>();
+        var renderedComponent = testContext.Render<SidebarComponent>();
 
         // Assert
         renderedComponent.Should().NotBeNull();
@@ -34,10 +34,10 @@ public sealed class SidebarTests
         var placementTyped = TypeSafeEnumFactory<SidebarPlacement>.Create(placement);
         var modifierCssClass = placementTyped.ToModifierCssClass();
 
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.RenderComponent<SidebarComponent>(
+        var renderedComponent = testContext.Render<SidebarComponent>(
             b => b.Add(s => s.Placement, placementTyped));
 
         var sidebar = renderedComponent.Find(".sidebar");
@@ -50,12 +50,12 @@ public sealed class SidebarTests
     public void ShouldRenderWithCompactWidth()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
 
         const int CompactWidth = 50;
 
         // Act
-        var renderedComponent = testContext.RenderComponent<SidebarComponent>(b => b
+        var renderedComponent = testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Compact)
             .Add(s => s.CompactWidth, CompactWidth));
 
@@ -69,13 +69,13 @@ public sealed class SidebarTests
     public void ShouldRenderWithFluidMinimumWidthByDefault()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
 
         const int FluidMinimumWidth = 100;
         const int FluidMaximumWidth = 200;
 
         // Act
-        var renderedComponent = testContext.RenderComponent<SidebarComponent>(b => b
+        var renderedComponent = testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, FluidMinimumWidth)
             .Add(s => s.FluidMaximumWidth, FluidMaximumWidth));
@@ -90,10 +90,10 @@ public sealed class SidebarTests
     public void ShouldCorrectFluidMinimumWidthToBelowOrEqualFluidMaximumWidth()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.RenderComponent<SidebarComponent>(b => b
+        var renderedComponent = testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, 300)
             .Add(s => s.FluidMaximumWidth, 200));
@@ -108,12 +108,12 @@ public sealed class SidebarTests
     public void ShouldRenderChildContent()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
 
         const string ContentText = "Lorem ipsum";
 
         // Act
-        var renderedComponent = testContext.RenderComponent<SidebarComponent>(
+        var renderedComponent = testContext.Render<SidebarComponent>(
             b => b.AddChildContent(ContentText));
 
         var content = renderedComponent.Find(".content");

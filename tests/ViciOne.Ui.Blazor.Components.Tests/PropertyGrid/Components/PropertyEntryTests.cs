@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using AngleSharp.Dom;
 using AwesomeAssertions;
 using Bunit;
@@ -27,14 +27,14 @@ public sealed partial class PropertyEntryTests
     public void Should_render_component()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
         testContext.Services.AddScoped(_ => Substitute.For<IPropertyEditorComponentRegistry>());
 
         var propertyGridController = Substitute.For<IPropertyGridController>();
         var propertyGridItem = Substitute.For<IPropertyGridItem<int>>();
 
         // Act
-        var renderedComponent = testContext.RenderComponent<PropertyEntry<int>>(b => b
+        var renderedComponent = testContext.Render<PropertyEntry<int>>(b => b
             .AddCascadingValue(propertyGridController)
             .Add(p => p.PropertyGridItem, propertyGridItem));
 
@@ -70,7 +70,7 @@ public sealed partial class PropertyEntryTests
         Expression<Func<Foo<TPropertyValue>, TPropertyValue>> propertySelector, params Foo<TPropertyValue>[] instances)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        using var testContext = new BunitContext();
         testContext.JSInterop.SetupModule("./_content/ViciOne.Ui.Blazor.Components/tooltip/components/tooltip-display.js");
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -90,7 +90,7 @@ public sealed partial class PropertyEntryTests
             .First();
 
         // Act
-        var renderedComponent = testContext.RenderComponent<TestPage<TPropertyValue>>(b => b
+        var renderedComponent = testContext.Render<TestPage<TPropertyValue>>(b => b
             .Add(p => p.PropertyGridController, propertyGridController)
             .Add(p => p.PropertyGridItem, propertyGridItem));
 
@@ -114,7 +114,7 @@ public sealed partial class PropertyEntryTests
         assertSelectionPropertyEditorDisabledMethod.Invoke(null, [renderedComponent]);
     }
 
-    private static void AssertSelectionPropertyEditorDisabled<TPropertyValue>(IRenderedFragment renderedComponent)
+    private static void AssertSelectionPropertyEditorDisabled<TPropertyValue>(IRenderedComponent<IComponent> renderedComponent)
     {
         var propertyEditor = renderedComponent.FindComponent<SelectionPropertyEditor<TPropertyValue>>();
         propertyEditor.Instance.Enabled.Should().BeFalse();

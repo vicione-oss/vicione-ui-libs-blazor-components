@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,14 +8,13 @@ using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using Xunit;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Components;
 
 public sealed class HorizontalScrollContainerTests : IDisposable
 {
     private readonly IResizeObserver _resizeObserver;
-    private readonly TestContext _testContext;
+    private readonly BunitContext _testContext;
 
     private readonly List<ElementReference> _elementReferences = [];
 
@@ -23,7 +22,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     {
         _resizeObserver = Substitute.For<IResizeObserver>();
 
-        _testContext = new TestContext();
+        _testContext = new BunitContext();
         _testContext.Services.AddScoped(_ => _resizeObserver);
 
         _resizeObserver.ObserveAsync(Arg.Do<ElementReference>(_elementReferences.Add));
@@ -40,7 +39,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
         var receivedScrollEvent = false;
         var scrollStep = 0;
 
-        var renderedComponent = _testContext.RenderComponent<HorizontalScrollContainer>(b => b
+        var renderedComponent = _testContext.Render<HorizontalScrollContainer>(b => b
             .Add(p => p.LastShownPixel, 0)
             .Add(p => p.MaxScrollStepCount, MaxScrollStep)
             .Add(p => p.OnScroll, input => { receivedScrollEvent = true; scrollStep = input; }));
@@ -66,14 +65,14 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     public void Has_scroll_depending_on_content_size(int availableSpace, int contentSize, bool expectScrolling)
     {
         // Arrange
-        var renderedComponent = _testContext.RenderComponent<HorizontalScrollContainer>(b => b
+        var renderedComponent = _testContext.Render<HorizontalScrollContainer>(b => b
             .Add(p => p.LastShownPixel, 0)
             .Add(p => p.MaxScrollStepCount, 10)
             .Add(p => p.OnScroll, () => { }));
 
         // Act
         SetContainerSizes(availableSpace, contentSize);
-        renderedComponent.SetParametersAndRender(b => b.Add(p => p.LastShownPixel, contentSize));
+        renderedComponent.Render(b => b.Add(p => p.LastShownPixel, contentSize));
 
         // Assert
         var hasScroll = renderedComponent.FindAll(".monochrome-icon-expander-light-left").Any();
@@ -86,14 +85,14 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     {
         // Arrange
         int? receivedScrollStep = null;
-        var renderedComponent = _testContext.RenderComponent<HorizontalScrollContainer>(b => b
+        var renderedComponent = _testContext.Render<HorizontalScrollContainer>(b => b
             .Add(p => p.LastShownPixel, 0)
             .Add(p => p.MaxScrollStepCount, 10)
             .Add(p => p.OnScroll, input => receivedScrollStep = input));
 
         SetContainerSizes(10, 100);
 
-        renderedComponent.SetParametersAndRender(parameters => parameters
+        renderedComponent.Render(parameters => parameters
             .Add(p => p.LastShownPixel, 100)
         );
 
@@ -116,7 +115,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     public void On_scroll_handles_active_state_of_scroll_buttons()
     {
         // Arrange
-        var renderedComponent = _testContext.RenderComponent<HorizontalScrollContainer>(b => b
+        var renderedComponent = _testContext.Render<HorizontalScrollContainer>(b => b
             .Add(p => p.LastShownPixel, 0)
             .Add(p => p.MaxScrollStepCount, 3)
             .Add(p => p.OnScroll, _ => { }));
@@ -124,7 +123,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
         SetContainerSizes(10, 100);
 
         // Act & Assert
-        renderedComponent.SetParametersAndRender(b => b.Add(p => p.LastShownPixel, 100));
+        renderedComponent.Render(b => b.Add(p => p.LastShownPixel, 100));
 
         // simulate scroll appearing and taking some space
         SetContainerSizes(10, 99);
@@ -168,14 +167,14 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     private static void ScrollLeft(IRenderedComponent<HorizontalScrollContainer> renderedComponent, int stepSizePixels = 10)
     {
         renderedComponent.Find(".monochrome-icon-expander-light-left.active").Click();
-        renderedComponent.SetParametersAndRender(
+        renderedComponent.Render(
             b => b.Add(p => p.LastShownPixel, renderedComponent.Instance.LastShownPixel - stepSizePixels));
     }
 
     private static void ScrollRight(IRenderedComponent<HorizontalScrollContainer> renderedComponent, int stepSizePixels = 10)
     {
         renderedComponent.Find(".monochrome-icon-expander-light-right.active").Click();
-        renderedComponent.SetParametersAndRender(
+        renderedComponent.Render(
             b => b.Add(p => p.LastShownPixel, renderedComponent.Instance.LastShownPixel + stepSizePixels));
     }
 }

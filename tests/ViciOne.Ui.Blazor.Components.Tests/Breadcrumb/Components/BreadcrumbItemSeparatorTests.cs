@@ -1,9 +1,8 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Bunit;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Components;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Models;
 using Xunit;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Components;
 
@@ -15,8 +14,8 @@ public sealed class BreadcrumbItemSeparatorTests
         // Arrange
         List<BreadcrumbItem> items = [new() { Name = "A" }, new() { Name = "B" }];
 
-        using var testContext = new TestContext();
-        var renderedComponent = testContext.RenderComponent<BreadcrumbItemSeparator>(b => b
+        using var testContext = new BunitContext();
+        var renderedComponent = testContext.Render<BreadcrumbItemSeparator>(b => b
             .Add(p => p.Items, items)
             .Add(p => p.ActiveItem, items[0]));
 

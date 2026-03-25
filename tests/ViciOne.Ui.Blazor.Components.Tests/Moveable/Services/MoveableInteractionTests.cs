@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -26,7 +26,7 @@ public sealed class MoveableInteractionTests
     public async Task Assert_js_module_import_on_attach_async(bool isAlreadyAttached, bool shouldImportJsModule)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -71,7 +71,7 @@ public sealed class MoveableInteractionTests
         bool shouldInvokeJsAttach)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -131,7 +131,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_throw_when_attach_called_after_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -151,7 +151,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_throw_when_remove_called_after_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -171,7 +171,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_only_dispose_once()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -192,7 +192,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_invoke_dispose_on_js_attach_result_on_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -218,7 +218,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_invoke_dispose_on_js_attach_result_when_remove_async()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -244,7 +244,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_throw_when_removing_non_attached_moveable()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -262,7 +262,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_invoke_add_pointer_capture_behavior_on_js_attach_result()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -293,7 +293,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_invoke_remove_pointer_capture_behavior_on_js_attach_result()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -324,7 +324,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_throw_when_add_pointer_capture_behavior_called_after_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -346,7 +346,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_throw_when_remove_pointer_capture_behavior_called_after_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -368,7 +368,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_invoke_add_when_pointer_capture_behavior_returns_null()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 
@@ -398,7 +398,7 @@ public sealed class MoveableInteractionTests
     public async Task Should_not_invoke_add_when_moveable_not_attached()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForMoveInteraction()
             .AddMoveable();
 

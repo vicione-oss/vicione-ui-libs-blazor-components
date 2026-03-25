@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -9,7 +9,6 @@ using ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using Xunit;
 using BreadcrumbComponent = ViciOne.Ui.Blazor.Components.Breadcrumb.Components.Breadcrumb;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Components;
 
@@ -21,13 +20,13 @@ public sealed class BreadcrumbTests
         // Arrange
         var item = new BreadcrumbItem { Name = "root" };
 
-        using var testContext = new TestContext();
+        using var testContext = new BunitContext();
         testContext.Services.AddBreadcrumb()
             .AddScoped(_ => Substitute.For<IResizeObserver>())
             .AddScoped(_ => Substitute.For<IHtmlElementHelper>());
 
         // Act
-        var renderedComponent = testContext.RenderComponent<BreadcrumbComponent>(
+        var renderedComponent = testContext.Render<BreadcrumbComponent>(
             b => b.Add(p => p.CurrentItem, item));
 
         // Assert
@@ -42,13 +41,13 @@ public sealed class BreadcrumbTests
         var child = new BreadcrumbItem { Name = "child" };
         item.AddChild(child);
 
-        using var testContext = new TestContext();
+        using var testContext = new BunitContext();
         testContext.Services.AddBreadcrumb()
             .AddScoped(_ => Substitute.For<IResizeObserver>())
             .AddScoped(_ => Substitute.For<IHtmlElementHelper>());
 
         // Act
-        var renderedComponent = testContext.RenderComponent<BreadcrumbComponent>(
+        var renderedComponent = testContext.Render<BreadcrumbComponent>(
             b => b.Add(p => p.CurrentItem, item));
 
         // Assert

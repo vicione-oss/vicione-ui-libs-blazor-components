@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using AwesomeAssertions;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +20,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Assert_js_module_import_on_get_js_object_async(bool isAlreadyInitialized, bool shouldImportJsModule)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -61,7 +61,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_invoke_create_instance_on_get_js_object_async(bool isAlreadyInitialized, bool shouldInvokeCreateInstance)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -100,7 +100,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_pass_grid_size_to_create_instance()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -125,7 +125,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_return_null_when_disposed()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -149,7 +149,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_set_grid_size(int gridSize)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -175,7 +175,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_not_update_js_object_when_grid_size_unchanged(int gridSize)
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -200,7 +200,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_invoke_set_grid_size_on_js_object_when_already_initialized()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -225,7 +225,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_not_throw_when_set_grid_size_called_after_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -244,7 +244,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_only_dispose_once()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 
@@ -265,7 +265,7 @@ public sealed class SnapToGridPointerCaptureBehaviorTests
     public async Task Should_dispose_js_references_on_dispose()
     {
         // Arrange
-        using var testContext = new Bunit.TestContext();
+        await using var testContext = new BunitContext();
         testContext.Services.MockServicesForSnapToGridPointerCaptureBehavior()
             .AddSnapToGridPointerCaptureBehavior();
 

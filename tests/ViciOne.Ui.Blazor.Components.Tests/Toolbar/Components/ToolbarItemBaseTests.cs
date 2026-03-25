@@ -9,14 +9,13 @@ using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using ViciOne.Ui.Blazor.Components.Toolbar.Components;
 using Xunit;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Toolbar.Components;
 
 public sealed class ToolbarItemBaseTests : IDisposable
 {
     private readonly IResizeObserver _resizeObserver;
-    private readonly TestContext _testContext;
+    private readonly BunitContext _testContext;
 
     private readonly List<ElementReference> _elementReferences = [];
 
@@ -24,7 +23,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
     {
         _resizeObserver = Substitute.For<IResizeObserver>();
 
-        _testContext = new TestContext();
+        _testContext = new BunitContext();
         _testContext.Services.AddScoped(_ => _resizeObserver);
 
         _resizeObserver.ObserveAsync(Arg.Do<ElementReference>(_elementReferences.Add), Arg.Any<bool>());
@@ -41,7 +40,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
         void HandleAddChild(IToolbarChild c) => child = c;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .AddChildContent<ToolbarButton>());
 
@@ -61,7 +60,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
         void HandleRemoveChild(IToolbarChild c) => removedChild = c;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .Add(x => x.HandleRemoveChild, HandleRemoveChild)
             .AddChildContent<ToolbarButton>());
@@ -85,7 +84,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarButton>());
 
@@ -110,7 +109,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
             .Add(x => x.HandleAddChild, HandleAddChild)
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarButton>());
@@ -135,7 +134,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
         void HandleChildChanged() => childSizeChangedCount++;
 
         // Act
-        var renderedComponent = _testContext.RenderComponent<ToolbarFakeParent>(b => b
+        var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
             .Add(x => x.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarButton>());
 

@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,6 @@ using ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Extensions;
 using Xunit;
-using TestContext = Bunit.TestContext;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Services;
 
@@ -24,7 +23,7 @@ public sealed class HtmlElementHelperTests
         var size1 = new DomRect { Width = Width1, Height = 1 };
         var size2 = new DomRect { Width = Width2, Height = 1 };
 
-        using var testContext = new TestContext();
+        await using var testContext = new BunitContext();
         testContext.JSInterop.SetupGetBoundingClientRects().SetResult([size1, size2]);
 
         var jsRuntime = testContext.Services.GetRequiredService<IJSRuntime>();
@@ -45,7 +44,7 @@ public sealed class HtmlElementHelperTests
         var size1 = new DomRect { Width = 10, Height = 1 };
         var size2 = new DomRect { Width = 20, Height = 1 };
 
-        using var testContext = new TestContext();
+        await using var testContext = new BunitContext();
         testContext.JSInterop.SetupGetBoundingClientRects().SetResult([size1, size2]);
 
         var jsRuntime = testContext.Services.GetRequiredService<IJSRuntime>();
@@ -64,7 +63,7 @@ public sealed class HtmlElementHelperTests
     public async Task Should_return_empty_when_element_does_not_exist()
     {
         // Arrange
-        using var testContext = new TestContext();
+        await using var testContext = new BunitContext();
         testContext.JSInterop.SetupGetBoundingClientRects().SetResult([]);
 
         var jsRuntime = testContext.Services.GetRequiredService<IJSRuntime>();

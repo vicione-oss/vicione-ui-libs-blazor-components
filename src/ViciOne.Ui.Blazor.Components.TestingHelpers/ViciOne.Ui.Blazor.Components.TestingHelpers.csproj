@@ -1,7 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Bunit" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\..\src\ViciOne.Ui.Blazor.Components\ViciOne.Ui.Blazor.Components.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ViciOne.Ui.Blazor.Components.Tests" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Toolbar.Enums
+@using ViciOne.Ui.Blazor.Components.Toolbar.Enums
 @using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
@@ -10,9 +10,11 @@
 
     if (Active)
         cssClasses.Add("active");
+
+    var title = string.IsNullOrWhiteSpace(Tooltip) ? Text : Tooltip;
 }
 
-<div @ref="_container" tabindex="0" class=@string.Join(" ", cssClasses) title="@Tooltip" @onclick="OnClick" @onkeydown="HandleKeyDownAsync">
+<div @ref="_container" tabindex="0" class=@string.Join(" ", cssClasses) title="@title" @onclick="OnClick" @onkeydown="HandleKeyDownAsync">
     @if (IconName != null)
     {
         <MonochromeIcon Name="IconName.Value" Size="MonochromeIconSize.SmallMedium" />

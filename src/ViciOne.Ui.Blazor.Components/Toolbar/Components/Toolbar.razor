@@ -35,6 +35,7 @@
                     if (child is ToolbarButton button)
                     {
                         <ToolbarButton @key="child"
+                                       CssClass="@button.CssClass"
                                        IconName="@button.IconName"
                                        OnClick="button.OnClick"
                                        Text="@button.Text"
@@ -47,6 +48,7 @@
                     else if (child is ToolbarContent content)
                     {
                         <ToolbarContent @key="child"
+                                        CssClass="@content.CssClass"
                                         OnClick="@content.OnClick"
                                         Tooltip="@content.Tooltip"
                                         Enabled="@content.Enabled"

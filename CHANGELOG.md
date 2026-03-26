@@ -3,6 +3,7 @@
 ## 5.7.0 - Unreleased
 
 - `bunit` package, updated to version `2.6.2`
+- `ToolbarButton`, title attribute falls back to `Text` when empty or no `Tooltip` is passed
 - `ToolbarGroup`, separator is displayed only if the group is not the only child element
 - `ToolbarItemBase`, added `CssClass` parameter
 

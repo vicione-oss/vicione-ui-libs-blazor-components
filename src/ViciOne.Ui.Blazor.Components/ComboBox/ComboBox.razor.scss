@@ -1,4 +1,4 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/design/colors";
 @use "../Styles/design/scrollbar";
 @use "../Styles/animations/mixins" as animations;
 @use "../Styles/inputs";
@@ -30,6 +30,8 @@
         @include inputs.padding($right: 28px);
 
         @include inputs.invalid-style();
+
+        @include inputs.single-line-text-input-style();
 
         @include scrollbar.adjust-styles();
 

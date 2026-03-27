@@ -1,4 +1,4 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/design/colors";
 @use "../Styles/animations/mixins" as animations;
 @use "../Styles/inputs";
 
@@ -13,10 +13,13 @@
     @include inputs.disabled-style();
     @include inputs.invalid-style();
 
+    @include inputs.single-line-text-input-style();
+
     ::deep .input {
         flex-grow: 1;
         min-width: 0; // allow input to shrink when the outer element is smaller than the default minimum input width applied by the browser
-        
+        align-self: center;
+
         border-width: 0;
 
         border-top-left-radius: inputs.$border-radius - inputs.$border-width;

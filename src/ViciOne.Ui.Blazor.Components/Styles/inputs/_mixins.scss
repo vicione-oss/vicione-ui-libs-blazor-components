@@ -1,4 +1,4 @@
-﻿@use "../animations/mixins" as animations;
+@use "../animations/mixins" as animations;
 @use "../design/colors";
 @use "../design/typography";
 @use "../theme";
@@ -96,4 +96,8 @@
 
 @mixin color-scheme() {
     color-scheme: theme.$color-scheme;
+}
+
+@mixin single-line-text-input-style() {
+    height: 24px; // ensure that display height is exactly 24px, otherwise a smaller value is calculated when using display scaling > 100%
 }

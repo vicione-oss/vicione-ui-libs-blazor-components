@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Extensions;
@@ -7,19 +8,20 @@ using ViciOne.Ui.Blazor.Components.Resizing.Models;
 
 namespace ViciOne.Ui.Blazor.Components.Resizing.Services;
 
-internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
+internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
 {
     private readonly ILogger<ResizeObserver> _logger;
 
-    private readonly Dictionary<string, ElementReference> _elementReferences = [];
+    private readonly ConcurrentDictionary<string, ElementReference> _elementReferences = [];
 
     private readonly IJSRuntime _jsRuntime;
-    private DotNetObjectReference<ResizeObserver>? _objRef;
+    private DotNetObjectReference<ResizeObserver>? _dotNetObjectReference;
     private IJSObjectReference? _module;
     private IJSObjectReference? _jsInstance;
 
     private readonly SemaphoreSlim _semaphore = new(1);
     private bool _disposed;
+    private bool _jsDisconnectedExceptionOccurred;
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
@@ -30,43 +32,19 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
     {
         _logger = logger;
         _jsRuntime = jsRuntime;
-        _objRef = DotNetObjectReference.Create(this);
+        _dotNetObjectReference = DotNetObjectReference.Create(this);
     }
 
-    private async ValueTask<IJSObjectReference?> GetInstanceAsync()
+    private async ValueTask<IJSObjectReference?> GetJsInstanceAsync(CancellationToken cancellationToken)
     {
-        if (_disposed)
-            return null;
+        if (_jsInstance != null)
+            return _jsInstance;
 
-        if (_jsInstance == null)
-        {
-            try
-            {
-                await _semaphore.WaitAsync(_cancellationTokenSource.Token);
+        _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
+            cancellationToken,
+            $"./_content/{GetType().Assembly.GetName().Name}/resizing/resize-observer.js");
 
-                try
-                {
-                    _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
-                        _cancellationTokenSource.Token,
-                        $"./_content/{GetType().Assembly.GetName().Name}/resizing/resize-observer.js");
-
-                    _jsInstance = await _module.InvokeAsync<IJSObjectReference>("createInstance", _cancellationTokenSource.Token);
-                }
-                finally
-                {
-                    _semaphore.Release();
-
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                // Nothing to do here, return gracefully
-            }
-            catch (ObjectDisposedException)
-            {
-                // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
-            }
-        }
+        _jsInstance = await _module.InvokeAsync<IJSObjectReference>("createInstance", cancellationToken);
 
         return _jsInstance;
     }
@@ -84,19 +62,37 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
 
     public async Task ObserveAsync(ElementReference elementReference, bool includeStyle = false)
     {
+        if (_disposed)
+            return;
+
         if (elementReference.Id == null)
             return;
 
-        var instance = await GetInstanceAsync();
-        if (instance == null)
+        if (_jsDisconnectedExceptionOccurred)
             return;
-
-        _elementReferences.Add(elementReference.Id, elementReference);
 
         try
         {
-            await instance.InvokeVoidAsync("observe", _cancellationTokenSource.Token, elementReference, elementReference.Id,
-                _objRef, includeStyle);
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _semaphore.WaitAsync(cancellationToken);
+
+            try
+            {
+                if (!_elementReferences.TryAdd(elementReference.Id, elementReference))
+                    return; // Element is already observed, no need to observe again
+
+                var jsInstance = await GetJsInstanceAsync(cancellationToken);
+                if (jsInstance == null)
+                    return;
+
+                await jsInstance.InvokeVoidAsync("observe", cancellationToken,
+                    [elementReference, elementReference.Id, _dotNetObjectReference, includeStyle]);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
         catch (OperationCanceledException)
         {
@@ -104,22 +100,51 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
         }
         catch (ObjectDisposedException)
         {
-            // CancellationTokenSource already disposed, nothing we can do, return gracefully
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
+        }
+        catch (JSDisconnectedException)
+        {
+            // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+
+            _jsDisconnectedExceptionOccurred = true;
+        }
+        catch (Exception ex)
+        {
+            InvokingVoidFailed(_logger, ex, "observe", [elementReference, elementReference.Id, _dotNetObjectReference, includeStyle]);
         }
     }
 
     public async Task UnobserveAsync(ElementReference elementReference)
     {
-        var instance = await GetInstanceAsync();
-        if (instance == null)
+        if (_disposed)
             return;
 
-        // will break if we have several observers on same element
-        _elementReferences.Remove(elementReference.Id);
+        if (elementReference.Id == null)
+            return;
+
+        if (_jsDisconnectedExceptionOccurred)
+            return;
 
         try
         {
-            await instance.InvokeVoidAsync("unobserve", _cancellationTokenSource.Token, elementReference);
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _semaphore.WaitAsync(cancellationToken);
+
+            try
+            {
+                if (_jsInstance == null)
+                    return; // ObserveAsync() was most likely not called before
+
+                if (!_elementReferences.TryRemove(elementReference.Id, out _))
+                    return; // Element was not observed before or already removed
+
+                await _jsInstance.InvokeVoidAsync("unobserve", cancellationToken, elementReference);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
         catch (OperationCanceledException)
         {
@@ -127,11 +152,17 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
         }
         catch (ObjectDisposedException)
         {
-            // CancellationTokenSource already disposed, nothing we can do, return gracefully
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
         }
         catch (JSDisconnectedException)
         {
             // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+
+            _jsDisconnectedExceptionOccurred = true;
+        }
+        catch (Exception ex)
+        {
+            InvokingVoidFailed(_logger, ex, "unobserve", [elementReference]);
         }
     }
 
@@ -143,23 +174,40 @@ internal sealed class ResizeObserver : IResizeObserver, IAsyncDisposable
         await _cancellationTokenSource.CancelAsync();
         _cancellationTokenSource.Dispose();
 
-        await _semaphore.WaitAsync();
-
-        try
+        if (_jsInstance is not null)
         {
-            await _jsInstance.DisposeAsync(_logger);
-            _jsInstance = null;
+            await _semaphore.WaitAsync();
 
-            await _module.DisposeAsync(_logger);
-            _module = null;
+            try
+            {
+                try
+                {
+                    foreach (var elementReference in _elementReferences.Values)
+                        await _jsInstance.InvokeVoidAsync("unobserve", elementReference);
+                }
+                catch (JSDisconnectedException)
+                {
+                    // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+                }
 
-            _objRef?.Dispose();
-            _objRef = null;
+                await _jsInstance.DisposeAsync(_logger);
+                _jsInstance = null;
+
+                await _module.DisposeAsync(_logger);
+                _module = null;
+
+                _dotNetObjectReference?.Dispose();
+                _dotNetObjectReference = null;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
-        finally
-        {
-            _semaphore.Release();
-            _semaphore.Dispose();
-        }
+
+        _semaphore.Dispose();
     }
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Invoking jsObjectReference.{identifier}({args}) failed")]
+    private static partial void InvokingVoidFailed(ILogger logger, Exception ex, string identifier, object?[]? args);
 }

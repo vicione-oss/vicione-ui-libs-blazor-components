@@ -5,6 +5,7 @@
 - `bunit` package, updated to version `2.6.2`
 - `ComboBox` and `SpinEdit`, height set to `24px` to avoid scaling issues
 - `ResizeObserver`, fixed unhandled `JSDisconnectedException` and reduced number of `JSDisconnectedExceptions` on dispose
+- `Toolbar`, added hover styling / improved spacing
 - `ToolbarButton`, title attribute falls back to `Text` when empty or no `Tooltip` is passed
 - `ToolbarGroup`, separator is displayed only if the group is not the only child element
 - `ToolbarItemBase`, added `CssClass` parameter

@@ -147,9 +147,9 @@ public sealed class ToolbarTests : IDisposable
             .AddChildContent<ToolbarButton>()
             .AddChildContent<ToolbarButton>());
 
-        SetContainerSize(_elementReferences[2], 50, marginX: 1);
-        SetContainerSize(_elementReferences[1], 50, marginX: 0);
-        SetContainerSize(_elementReferences[0], 100);
+        SetContainerSize(_elementReferences[2], 100, marginX: 1);
+        SetContainerSize(_elementReferences[1], 100, marginX: 0);
+        SetContainerSize(_elementReferences[0], 200);
 
         renderedComponent.WaitForState(() => renderedComponent.FindAll(".toolbar-button")[^1].ClassList.Contains("hidden"));
 
@@ -168,10 +168,10 @@ public sealed class ToolbarTests : IDisposable
                 .AddChildContent<ToolbarButton>()
                 .AddChildContent<ToolbarButton>()));
 
-        SetContainerSize(_elementReferences[3], 45, marginX: 0);
-        SetContainerSize(_elementReferences[2], 50, marginX: 0);
+        SetContainerSize(_elementReferences[3], 95, marginX: 0);
+        SetContainerSize(_elementReferences[2], 100, marginX: 0);
         SetContainerSize(_elementReferences[1], 999, paddingX: 1, marginX: 1, borderX: 1);
-        SetContainerSize(_elementReferences[0], 100);
+        SetContainerSize(_elementReferences[0], 200);
 
         renderedComponent.WaitForState(() => renderedComponent.FindAll(".toolbar-button")[^1].ClassList.Contains("hidden"));
 

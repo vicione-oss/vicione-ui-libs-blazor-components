@@ -1,12 +1,34 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/design/colors";
 @use "../Styles/mixins";
+@use "../Styles/variables";
 
 .toolbar-button {
     @include mixins.toolbar-item-styles();
 
-    gap: 8px;
+    @include mixins.hover-effect();
+
+    border-radius: variables.$border-radius;
+
+    cursor: pointer;
+    user-select: none;
 
     &.active {
         color: colors.$accent;
+    }
+
+    ::deep .icon {
+        margin: 4px;
+    }
+
+    .text {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    &:has(.icon) {
+        .text {
+            margin-left: 4px;
+        }
     }
 }

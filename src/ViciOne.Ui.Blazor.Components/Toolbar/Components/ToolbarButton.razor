@@ -17,22 +17,20 @@
 <div @ref="_container" tabindex="0" class=@string.Join(" ", cssClasses) title="@title" @onclick="OnClick" @onkeydown="HandleKeyDownAsync">
     @if (IconName != null)
     {
-        <MonochromeIcon Name="IconName.Value" Size="MonochromeIconSize.SmallMedium" />
+        <MonochromeIcon Name="IconName.Value" Size="MonochromeIconSize.SmallMedium" CssClass="icon" />
     }
 
     @if (!string.IsNullOrWhiteSpace(Text))
     {
-        if (TextVisibility == TextVisibility.ToolbarOnly && !InMenu)
+        var showText = TextVisibility == TextVisibility.Always ||
+            (TextVisibility == TextVisibility.ToolbarOnly && !InMenu) ||
+            (TextVisibility == TextVisibility.MenuOnly && InMenu);
+
+        if (showText)
         {
-            @Text
-        }
-        else if (TextVisibility == TextVisibility.MenuOnly && InMenu)
-        {
-            @Text
-        }
-        else if (TextVisibility == TextVisibility.Always)
-        {
-            @Text
+            <div class="text">
+                @Text
+            </div>
         }
     }
 </div>

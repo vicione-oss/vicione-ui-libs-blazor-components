@@ -1,0 +1,8 @@
+@use "../../Styles/design/colors";
+
+@use "sass:color";
+
+$border-radius: 4px;
+$gap: 8px;
+
+$background-hover: color.change(colors.$theme-inverted, $alpha: 0.05);

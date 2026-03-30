@@ -1,13 +1,17 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
+@use "../Styles/mixins";
+@use "../Styles/variables";
 
 .toolbar {
     display: flex;
-    height: 34px;
+    height: 32px;
 
     font-size: 13px;
     font-weight: typography.$font-weight-regular;
     letter-spacing: normal;
+
+    padding-right: variables.$gap;
 
     .item-container {
         display: flex;
@@ -19,11 +23,14 @@
         align-items: center;
         position: relative;
         cursor: pointer;
-        border-radius: 3px;
 
-        &:hover {
-            background-color: rgb(69, 69, 69); // todo: *nearly* $background-light but also a hover state and definitely not $background-light-hover (original used opacity to lighten the background) -> where to pull this from color.scss?
-        }
+        border-radius: variables.$border-radius;
+
+        padding-left: 4px;
+        padding-right: 4px;
+        margin-left: 24px;
+
+        @include mixins.hover-effect();
 
         &:has(> .menu:focus-within) {
             background-color: rgb(78, 78, 78); // todo: where to pull this from color.scss? (original used opacity to lighten the background)
@@ -39,10 +46,14 @@
             z-index: 100;
             width: max-content;
 
+            margin-top: 2px;
             padding-top: 3px;
             padding-bottom: 3px;
+
             background-color: colors.$background-dark;
+
             border: 1px solid colors.$border;
+            border-radius: variables.$border-radius;
 
             &:focus-within {
                 opacity: 1;

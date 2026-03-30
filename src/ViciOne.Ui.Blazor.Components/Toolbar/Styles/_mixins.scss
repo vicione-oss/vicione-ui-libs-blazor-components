@@ -1,13 +1,12 @@
-﻿@mixin toolbar-item-styles() {
+@use "../../Styles/animations/mixins" as animations;
+@use "variables";
+
+@mixin toolbar-item-styles() {
     display: flex;
     align-items: center;
     text-wrap-mode: nowrap;
 
-    margin-left: 5px;
-    margin-right: 5px;
-
-    cursor: pointer;
-    user-select: none;
+    margin-left: variables.$gap;
 
     &.disabled {
         pointer-events: none;
@@ -24,7 +23,14 @@
     }
 
     &.in-menu {
-        padding: 5px;
-        margin: 0px;
+        margin: 8px;
+    }
+}
+
+@mixin hover-effect() {
+    @include animations.background-color();
+
+    &:hover {
+        background-color: variables.$background-hover;
     }
 }

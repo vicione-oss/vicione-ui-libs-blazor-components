@@ -11,7 +11,7 @@ namespace ViciOne.Ui.Blazor.Components.Toolbar.Components;
 /// </summary>
 public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarItemParent
 {
-    private const double MenuContainerWidth = 24;
+    private const double MenuContainerWidth = 24 + 32; // left margin + content
 
     private ElementReference _container;
     private ElementReference _menu;

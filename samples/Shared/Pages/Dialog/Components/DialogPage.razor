@@ -1,0 +1,87 @@
+@page "/dialog"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.Dialog.Components
+@using ViciOne.Ui.Blazor.Components.SearchBox
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Toolbar.Components
+@using ViciOne.Ui.Blazor.Components.Tooltip.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+@using global::Shared.Pages.Dialog.Shared
+
+<div class="options">
+    <div class="option">
+        <label><code>@nameof(Dialog.Visible)</code></label>
+
+        <Switch @bind-Value="_dialogVisible" />
+    </div>
+</div>
+
+<Dialog HeaderText="Lorem ipsum"
+        MinimumWidth="@(_dialogMinimumWidth is not null ? $"{_dialogMinimumWidth}px" : null)"
+        Width="@($"{_dialogWidth}px")"
+        Height="@($"{_dialogHeight}px")"
+        HeaderSlot="@(_dialogWithHeaderToolbar ? RenderFragments.HeaderToolbar : null)"
+        PreventBrowserContextMenu="@_dialogPreventBrowserContextMenu"
+        @bind-Visible="_dialogVisible">
+
+    <Body>
+        <ConditionalLayout Condition="@_dialogWithBodyTextLayout">
+            <Layout>
+                <DialogBodyTextLayout>
+                    @context
+                </DialogBodyTextLayout>
+            </Layout>
+
+            <Content>
+                <div class="text-mixed-with-options">
+                    <p>
+                        This dialog has a
+                        <code>@nameof(Dialog.Width)</code> of <SpinEdit @bind-Value="_dialogWidth" Interval="1" Minimum="100" Maximum="800" /> px and a
+                        <code>@nameof(Dialog.Height)</code> of <SpinEdit @bind-Value="_dialogHeight" Interval="1" Minimum="100" Maximum="600" /> px.
+                    </p>
+
+                    <div class="options">
+                        <div class="option">
+                            <label>With <code>@nameof(Dialog.HeaderSlot)</code></label>
+
+                            <Switch @bind-Value="_dialogWithHeaderToolbar" />
+                        </div>
+
+                        <div class="option">
+                            <label>With <code>@nameof(DialogBodyTextLayout)</code></label>
+
+                            <Switch @bind-Value="_dialogWithBodyTextLayout" />
+                        </div>
+
+                        <div class="option">
+                            <label><code>@nameof(Dialog.PreventBrowserContextMenu)</code></label>
+
+                            <Switch @bind-Value="_dialogPreventBrowserContextMenu" />
+                        </div>
+
+                        <div class="option">
+                            <label><code>@nameof(Dialog.MinimumWidth)</code></label>
+
+                            <div>
+                                <SpinEdit @bind-Value="_dialogMinimumWidth" Interval="10" Minimum="100" Maximum="800" /> px
+                            </div>
+                        </div>
+                    </div>
+
+                    @foreach (var i in Enumerable.Range(1, 100))
+                    {
+                        <p>@_faker.Lorem.Paragraph(1)</p>
+                    }
+                </div>
+            </Content>
+        </ConditionalLayout>
+    </Body>
+
+    <Footer>
+        <DialogFooterButton Text="OK" OnClick="CloseDialog" />
+        <DialogFooterButton Text="Cancel" OnClick="CloseDialog" />
+    </Footer>
+</Dialog>

@@ -1,14 +1,20 @@
 # Changelog
 
-## 5.7.0 - Unreleased
+## 5.7.0 - 2026-03-31
 
 - `bunit` package, updated to version `2.6.2`
 - `ComboBox` and `SpinEdit`, height set to `24px` to avoid scaling issues
+- `ContextMenu`, renamed `HideAsync()` to `CloseAsync()`
 - `ResizeObserver`, fixed unhandled `JSDisconnectedException` and reduced number of `JSDisconnectedExceptions` on dispose
+- `Popup`
+  - Added `MinimumWidth`, `PreventBrowserContextMenu`, `OnShowing`, `OnClosing` and `ShowAsync()`
+  - `VisibleChanged` is now invoked after render to align with the actual visibility on screen
+- `PopupHeaderBodyLayout`, added scrollbar support in body
 - `Toolbar`, added hover styling / improved spacing
 - `ToolbarButton`, title attribute falls back to `Text` when empty or no `Tooltip` is passed
 - `ToolbarGroup`, separator is displayed only if the group is not the only child element
 - `ToolbarItemBase`, added `CssClass` parameter
+- Added `Dialog`
 
 ## 5.6.0 - 2026-03-18
 
@@ -37,8 +43,7 @@
 
 ## 5.3.0 - 2026-02-16
 
-- Added `Breadcrumb`
-- Added `ResizeObserver`
+- Added `Breadcrumb` and `ResizeObserver`
 - `ComboBox`, improved value handling to avoid possible `ArgumentException` (An element with the same key already exists)
 
 ## 5.2.0 - 2026-02-10

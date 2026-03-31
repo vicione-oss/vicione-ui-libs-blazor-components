@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;
 using ViciOne.Ui.Blazor.Components.Popup.Services;
@@ -6,7 +6,7 @@ using ViciOne.Ui.Blazor.Components.Popup.Services;
 namespace ViciOne.Ui.Blazor.Components.Popup.Components;
 
 /// <summary>
-/// A component that displays a popup with backdrop.
+/// A component that displays a popup.
 /// </summary>
 public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandle, IMoveContainer, IMoveablePopup, IAsyncDisposable
 {
@@ -19,6 +19,13 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     private double? _x;
     private double? _y;
     private bool _requestRemoveMoveInteractionAfterRender;
+    private bool _visible;
+    private bool _showing;
+    private bool _closing;
+    private readonly SemaphoreSlim _showCloseSemaphore = new(1);
+    private bool _disposed;
+
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     /// <summary>
     /// Text rendered into the <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
@@ -28,31 +35,36 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     public string? CssClass { get; set; }
 
     /// <summary>
-    /// Specifies whether the popup is visible.
+    /// Specifies whether the component is visible.
     /// </summary>
     /// <value>
-    /// <see langword="true"/> if the popup should be visible, otherwise <see langword="false"/>.
+    /// <see langword="true"/> if the component should be visible, otherwise <see langword="false"/>.
     /// </value>
     [Parameter] public bool Visible { get; set; }
 
     /// <summary>
-    /// Raised when <see cref="Visible"/> has changed.
+    /// Raised after render when <see cref="Visible"/> has changed when calling <see cref="ShowAsync()"/> or <see cref="CloseAsync()"/>.
     /// </summary>
     [Parameter] public EventCallback<bool> VisibleChanged { get; set; }
 
     /// <summary>
-    /// Optional width of the popup in CSS units.
+    /// The minimum width of the component in CSS units.
+    /// </summary>
+    [Parameter] public string? MinimumWidth { get; set; }
+
+    /// <summary>
+    /// Optional width of the component in CSS units.
     /// </summary>
     /// <remarks>
-    /// If not set, the popup adjusts its width to fit its content.
+    /// If not set, the component adjusts its width to fit its content.
     /// </remarks>
     [Parameter] public string? Width { get; set; }
 
     /// <summary>
-    /// Optional height of the popup in CSS units.
+    /// Optional height of the component in CSS units.
     /// </summary>
     /// <remarks>
-    /// If not set, the popup adjusts its height to fit its content.
+    /// If not set, the component adjusts its height to fit its content.
     /// </remarks>
     [Parameter] public string? Height { get; set; }
 
@@ -86,6 +98,22 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     /// <inheritdoc/>
     [Parameter] public bool Moveable { get; set; }
 
+    /// <summary>
+    /// <see langword="true"/> if the browser's context menu should not be displayed when the user requests it,
+    /// otherwise <see langword="false"/>.
+    /// </summary>
+    [Parameter] public bool PreventBrowserContextMenu { get; set; }
+
+    /// <summary>
+    /// Raised when the component is going to be shown.
+    /// </summary>
+    [Parameter] public EventCallback OnShowing { get; set; }
+
+    /// <summary>
+    /// Raised when the component is going to be closed.
+    /// </summary>
+    [Parameter] public EventCallback OnClosing { get; set; }
+
     [Inject] private IPopupRegistry PopupRegistry { get; set; } = default!;
     [Inject] private IMoveInteraction MoveInteraction { get; set; } = default!;
 
@@ -105,7 +133,25 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
             _moveable = Moveable;
 
             if (!_moveable)
-                await RemoveMoveInteractionAsync();
+                _requestRemoveMoveInteractionAfterRender = true;
+        }
+
+        if (Visible != _visible && !_showing && !_closing)
+        {
+            _visible = Visible;
+
+            _requestRemoveMoveInteractionAfterRender = true;
+
+            if (_visible)
+            {
+                if (OnShowing.HasDelegate)
+                    await OnShowing.InvokeAsync();
+            }
+            else
+            {
+                if (OnClosing.HasDelegate)
+                    await OnClosing.InvokeAsync();
+            }
         }
     }
 
@@ -117,7 +163,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
         if (Interlocked.CompareExchange(ref _requestRemoveMoveInteractionAfterRender, false, true))
             await RemoveMoveInteractionAsync();
 
-        if (Visible && _moveable && _moveInteractionAttachTask is null)
+        if (_visible && _moveable && _moveInteractionAttachTask is null)
         {
             var isMoveHandleElementReferenceDefined = !string.IsNullOrEmpty(GetMoveHandle().GetElementReference().Id);
 
@@ -128,28 +174,116 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
                 await _moveInteractionAttachTask;
             }
         }
+
+        if (Interlocked.CompareExchange(ref _showing, false, true))
+        {
+            if (VisibleChanged.HasDelegate)
+                await VisibleChanged.InvokeAsync(_visible);
+        }
+
+        if (Interlocked.CompareExchange(ref _closing, false, true))
+        {
+            if (VisibleChanged.HasDelegate)
+                await VisibleChanged.InvokeAsync(_visible);
+        }
     }
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        await RemoveMoveInteractionAsync();
-
-        PopupRegistry.Remove(this);
-    }
-
-    /// <inheritdoc/>
-    public async Task HideAsync()
-    {
-        if (!Visible)
+        if (Interlocked.CompareExchange(ref _disposed, true, false))
             return;
 
         await RemoveMoveInteractionAsync();
 
-        Visible = false;
+        PopupRegistry.Remove(this);
 
-        if (VisibleChanged.HasDelegate)
-            await VisibleChanged.InvokeAsync(false);
+        await _cancellationTokenSource.CancelAsync();
+        _cancellationTokenSource.Dispose();
+
+        _showCloseSemaphore.Release();
+        _showCloseSemaphore.Dispose();
+    }
+
+    /// <summary>
+    /// Shows the popup.
+    /// </summary>
+    public async Task ShowAsync()
+    {
+        if (_disposed)
+            return;
+
+        try
+        {
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _showCloseSemaphore.WaitAsync(cancellationToken);
+            try
+            {
+                if (_visible)
+                    return;
+
+                _visible = true;
+                _showing = true;
+
+                if (OnShowing.HasDelegate)
+                    await OnShowing.InvokeAsync();
+
+                await InvokeAsync(StateHasChanged);
+            }
+            finally
+            {
+                _showCloseSemaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task CloseAsync()
+    {
+        if (_disposed)
+            return;
+
+        try
+        {
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _showCloseSemaphore.WaitAsync(cancellationToken);
+            try
+            {
+                if (!_visible)
+                    return;
+
+                _visible = false;
+                _closing = true;
+                _requestRemoveMoveInteractionAfterRender = true;
+
+                if (OnClosing.HasDelegate)
+                    await OnClosing.InvokeAsync();
+
+                await InvokeAsync(StateHasChanged);
+            }
+            finally
+            {
+                _showCloseSemaphore.Release();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or CancellationTokenSource already disposed, nothing we can do, return gracefully
+        }
     }
 
     /// <inheritdoc/>

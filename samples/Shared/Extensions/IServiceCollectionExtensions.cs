@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.Pages.Breadcrumb.Extensions;
 using Shared.Pages.CheckBox.Extensions;
 using Shared.Pages.ContextMenu.Extensions;
+using Shared.Pages.Dialog.Extensions;
 using Shared.Pages.ExpandableMenu.Extensions;
 using Shared.Pages.Grid.Extensions;
 using Shared.Pages.Moveable.Extensions;
+using Shared.Pages.Popup.Extensions;
 using Shared.Pages.PropertyGrid.Extensions;
 using Shared.Pages.SectionRail.Extensions;
 using Shared.Pages.SpinEdit.Extensions;
@@ -20,9 +22,11 @@ public static class IServiceCollectionExtensions
         services.AddBreadcrumbPage()
             .AddCheckBoxPage()
             .AddContextMenuPage()
+            .AddDialogPage()
             .AddExpandableMenuPage()
             .AddGridPage()
             .AddMoveablePage()
+            .AddPopupPage()
             .AddPropertyGridPage()
             .AddSectionRailPage()
             .AddSpinEditPage()

@@ -87,7 +87,7 @@ class ContextMenu {
         }
 
         if (!clickedInsideAnyContextMenu)
-            await this.#dotNetObject.invokeMethodAsync('HideAsync');
+            await this.#dotNetObject.invokeMethodAsync('CloseAsync');
     };
 }
 

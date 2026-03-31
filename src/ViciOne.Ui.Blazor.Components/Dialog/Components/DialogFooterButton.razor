@@ -1,0 +1,20 @@
+﻿@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.MonochromeIcons.Core.Extensions
+
+<div class="dialog-footer-button-container">
+    @{
+        var buttonCssClasses = new List<string> { "dialog-footer-button" };
+
+        if (!string.IsNullOrWhiteSpace(CssClass))
+            buttonCssClasses.AddRange(CssClass.Split(" "));
+
+    }
+    <Button Id="@Id"
+            CssClass="@string.Join(" ", buttonCssClasses)"
+            Text="@Text"
+            Title="@Title"
+            Enabled="@Enabled"
+            Size="ButtonSize.Small"
+            OnClick="@ButtonClickAsync" />
+</div>

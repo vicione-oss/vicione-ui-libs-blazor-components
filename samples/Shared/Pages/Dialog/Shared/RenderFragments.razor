@@ -1,0 +1,21 @@
+﻿@using ViciOne.Ui.Blazor.Components.SearchBox
+@using ViciOne.Ui.Blazor.Components.Toolbar.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@code
+{
+    public static RenderFragment HeaderToolbar = __builder =>
+    {
+        <Toolbar>
+            <ToolbarGroup>
+                <ToolbarButton IconName="@MonochromeIconName.AlignTop" Tooltip="Align top" />
+                <ToolbarButton IconName="@MonochromeIconName.AlignTopByLowestElement" Tooltip="Align top by lowest" />
+                <ToolbarButton IconName="@MonochromeIconName.AlignBottom" Tooltip="Align bottom" />
+            </ToolbarGroup>
+
+            <ToolbarContent>
+                <SearchBox Placeholder="Search" />
+            </ToolbarContent>
+        </Toolbar>
+    };
+}

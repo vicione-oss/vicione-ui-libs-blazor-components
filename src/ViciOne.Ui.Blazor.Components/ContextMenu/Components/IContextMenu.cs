@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Models;
 
@@ -27,9 +27,9 @@ internal interface IContextMenu
     bool Visible { get; }
 
     /// <summary>
-    /// Raised when <see cref="HideAsync"/> was called but before the context menu is actually hidden
+    /// Raised when <see cref="CloseAsync"/> was called but before the context menu is actually hidden
     /// </summary>
-    event Action? Hiding;
+    event Action? Closing;
 
     /// <summary>
     /// Shows the context menu
@@ -39,7 +39,7 @@ internal interface IContextMenu
     /// <summary>
     /// Hides the context menu
     /// </summary>
-    Task HideAsync();
+    Task CloseAsync();
 
     /// <summary>
     /// Registers the given <paramref name="contextMenuItem"/>

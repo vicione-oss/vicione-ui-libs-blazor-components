@@ -1,4 +1,4 @@
-﻿@use "../../Styles/mixins";
+@use "../../../Styles/mixins";
 
 .options {
     @include mixins.options-styling();

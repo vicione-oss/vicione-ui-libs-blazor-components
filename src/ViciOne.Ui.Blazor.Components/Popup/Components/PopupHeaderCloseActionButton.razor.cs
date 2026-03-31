@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 
 namespace ViciOne.Ui.Blazor.Components.Popup.Components;
 
@@ -11,5 +11,5 @@ public sealed partial class PopupHeaderCloseActionButton : ComponentBase
     private IPopup Popup { get; set; } = default!;
 
     private async Task ButtonClickAsync()
-        => await Popup.HideAsync();
+        => await Popup.CloseAsync();
 }

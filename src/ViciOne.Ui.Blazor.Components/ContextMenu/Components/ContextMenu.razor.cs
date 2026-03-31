@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
@@ -83,7 +83,7 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
     IEnumerable<IContextMenuItem> IContextMenu.Items => _items;
 
     /// <inheritdoc/>
-    public event Action? Hiding;
+    public event Action? Closing;
 
     /// <inheritdoc/>
     protected override void OnInitialized()
@@ -257,9 +257,9 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
 
     /// <inheritdoc />
     [JSInvokable]
-    public Task HideAsync()
+    public Task CloseAsync()
     {
-        Hiding?.Invoke();
+        Closing?.Invoke();
 
         var newState = new ContextMenuState();
 

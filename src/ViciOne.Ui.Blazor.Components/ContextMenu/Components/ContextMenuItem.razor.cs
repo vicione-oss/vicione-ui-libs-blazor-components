@@ -1,4 +1,4 @@
-﻿using System.Timers;
+using System.Timers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
@@ -76,7 +76,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
         ParentContextMenu.RegisterContextMenuItem(this);
 
-        ParentContextMenu.Hiding += ParentContextMenuHidingAsync;
+        ParentContextMenu.Closing += ParentContextMenuClosingAsync;
 
         _showChildContextMenuTimer.Elapsed += ShowChildContentMenuTimerElapsedAsync;
     }
@@ -122,7 +122,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
         ParentContextMenu.UnregisterContextMenuItem(this);
 
-        ParentContextMenu.Hiding -= ParentContextMenuHidingAsync;
+        ParentContextMenu.Closing -= ParentContextMenuClosingAsync;
 
         if (_showChildContextMenuTimer is not null)
         {
@@ -197,7 +197,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
         if (_childContextMenu is null)
         {
-            await RootContextMenu.HideAsync();
+            await RootContextMenu.CloseAsync();
 
             return;
         }
@@ -269,7 +269,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             {
                 await EndObserveMouseLeaveAsync();
 
-                await _childContextMenu.HideAsync();
+                await _childContextMenu.CloseAsync();
             }
         }
         else
@@ -278,13 +278,13 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
         }
     }
 
-    private async void ParentContextMenuHidingAsync()
+    private async void ParentContextMenuClosingAsync()
     {
         _showChildContextMenuTimer.Stop();
         await EndObserveMouseLeaveAsync();
 
         if (_childContextMenu?.Visible == true)
-            await _childContextMenu.HideAsync();
+            await _childContextMenu.CloseAsync();
     }
 
     private async void ShowChildContentMenuTimerElapsedAsync(object? sender, ElapsedEventArgs e)

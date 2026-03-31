@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.8.0 - Unreleased
+
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `Resizing`, added extension method `SetupForResizeObserver()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
+
 ## 5.7.0 - 2026-03-31
 
 - `bunit` package, updated to version `2.6.2`

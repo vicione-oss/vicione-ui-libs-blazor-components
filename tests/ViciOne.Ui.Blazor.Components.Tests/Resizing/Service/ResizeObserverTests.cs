@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.Resizing.Extensions;
 using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Resizing.Service;
@@ -18,7 +19,7 @@ public class ResizeObserverTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        ctx.JSInterop.SetupForResizeObserver();
 
         var jsRuntime = ctx.Services.GetRequiredService<IJSRuntime>();
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
@@ -45,7 +46,7 @@ public class ResizeObserverTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        ctx.JSInterop.SetupForResizeObserver();
 
         var jsRuntime = ctx.Services.GetRequiredService<IJSRuntime>();
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
@@ -75,7 +76,7 @@ public class ResizeObserverTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        ctx.JSInterop.SetupForResizeObserver();
 
         var jsRuntime = ctx.Services.GetRequiredService<IJSRuntime>();
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
@@ -96,7 +97,7 @@ public class ResizeObserverTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        ctx.JSInterop.SetupForResizeObserver();
 
         var jsRuntime = ctx.Services.GetRequiredService<IJSRuntime>();
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
@@ -120,7 +121,7 @@ public class ResizeObserverTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        ctx.JSInterop.SetupForResizeObserver();
 
         var jsRuntime = ctx.Services.GetRequiredService<IJSRuntime>();
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());
@@ -154,7 +155,7 @@ public class ResizeObserverTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        ctx.JSInterop.SetupForResizeObserver();
 
         var jsRuntime = ctx.Services.GetRequiredService<IJSRuntime>();
         await using var sut = new ResizeObserver(jsRuntime, Substitute.For<ILogger<ResizeObserver>>());

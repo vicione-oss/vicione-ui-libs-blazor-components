@@ -19,11 +19,11 @@
     </PackageReference>
     <PackageReference Include="NTypewriter.CodeModel">
       <PrivateAssets>all</PrivateAssets>
-      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="NTypewriter.SourceGenerator">
       <PrivateAssets>all</PrivateAssets>
-      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage">
       <PrivateAssets>all</PrivateAssets>
@@ -35,8 +35,8 @@
     </PackageReference>
     <PackageReference Include="ViciOne.Ui.Localization" />
     <PackageReference Include="ViciOne.Ui.MonochromeIcons.Assets">
-      <PrivateAssets>all</PrivateAssets><!-- avoids include of CSS isolation bundle -->
-      <ExcludeAssets>runtime</ExcludeAssets><!-- don't depend on assembly at runtime -->
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="ViciOne.Ui.MonochromeIcons.Components" />
   </ItemGroup>
@@ -235,7 +235,7 @@
     <ItemGroup>
       <MonochromeIcon Include="clear" Size="18" />
       <MonochromeIcon Include="chevron" Size="16" />
-      <MonochromeIcon Include="close-medium" Size="16" />
+      <MonochromeIcon Include="close-medium" Size="16;32" />
       <MonochromeIcon Include="delete" Size="24" />
       <MonochromeIcon Include="edit" Size="24" />
       <MonochromeIcon Include="error-full" Size="24" />

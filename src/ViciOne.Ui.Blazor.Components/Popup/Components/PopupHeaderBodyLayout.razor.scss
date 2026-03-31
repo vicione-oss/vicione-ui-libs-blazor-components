@@ -1,5 +1,6 @@
 @use "../../Styles/design/colors";
 @use "../../Styles/design/popup";
+@use "../../Styles/design/scrollbar";
 @use "../../Styles/design/typography";
 
 .popup-header-body-layout {
@@ -74,5 +75,8 @@
         $padding-x: 0.75rem;
         $padding-y: 0.75rem;
         padding: $padding-y $padding-x;
+
+        overflow: auto;
+        @include scrollbar.adjust-styles();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Shared.Pages.PropertyGrid.Models;
+using Shared.Pages.PropertyGrid.Models;
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Messages;
@@ -100,7 +100,7 @@ public sealed partial class PropertyGridPage : ComponentBase, IDisposable
         if (args.Visible)
             _changeLog.Add("Context menu visible");
         else
-            _changeLog.Add("Context menu hidden");
+            _changeLog.Add("Context menu closed");
 
         InvokeAsync(StateHasChanged);
     }

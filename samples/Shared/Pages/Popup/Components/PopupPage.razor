@@ -1,0 +1,83 @@
+@page "/popup"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Popup.Components
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<div class="options">
+    <div class="option">
+        <label><code>@nameof(Popup.Visible)</code></label>
+
+        <Switch @bind-Value="_popupVisible" />
+    </div>
+</div>
+
+<Popup CssClass="@(_popupWithInvertedModifier ? "inverted" : null)"
+       MinimumWidth="@(_popupMinimumWidth is not null ? $"{_popupMinimumWidth}px" : null)"
+       Width="@($"{_popupWidth}px")"
+       Height="@($"{_popupHeight}px")"
+       ShowBackdrop="@_popupShowBackdrop"
+       Moveable="@_popupMoveable"
+       PreventBrowserContextMenu="@_popupPreventBrowserContextMenu"
+       @bind-Visible="_popupVisible">
+
+    <PopupHeaderBodyLayout HeaderText="Lorem ipsum">
+        <Body>
+            <div class="options">
+                <div class="option">
+                    <label>With <code>inverted</code> modifier</label>
+
+                    <Switch @bind-Value="_popupWithInvertedModifier" />
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.ShowBackdrop)</code></label>
+
+                    <Switch @bind-Value="_popupShowBackdrop" />
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.Moveable)</code></label>
+
+                    <Switch @bind-Value="_popupMoveable" />
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.MinimumWidth)</code></label>
+
+                    <div>
+                        <SpinEdit @bind-Value="_popupMinimumWidth" Interval="10" Minimum="100" Maximum="800" /> px
+                    </div>
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.Width)</code></label>
+
+                    <div>
+                        <SpinEdit @bind-Value="_popupWidth" Interval="10" Minimum="100" Maximum="800" /> px
+                    </div>
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.Height)</code></label>
+
+                    <div>
+                        <SpinEdit @bind-Value="_popupHeight" Interval="10" Minimum="100" Maximum="600" /> px
+                    </div>
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.PreventBrowserContextMenu)</code></label>
+
+                    <Switch @bind-Value="_popupPreventBrowserContextMenu" />
+                </div>
+            </div>
+
+            @foreach (var i in Enumerable.Range(1, 100))
+            {
+                <p>@_faker.Lorem.Paragraph(1)</p>
+            }
+        </Body>
+    </PopupHeaderBodyLayout>
+</Popup>

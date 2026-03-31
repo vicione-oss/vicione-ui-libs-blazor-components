@@ -1,0 +1,95 @@
+@use "../../Styles/design/colors";
+@use "../../Styles/design/popup";
+@use "../../Styles/design/scrollbar";
+@use "../../Styles/design/typography";
+@use "../../Styles/mixins";
+
+@use "sass:color";
+
+.popup-dialog-layout {
+    height: 100%;
+
+    display: grid;
+    grid-template-areas:
+        "header"
+        "body"
+        "footer";
+    grid-template-rows: auto minmax(10px, 1fr) 72px; // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+
+    backdrop-filter: popup.$content-backdrop-filter;
+    background-color: popup.$content-background-color-dark;
+    border-radius: inherit;
+
+    $separator-color: color.scale(colors.$border, $lightness: 10%);
+    $content-padding-left-right: 32px;
+
+    .header {
+        grid-area: header;
+
+        position: relative;
+
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        border-bottom: 1px solid $separator-color;
+
+        padding-top: 32px;
+        padding-right: 24px;
+        padding-bottom: 24px;
+        padding-left: $content-padding-left-right;
+
+        $header-text-width: minmax(0, min-content);
+        $header-action-buttons-width: 32px;
+
+        display: grid;
+        grid-template-areas: "text action-buttons";
+        grid-template-columns: $header-text-width $header-action-buttons-width;
+        grid-column-gap: 88px;
+        justify-content: space-between;
+
+        &.with-slot {
+            grid-template-areas: "text slot action-buttons";
+            grid-template-columns: $header-text-width minmax(24px, 1fr) $header-action-buttons-width; // minmax(24px, 1fr) to https://css-tricks.com/preventing-a-grid-blowout, it is the only way to ensure toolbar reduces it size when space runs out
+        }
+
+        .text {
+            grid-area: text;
+
+            color: color.scale(colors.$font-light, $lightness: -31%);
+
+            font-size: 24px;
+            letter-spacing: 0.33px;
+
+            @include mixins.overflow-ellipsis();
+        }
+
+        .slot {
+            grid-area: slot;
+        }
+
+        .action-buttons {
+            grid-area: action-buttons;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+    }
+
+    .body {
+        grid-area: body;
+
+        overflow: auto;
+        @include scrollbar.adjust-styles();
+    }
+
+    .footer {
+        grid-area: footer;
+
+        border-top: 1px solid $separator-color;
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+
+        padding: 24px $content-padding-left-right;
+
+        display: flex;
+        justify-content: end;
+    }
+}

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 
 namespace ViciOne.Ui.Blazor.Components.ContextMenu.Components;
@@ -76,7 +76,7 @@ public sealed partial class ContextMenuButton : ContextMenuItemBase, IDisposable
         {
             await OnClick.InvokeAsync();
 
-            await ParentContextMenu.HideAsync();
+            await ParentContextMenu.CloseAsync();
         }
     }
 }

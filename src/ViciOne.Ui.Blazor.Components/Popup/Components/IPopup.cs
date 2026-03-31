@@ -1,9 +1,9 @@
-﻿namespace ViciOne.Ui.Blazor.Components.Popup.Components;
+namespace ViciOne.Ui.Blazor.Components.Popup.Components;
 
 internal interface IPopup
 {
     /// <summary>
-    /// Hides the popup.
+    /// Closes the popup.
     /// </summary>
-    Task HideAsync();
+    Task CloseAsync();
 }

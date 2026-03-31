@@ -1,0 +1,56 @@
+@using ViciOne.Ui.Blazor.Components.Popup.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<Popup CssClass="@CssClass"
+       MinimumWidth="@MinimumWidth"
+       Width="@Width"
+       Height="@Height"
+       PreventBrowserContextMenu="@PreventBrowserContextMenu"
+       OnShowing="@OnShowing"
+       OnClosing="@OnClosing"
+       @bind-Visible="Visible"
+       @bind-Visible:after="PopupVisibleChangedAsync"
+       @ref="_popup">
+
+    <div class="popup-dialog-layout">
+        @{
+            var headerCssClasses = new List<string> { "header" };
+
+            var withHeaderSlot = HeaderSlot is not null;
+            if (withHeaderSlot)
+                headerCssClasses.Add("with-slot");
+        }
+        <div class="@string.Join(" ", headerCssClasses)">
+            <div class="text">
+                @HeaderText
+            </div>
+
+            @if (withHeaderSlot)
+            {
+                <div class="slot">
+                    @HeaderSlot
+                </div>
+            }
+
+            <div class="action-buttons">
+                <CascadingValue Value="MonochromeIconSize.Medium">
+                    <PopupHeaderCloseActionButton />
+                </CascadingValue>
+            </div>
+        </div>
+
+        <div class="body">
+            @if (Body is not null)
+            {
+                @Body
+            }
+        </div>
+
+        <div class="footer">
+            @if (Footer is not null)
+            {
+                @Footer
+            }
+        </div>
+    </div>
+</Popup>

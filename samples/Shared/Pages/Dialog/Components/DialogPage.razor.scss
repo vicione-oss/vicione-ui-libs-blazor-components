@@ -1,0 +1,11 @@
+﻿@use "../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.text-mixed-with-options {
+    ::deep .spin-edit {
+        width: 70px;
+    }
+}

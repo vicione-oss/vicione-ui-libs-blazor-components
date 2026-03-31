@@ -1,0 +1,10 @@
+﻿.dialog-footer-button-container {
+
+    &:not(:first-of-type) {
+        margin-left: 24px;
+    }
+
+    ::deep .dialog-footer-button {
+        min-width: 100px;
+    }
+}

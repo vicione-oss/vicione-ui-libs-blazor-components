@@ -17,6 +17,10 @@
         color: colors.$accent;
     }
 
+    &.disabled {
+        color: rgb(78, 78, 78); // todo: where to pull this from colors.scss?
+    }
+
     ::deep .icon {
         margin: 4px;
     }

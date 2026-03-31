@@ -1,7 +1,7 @@
-﻿@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.AspNetCore.Components.Sections
 @using ViciOne.Ui.Blazor.Components.Extensions
 
-@if (!Visible) return;
+@if (!_visible) return;
 
 <SectionContent SectionId="this">
     @{
@@ -20,7 +20,11 @@
         if (modalRootStyles.Count > 0)
             modalRootAttributes["style"] = string.Join("; ", modalRootStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
     }
-    <div class="@string.Join(" ", modelRootCssClasses)" @attributes="modalRootAttributes" @ref="_modalRootElementReference">
+    <div class="@string.Join(" ", modelRootCssClasses)"
+         @attributes="modalRootAttributes"
+         @ref="_modalRootElementReference"
+         @oncontextmenu:preventDefault="@PreventBrowserContextMenu">
+
         @{
             var modelDialogCssClasses = new List<string> { "modal-dialog" };
 
@@ -28,6 +32,9 @@
                 modelDialogCssClasses.AddRange(CssClass.Split(" "));
 
             var modalDialogStyles = new Dictionary<string, object>();
+
+            if (MinimumWidth is not null)
+                modalDialogStyles["min-width"] = MinimumWidth;
 
             if (Width is not null)
                 modalDialogStyles["width"] = Width;

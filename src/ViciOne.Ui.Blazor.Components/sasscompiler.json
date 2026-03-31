@@ -9,6 +9,7 @@
         "AdvancedErrorBoundary",
         "ContentLoadingIndication",
         "ContextMenu",
+        "Dialog",
         "EditorLayout",
         "ExpandableMenu",
         "Grid",

@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.ContextMenu.Models;
+using ViciOne.Ui.Blazor.Components.ContextMenu.Models;
 
 namespace ViciOne.Ui.Blazor.Components.ContextMenu.Services;
 
@@ -14,8 +14,8 @@ public interface IContextMenuRequest<TContext> where TContext : IContextMenuCont
     event Func<TContext, Task>? ContextMenuRequestedAsync;
 
     /// <summary>
-    /// Raises event <see cref="ContextMenuRequestedAsync"/> to notifiy about the request to display
-    /// the context menu assocaited with the given <paramref name="context"/>, but only when
+    /// Raises event <see cref="ContextMenuRequestedAsync"/> to notify about the request to display
+    /// the context menu associated with the given <paramref name="context"/>, but only when
     /// <see cref="IContextMenuSettings.UseCustomMenu"/> is <see langword="true"/>
     /// </summary>
     Task SendAsync(TContext context);

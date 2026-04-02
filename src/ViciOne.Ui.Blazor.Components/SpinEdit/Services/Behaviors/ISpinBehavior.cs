@@ -1,10 +1,10 @@
-﻿using ViciOne.Ui.Blazor.Components.SpinEdit.Attributes;
+using ViciOne.Ui.Blazor.Components.SpinEdit.Attributes;
 
 namespace ViciOne.Ui.Blazor.Components.SpinEdit.Services.Behaviors;
 
 /// <summary>
 /// Provides value arithmetic and validation rules for spin-edit controls.
-/// /// Implementations define how to increment/decrement, clamp to limits and align values to a raster,
+/// Implementations define how to increment/decrement, clamp to limits and align values to a raster,
 /// for a specific value, interval and limit types.
 /// </summary>
 /// <typeparam name="TValue">The numeric value type handled by the behavior (e.g. int, decimal).</typeparam>

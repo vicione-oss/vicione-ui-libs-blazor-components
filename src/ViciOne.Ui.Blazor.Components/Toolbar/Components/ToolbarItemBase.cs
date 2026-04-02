@@ -60,7 +60,7 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
     /// Whether the item is rendered in the UI.
     /// </summary>
     /// <remarks>
-    /// If this is <c>true</c>, the item will take no space.
+    /// If this is <c>false</c>, the item will take no space.
     /// </remarks>
     [Parameter]
     public bool Visible { get; set; } = true;
@@ -137,7 +137,7 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
 
     private void OnElementSizeChanged(ElementSizeChangedEventArgs args)
     {
-        // When element is not rendered, it's size can be smaller -> ignore
+        // When element is not rendered, its size can be smaller -> ignore
         if (_hidden || args.ElementReference.Id != Container.Id)
             return;
 

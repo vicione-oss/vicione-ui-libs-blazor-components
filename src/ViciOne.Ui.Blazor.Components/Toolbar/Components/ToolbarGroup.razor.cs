@@ -96,7 +96,7 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
 
     private void OnElementSizeChanged(ElementSizeChangedEventArgs args)
     {
-        // when element is not rendered, it's size can be smaller -> ignore
+        // when element is not rendered, its size can be smaller -> ignore
         if (_hidden || args.ElementReference.Id != _container.Id)
             return;
 

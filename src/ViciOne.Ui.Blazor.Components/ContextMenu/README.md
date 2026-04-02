@@ -4,7 +4,7 @@
 
 ## Introduction
 
-A context menu is an UI element that is proving some clickable actions in a pop-up element according to the given context.
+A context menu is a UI element that is providing some clickable actions in a pop-up element according to the given context.
 
 The context is implemented via `IContextMenuContext` and the context menu itself is requested via `IContextMenuRequest<>`.
 It can have an optional state implemented via `IContextMenuState<>`.

@@ -122,7 +122,7 @@ internal sealed class ExampleInstancePropertyDescriptorProvider
 }
 ```
 
-> This provider describe the property `Description` of an imaginary class `ExampleInstance`.
+> This provider describes the property `Description` of an imaginary class `ExampleInstance`.
 
 ### 3. Register minimal services
 
@@ -131,7 +131,7 @@ services.AddPropertyGrid<ExamplePropertyGridContext>()
   .WithPropertyDescriptorProvider<ExampleInstancePropertyDescriptorProvider>();
 ```
 
-### 3. Render property grid
+### 4. Render property grid
 
 ``` html
 @* AnyComponent.razor *@
@@ -143,7 +143,7 @@ services.AddPropertyGrid<ExamplePropertyGridContext>()
 <PropertyGrid Controller="PropertyGridController" />
 ```
 
-### 4. Set instances
+### 5. Set instances
 
 ``` csharp
 ExampleInstance _instance1 = new();
@@ -152,7 +152,7 @@ ExampleInstance _instance2 = new();
 PropertyGridController.SetInstance([_instance1, _instance2], new ExamplePropertyGridContext { Subject = "Foo" });
 ```
 
-### 5. Add TooltipDisplay
+### 6. Add TooltipDisplay
 
 - Add `TooltipDisplay` component to your application at a central place (e.g. in `MainLayout.razor`)
 

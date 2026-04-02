@@ -90,8 +90,8 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     /// Renders the content of the popup.
     /// </summary>
     /// <remarks>
-    /// It is recommend to use provided layout components like <see cref="PopupHeaderBodyLayout"/>
-    /// for implementing content with a consistent layout accross individual popups.
+    /// It is recommended to use provided layout components like <see cref="PopupHeaderBodyLayout"/>
+    /// for implementing content with a consistent layout across individual popups.
     /// </remarks>
     [Parameter] public RenderFragment? ChildContent { get; set; }
 

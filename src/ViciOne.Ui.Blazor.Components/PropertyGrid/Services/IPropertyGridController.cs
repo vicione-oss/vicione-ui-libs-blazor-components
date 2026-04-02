@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.PropertyGrid.Models;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Models;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items;
 
@@ -63,6 +63,6 @@ public interface IPropertyGridController<TContext> : IPropertyGridController
     /// Sets the instances whose properties should be rendered in the property grid
     /// </summary>
     /// <param name="instances">Instances whose properties should be rendered in the property grid</param>
-    /// <param name="context">Context in with properties should be rendered in the property grid</param>
+    /// <param name="context">Context in which properties should be rendered in the property grid</param>
     void SetInstances(IEnumerable<object> instances, TContext context);
 }

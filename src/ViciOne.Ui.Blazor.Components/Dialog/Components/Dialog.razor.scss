@@ -14,7 +14,7 @@
         "header"
         "body"
         "footer";
-    grid-template-rows: auto minmax(10px, 1fr) 72px; // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+    grid-template-rows: auto minmax(10px, 1fr) auto; // minmax() to https://css-tricks.com/preventing-a-grid-blowout
 
     backdrop-filter: popup.$content-backdrop-filter;
     background-color: popup.$content-background-color-dark;

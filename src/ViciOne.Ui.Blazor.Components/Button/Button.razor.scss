@@ -1,4 +1,4 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/design/colors";
 @use "../Styles/design/typography";
 @use "../Styles/animations/mixins" as animations;
 @use "../Styles/buttons/mixins" as buttons;
@@ -64,7 +64,7 @@
         }
     }
 
-    @include size-modifier($size: "small", $height: 26px, $icon-margin-left: 6px, $icon-size: 16px, $font-size: 12px, $text-padding-left-right: 8px);
+    @include size-modifier($size: "small", $height: 24px, $icon-margin-left: 6px, $icon-size: 16px, $font-size: 12px, $text-padding-left-right: 8px);
     @include size-modifier($size: "medium", $height: 32px, $icon-margin-left: 8px, $icon-size: 24px, $font-size: 14px, $text-padding-left-right: 10px);
     @include size-modifier($size: "large", $height: 36px, $icon-margin-left: 10px, $icon-size: 32px, $font-size: 16px, $text-padding-left-right: 13px);
 

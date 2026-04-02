@@ -2,6 +2,10 @@
 
 ## 5.8.0 - Unreleased
 
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `Button`, changed `ButtonSize.Small` from `26px` to `24px`
+
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 
 - `Resizing`, added extension method `SetupForResizeObserver()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests

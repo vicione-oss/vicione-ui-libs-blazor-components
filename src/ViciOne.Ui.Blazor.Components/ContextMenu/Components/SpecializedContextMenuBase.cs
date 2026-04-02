@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Models;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Services;
@@ -39,7 +39,6 @@ public abstract class SpecializedContextMenuBase<TContext> : ComponentBase, IDis
 
     /// <summary>
     /// Reference to the component that renders the actual context menu.
-    /// Pass the CanvasMenu <c>@ref</c> here to receive the instance.
     /// </summary>
     protected ContextMenu? ContextMenu { get; set; }
 

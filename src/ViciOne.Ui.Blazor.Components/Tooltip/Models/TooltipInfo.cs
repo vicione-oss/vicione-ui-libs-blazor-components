@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Tooltip.Components;
 
@@ -35,13 +35,13 @@ internal sealed class TooltipInfo()
     public string Id { get; } = $"tooltip_{Guid.NewGuid()}";
 
     /// <summary>
-    /// <see langword="true"/> if the Shall be ignored for displaying. Otherwise <see langword="false"/>.
+    /// <see langword="true"/> if it shall be ignored for displaying. Otherwise <see langword="false"/>.
     /// </summary>
     public bool Ignore
         => Content is null || !Displaying || !DisplayCondition.Invoke();
 
     /// <summary>
-    /// Gets or sets the size at which the tooltip shall be displayed
+    /// Gets or sets the position at which the tooltip shall be displayed.
     /// </summary>
     public Point Position { get; set; } = Point.Empty;
 

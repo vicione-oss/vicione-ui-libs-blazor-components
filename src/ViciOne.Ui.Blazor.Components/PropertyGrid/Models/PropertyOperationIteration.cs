@@ -1,9 +1,9 @@
-﻿using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors;
 
 namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Models;
 
 /// <summary>
-/// Describes an interation of an operation targeting a property implemented by instances of a specific type
+/// Describes an iteration of an operation targeting a property implemented by instances of a specific type
 /// </summary>
 internal sealed class PropertyOperationIteration
 {

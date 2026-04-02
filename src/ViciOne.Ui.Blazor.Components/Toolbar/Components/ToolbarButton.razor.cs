@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Toolbar.Enums;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 
@@ -27,7 +27,7 @@ public sealed partial class ToolbarButton : ToolbarItemBase
     /// The text displayed next to the icon.
     /// </summary>
     /// <remarks>
-    /// Use <see cref="TextVisibility"/> to configure the visiblity of the text.
+    /// Use <see cref="TextVisibility"/> to configure the visibility of the text.
     /// </remarks>
     [Parameter]
     public string? Text { get; set; }

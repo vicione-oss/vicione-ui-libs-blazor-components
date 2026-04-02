@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.PropertyGrid.Exceptions;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Exceptions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Validators;
 
@@ -13,7 +13,7 @@ public interface IPropertyDescriptor
     /// Unique name for the property
     /// </summary>
     /// <remarks>
-    /// The name is be used in various parts of the component like for determining common properties
+    /// The name is used in various parts of the component like for determining common properties
     /// across multiple instances set via <see cref="IPropertyGridController{TContext}.SetInstances(IEnumerable{object}, TContext)"/>.
     /// </remarks>
     string Name { get; }

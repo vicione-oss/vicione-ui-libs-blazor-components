@@ -164,7 +164,7 @@ export class PointerCapture {
         // User could have selected text before start dragging, we clear the selection to avoid confusion ...
         clearSelection();
 
-        // ... and we avoid that new text can be selected before start of the pointer captuure
+        // ... and we avoid that new text can be selected before start of the pointer capture
         avoidTextSelection();
 
         if (this.endedCssClass)

@@ -1,7 +1,7 @@
-﻿namespace ViciOne.Ui.Blazor.Components.Interfaces;
+namespace ViciOne.Ui.Blazor.Components.Interfaces;
 
 /// <summary>
-/// Component that can has selectable content
+/// Component that has selectable content
 /// </summary>
 internal interface IHasSelectableContent
 {

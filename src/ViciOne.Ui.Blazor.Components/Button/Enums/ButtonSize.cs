@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.Enums;
+using ViciOne.Ui.Blazor.Components.Enums;
 
 namespace ViciOne.Ui.Blazor.Components.Button.Enums;
 
@@ -8,7 +8,7 @@ namespace ViciOne.Ui.Blazor.Components.Button.Enums;
 public readonly record struct ButtonSize : ITypeSafeEnumImplemention<ButtonSize>
 {
     /// <summary>
-    ///  Height of 26 pixel
+    ///  Height of 24 pixel
     /// </summary>
     public static readonly ButtonSize Small = new(nameof(Small));
 

@@ -1,10 +1,11 @@
 # Changelog
 
-## 5.8.0 - Unreleased
+## 5.8.0 - 2026-04-14
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `Button`, changed `ButtonSize.Small` from `26px` to `24px`
+- `TextBox`, fixed missing update of inner input element on forced update
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

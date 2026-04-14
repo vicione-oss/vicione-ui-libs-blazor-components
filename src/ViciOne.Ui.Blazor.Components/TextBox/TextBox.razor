@@ -36,11 +36,13 @@
     var type = Password ? "password" : "text";
 }
 
+@* Using @bind:event instead of value="..." @oninput="..." due to https://gitlab.com/vicione-oss/vicione/ui-libs/blazor-components/-/merge_requests/63#note_3245777960 *@
 <input class="@string.Join(" ", cssClasses)"
        type="@type"
-       value="@_valueEntered"
-       @oninput="@InputChangedAsync"
+       @attributes="@attributes"
+       @bind="_valueEntered"
+       @bind:event="oninput"
+       @bind:after="@AfterOnInput"
        @onkeyup="@InputKeyUpAsync"
        @onblur="@InputBlurAsync"
-       @attributes="@attributes"
        @ref="_inputElementReference" />

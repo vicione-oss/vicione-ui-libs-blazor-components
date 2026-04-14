@@ -1,4 +1,4 @@
-﻿using Shared.Pages.PropertyGrid.Models;
+using Shared.Pages.PropertyGrid.Models;
 using Shared.Pages.SectionRail.Enums;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors;
@@ -91,7 +91,7 @@ internal sealed class ExampleBarInstancePropertyDescriptorProvider
             GetValue = (instance) => instance.ByteValue,
             Minimum = 5,
             Maximum = 200,
-            Interval = 10,
+            Interval = 5,
             IsRasteredValue = true,
             SetValue = (instance, value) => instance.ByteValue = value
         };

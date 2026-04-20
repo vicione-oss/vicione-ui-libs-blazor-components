@@ -1,7 +1,8 @@
-﻿@page "/property-grid"
+@page "/property-grid"
 
 @using Shared.Pages.PropertyGrid.Models
 @using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.ComboBox
 @using ViciOne.Ui.Blazor.Components.EditorLayout
 @using ViciOne.Ui.Blazor.Components.PropertyGrid.Components
 @using ViciOne.Ui.Blazor.Components.Switch
@@ -20,6 +21,24 @@
                 <span>Keep messages</span>
 
                 <Switch @bind-Value="@PropertyGridState.KeepMessages" />
+            </div>
+
+            <div class="option">
+                <span>Property order</span>
+
+                <ComboBox Items="@_propertyOrderComboBoxItems"
+                          ValueSelector="@(item => item.Value)"
+                          TextSelector="@(item => item.Text)"
+                          @bind-Value="@PropertyGridState.PropertyComparer" />
+            </div>
+
+            <div class="option">
+                <span>Category order</span>
+
+                <ComboBox Items="@_categoryOrderComboBoxItems"
+                          ValueSelector="@(item => item.Value)"
+                          TextSelector="@(item => item.Text)"
+                          @bind-Value="@PropertyGridState.CategoryComparer" />
             </div>
 
             @foreach (var instanceState in _instanceStates)

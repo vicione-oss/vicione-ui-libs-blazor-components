@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Comparers;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 
@@ -30,4 +31,11 @@ public partial class PropertyEntrySet : ComponentBase
     /// </summary>
     [Parameter, EditorRequired]
     public required IEnumerable<IPropertyGridItem> Items { get; set; }
+
+    /// <inheritdoc cref="IPropertyGridState.PropertyComparer"/>
+    [Parameter]
+    public IComparer<IPropertyGridItem>? PropertyComparer { get; set; }
+
+    [Inject]
+    private IAlphabeticalPropertyComparer DefaultPropertyComparer { get; set; } = default!;
 }

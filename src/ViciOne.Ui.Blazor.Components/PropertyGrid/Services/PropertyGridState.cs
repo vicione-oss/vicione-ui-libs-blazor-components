@@ -12,8 +12,10 @@ internal sealed class PropertyGridState<TContext> : IPropertyGridState<TContext>
 
     private IReadOnlyCollection<IPropertyGridItem>? _items;
     private IReadOnlyDictionary<IPropertyGridItem, HashSet<IPropertyGridItem>>? _itemDependentsMap;
+    private IComparer<string>? _categoryComparer;
     private bool _groupByCategory;
     private bool _keepMessages;
+    private IComparer<IPropertyGridItem>? _propertyComparer;
 
     public int UpdateLock => _updateLock;
 
@@ -45,6 +47,20 @@ internal sealed class PropertyGridState<TContext> : IPropertyGridState<TContext>
         }
     }
 
+    public IComparer<string>? CategoryComparer
+    {
+        get => _categoryComparer;
+        set
+        {
+            if (value != _categoryComparer)
+            {
+                _categoryComparer = value;
+
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public bool GroupByCategory
     {
         get => _groupByCategory;
@@ -53,6 +69,20 @@ internal sealed class PropertyGridState<TContext> : IPropertyGridState<TContext>
             if (value != _groupByCategory)
             {
                 _groupByCategory = value;
+
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public IComparer<IPropertyGridItem>? PropertyComparer
+    {
+        get => _propertyComparer;
+        set
+        {
+            if (value != _propertyComparer)
+            {
+                _propertyComparer = value;
 
                 OnPropertyChanged();
             }

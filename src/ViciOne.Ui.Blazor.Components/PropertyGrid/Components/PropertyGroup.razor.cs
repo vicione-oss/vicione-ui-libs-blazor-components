@@ -46,6 +46,9 @@ public sealed partial class PropertyGroup : ComponentBase
     /// <inheritdoc cref="IPropertyGridState.KeepMessages"/>
     [Parameter] public bool KeepMessages { get; set; }
 
+    /// <inheritdoc cref="IPropertyGridState.PropertyComparer"/>
+    [Parameter] public IComparer<IPropertyGridItem>? PropertyComparer { get; set; }
+
     /// <inheritdoc/>
     protected override void OnAfterRender(bool firstRender)
     {

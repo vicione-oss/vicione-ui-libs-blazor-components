@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.PropertyGrid.Components.ContextMenu
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Components.ContextMenu
 
 @typeparam TContext
 
@@ -8,14 +8,14 @@
     <CascadingValue Value="_controller">
         @if (_state.GroupByCategory)
         {
-            foreach (var g in _state.Items.ToLookup(p => p.Category).OrderBy(g => g.Key))
+            foreach (var g in _state.Items.ToLookup(p => p.Category).OrderBy(g => g.Key, _state.CategoryComparer ?? DefaultCategoryComparer))
             {
-                <PropertyGroup Header="@g.Key" Items="@g" ShowHeader="true" KeepMessages="@_state.KeepMessages" />
+                <PropertyGroup Header="@g.Key" Items="@g" ShowHeader="true" KeepMessages="@_state.KeepMessages" PropertyComparer="@_state.PropertyComparer" />
             }
         }
         else
         {
-            <PropertyEntrySet Items="@_state.Items" KeepMessages="@_state.KeepMessages" />
+            <PropertyEntrySet Items="@_state.Items" KeepMessages="@_state.KeepMessages" PropertyComparer="@_state.PropertyComparer" />
         }
     </CascadingValue>
 </div>

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Models;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Comparers;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 
 namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Components;
@@ -17,6 +18,8 @@ public sealed partial class PropertyGrid<TContext> : ComponentBase, IDisposable
     /// Controller for the property grid
     /// </summary>
     [Parameter, EditorRequired] public required IPropertyGridController<TContext> Controller { get; set; }
+
+    [Inject] private IAlphabeticalCategoryComparer DefaultCategoryComparer { get; set; } = default!;
 
     private void ContextMenuVisibilityChanged(bool visible)
         => _events?.NotifyContextMenuVisibilityChanged(visible);
@@ -46,8 +49,10 @@ public sealed partial class PropertyGrid<TContext> : ComponentBase, IDisposable
     private async void StatePropertiesChangedAsync(PropertiesChangedEventArgs args)
     {
         if (args.PropertyNames.Contains(nameof(IPropertyGridState.Items)) ||
+            args.PropertyNames.Contains(nameof(IPropertyGridState.CategoryComparer)) ||
             args.PropertyNames.Contains(nameof(IPropertyGridState.GroupByCategory)) ||
-            args.PropertyNames.Contains(nameof(IPropertyGridState.KeepMessages)))
+            args.PropertyNames.Contains(nameof(IPropertyGridState.KeepMessages)) ||
+            args.PropertyNames.Contains(nameof(IPropertyGridState.PropertyComparer)))
         {
             await InvokeAsync(StateHasChanged);
         }

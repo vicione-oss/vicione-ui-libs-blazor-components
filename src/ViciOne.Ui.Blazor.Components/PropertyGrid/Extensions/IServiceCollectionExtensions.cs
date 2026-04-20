@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ViciOne.Ui.Blazor.Components.CheckBox.Extensions;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Extensions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Builders;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Comparers;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 using ViciOne.Ui.Blazor.Components.SpinEdit.Extensions;
@@ -30,6 +31,8 @@ public static partial class IServiceCollectionExtensions
 
         services.AddCheckBox();
         services.AddSpinEditVariants();
+        services.AddCategoryComparers();
+        services.AddPropertyComparers();
 
         services.AddPropertyValueEqualityComparerProvider<TContext>();
 
@@ -84,6 +87,66 @@ public static partial class IServiceCollectionExtensions
 
             return new PropertyValueEqualityComparerProvider<TContext>(propertyValueEqualityComparers);
         });
+
+        return services;
+    }
+
+    internal static IServiceCollection AddCategoryComparers(this IServiceCollection services)
+    {
+        services.AddAlphabeticalCategoryComparer();
+        services.AddReverseAlphabeticalCategoryComparer();
+        services.AddInsertionOrderCategoryComparer();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddPropertyComparers(this IServiceCollection services)
+    {
+        services.AddAlphabeticalPropertyComparer();
+        services.AddReverseAlphabeticalPropertyComparer();
+        services.AddInsertionOrderPropertyComparer();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddAlphabeticalCategoryComparer(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IAlphabeticalCategoryComparer, AlphabeticalCategoryComparer>();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddReverseAlphabeticalCategoryComparer(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IReverseAlphabeticalCategoryComparer, ReverseAlphabeticalCategoryComparer>();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddInsertionOrderCategoryComparer(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IInsertionOrderCategoryComparer, InsertionOrderCategoryComparer>();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddAlphabeticalPropertyComparer(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IAlphabeticalPropertyComparer, AlphabeticalPropertyComparer>();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddReverseAlphabeticalPropertyComparer(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IReverseAlphabeticalPropertyComparer, ReverseAlphabeticalPropertyComparer>();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddInsertionOrderPropertyComparer(this IServiceCollection services)
+    {
+        services.TryAddSingleton<IInsertionOrderPropertyComparer, InsertionOrderPropertyComparer>();
 
         return services;
     }

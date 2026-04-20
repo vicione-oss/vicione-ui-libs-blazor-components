@@ -1,4 +1,4 @@
-﻿@foreach (var item in Items.OrderBy(p => p.DisplayName))
+@foreach (var item in Items.OrderBy(p => p, PropertyComparer ?? DefaultPropertyComparer))
 {
     var valueType = item.ValueType;
 

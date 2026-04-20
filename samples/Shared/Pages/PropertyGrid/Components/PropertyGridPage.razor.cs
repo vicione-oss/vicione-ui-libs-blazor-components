@@ -1,6 +1,9 @@
-using Shared.Pages.PropertyGrid.Models;
 using Microsoft.AspNetCore.Components;
+using Shared.Pages.PropertyGrid.Models;
+using ViciOne.Ui.Blazor.Components.ComboBox;
 using ViciOne.Ui.Blazor.Components.Models;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Comparers;
+using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Messages;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 
@@ -8,6 +11,14 @@ namespace Shared.Pages.PropertyGrid.Components;
 
 public sealed partial class PropertyGridPage : ComponentBase, IDisposable
 {
+    private const string OrderAscending = "A → Z";
+    private const string OrderDescending = "Z → A";
+    private const string OrderInsertion = "Insertion order";
+    private const string OrderDefault = "Default (A → Z)";
+
+    private ComboBoxItem<IComparer<IPropertyGridItem>?, string>[] _propertyOrderComboBoxItems = [];
+    private ComboBoxItem<IComparer<string>?, string>[] _categoryOrderComboBoxItems = [];
+
     private readonly List<string> _changeLog = [];
 
     private interface IInstanceState<out T>
@@ -19,7 +30,6 @@ public sealed partial class PropertyGridPage : ComponentBase, IDisposable
     private class InstanceState<T> : IInstanceState<T>
         where T : class, new()
     {
-
         public T Instance { get; } = new();
         public bool Selected { get; set; }
     }
@@ -38,8 +48,32 @@ public sealed partial class PropertyGridPage : ComponentBase, IDisposable
     [Inject] private IPropertyGridEvents<ExamplePropertyGridContext> PropertGridEvents { get; set; } = default!;
     [Inject] private IPropertyGridState<ExamplePropertyGridContext> PropertyGridState { get; set; } = default!;
 
+    [Inject] private IAlphabeticalPropertyComparer AlphabeticalPropertyComparer { get; set; } = default!;
+    [Inject] private IReverseAlphabeticalPropertyComparer ReverseAlphabeticalPropertyComparer { get; set; } = default!;
+    [Inject] private IInsertionOrderPropertyComparer InsertionOrderPropertyComparer { get; set; } = default!;
+
+    [Inject] private IAlphabeticalCategoryComparer AlphabeticalCategoryComparer { get; set; } = default!;
+    [Inject] private IReverseAlphabeticalCategoryComparer ReverseAlphabeticalCategoryComparer { get; set; } = default!;
+    [Inject] private IInsertionOrderCategoryComparer InsertionOrderCategoryComparer { get; set; } = default!;
+
     protected override void OnInitialized()
     {
+        _propertyOrderComboBoxItems =
+        [
+            new() { Value = AlphabeticalPropertyComparer, Text = OrderAscending },
+            new() { Value = ReverseAlphabeticalPropertyComparer, Text = OrderDescending },
+            new() { Value = InsertionOrderPropertyComparer, Text = OrderInsertion },
+            new() { Value = null, Text = OrderDefault },
+        ];
+
+        _categoryOrderComboBoxItems =
+        [
+            new() { Value = AlphabeticalCategoryComparer, Text = OrderAscending },
+            new() { Value = ReverseAlphabeticalCategoryComparer, Text = OrderDescending },
+            new() { Value = InsertionOrderCategoryComparer, Text = OrderInsertion },
+            new() { Value = null, Text = OrderDefault },
+        ];
+
         _instanceStates.Add(_exampleFooInstanceState1);
         _instanceStates.Add(_exampleFooInstanceState2);
         _instanceStates.Add(_exampleBarInstanceState);

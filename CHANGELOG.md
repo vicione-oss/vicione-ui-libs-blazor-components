@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.6`
+- `IPropertyGridState`, added `PropertyComparer` and `CategoryComparer` properties to control the sort order of property entries and category groups
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 
@@ -140,7 +141,7 @@
   - Added `ValueExpression` and `Valid` parameter
   - Added `FocusAsync()`
 - `ComboBox`
-  - Added `Enabled`, `NoOptionSelected`, `ReadOnly`, `UpdateKey ` and `ValueExpression` parameter
+  - Added `Enabled`, `NoOptionSelected`, `ReadOnly`, `UpdateKey` and `ValueExpression` parameter
   - Passing a value that is not selectable results in an empty state
 - `ContextMenu`, z-index changed from `1050` to `1060` to ensure context menu is displayed above DX dialogs when requested from said dialogs
 - `Grid`, marked `IHasUpdateLock` as obsolete
@@ -329,7 +330,6 @@
 - `TextBox`
   - Added `Valid` flag
   - Added `Id` parameter
-
 
 ## 1.7.5 - 2024-10-15
 

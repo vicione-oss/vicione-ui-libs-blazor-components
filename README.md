@@ -23,3 +23,7 @@ This repository contains Blazor components for use in ViciOne applications.
 
 - [`Components`](src/ViciOne.Ui.Blazor.Components/README.md)
 - [`TestingHelpers`](src/ViciOne.Ui.Blazor.Components.TestingHelpers/README.md)
+
+## Further reading
+
+- [`Server.Tests`](tests/Server.Tests/README.md)

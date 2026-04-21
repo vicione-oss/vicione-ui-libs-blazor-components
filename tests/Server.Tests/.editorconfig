@@ -1,0 +1,2 @@
+[ServerTestCollection.cs]
+dotnet_diagnostic.CA1711.severity = none # Rename type name ServerTestCollection so that it does not end in 'Collection'

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.Helpers;
@@ -306,7 +306,7 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
             oldItemsEnumerable = oldItemsList;
         }
 
-        if (!newItems.TryGetNonEnumeratedCount(out var newItemsCount))
+        if (newItems.TryGetNonEnumeratedCount(out var newItemsCount))
         {
             newItemsEnumerable = newItems;
         }

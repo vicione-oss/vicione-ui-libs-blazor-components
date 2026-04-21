@@ -6,6 +6,7 @@
 
 - `.NET` packages, updated to version `10.0.6`
 - `IPropertyGridState`, added `PropertyComparer` and `CategoryComparer` properties to control the sort order of property entries and category groups
+- `ComboBox`, fixed an issue with detecting changes to `Items`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

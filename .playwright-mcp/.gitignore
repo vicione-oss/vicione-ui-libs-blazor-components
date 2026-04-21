@@ -1,0 +1,2 @@
+# Exclude all Playwright MCP files for now as those files are mainly logs or cache files.
+*

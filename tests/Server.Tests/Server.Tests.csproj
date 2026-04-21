@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Playwright.Xunit.v3" />
+    <PackageReference Include="ViciOne.Ui.Testing.Playwright" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\samples\Server\Server.csproj" />
+  </ItemGroup>
+
+</Project>

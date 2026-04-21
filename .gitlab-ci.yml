@@ -112,6 +112,7 @@ include:
         - *install_npm_packages
       tags:
         - ${RUNNER_TAG}
+      filter: '/[Category!=Playwright]'
       coverage: true
   ### Pack
   - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.2.4

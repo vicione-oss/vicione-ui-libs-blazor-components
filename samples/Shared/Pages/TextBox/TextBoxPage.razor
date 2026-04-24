@@ -1,62 +1,60 @@
-﻿@page "/text-box"
+@page "/text-box"
 
 @using ViciOne.Ui.Blazor.Components.Button
 @using ViciOne.Ui.Blazor.Components.Button.Enums
 @using ViciOne.Ui.Blazor.Components.TextBox
 
-<h3>Placeholder</h3>
+<h3><code>@nameof(TextBox.Placeholder)</code></h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" />
 
-<h3>AutoComplete</h3>
+<h3><code>@nameof(TextBox.AutoComplete)</code></h3>
 
 <TextBox Placeholder="e.g. any@mail.com" AutoComplete="email" />
 
-<h3>Custom theme</h3>
+<h3><code>@nameof(TextBox.MaximumLength)</code></h3>
 
-<div class="custom-theme">
-    <TextBox Placeholder=" e.g. sed diam voluptua" />
-</div>
+<TextBox Placeholder="Enter up to 16 characters" MaximumLength="16" />
 
-<h3>Read-only</h3>
+<h3><code>@nameof(TextBox.ReadOnly)</code></h3>
 
 <TextBox ReadOnly="true" Value="Lorem ipsum" />
 
-<h3>Disabled</h3>
+<h3><code>@nameof(TextBox.Enabled)</code> is false</h3>
 
 <TextBox Enabled="false" Value="Lorem ipsum" />
 
-<h3>Invalid</h3>
+<h3><code>@nameof(TextBox.Valid)</code> is false</h3>
 
 <TextBox Value="Lorem ipsum" Valid="false" />
 
-<h3>Password</h3>
+<h3><code>@nameof(TextBox.Password)</code></h3>
 
 <TextBox Password="true" Value="Lorem ipsum" />
 
-<h3>Value / ValueChanging</h3>
+<h3><code>@nameof(TextBox.Value) / @nameof(TextBox.ValueChanging)</code></h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue1" ValueChanging="@TextBoxValueChanging" />
 contains @_textBoxInputValue1, <code>ValueChanging</code> raised @_textBoxInputValueChangingCount times
 
-<h3>Value / ValueChanged</h3>
+<h3><code>@nameof(TextBox.Value) / @nameof(TextBox.ValueChanged)</code></h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue4" ValueChanged="@TextBoxValueChanged" />
 contains @_textBoxInputValue4, <code>ValueChanged</code> raised @_textBoxInputValueChangedCount times
 
-<h3>Value / Data binding</h3>
+<h3><code>@nameof(TextBox.Value)</code> / DataBinding</h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" @bind-Value="@_textBoxBoundValue" /> bound to @_textBoxBoundValue
 
-<h3>Value / EnterPressed</h3>
+<h3><code>@nameof(TextBox.Value) / @nameof(TextBox.EnterPressed)</code></h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue2" EnterPressed="@(value => _textBoxInputValue2 = value)" /> contains @_textBoxInputValue2
 
-<h3>Value / EnterPressed removes content</h3>
+<h3><code>@nameof(TextBox.Value) / @nameof(TextBox.EnterPressed)</code> removes content</h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" @bind-Value="@_textBoxInputValue5" @bind-Value:event="ValueChanging" EnterPressed="@(() => _textBoxInputValue5 = string.Empty)" />
 
-<h3>Value / FocusLost</h3>
+<h3><code>@nameof(TextBox.Value) / @nameof(TextBox.FocusLost)</code></h3>
 
 <TextBox Placeholder="e.g. sed diam voluptua" Value="@_textBoxInputValue3" FocusLost="@(value => _textBoxInputValue3 = value)" /> contains @_textBoxInputValue3
 
@@ -73,4 +71,8 @@ contains @_textBoxInputValue4, <code>ValueChanged</code> raised @_textBoxInputVa
     }
 </p>
 
+<h3>Custom theme</h3>
 
+<div class="custom-theme">
+    <TextBox Placeholder=" e.g. sed diam voluptua" />
+</div>

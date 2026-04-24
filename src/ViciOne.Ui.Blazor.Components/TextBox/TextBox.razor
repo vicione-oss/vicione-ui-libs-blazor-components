@@ -30,6 +30,9 @@
     if (!string.IsNullOrWhiteSpace(Id))
         attributes.Add("id", Id);
 
+    if (MaximumLength.HasValue)
+        attributes.Add("maxlength", MaximumLength.Value);
+
     if (SpellCheck.HasValue)
         attributes.Add("spellcheck", SpellCheck.Value ? "true" : "false");
 

@@ -134,6 +134,13 @@ public sealed partial class TextBox
     public string? Id { get; set; }
 
     /// <summary>
+    /// Maximum number of characters the user can enter.
+    /// Maps to the <see href="https://html.spec.whatwg.org/#attr-input-maxlength">maxlength</see> attribute.
+    /// </summary>
+    [Parameter]
+    public int? MaximumLength { get; set; }
+
+    /// <summary>
     /// https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck
     /// </summary>
     [Parameter]

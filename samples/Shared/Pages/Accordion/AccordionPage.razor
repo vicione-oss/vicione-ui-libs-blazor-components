@@ -1,0 +1,109 @@
+@page "/accordion"
+
+@using ViciOne.Ui.Blazor.Components.Accordion.Components
+@using ViciOne.Ui.Blazor.Components.Accordion.Models
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+@using ViciOne.Ui.MonochromeIcons.Core.Extensions
+
+<h3>Basic</h3>
+
+<Accordion>
+    <AccordionItem Text="Section 1"
+                   Title="First section"
+                   Expanded="@(_expandedItem == "Section 1")"
+                   OnBeforeExpand="OnBeforeExpand"
+                   OnBeforeCollapse="OnBeforeCollapse">
+        <p>Content of section 1. Lorem ipsum dolor sit amet.</p>
+    </AccordionItem>
+
+    <AccordionItem Text="Section 2"
+                   Title="Second section"
+                   Expanded="@(_expandedItem == "Section 2")"
+                   OnBeforeExpand="OnBeforeExpand"
+                   OnBeforeCollapse="OnBeforeCollapse">
+        <p>Content of section 2. Consetetur sadipscing elitr.</p>
+    </AccordionItem>
+
+    <AccordionItem Text="Section 3"
+                   Title="Third section"
+                   Expanded="@(_expandedItem == "Section 3")"
+                   OnBeforeExpand="OnBeforeExpand"
+                   OnBeforeCollapse="OnBeforeCollapse">
+        <p>Content of section 3. Sed diam nonumy eirmod tempor.</p>
+    </AccordionItem>
+</Accordion>
+
+<h3>With icons</h3>
+
+<Accordion>
+    <AccordionItem Text="Settings"
+                   IconCssClass="@_settingsIcon"
+                   Expanded="@(_expandedIconItem == "Settings")"
+                   OnBeforeExpand="OnBeforeExpandIcons"
+                   OnBeforeCollapse="OnBeforeCollapseIcons">
+        <p>Application settings content.</p>
+    </AccordionItem>
+
+    <AccordionItem Text="Profile"
+                   IconCssClass="@_profileIcon"
+                   Expanded="@(_expandedIconItem == "Profile")"
+                   OnBeforeExpand="OnBeforeExpandIcons"
+                   OnBeforeCollapse="OnBeforeCollapseIcons">
+        <p>User profile content.</p>
+    </AccordionItem>
+</Accordion>
+
+<h3>With <code>CssClass</code></h3>
+
+<div class="with-css-class-example">
+    <Accordion>
+        <AccordionItem Text="Active Item"
+                       CssClass="@(_expandedStyledItem == "Active Item" ? "active" : null)"
+                       Expanded="@(_expandedStyledItem == "Active Item")"
+                       OnBeforeExpand="OnBeforeExpandStyled"
+                       OnBeforeCollapse="OnBeforeCollapseStyled">
+
+            <p>This item has the "active" CSS class when expanded.</p>
+        </AccordionItem>
+
+        <AccordionItem Text="Regular Item"
+                       CssClass="@(_expandedStyledItem == "Regular Item" ? "active" : null)"
+                       Expanded="@(_expandedStyledItem == "Regular Item")"
+                       OnBeforeExpand="OnBeforeExpandStyled"
+                       OnBeforeCollapse="OnBeforeCollapseStyled">
+
+            <p>Another item that receives the "active" class when expanded.</p>
+        </AccordionItem>
+    </Accordion>
+</div>
+
+<h3>Cancel expand / collapse</h3>
+
+<div class="options">
+    <div class="option">
+        <label>Block expand</label>
+
+        <Switch @bind-Value="_blockExpand" />
+    </div>
+</div>
+
+<Accordion>
+    <AccordionItem Text="Item A"
+                   Expanded="@(_expandedCancellableItem == "Item A")"
+                   OnBeforeExpand="OnBeforeExpandCancellable"
+                   OnBeforeCollapse="OnBeforeCollapseCancellable">
+        <p>Content A — collapsing this item is always allowed.</p>
+    </AccordionItem>
+
+    <AccordionItem Text="Item B"
+                   Expanded="@(_expandedCancellableItem == "Item B")"
+                   OnBeforeExpand="OnBeforeExpandCancellable"
+                   OnBeforeCollapse="OnBeforeCollapseCancellable">
+        <p>Content B</p>
+    </AccordionItem>
+</Accordion>
+
+<h4>Event log</h4>
+
+<p>Last event: <strong>@_lastEvent</strong></p>

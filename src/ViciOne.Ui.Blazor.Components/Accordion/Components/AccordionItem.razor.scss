@@ -1,0 +1,79 @@
+@use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/design/colors";
+@use "../../Styles/design/typography";
+@use "../../Styles/mixins";
+
+@use "sass:color";
+
+.accordion-item {
+    // Resets to overrides style inherited from Bootstrap included in consumer projects like Suite
+    background-color: transparent;
+    border: 0;
+
+    // Make items take full width by default
+    display: flex;
+    flex-direction: column;
+
+    color: colors.$font-light;
+
+    font-size: 12px;
+    font-weight: typography.$font-weight-light;
+
+    &:not(:first-child) {
+        margin-top: 8px;
+    }
+
+    .header {
+        // General resets
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        color: unset;
+        background-color: unset;
+        font-family: unset;
+        font-weight: unset;
+        line-height: unset;
+
+        min-height: 40px;
+
+        padding: 0px 24px;
+
+        overflow: hidden;
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        font-size: 14px;
+
+        user-select: none;
+        cursor: pointer;
+
+        @include animations.background-color();
+
+        $hover-bg: color.adjust(colors.$theme-inverted, $alpha: -0.95);
+
+        &:hover {
+            background-color: $hover-bg;
+        }
+
+        &:focus-visible {
+            background-color: $hover-bg;
+            outline: none;
+        }
+
+        ::deep > .icon {
+            flex-shrink: 0;
+
+            width: 24px;
+            height: 24px;
+        }
+
+        .text {
+            padding: 0px;
+
+            @include mixins.overflow-ellipsis();
+        }
+    }
+}

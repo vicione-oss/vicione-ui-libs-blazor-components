@@ -1,0 +1,16 @@
+@use "../../Styles/design/typography";
+@use "../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+
+    margin-bottom: 16px;
+}
+
+.with-css-class-example {
+    ::deep .active {
+        .accordion-item-header {
+            font-weight: typography.$font-weight-bold;
+        }
+    }
+}

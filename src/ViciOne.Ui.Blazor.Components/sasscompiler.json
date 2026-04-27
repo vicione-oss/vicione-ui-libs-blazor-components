@@ -1,6 +1,7 @@
-﻿{
+{
     "Arguments": "--no-source-map --style=compressed",
     "ScopedCssFolders": [
+        "Accordion",
         "AdvancedErrorBoundary",
         "Button",
         "Breadcrumb",

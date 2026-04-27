@@ -1,0 +1,32 @@
+@using ViciOne.Ui.Blazor.Components.Accordion.Components
+@using ViciOne.Ui.Blazor.Components.Shared
+
+@{
+    var cssClasses = new List<string> { "accordion-item" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.Add(CssClass);
+
+    var headerAttributes = new Dictionary<string, object>
+    {
+        { "class", string.Join(" ", cssClasses) }
+    };
+
+    if (!string.IsNullOrWhiteSpace(Title))
+        headerAttributes.Add("title", Title);
+}
+
+<div @attributes="headerAttributes">
+    <button class="header" @onclick="OnHeaderClickAsync">
+        @RenderFragments.Icon(this)
+
+        <span class="text">@Text</span>
+    </button>
+
+    @if (Expanded && ChildContent is not null)
+    {
+        <div class="content">
+            @ChildContent
+        </div>
+    }
+</div>

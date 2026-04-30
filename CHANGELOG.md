@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.10.0 - Unreleased
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `.NET` packages, updated to version `10.0.7`
+
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `.NET` packages, updated to version `10.0.7`
+
 ## 5.9.0 - 2026-04-27
 
 ### Package `ViciOne.Ui.Blazor.Components`

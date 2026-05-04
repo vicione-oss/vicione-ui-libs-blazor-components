@@ -87,10 +87,12 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
 
     private CheckBoxMode GetCheckBoxMode()
     {
-        if (AllowIndeterminateState && Value?.ToString() == ValueIndeterminate?.ToString())
+        var equalityComparer = EqualityComparer<TValue>.Default;
+
+        if (AllowIndeterminateState && equalityComparer.Equals(Value, ValueIndeterminate))
             return CheckBoxMode.Indeterminate;
 
-        if (Value?.ToString() == ValueChecked?.ToString())
+        if (equalityComparer.Equals(Value, ValueChecked))
             return CheckBoxMode.Checked;
         else
             return CheckBoxMode.Unchecked;

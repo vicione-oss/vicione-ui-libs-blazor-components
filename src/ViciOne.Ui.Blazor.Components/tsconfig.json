@@ -1,4 +1,4 @@
-﻿{
+{
     "compileOnSave": true,
     "compilerOptions": {
         "target": "es2022",
@@ -14,7 +14,7 @@
         "skipLibCheck": true,
         "paths": {
             "/_content/ViciOne.Ui.Blazor.Components/js/point.js": [ "./Scripts/Point.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-extensions.js": [ "./Scripts/PointerEventMixins.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js": [ "./Scripts/PointerEventMixins.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js": [ "./PointerCapture/Scripts/PointerCapture.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js": [ "./PointerCapture/Scripts/PointerCaptureBehavior.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js": [ "./PointerCapture/Scripts/PointerCaptureBehaviorContext.ts" ],

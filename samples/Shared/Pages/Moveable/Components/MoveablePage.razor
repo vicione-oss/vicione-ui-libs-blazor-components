@@ -1,4 +1,4 @@
-﻿@page "/moveable"
+@page "/moveable"
 
 @using ViciOne.Ui.Blazor.Components.SpinEdit
 @using ViciOne.Ui.Blazor.Components.Switch
@@ -10,6 +10,12 @@
         <label>Moveable</label>
 
         <Switch @bind-Value="@_moveable" />
+    </div>
+    
+    <div class="option">
+        <label>With move handle</label>
+
+        <Switch @bind-Value="@_withMoveHandle" />
     </div>
 
     <div class="option">
@@ -27,6 +33,6 @@
 
 <div class="content">
     <MoveableContainer GridSize="@_gridSize">
-        <Shape Moveable="@_moveable" @bind-X="_x" @bind-Y="_y" SnapToGrid="@_snapToGrid" />
+        <Shape Moveable="@_moveable" @bind-X="_x" @bind-Y="_y" SnapToGrid="@_snapToGrid" WithMoveHandle="@_withMoveHandle"/>
     </MoveableContainer>
 </div>

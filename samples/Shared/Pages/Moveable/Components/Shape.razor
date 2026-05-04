@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Extensions
 
 @{
     var cssClasses = new List<string> { "shape" };
@@ -30,6 +30,11 @@
 }
 
 <div @attributes="attributes" @ref="_elementReference">
+    @if (WithMoveHandle)
+    {
+        <ShapeMoveHandle Shape="this" />
+    }
+
     @if (left is not null)
     {
         <span>left: @left</span>

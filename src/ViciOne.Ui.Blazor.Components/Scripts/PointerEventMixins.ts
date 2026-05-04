@@ -5,7 +5,7 @@ class PointerEventMixins {
      * @param rootAncestor - Element that potentially contains the element having raised the pointer event
      * @param featureModifierClass - CSS class that identifies the required feature on the nested element like 'moveable'
      */
-    isRaisedByNestableOf(this: PointerEvent, rootAncestor: HTMLElement, featureModifierClass: string): boolean {
+    isRaisedByElementWithOwnHandlerNestedIn(this: PointerEvent, rootAncestor: HTMLElement, featureModifierClass: string): boolean {
         // If event was raised by a nested element ...
         if (this.currentTarget !== this.target && this.target instanceof HTMLElement) {
 
@@ -38,11 +38,4 @@ class PointerEventMixins {
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 interface PointerEvent extends PointerEventMixins { }
 
-applyMixins(PointerEvent, [PointerEventMixins]);
-
-function applyMixins(targetType: any, mixinClasses: any[]) {
-    for (const mixinClass of mixinClasses) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        Object.defineProperties(targetType.prototype, Object.getOwnPropertyDescriptors(mixinClass.prototype));
-    }
-}
+Object.defineProperties(PointerEvent.prototype, Object.getOwnPropertyDescriptors(PointerEventMixins.prototype));

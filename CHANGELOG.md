@@ -5,6 +5,8 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.7`
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.9.0`
+- `PointerCapture`, removed unnecessary nested handling in `start()` which also caused friction with move handles
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

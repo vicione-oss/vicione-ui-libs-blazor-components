@@ -331,7 +331,7 @@
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.7, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.7, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.5.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.9.0, )"
         }
       },
       "Microsoft.AspNetCore.Components.QuickGrid": {
@@ -403,19 +403,19 @@
       },
       "ViciOne.Ui.MonochromeIcons.Components": {
         "type": "CentralTransitive",
-        "requested": "[4.5.0, )",
-        "resolved": "4.5.0",
-        "contentHash": "p8TlJg+V4mPcfYC6YCTPolstxi9MMI5WkXPzMqpoYpotOuI5E/UXck+gYAl2Y3X9EXkufX1uiTxTNEu55buHZQ==",
+        "requested": "[4.9.0, )",
+        "resolved": "4.9.0",
+        "contentHash": "VrfN89cP3BXFUbFWuiBK5bFmyJMu5AYpto4AGogOZIGYPPROa830JjuZNrUfxBHtBAH3L7/aX1t4N5gT87pQtA==",
         "dependencies": {
-          "Microsoft.AspNetCore.Components.Web": "10.0.4",
-          "ViciOne.Ui.MonochromeIcons.Core": "4.5.0"
+          "Microsoft.AspNetCore.Components.Web": "10.0.6",
+          "ViciOne.Ui.MonochromeIcons.Core": "4.9.0"
         }
       },
       "ViciOne.Ui.MonochromeIcons.Core": {
         "type": "CentralTransitive",
-        "requested": "[4.5.0, )",
-        "resolved": "4.5.0",
-        "contentHash": "AURCzsnfh9/07sVma81MxulCDababdNyIaC6ITnc8pvkahf54EnM5oYFBXY9igzlk+3yvP5D3zArob+JHsMYTw=="
+        "requested": "[4.9.0, )",
+        "resolved": "4.9.0",
+        "contentHash": "PVVaC/XdzXW+4Eyz1hLfZTGtgmFPIiKEvgu1dFFmYfwawiXnz8rHTai+NT6EpGjdKGO2cFosNuyrMW5vUSzefQ=="
       }
     },
     "net10.0/linux-arm64": {

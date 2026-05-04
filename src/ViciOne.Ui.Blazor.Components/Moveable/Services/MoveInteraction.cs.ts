@@ -35,7 +35,7 @@ class MoveInteraction {
         if (e.isModifierKeyPressed())
             return;
 
-        if (e.isRaisedByNestableOf(this.context.moveHandle, 'moveable'))
+        if (e.isRaisedByElementWithOwnHandlerNestedIn(this.context.moveHandle, 'moveable'))
             return; // Do nothing as nested moveable has its own handler
 
         // Start interaction when mouse is moved

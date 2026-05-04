@@ -19,29 +19,14 @@ export class PointerCapture {
         const pointerDownClientX = pointerEvent.clientX;
         const pointerDownClientY = pointerEvent.clientY;
 
-        let { offsetX, offsetY } = pointerEvent;
+        const captureTargetBoundingClientRect = captureTarget.getBoundingClientRect();
 
-        if (pointerEvent.currentTarget && pointerEvent.currentTarget !== pointerEvent.target) {
-            // This path is entered when an element inside captureTarget raised the pointerEvent.
-            // We need to adjust offsetX and offsetY as those values are relative to pointerEvent.target,
-            // but we expect those values to be relative to pointerEvent.currentTarget (captureTarget)
-
-            if (pointerEvent.currentTarget instanceof HTMLElement && pointerEvent.target instanceof HTMLElement) {
-                const currentTargetBoundingClientRect = pointerEvent.currentTarget.getBoundingClientRect();
-                const targetBoundingClientRect = pointerEvent.target.getBoundingClientRect();
-
-                offsetX += targetBoundingClientRect.left - currentTargetBoundingClientRect.left;
-                offsetY += targetBoundingClientRect.top - currentTargetBoundingClientRect.top;
-            }
-        }
-
-        const pointerDownCaptureTargetClientX = pointerEvent.clientX - offsetX;
-        const pointerDownCaptureTargetClientY = pointerEvent.clientY - offsetY;
+        const pointerDownCaptureTargetClientX = captureTargetBoundingClientRect.x;
+        const pointerDownCaptureTargetClientY = captureTargetBoundingClientRect.y;
 
         const captureTargetClientXminimum = boundingClientRect.left;
         const captureTargetClientYminimum = boundingClientRect.top;
 
-        const captureTargetBoundingClientRect = captureTarget.getBoundingClientRect();
         const captureTargetClientXmaximum = captureTargetClientXminimum + boundingClientRect.width - captureTargetBoundingClientRect.width;
         const captureTargetClientYmaximum = captureTargetClientYminimum + boundingClientRect.height - captureTargetBoundingClientRect.height;
 

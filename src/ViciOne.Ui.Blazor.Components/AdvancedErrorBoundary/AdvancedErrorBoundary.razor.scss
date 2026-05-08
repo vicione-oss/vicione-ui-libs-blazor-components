@@ -1,4 +1,4 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/design/colors";
 
 .generic-error-hint {
     position: absolute;
@@ -6,6 +6,12 @@
     top: 0;
     right: 0;
     bottom: 0;
+
+    container-type: size; // enables queries to allow responsive layout
+
+    overflow: hidden; // avoid overflow by elements inside the error hint
+
+    color: colors.$font-light;
 
     display: grid;
     align-content: center;
@@ -17,21 +23,91 @@
         gap: 10px;
         align-items: center;
 
+        max-width: 100%;
+
         ::deep .monochrome-icon {
-            color: colors.$font-light;
+            flex-shrink: 0;
         }
 
         .text {
             font-size: 18px;
+
             color: colors.$accent;
         }
     }
 
     .details {
+        max-width: 100%;
+
         font-size: 12px;
+        text-align: center;
     }
 
     ::deep .try-to-recover-button {
-        margin-top: 16px;
+        margin-top: 4px;
     }
+
+    .only-icon {
+        display: none;
+
+        .tooltipped-content {
+            display: contents;
+        }
+    }
+
+    @container (width < 325px) {
+        .heading {
+            flex-direction: column;
+
+            span {
+                text-align: center
+            }
+        }
+    }
+
+    @container (width < 130px) {
+        .heading {
+            display: none;
+        }
+
+        .details {
+            display: none;
+        }
+
+        .only-icon {
+            display: contents;
+        }
+    }
+
+    @container (height < 220px) or (width < 155px) {
+        ::deep .try-to-recover-button {
+            display: none;
+        }
+    }
+
+    @container (height < 180px) {
+        .details {
+            display: none;
+        }
+    }
+
+    @container (height < 85px) {
+        .heading {
+            display: none;
+        }
+
+        .only-icon {
+            display: contents;
+        }
+    }
+}
+
+.tooltip-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+
+    width: fit-content !important;
+
+    padding: 8px;
 }

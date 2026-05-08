@@ -1,9 +1,10 @@
-﻿@page "/advanced-error-boundary"
+@page "/advanced-error-boundary"
 
 @using ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary
 @using ViciOne.Ui.Blazor.Components.Button
 @using ViciOne.Ui.Blazor.Components.CheckBox
 @using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tooltip.Components
 
 <div class="options">
     <div class="option">
@@ -14,13 +15,81 @@
     </div>
 </div>
 
-<div class="error-boundary-container">
-    <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
-        <Button Text="Make it snap!" OnClick="@MakeItSnapButtonClick" />
-    </AdvancedErrorBoundary>
+<h3>Different container widths</h3>
+
+<div class="stack-layout">
+    <div class="error-boundary-container width">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+
+    <div class="error-boundary-container width two-line">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+
+    <div class="error-boundary-container width three-line">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+
+    <div class="error-boundary-container width only-icon">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+</div>
+
+<h3>Different container heights</h3>
+
+<div class="stack-layout">
+    <div class="error-boundary-container height">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+
+    <div class="error-boundary-container height without-button">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+
+    <div class="error-boundary-container height without-details">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
+
+    <div class="error-boundary-container height without-header">
+        <AdvancedErrorBoundary PrepareRecover="@_prepareRecoverEventCallback">
+            <Button Text="@_text" OnClick="@MakeItSnapButtonClick" />
+
+            @PossiblyFailingOperation()
+        </AdvancedErrorBoundary>
+    </div>
 </div>
 
 @if (!string.IsNullOrEmpty(_recoverMessage))
 {
     <p>@_recoverMessage</p>
 }
+
+<TooltipDisplay />

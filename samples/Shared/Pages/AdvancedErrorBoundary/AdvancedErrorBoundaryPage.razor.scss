@@ -1,19 +1,54 @@
-﻿@use "../../Styles/mixins";
+@use "../../Styles/mixins";
 
 .options {
     @include mixins.options-styling();
 }
 
-.error-boundary-container {
-    position: relative;
-    margin-top: 30px;
+.stack-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
 
-    display: grid;
-    justify-items: center;
-    align-items: center;
+    .error-boundary-container {
+        position: relative;
 
-    width: 480px;
-    height: 360px;
+        box-sizing: content-box;
 
-    @include mixins.dotted-border();
+        width: 325px;
+        height: 220px;
+
+        display: grid;
+        justify-items: center;
+        align-items: center;
+
+        @include mixins.dotted-border();
+
+        &.width {
+            &.two-line {
+                width: 155px;
+            }
+
+            &.three-line {
+                width: 130px;
+            }
+
+            &.only-icon {
+                width: 80px;
+            }
+        }
+
+        &.height {
+            &.without-button {
+                height: 180px;
+            }
+
+            &.without-details {
+                height: 85px;
+            }
+
+            &.without-header {
+                height: 80px;
+            }
+        }
+    }
 }

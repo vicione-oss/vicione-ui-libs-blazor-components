@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <ViciOneUiMonochromeIconsVersion>4.9.0</ViciOneUiMonochromeIconsVersion>
+    <ViciOneUiMonochromeIconsVersion>4.10.0</ViciOneUiMonochromeIconsVersion>
     <DotNetVersion>10.0.7</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>

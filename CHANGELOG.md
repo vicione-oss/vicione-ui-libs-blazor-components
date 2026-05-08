@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.11.0 - 2026-05-08
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `AdvancedErrorBoundary`, reworked to responsive styling
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.10.0`
+
 ## 5.10.0 - 2026-05-04
 
 ### Package `ViciOne.Ui.Blazor.Components`

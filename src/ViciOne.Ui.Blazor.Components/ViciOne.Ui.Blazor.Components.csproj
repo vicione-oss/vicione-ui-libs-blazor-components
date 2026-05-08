@@ -238,11 +238,11 @@
       <MonochromeIcon Include="close-medium" Size="16;32" />
       <MonochromeIcon Include="delete" Size="24" />
       <MonochromeIcon Include="edit" Size="24" />
-      <MonochromeIcon Include="error-full" Size="24" />
       <MonochromeIcon Include="expander-light-left" Size="24" />
       <MonochromeIcon Include="expander-light-right" Size="16;24" />
       <MonochromeIcon Include="filter-light" Size="18" />
       <MonochromeIcon Include="folder" Size="32" />
+      <MonochromeIcon Include="general-error" Size="24" />
       <MonochromeIcon Include="info-outlined" Size="16" />
       <MonochromeIcon Include="kebab-menu" Size="24" />
       <MonochromeIcon Include="move-down" Size="24" />

@@ -49,6 +49,7 @@
             margin: 0;
             border-width: 0;
             border-radius: 0;
+            line-height: 16px; // same as icon size, otherwise CSS transform is based on inherited value which we don't control
 
             &:first-child {
                 border-top-right-radius: inputs.$border-radius - inputs.$border-width;

@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.12.0 - Unreleased
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `SpinEdit`, more robust icon transform in spin buttons to avoid interference with third-party styling
+
 ## 5.11.0 - 2026-05-08
 
 ### Package `ViciOne.Ui.Blazor.Components`

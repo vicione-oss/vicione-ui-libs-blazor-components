@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Extensions
 @using ViciOne.Ui.Blazor.Components.Resources.SpinEdit
 @using ViciOne.Ui.Blazor.Components.TextBox
 @using ViciOne.Ui.MonochromeIcons.Components
@@ -21,7 +21,7 @@
     if (!Enabled)
         cssClasses.Add("disabled");
 
-    if (CssClass is not null)
+    if (!string.IsNullOrWhiteSpace(CssClass))
         cssClasses.AddRange(CssClass.Split(" "));
 
     this.WithInputValidationStyling(cssClasses);

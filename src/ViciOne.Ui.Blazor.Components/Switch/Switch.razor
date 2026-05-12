@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Switch.Extensions
+@using ViciOne.Ui.Blazor.Components.Switch.Extensions
 
 @{
     var cssClasses = new List<string> { "switch", Size.ToModifierCssClass() };
@@ -9,7 +9,7 @@
     if (!Enabled)
         cssClasses.Add("disabled");
 
-    if (CssClass is not null)
+    if (!string.IsNullOrWhiteSpace(CssClass))
         cssClasses.AddRange(CssClass.Split(" "));
 }
 

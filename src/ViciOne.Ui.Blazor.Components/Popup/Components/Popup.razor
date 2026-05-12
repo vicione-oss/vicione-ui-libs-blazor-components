@@ -28,7 +28,7 @@
         @{
             var modelDialogCssClasses = new List<string> { "modal-dialog" };
 
-            if (CssClass is not null)
+            if (!string.IsNullOrWhiteSpace(CssClass))
                 modelDialogCssClasses.AddRange(CssClass.Split(" "));
 
             var modalDialogStyles = new Dictionary<string, object>();

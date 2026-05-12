@@ -1,4 +1,4 @@
-﻿@page "/expandable-menu"
+@page "/expandable-menu"
 
 @using ViciOne.Ui.Blazor.Components.EditorLayout
 @using ViciOne.Ui.Blazor.Components.ExpandableMenu.Components
@@ -9,7 +9,7 @@
     <EditorLayout>
         <Left>
             <Sidebar Placement="SidebarPlacement.Left" Mode="@_sidebarMode" CompactWidth="56" FluidMinimumWidth="300" FluidMaximumWidth="680">
-                <ExpandableMenu CompactMode="_sidebarMode == SidebarMode.Compact" CompactModeChanged="@OnCompactChanged" Entries="@_entries" />
+                <ExpandableMenu CompactMode="_sidebarMode == SidebarMode.Compact" CompactModeChanged="@ExpandableMenuCompactModeChanged" Entries="@_entries" />
             </Sidebar>
         </Left>
 

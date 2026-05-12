@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.ExpandableMenu.Models;
+using ViciOne.Ui.Blazor.Components.ExpandableMenu.Models;
 
 namespace ViciOne.Ui.Blazor.Components.ExpandableMenu.Services;
 
@@ -11,7 +11,7 @@ internal sealed class ExpandableMenuService
     public event Func<Task>? CompactChanged;
     public event Func<ExpandableMenuEntry, Task>? EntryExpansionChanged;
 
-    public Task InvokeEntryExpansionChanged(ExpandableMenuEntry entry)
+    public Task NotifyEntryExpansionChangedAsync(ExpandableMenuEntry entry)
     {
         if (entry.IsSticky)
         {
@@ -28,7 +28,7 @@ internal sealed class ExpandableMenuService
         return EntryExpansionChanged?.Invoke(entry) ?? Task.CompletedTask;
     }
 
-    public Task SetIsCompact(bool isCompact)
+    public Task SetIsCompactAsync(bool isCompact)
     {
         if (IsCompact == isCompact)
             return Task.CompletedTask;

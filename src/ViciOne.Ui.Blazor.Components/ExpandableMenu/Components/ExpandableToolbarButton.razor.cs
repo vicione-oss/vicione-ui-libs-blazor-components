@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.ExpandableMenu.Models;
 using ViciOne.Ui.Blazor.Components.ExpandableMenu.Services;
 
@@ -18,8 +18,8 @@ public sealed partial class ExpandableToolbarButton : ComponentBase, IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        MenuService.CompactChanged -= OnCompactChanged;
-        MenuService.EntryExpansionChanged -= OnEntryExpansionChanged;
+        MenuService.CompactChanged -= MenuServiceCompactChangedAsync;
+        MenuService.EntryExpansionChanged -= MenuServiceEntryExpansionChangedAsync;
     }
 
     private async Task OnClickAsync()
@@ -29,24 +29,24 @@ public sealed partial class ExpandableToolbarButton : ComponentBase, IDisposable
         else if (Entry.IsSticky && !MenuService.IsCompact)
             Entry.IsExpanded = false;
 
-        await MenuService.InvokeEntryExpansionChanged(Entry);
+        await MenuService.NotifyEntryExpansionChangedAsync(Entry);
 
         if (MenuService.IsCompact)
-            await MenuService.SetIsCompact(false);
+            await MenuService.SetIsCompactAsync(false);
     }
 
-    private Task OnCollapseButtonClicked()
+    private Task CollapseButtonClickAsync()
     {
         if (!MenuService.IsCompact)
-            return MenuService.SetIsCompact(true);
+            return MenuService.SetIsCompactAsync(true);
 
         return Task.CompletedTask;
     }
 
-    private Task OnCompactChanged()
+    private Task MenuServiceCompactChangedAsync()
         => InvokeAsync(StateHasChanged);
 
-    private Task OnEntryExpansionChanged(ExpandableMenuEntry entry)
+    private Task MenuServiceEntryExpansionChangedAsync(ExpandableMenuEntry entry)
     {
         if (Entry == entry)
             return Task.CompletedTask;
@@ -60,13 +60,13 @@ public sealed partial class ExpandableToolbarButton : ComponentBase, IDisposable
     /// <inheritdoc/>
     protected override Task OnInitializedAsync()
     {
-        MenuService.CompactChanged += OnCompactChanged;
-        MenuService.EntryExpansionChanged += OnEntryExpansionChanged;
+        MenuService.CompactChanged += MenuServiceCompactChangedAsync;
+        MenuService.EntryExpansionChanged += MenuServiceEntryExpansionChangedAsync;
 
         if (Entry.IsDefault)
         {
             Entry.IsExpanded = true;
-            return MenuService.InvokeEntryExpansionChanged(Entry);
+            return MenuService.NotifyEntryExpansionChangedAsync(Entry);
         }
 
         return Task.CompletedTask;

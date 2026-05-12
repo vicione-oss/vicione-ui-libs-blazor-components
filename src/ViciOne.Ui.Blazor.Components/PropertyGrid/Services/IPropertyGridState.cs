@@ -72,6 +72,3 @@ public interface IPropertyGridState : IHasChangeableProperties, IHasUpdateLock
     /// </remarks>
     bool KeepMessages { get; set; }
 }
-
-/// <inheritdoc/>
-public interface IPropertyGridState<TContext> : IPropertyGridState;

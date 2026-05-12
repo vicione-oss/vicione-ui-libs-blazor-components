@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.Interfaces;
+using ViciOne.Ui.Blazor.Components.Interfaces;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Messages;
 
@@ -53,6 +53,3 @@ public interface IPropertyGridMessageStore : IHasUpdateLock
     /// </summary>
     IEnumerable<IMessage> Get(IPropertyGridItem propertyGridItem);
 }
-
-/// <inheritdoc/>
-public interface IPropertyGridMessageStore<TContext> : IPropertyGridMessageStore;

@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Shared
+@using ViciOne.Ui.Blazor.Components.Shared
 @using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
@@ -35,7 +35,7 @@
         {
             <button type="button"
                     class="collapse-button"
-                    @onclick="@OnCollapseButtonClicked"
+                    @onclick="@CollapseButtonClickAsync"
                     @onclick:preventDefault
                     @onclick:stopPropagation>
 

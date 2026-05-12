@@ -72,7 +72,7 @@ public class ResizeObserverTests
     [Theory]
     [InlineData(true, 50)]
     [InlineData(false, 1)]
-    public async Task Concurrent_ObserveAsync_should_invoke_observe_expected_times(bool useUniqueElements, int expectedInvokeCount)
+    public async Task Concurrent_observe_async_should_invoke_observe_expected_times(bool useUniqueElements, int expectedInvokeCount)
     {
         // Arrange
         await using var ctx = new BunitContext();
@@ -93,7 +93,7 @@ public class ResizeObserverTests
     }
 
     [Fact]
-    public async Task Concurrent_UnobserveAsync_should_unobserve_all_elements()
+    public async Task Concurrent_unobserve_async_should_unobserve_all_elements()
     {
         // Arrange
         await using var ctx = new BunitContext();
@@ -117,7 +117,7 @@ public class ResizeObserverTests
     }
 
     [Fact]
-    public async Task Concurrent_ObserveAsync_and_UnobserveAsync_should_not_throw()
+    public async Task Concurrent_observe_async_and_unobserve_async_should_not_throw()
     {
         // Arrange
         await using var ctx = new BunitContext();
@@ -151,7 +151,7 @@ public class ResizeObserverTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task Concurrent_DisposeAsync_should_not_throw(bool concurrentObserve)
+    public async Task Concurrent_dispose_async_should_not_throw(bool concurrentObserve)
     {
         // Arrange
         await using var ctx = new BunitContext();

@@ -11,9 +11,10 @@ dotnet_diagnostic.CA2251.severity = warning # Use 'string.Equals' instead of com
 
 dotnet_diagnostic.SYSLIB1006.severity = warning # Multiple logging methods cannot use the same event ID
 
-# https://aka.ms/editorconfigdocs
-
 [**{Tests}*.cs]
+dotnet_diagnostic.RCS1046.severity = none # Asynchronous method name should end with 'Async'
+
+# https://aka.ms/editorconfigdocs
 
 #
 # Configure IDE1006 to somewhat check snake case naming for test methods.
@@ -33,44 +34,3 @@ dotnet_naming_style.test_method_naming_style.required_suffix =
 dotnet_naming_rule.test_method_naming_rule.symbols  = test_method
 dotnet_naming_rule.test_method_naming_rule.style    = test_method_naming_style
 dotnet_naming_rule.test_method_naming_rule.severity = default
-
-#
-# Configure IDE1006 in a way that "Naming rule violation: Missing suffix: 'Async'" is not shown anymore
-# for facts and theories. This is done by relying on the rule order functionality where declaring a more
-# specific naming rule "async_facts_or_theories_naming_rule" overrides the default one shipped with Roslyn.
-#
-# Inspired by https://learn.microsoft.com/de-de/dotnet/fundamentals/code-analysis/style-rules/naming-rules#example-public-member-capitalization
-# ===========================
-
-# Defining the 'async_facts_or_theories' symbol group
-dotnet_naming_symbols.async_facts_or_theories.applicable_kinds = method
-dotnet_naming_symbols.async_facts_or_theories.applicable_accessibilities = public
-dotnet_naming_symbols.async_facts_or_theories.required_modifiers = async
-
-# Defining the 'async_facts_or_theories_naming_style' naming style
-dotnet_naming_style.async_facts_or_theories_naming_style.capitalization = first_word_upper
-dotnet_naming_style.async_facts_or_theories_naming_style.required_suffix = 
-
-# Defining the 'async_facts_or_theories_naming_rule' naming rule
-dotnet_naming_rule.async_facts_or_theories_naming_rule.symbols  = async_facts_or_theories
-dotnet_naming_rule.async_facts_or_theories_naming_rule.style = async_facts_or_theories_naming_style
-dotnet_naming_rule.async_facts_or_theories_naming_rule.severity = default
-
-#
-# Configure IDE1006 to allow CamelCase (PascalCase) for private const fields.
-# This allows patterns like "private const string CssSelector" without s_ prefix.
-# ===========================
-
-# Defining the 'private_const_fields' symbol group
-dotnet_naming_symbols.private_const_fields.applicable_kinds = field
-dotnet_naming_symbols.private_const_fields.applicable_accessibilities = private
-dotnet_naming_symbols.private_const_fields.required_modifiers = const
-
-# Defining the 'private_const_fields_naming_style' naming style (PascalCase, no prefix)
-dotnet_naming_style.private_const_fields_naming_style.capitalization = pascal_case
-dotnet_naming_style.private_const_fields_naming_style.required_prefix = 
-
-# Defining the 'private_const_fields_naming_rule' naming rule
-dotnet_naming_rule.private_const_fields_naming_rule.symbols = private_const_fields
-dotnet_naming_rule.private_const_fields_naming_rule.style = private_const_fields_naming_style
-dotnet_naming_rule.private_const_fields_naming_rule.severity = default

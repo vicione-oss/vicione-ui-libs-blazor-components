@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.ExpandableMenu.Models;
 using ViciOne.Ui.Blazor.Components.Sidebar.Enums;
@@ -65,10 +65,6 @@ public sealed partial class ExpandableMenuPage : ComponentBase
             },
         ];
 
-    private Task OnCompactChanged(bool isCompact)
-    {
-        _sidebarMode = isCompact ? SidebarMode.Compact : SidebarMode.Fluid;
-
-        return InvokeAsync(StateHasChanged);
-    }
+    private void ExpandableMenuCompactModeChanged(bool isCompact)
+        => _sidebarMode = isCompact ? SidebarMode.Compact : SidebarMode.Fluid;
 }

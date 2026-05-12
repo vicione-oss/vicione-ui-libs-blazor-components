@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Timers;
 using Microsoft.AspNetCore.Components;
@@ -50,11 +50,11 @@ public sealed partial class ExpandableMenu : ComponentBase, IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        _entriesChangedTimer.Elapsed -= OnEntriesChangedTimerElapsedAsync;
+        _entriesChangedTimer.Elapsed -= EntriesChangedTimerElapsedAsync;
         _entriesChangedTimer.Dispose();
-        Entries.CollectionChanged -= OnEntriesChanged;
-        MenuService.CompactChanged -= OnCompactChangedAsync;
-        MenuService.EntryExpansionChanged -= OnEntryExpansionChanged;
+        Entries.CollectionChanged -= EntriesCollectionChanged;
+        MenuService.CompactChanged -= MenuServiceCompactChangedAsync;
+        MenuService.EntryExpansionChanged -= MenuServiceEntryExpansionChangedAsync;
     }
 
     private string GetAreaRowsDefinition()
@@ -114,47 +114,48 @@ public sealed partial class ExpandableMenu : ComponentBase, IDisposable
                (bottomCount > 0 ? $" repeat({bottomCount}, min-content)" : string.Empty);
     }
 
-    private async Task OnCompactChangedAsync()
+    private async Task MenuServiceCompactChangedAsync()
     {
         if (CompactModeChanged.HasDelegate)
             await CompactModeChanged.InvokeAsync(MenuService.IsCompact);
 
-        await Refresh();
+        await RefreshAsync();
     }
 
-    private void OnEntriesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void EntriesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         => _entriesChangedTimer.Start();
 
-    private async void OnEntriesChangedTimerElapsedAsync(object? sender, ElapsedEventArgs e)
-        => await Refresh();
+    private async void EntriesChangedTimerElapsedAsync(object? sender, ElapsedEventArgs e)
+        => await RefreshAsync();
 
-    private Task OnEntryExpansionChanged(ExpandableMenuEntry arg)
-        => Refresh();
+    private Task MenuServiceEntryExpansionChangedAsync(ExpandableMenuEntry arg)
+        => RefreshAsync();
 
     /// <inheritdoc/>
     protected override void OnInitialized()
     {
-        _entriesChangedTimer.Elapsed += OnEntriesChangedTimerElapsedAsync;
-        Entries.CollectionChanged += OnEntriesChanged;
+        _entriesChangedTimer.Elapsed += EntriesChangedTimerElapsedAsync;
+        Entries.CollectionChanged += EntriesCollectionChanged;
 
-        MenuService.CompactChanged += OnCompactChangedAsync;
-        MenuService.SetIsCompact(CompactMode);
+        MenuService.CompactChanged += MenuServiceCompactChangedAsync;
+        MenuService.SetIsCompactAsync(CompactMode);
 
-        MenuService.EntryExpansionChanged += OnEntryExpansionChanged;
+        MenuService.EntryExpansionChanged += MenuServiceEntryExpansionChangedAsync;
     }
 
     /// <inheritdoc/>
     protected override void OnParametersSet()
     {
         if (CompactMode != MenuService.IsCompact)
-            MenuService.SetIsCompact(CompactMode);
+            MenuService.SetIsCompactAsync(CompactMode);
 
         _shouldRender = true;
     }
 
-    private Task Refresh()
+    private Task RefreshAsync()
     {
         _shouldRender = true;
+
         return InvokeAsync(StateHasChanged);
     }
 
@@ -164,6 +165,7 @@ public sealed partial class ExpandableMenu : ComponentBase, IDisposable
         if (_shouldRender)
         {
             _shouldRender = false;
+
             return true;
         }
 

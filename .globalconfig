@@ -22,6 +22,7 @@ roslynator_blank_line_between_switch_sections = include
 dotnet_diagnostic.RCS1001.severity = warning # Add braces (when expression spans over multiple lines)
 dotnet_diagnostic.RCS1021.severity = warning # Convert lambda expression body to expression body
 dotnet_diagnostic.RCS1037.severity = warning # Remove trailing white-space
+dotnet_diagnostic.RCS1046.severity = warning # Asynchronous method name should end with 'Async'
 dotnet_diagnostic.RCS1047.severity = warning # Non-asynchronous method name should not end with 'Async'
 dotnet_diagnostic.RCS1060.severity = warning # Declare each type in separate file
 dotnet_diagnostic.RCS1085.severity = warning # Use auto-implemented property

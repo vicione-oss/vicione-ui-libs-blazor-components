@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.ExpandableMenu.Models;
 using ViciOne.Ui.Blazor.Components.ExpandableMenu.Services;
 
@@ -17,14 +17,14 @@ public sealed partial class ExpandableContent : ComponentBase, IDisposable
 
     /// <inheritdoc/>
     public void Dispose()
-        => MenuService.EntryExpansionChanged -= OnEntryExpansionChanged;
+        => MenuService.EntryExpansionChanged -= MenuServiceEntryExpansionChangedAsync;
 
-    private Task OnEntryExpansionChanged(ExpandableMenuEntry entry)
+    private Task MenuServiceEntryExpansionChangedAsync(ExpandableMenuEntry entry)
         => InvokeAsync(StateHasChanged);
 
     /// <inheritdoc/>
     protected override void OnInitialized()
-        => MenuService.EntryExpansionChanged += OnEntryExpansionChanged;
+        => MenuService.EntryExpansionChanged += MenuServiceEntryExpansionChangedAsync;
 
     /// <inheritdoc/>
     protected override void OnParametersSet()

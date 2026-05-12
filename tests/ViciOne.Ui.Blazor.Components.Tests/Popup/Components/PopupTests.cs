@@ -69,7 +69,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task ShowAsync_should_invoke_OnShowing()
+    public async Task Show_async_should_invoke_on_showing()
     {
         // Arrange
         var onShowingInvoked = false;
@@ -85,7 +85,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task ShowAsync_should_invoke_VisibleChanged_with_true()
+    public async Task Show_async_should_invoke_visible_changed_with_true()
     {
         // Arrange
         bool? visibleChangedValue = null;
@@ -101,7 +101,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task ShowAsync_should_not_invoke_OnShowing_when_already_visible()
+    public async Task Show_async_should_not_invoke_on_showing_when_already_visible()
     {
         // Arrange
         var onShowingCallCount = 0;
@@ -119,7 +119,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task ShowAsync_should_not_throw_when_disposed()
+    public async Task Show_async_should_not_throw_when_disposed()
     {
         // Arrange
         var popup = _testContext.Render<PopupComponent>();
@@ -134,7 +134,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task CloseAsync_should_make_popup_closed()
+    public async Task Close_async_should_make_popup_closed()
     {
         // Arrange
         var popup = _testContext.Render<PopupComponent>(b => b
@@ -153,7 +153,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task CloseAsync_should_invoke_OnClosing()
+    public async Task Close_async_should_invoke_on_closing()
     {
         // Arrange
         var onClosingInvoked = false;
@@ -170,7 +170,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task CloseAsync_should_invoke_VisibleChanged_with_false()
+    public async Task Close_async_should_invoke_visible_changed_with_false()
     {
         // Arrange
         bool? visibleChangedValue = null;
@@ -187,7 +187,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task CloseAsync_should_not_invoke_OnClosing_when_already_hidden()
+    public async Task Close_async_should_not_invoke_on_closing_when_already_hidden()
     {
         // Arrange
         var onClosingCallCount = 0;
@@ -219,7 +219,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task Concurrent_ShowAsync_calls_should_invoke_OnShowing_once()
+    public async Task Concurrent_show_async_calls_should_invoke_on_showing_once()
     {
         // Arrange
         var onShowingCallCount = 0;
@@ -238,7 +238,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task Concurrent_CloseAsync_calls_should_invoke_OnClosing_once()
+    public async Task Concurrent_close_async_calls_should_invoke_on_closing_once()
     {
         // Arrange
         var onClosingCallCount = 0;
@@ -258,7 +258,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task DisposeAsync_should_cancel_pending_ShowAsync()
+    public async Task Dispose_async_should_cancel_pending_show_async()
     {
         // Arrange
         var popup = _testContext.Render<PopupComponent>();
@@ -274,7 +274,7 @@ public sealed class PopupTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task DisposeAsync_should_cancel_pending_CloseAsync()
+    public async Task Dispose_async_should_cancel_pending_close_async()
     {
         // Arrange
         var popup = _testContext.Render<PopupComponent>(b => b

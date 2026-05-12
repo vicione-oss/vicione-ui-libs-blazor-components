@@ -324,6 +324,6 @@ public sealed partial class TextBox
         }
     }
 
-    private async Task AfterOnInput()
+    private async Task AfterOnInputAsync()
         => await HandleValueChangingAsync(_valueEntered);
 }

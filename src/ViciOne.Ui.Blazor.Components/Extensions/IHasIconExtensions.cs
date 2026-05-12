@@ -1,9 +1,9 @@
-﻿using ViciOne.Ui.Blazor.Components.Interfaces;
+using ViciOne.Ui.Blazor.Components.Interfaces;
 
 namespace ViciOne.Ui.Blazor.Components.Extensions;
 
 internal static class IHasIconExtensions
 {
-    public static bool IsAnyIconParameterSet(this IHasIcon component)
-        => component.IconCssClass is not null || component.IconUrl is not null || !string.IsNullOrWhiteSpace(component.IconData);
+    public static bool IsAnyIconParameterSet(this IHasIcon hasIcon)
+        => !string.IsNullOrWhiteSpace(hasIcon.IconCssClass) || hasIcon.IconUrl is not null || !string.IsNullOrWhiteSpace(hasIcon.IconData);
 }

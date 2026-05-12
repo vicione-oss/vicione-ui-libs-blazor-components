@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `SpinEdit`, more robust icon transform in spin buttons to avoid interference with third-party styling
+- Empty `class` attributes are not rendered anymore
 
 ## 5.11.0 - 2026-05-08
 

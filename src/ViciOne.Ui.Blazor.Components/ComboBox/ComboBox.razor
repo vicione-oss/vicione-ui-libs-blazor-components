@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Extensions
 @using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
@@ -8,7 +8,7 @@
 @{
     var cssClasses = new List<string> { "combo-box" };
 
-    if (CssClass is not null)
+    if (!string.IsNullOrWhiteSpace(CssClass))
         cssClasses.AddRange(CssClass.Split(" "));
 
     if (!Enabled)

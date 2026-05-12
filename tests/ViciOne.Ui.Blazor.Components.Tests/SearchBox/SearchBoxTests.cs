@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 using Bunit;
-using Microsoft.AspNetCore.Components;
 using Xunit;
 using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
 
@@ -147,7 +146,7 @@ public sealed class SearchBoxTests : IDisposable
         // Arrange
         string? receivedValue = null;
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.TextChanging, EventCallback.Factory.Create<string?>(this, v => receivedValue = v)));
+            .Add(s => s.TextChanging, v => receivedValue = v));
 
         // Act
         var input = renderedComponent.Find("input");
@@ -163,7 +162,7 @@ public sealed class SearchBoxTests : IDisposable
         // Arrange
         string? receivedValue = null;
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.TextChanged, EventCallback.Factory.Create<string?>(this, v => receivedValue = v)));
+            .Add(s => s.TextChanged, v => receivedValue = v));
 
         // Act
         var input = renderedComponent.Find("input");
@@ -182,8 +181,8 @@ public sealed class SearchBoxTests : IDisposable
         var changedValue = (string?)"initial";
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
             .Add(s => s.Text, "hello")
-            .Add(s => s.TextChanging, EventCallback.Factory.Create<string?>(this, v => changingValue = v))
-            .Add(s => s.TextChanged, EventCallback.Factory.Create<string?>(this, v => changedValue = v)));
+            .Add(s => s.TextChanging, v => changingValue = v)
+            .Add(s => s.TextChanged, v => changedValue = v));
 
         // Act
         var clearButton = renderedComponent.Find("button");

@@ -1,5 +1,7 @@
 # Changelog
 
+## 5.13.0 - Unreleased
+
 ## 5.12.0 - 2026-05-12
 
 ### Package `ViciOne.Ui.Blazor.Components`

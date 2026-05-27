@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace ViciOne.Ui.Blazor.Components.Extensions;
 
@@ -46,9 +46,10 @@ public static class DoubleExtensions
     /// </remarks>
     internal static bool NearlyEquals(this double? a, double? b, double epsilon = 0.001)
     {
-        if (a == null && b == null)
+        if (a is null && b is null)
             return true;
-        if (a == null || b == null)
+
+        if (a is null || b is null)
             return false;
 
         return a.Value.NearlyEquals(b, epsilon);
@@ -66,7 +67,7 @@ public static class DoubleExtensions
     /// </remarks>
     internal static bool NearlyEquals(this double a, double? b, double epsilon = 0.001)
     {
-        if (b == null)
+        if (b is null)
             return false;
 
         return Math.Abs(a - b.Value) < epsilon;

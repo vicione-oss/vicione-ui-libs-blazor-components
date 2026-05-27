@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using Xunit;
 
@@ -17,7 +17,7 @@ public sealed class DoubleExtensionsTests
     public void NearlyEquals_without_nullables_behaves_as_expected(double a, double b, double? epsilon, bool expectedResult)
     {
         // Act
-        var result = epsilon == null ? a.NearlyEquals(b) : a.NearlyEquals(b, epsilon.Value);
+        var result = epsilon is null ? a.NearlyEquals(b) : a.NearlyEquals(b, epsilon.Value);
 
         // Assert
         result.Should().Be(expectedResult);
@@ -37,7 +37,7 @@ public sealed class DoubleExtensionsTests
     public void NearlyEquals_with_nullables_behaves_as_expected(double? a, double? b, double? epsilon, bool expectedResult)
     {
         // Act
-        var result = epsilon == null ? a.NearlyEquals(b) : a.NearlyEquals(b, epsilon.Value);
+        var result = epsilon is null ? a.NearlyEquals(b) : a.NearlyEquals(b, epsilon.Value);
 
         // Assert
         result.Should().Be(expectedResult);

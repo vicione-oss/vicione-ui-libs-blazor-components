@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
@@ -39,7 +39,7 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IAsyncDis
     {
         get
         {
-            if (_contentWidth == null || _contentContainerWidth == null)
+            if (_contentWidth is null || _contentContainerWidth is null)
                 return 0;
 
             return _contentWidth.Value - _contentContainerWidth.Value;
@@ -141,7 +141,7 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IAsyncDis
     }
 
     private bool RequiresScroll()
-        => _contentWidth != null && _contentContainerWidth != null &&
+        => _contentWidth is not null && _contentContainerWidth is not null &&
            _contentWidth > _contentContainerWidth;
 
     private async Task ScrollToLastAsync()
@@ -153,7 +153,7 @@ public sealed partial class HorizontalScrollContainer : ComponentBase, IAsyncDis
 
     private void SetScrollPosition(double? lastShownPixel)
     {
-        if (_contentContainerWidth == null || lastShownPixel == null)
+        if (_contentContainerWidth is null || lastShownPixel is null)
             return;
 
         var offset = lastShownPixel.Value - _contentContainerWidth.Value;

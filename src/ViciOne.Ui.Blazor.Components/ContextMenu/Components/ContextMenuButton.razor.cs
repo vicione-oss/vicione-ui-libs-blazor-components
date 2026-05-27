@@ -57,7 +57,7 @@ public sealed partial class ContextMenuButton : ContextMenuItemBase, IDisposable
     /// <inheritdoc/>
     protected override void OnParametersSet()
     {
-        if (Parent == null)
+        if (Parent is null)
         {
             throw new ArgumentNullException(nameof(Parent),
                 $"{nameof(ContextMenuButton)} must exist within a {nameof(ContextMenuButtonRow)}");

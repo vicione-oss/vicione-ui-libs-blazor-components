@@ -45,10 +45,10 @@ public sealed class ToolbarButtonTests : IDisposable
         {
             b.AddCascadingValue(toolbarItemParent);
 
-            if (tooltip != null)
+            if (tooltip is not null)
                 b.Add(x => x.Tooltip, tooltip);
 
-            if (text != null)
+            if (text is not null)
                 b.Add(x => x.Text, text);
         });
 

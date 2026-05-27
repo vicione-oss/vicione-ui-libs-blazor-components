@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 
 namespace ViciOne.Ui.Blazor.Components.SectionRail.Components;
 
@@ -41,7 +41,7 @@ public sealed partial class Section<TSectionIdentifier> : ComponentBase, ISectio
     /// <inheritdoc/>
     protected override void OnInitialized()
     {
-        if (SectionRail != null)
+        if (SectionRail is not null)
         {
             SectionRail.RegisterItem(this);
         }

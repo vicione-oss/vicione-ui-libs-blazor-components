@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
 namespace ViciOne.Ui.Blazor.Components.Extensions;
@@ -7,7 +7,7 @@ internal static partial class IJSObjectReferenceExtensions
 {
     public static async Task DisposeAsync(this IJSObjectReference? jsObjectReference, ILogger logger)
     {
-        if (jsObjectReference == null)
+        if (jsObjectReference is null)
             return;
 
         try
@@ -28,7 +28,7 @@ internal static partial class IJSObjectReferenceExtensions
     public static async Task InvokeVoidAsync(this IJSObjectReference? jsObjectReference, string identifier,
         ILogger logger, CancellationToken cancellationToken = default, params object?[]? args)
     {
-        if (jsObjectReference == null)
+        if (jsObjectReference is null)
             return;
 
         try

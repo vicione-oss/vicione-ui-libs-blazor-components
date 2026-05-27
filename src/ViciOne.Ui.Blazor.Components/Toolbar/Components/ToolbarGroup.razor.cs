@@ -64,7 +64,7 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
 
         ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
 
-        if (Parent == null)
+        if (Parent is null)
             throw new InvalidOperationException($"{GetType().FullName} must be placed inside a {typeof(Toolbar).FullName}.");
 
         _withSeparator = Parent.Children.Count > 0;

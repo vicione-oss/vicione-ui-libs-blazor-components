@@ -39,6 +39,10 @@ dotnet_diagnostic.RCS1226.severity = warning # Add paragraph to documentation co
 dotnet_diagnostic.RCS1235.severity = warning # Optimize method call
 dotnet_diagnostic.RCS1243.severity = warning # Duplicate word in a comment
 dotnet_diagnostic.RCS1246.severity = warning # Use element access
+
+dotnet_diagnostic.RCS1248.severity = warning # Normalize null check
+roslynator_null_check_style = pattern_matching
+
 dotnet_diagnostic.RCS1251.severity = warning # Remove unnecessary braces from record declaration
 dotnet_diagnostic.RCS1266.severity = warning # Use raw string literal
 

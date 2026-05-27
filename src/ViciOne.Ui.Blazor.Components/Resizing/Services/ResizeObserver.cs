@@ -37,7 +37,7 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
 
     private async ValueTask<IJSObjectReference?> GetJsInstanceAsync(CancellationToken cancellationToken)
     {
-        if (_jsInstance != null)
+        if (_jsInstance is not null)
             return _jsInstance;
 
         _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
@@ -65,7 +65,7 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
         if (_disposed)
             return;
 
-        if (elementReference.Id == null)
+        if (elementReference.Id is null)
             return;
 
         if (_jsDisconnectedExceptionOccurred)
@@ -83,7 +83,7 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
                     return; // Element is already observed, no need to observe again
 
                 var jsInstance = await GetJsInstanceAsync(cancellationToken);
-                if (jsInstance == null)
+                if (jsInstance is null)
                     return;
 
                 await jsInstance.InvokeVoidAsync("observe", cancellationToken,
@@ -119,7 +119,7 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
         if (_disposed)
             return;
 
-        if (elementReference.Id == null)
+        if (elementReference.Id is null)
             return;
 
         if (_jsDisconnectedExceptionOccurred)
@@ -133,7 +133,7 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
 
             try
             {
-                if (_jsInstance == null)
+                if (_jsInstance is null)
                     return; // ObserveAsync() was most likely not called before
 
                 if (!_elementReferences.TryRemove(elementReference.Id, out _))

@@ -31,6 +31,8 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
     private MouseEventArgs? _childContextMenuMouseEventArgs;
     private int _observingMouseLeave;
 
+    private volatile bool _childContextMenuShowPending;
+
     /// <summary>
     /// Content of the child context menu displayed when the item is clicked / focused / hovered
     /// </summary>
@@ -126,7 +128,8 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
         if (_showChildContextMenuTimer is not null)
         {
-            _showChildContextMenuTimer.Stop();
+            CancelShowChildContextMenuDelayed();
+
             _showChildContextMenuTimer.Elapsed -= ShowChildContentMenuTimerElapsedAsync;
             _showChildContextMenuTimer.Dispose();
         }
@@ -202,10 +205,11 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             return;
         }
 
-        if (!_childContextMenu.Visible)
+        if (!_childContextMenu.Visible && !_childContextMenuShowPending)
         {
-            _childContextMenuMouseEventArgs = e;
-            _showChildContextMenuTimer.Start();
+            await CloseOtherChildContextMenusAsync();
+
+            ShowChildContextMenuDelayed(e);
 
             await StartObserveMouseLeaveAsync();
         }
@@ -213,7 +217,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private async Task ChildContentContextMenuVisibilityChangedAsync(bool isVisible)
     {
-        _showChildContextMenuTimer.Stop();
+        CancelShowChildContextMenuDelayed();
 
         if (!isVisible)
             await EndObserveMouseLeaveAsync();
@@ -248,8 +252,9 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
         if (_childContextMenu?.Visible == false)
         {
-            _childContextMenuMouseEventArgs = e;
-            _showChildContextMenuTimer.Start();
+            await CloseOtherChildContextMenusAsync();
+
+            ShowChildContextMenuDelayed(e);
 
             await StartObserveMouseLeaveAsync();
         }
@@ -261,7 +266,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
     [JSInvokable]
     public async Task MouseLeaveAsync(MouseLeaveDirection direction)
     {
-        _showChildContextMenuTimer.Stop();
+        CancelShowChildContextMenuDelayed();
 
         if (_childContextMenu?.Visible == true)
         {
@@ -280,7 +285,8 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private async void ParentContextMenuClosingAsync()
     {
-        _showChildContextMenuTimer.Stop();
+        CancelShowChildContextMenuDelayed();
+
         await EndObserveMouseLeaveAsync();
 
         if (_childContextMenu?.Visible == true)
@@ -307,7 +313,42 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
         _childContextMenuMouseEventArgs.PageY = childContextMenuPosition.Y;
         _childContextMenuMouseLeaveDirection = childContextMenuPosition.MouseLeaveDirection;
 
+        _childContextMenuShowPending = true;
+
         await _childContextMenu.ShowAsync(_childContextMenuMouseEventArgs, ItemFilter);
+    }
+
+    /// <inheritdoc/>
+    async Task IContextMenuItem.CloseChildContextMenuAsync()
+    {
+        CancelShowChildContextMenuDelayed();
+
+        await EndObserveMouseLeaveAsync();
+
+        if (_childContextMenu?.Visible == true)
+            await _childContextMenu.CloseAsync();
+    }
+
+    private async Task CloseOtherChildContextMenusAsync()
+    {
+        // Close any sibling child context menus that are open or pending to be shown
+        foreach (var sibling in ParentContextMenu.Items)
+        {
+            if (sibling != this)
+                await sibling.CloseChildContextMenuAsync();
+        }
+    }
+
+    private void ShowChildContextMenuDelayed(MouseEventArgs mouseEventArgs)
+    {
+        _childContextMenuMouseEventArgs = mouseEventArgs;
+        _showChildContextMenuTimer.Start();
+    }
+
+    private void CancelShowChildContextMenuDelayed()
+    {
+        _showChildContextMenuTimer.Stop();
+        _childContextMenuShowPending = false;
     }
 
     IContextMenu? IContextMenuItem.GetChildContextMenu() => _childContextMenu;

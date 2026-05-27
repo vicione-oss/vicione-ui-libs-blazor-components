@@ -93,7 +93,7 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
 
         ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
 
-        if (Parent == null)
+        if (Parent is null)
             throw new InvalidOperationException($"{GetType().FullName} must be placed inside a {typeof(Toolbar).FullName}.");
 
         Parent.AddChild(this);
@@ -105,7 +105,7 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
         // Special case where an item may be changed from outside the toolbar,
         // includes handling for case where a single item is in the menu and that item
         // is changed to be invisible, so the menu should no longer be shown.
-        if (_previousVisible != null && _previousVisible != Visible)
+        if (_previousVisible is not null && _previousVisible != Visible)
         {
             Parent?.ChildSizeChanged();
 

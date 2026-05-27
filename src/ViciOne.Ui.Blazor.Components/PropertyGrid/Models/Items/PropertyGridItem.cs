@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using ViciOne.Ui.Blazor.Components.Helpers;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
@@ -229,7 +229,7 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
         }
 
         if (value is null)
-            return defaultValue != null;
+            return defaultValue is not null;
         else
             return !valueEqualityComparer.Equals(value.Value, defaultValue.Value);
     }

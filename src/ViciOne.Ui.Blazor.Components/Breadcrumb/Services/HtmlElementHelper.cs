@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Extensions;
@@ -55,7 +55,7 @@ internal sealed class HtmlElementHelper(IJSRuntime jsRuntime, ILogger<HtmlElemen
     public async Task<IEnumerable<DomRect>> GetBoundingClientRectsAsync(IEnumerable<ElementReference> htmlElements)
     {
         var jsModule = await GetJsModuleAsync();
-        if (jsModule == null)
+        if (jsModule is null)
             return [];
 
         try

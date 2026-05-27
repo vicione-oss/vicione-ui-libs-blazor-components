@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.Breadcrumb.Models;
+using ViciOne.Ui.Blazor.Components.Breadcrumb.Models;
 
 namespace ViciOne.Ui.Blazor.Components.Breadcrumb.Extensions;
 
@@ -9,7 +9,7 @@ internal static class BreadcrumbItemExtensions
         var result = new List<BreadcrumbItem>();
 
         var ancestor = item;
-        while (ancestor != null)
+        while (ancestor is not null)
         {
             result.Insert(0, ancestor);
 

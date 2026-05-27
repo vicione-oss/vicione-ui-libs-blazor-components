@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Extensions;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Models;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
@@ -45,7 +45,7 @@ public sealed partial class Breadcrumb : ComponentBase
         foreach (var newItemContext in newItemContexts)
         {
             var existingItemContext = _itemContexts.FirstOrDefault(i => i.Instance == newItemContext.Instance);
-            if (existingItemContext != null)
+            if (existingItemContext is not null)
                 newItemContext.ElementReference = existingItemContext.ElementReference;
         }
 

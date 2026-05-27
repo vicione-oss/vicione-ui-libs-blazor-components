@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ViciOne.Ui.Blazor.Components.CheckBox.Extensions;
 using ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
@@ -31,7 +31,7 @@ public static class IServiceCollectionExtensions
     {
         ServiceDescriptor serviceDescriptor;
 
-        if (serviceKey != null)
+        if (serviceKey is not null)
         {
             serviceDescriptor = ServiceDescriptor.DescribeKeyed(typeof(IGridItemSelection<TGridItemKey>),
                 serviceKey, typeof(GridItemSelection<TGridItemKey>), lifetime);

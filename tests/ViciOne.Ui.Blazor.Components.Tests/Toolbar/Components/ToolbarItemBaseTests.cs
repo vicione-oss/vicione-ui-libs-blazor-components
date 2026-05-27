@@ -44,7 +44,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
             .Add(x => x.HandleAddChild, HandleAddChild)
             .AddChildContent<ToolbarButton>());
 
-        renderedComponent.WaitForState(() => child != null);
+        renderedComponent.WaitForState(() => child is not null);
 
         // Assert
         child.Should().NotBeNull();
@@ -65,12 +65,12 @@ public sealed class ToolbarItemBaseTests : IDisposable
             .Add(x => x.HandleRemoveChild, HandleRemoveChild)
             .AddChildContent<ToolbarButton>());
 
-        renderedComponent.WaitForState(() => child != null);
+        renderedComponent.WaitForState(() => child is not null);
 
         if (child is ToolbarItemBase item)
             await item.DisposeAsync();
 
-        renderedComponent.WaitForState(() => removedChild != null);
+        renderedComponent.WaitForState(() => removedChild is not null);
 
         // Assert
         removedChild.Should().NotBeNull();
@@ -115,7 +115,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
             .AddChildContent<ToolbarButton>());
 
         SetContainerSize(_elementReferences[0], marginX: 10);
-        renderedComponent.WaitForState(() => child != null);
+        renderedComponent.WaitForState(() => child is not null);
 
         child!.SetHidden(true);
 
@@ -196,7 +196,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
             builder.OpenComponent<CascadingValue<IToolbarItemParent>>(0);
             builder.AddAttribute(2, "Value", this);
 
-            if (ChildContent != null)
+            if (ChildContent is not null)
             {
                 builder.AddAttribute(3, "ChildContent", (RenderFragment)(childBuilder =>
                     childBuilder.AddContent(4, ChildContent)));

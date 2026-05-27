@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Models;
 
@@ -64,7 +64,7 @@ public sealed partial class BreadcrumbPage : ComponentBase
 
     private async Task RemoveClickAsync()
     {
-        if (_adaptiveTreeItem.Parent == null)
+        if (_adaptiveTreeItem.Parent is null)
             return;
 
         var parent = _adaptiveTreeItem.Parent;

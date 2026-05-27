@@ -103,7 +103,7 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
 
     private void HandleSizeChanged()
     {
-        if (_latestWidth == null)
+        if (_latestWidth is null)
             return;
 
         var availableWidth = _latestWidth.Value;
@@ -125,7 +125,7 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
 
         foreach (var child in children)
         {
-            if (child.DomRect == null)
+            if (child.DomRect is null)
                 continue;
 
             var requiredWidth = GetRequiredWidth(child);
@@ -187,14 +187,14 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
 
     private static double GetRequiredWidth(IToolbarChild child)
     {
-        if (child.DomRect == null)
+        if (child.DomRect is null)
             return 0;
 
         if (child is ToolbarItemBase { Visible: false })
             return 0;
 
         var style = child.Style;
-        if (style == null)
+        if (style is null)
             return 0;
 
         if (child is ToolbarGroup)

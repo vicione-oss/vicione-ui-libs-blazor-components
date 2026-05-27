@@ -1,4 +1,4 @@
-﻿@using Shared.Pages.ContextMenu.Models
+@using Shared.Pages.ContextMenu.Models
 @using Shared.Pages.ContextMenu.Services
 @using ViciOne.Ui.Blazor.Components.ContextMenu.Components
 
@@ -22,13 +22,17 @@
     </ContextMenuButtonRow>
 
     <ContextMenuItem BeginGroup="true"
-                     IconCssClass="@_editIcon"
-                     OnClick="@ContextMenuItemClickedAsync"
-                     Text="Add" />
-    <ContextMenuItem IconCssClass="@_editIcon"
-                     OnClick="@ContextMenuItemClickedAsync"
-                     Text="Remove" />
- 
+                     Text="Editing">
+
+        <ContextMenuItem BeginGroup="true"
+                         IconCssClass="@_editIcon"
+                         OnClick="@ContextMenuItemClickedAsync"
+                         Text="Add" />
+        <ContextMenuItem IconCssClass="@_editIcon"
+                         OnClick="@ContextMenuItemClickedAsync"
+                         Text="Remove" />
+    </ContextMenuItem>
+
     <ContextMenuItem BeginGroup="true"
                      Enabled="false"
                      IconCssClass="@_editIcon"
@@ -46,9 +50,28 @@
                          IconCssClass="@_editIcon"
                          OnClick="@ContextMenuItemClickedAsync"
                          Text="Select edges" />
-        <ContextMenuItem IconCssClass="@_editIcon"
-                         OnClick="@ContextMenuItemClickedAsync"
-                         Text="Select faces" />
+
+        <ContextMenuItem Text="Select faces">
+
+            <ChildContent Context="_">
+                <ContextMenuItem IconCssClass="@_editIcon"
+                                 OnClick="@ContextMenuItemClickedAsync"
+                                 Text="Left face" />
+
+                <ContextMenuItem IconCssClass="@_editIcon"
+                                 OnClick="@ContextMenuItemClickedAsync"
+                                 Text="Top face" />
+
+                <ContextMenuItem IconCssClass="@_editIcon"
+                                 OnClick="@ContextMenuItemClickedAsync"
+                                 Text="Right face" />
+
+                <ContextMenuItem IconCssClass="@_editIcon"
+                                 OnClick="@ContextMenuItemClickedAsync"
+                                 Text="Bottom face" />
+            </ChildContent>
+
+        </ContextMenuItem>
     </ContextMenuItem>
 
     <ContextMenuButtonRow BeginGroup="true"

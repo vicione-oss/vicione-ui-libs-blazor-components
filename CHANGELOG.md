@@ -1,10 +1,12 @@
 # Changelog
 
-## 5.13.0 - Unreleased
+## 5.13.0 - 2026-05-27
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.8`
+- Prevent multiple child `ContextMenu` from beeing shown simultaneously
+- Prevent `ContextMenu` from being stuck after fast mouse movement
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

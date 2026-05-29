@@ -16,7 +16,7 @@
 
     var buttonAttributes = new Dictionary<string, object>();
 
-    if (expanded && !isCompact)
+    if (!isCompact && expanded && !Entry.IsSticky)
         buttonAttributes.Add("tabindex", "-1");
     else
         buttonAttributes.Add("onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClickAsync));

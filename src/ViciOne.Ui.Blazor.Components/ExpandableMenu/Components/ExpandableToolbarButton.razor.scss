@@ -1,4 +1,4 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
 @use "../../Styles/user-interaction";
 
@@ -73,7 +73,7 @@
 
         > span {
             padding-left: 16px;
-            
+
             font-size: 13px;
             font-weight: typography.$font-weight-regular;
         }
@@ -82,10 +82,8 @@
     &:not(.compact) {
         .expand-button {
             padding-left: 16px;
-        }
 
-        &.expanded {
-            .expand-button {
+            &[tabindex="-1"] {
                 cursor: default;
             }
         }

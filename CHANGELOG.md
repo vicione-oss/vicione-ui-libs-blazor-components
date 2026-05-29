@@ -2,6 +2,10 @@
 
 ## 5.14.0 - Unreleased
 
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `ExpandableMenu`, expanded sticky entries can now be collapsed by clicking the label
+
 ## 5.13.0 - 2026-05-27
 
 ### Package `ViciOne.Ui.Blazor.Components`

@@ -214,8 +214,8 @@
       target 'MoveGeneratedStaticWebAssets', so that these generated files are not included in NuGet-package and staticwebassets.
     -->
     <ItemGroup>
-      <Content Remove="%(GeneratedStaticWebAsset.FullPath)" Condition="'$(CI)' != ''" />
-      <Content Remove="%(GeneratedStaticWebAsset.Identity)" Condition="'$(CI)' == ''" />
+      <Content Remove="%(GeneratedStaticWebAsset.FullPath)" Condition="!$([MSBuild]::IsOSPlatform('Windows'))" />
+      <Content Remove="%(GeneratedStaticWebAsset.Identity)" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
     </ItemGroup>
   </Target>
 

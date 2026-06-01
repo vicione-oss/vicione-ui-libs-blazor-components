@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using ViciOne.Ui.Blazor.Components.Grid.Components.Shared;
 using ViciOne.Ui.Blazor.Components.Grid.Extensions;

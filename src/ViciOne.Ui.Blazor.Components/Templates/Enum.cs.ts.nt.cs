@@ -1,4 +1,4 @@
-﻿#pragma warning disable IDE0005 // Using directive is unnecessary.
+#pragma warning disable IDE0005 // Using directive is unnecessary.
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,8 +43,10 @@ internal static class CustomFunctions
             }
         }
 
+        const string LineBreak = "\n";
+
         if (imports.Count > 0)
-            return string.Join(Environment.NewLine, imports) + Environment.NewLine;
+            return string.Join(LineBreak, imports) + LineBreak;
         else
             return string.Empty;
     }

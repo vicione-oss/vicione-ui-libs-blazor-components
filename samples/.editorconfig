@@ -9,3 +9,9 @@ dotnet_diagnostic.CA1859.severity = warning # Use concrete types when possible f
 dotnet_diagnostic.CA2251.severity = warning # Use 'string.Equals' instead of comparing the result of 'string.Compare' to 0
 
 dotnet_diagnostic.SYSLIB1006.severity = warning # Multiple logging methods cannot use the same event ID
+
+[*.{cs,cs.nt,razor,scss,ts,ts.nt,json,sh}]
+end_of_line = lf
+
+[package.lock.json]
+end_of_line = unset

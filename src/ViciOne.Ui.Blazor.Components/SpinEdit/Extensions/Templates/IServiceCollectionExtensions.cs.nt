@@ -1,4 +1,4 @@
-﻿{{
+{{
     generateAttributeName = "GenerateNumericSpinBehavior"
 
     func isGenerateAttribute(attribute)

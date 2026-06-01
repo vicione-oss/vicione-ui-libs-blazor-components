@@ -1,4 +1,4 @@
-﻿{{
+{{
     generateAttributeName = "GenerateNumericSpinBehavior"
     generatedFileNamespace = "ViciOne.Ui.Blazor.Components.SpinEdit.Services.Behaviors"
 

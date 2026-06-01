@@ -1,4 +1,4 @@
-﻿{{
+{{
     generateAttributeName = "GenerateNumericValueTypeDescriptor"
 
     func isGenerateAttribute(attribute)

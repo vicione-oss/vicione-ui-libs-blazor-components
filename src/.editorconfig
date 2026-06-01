@@ -15,3 +15,9 @@ dotnet_diagnostic.IDE0057.severity = none # NTypewriter templates require Substr
 
 [package.json]
 indent_size = 2
+
+[*.{cs,cs.nt,razor,scss,ts,ts.nt,json,sh}]
+end_of_line = lf
+
+[package.lock.json]
+end_of_line = unset

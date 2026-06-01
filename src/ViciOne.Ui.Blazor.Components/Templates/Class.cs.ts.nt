@@ -1,4 +1,4 @@
-﻿{{
+{{
 
 func isTypeScriptPropertyInfoAttribute(attribute)
     ret attribute.Name == "TypeScriptPropertyInfo"
@@ -56,7 +56,7 @@ export class {{ class.Name }} {
 {{ end }}) {}
 }
     {{~ end
-    
+
     for l in class.Locations
         Save output l.Path + ".ts"
     end

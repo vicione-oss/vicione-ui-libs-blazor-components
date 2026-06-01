@@ -1,4 +1,4 @@
-﻿{{
+{{
     generateAttributeName = "GenerateNumericValueTypeDescriptor"
     generatedFileNamespace = "ViciOne.Ui.Blazor.Components.PropertyGrid.Services.TypeDescriptors"
 

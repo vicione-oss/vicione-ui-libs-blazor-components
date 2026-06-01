@@ -22,6 +22,7 @@
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path=".gitlab-ci.yml" />
     <File Path=".globalconfig" />

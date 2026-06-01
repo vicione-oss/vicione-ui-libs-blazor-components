@@ -34,3 +34,9 @@ dotnet_naming_style.test_method_naming_style.required_suffix =
 dotnet_naming_rule.test_method_naming_rule.symbols  = test_method
 dotnet_naming_rule.test_method_naming_rule.style    = test_method_naming_style
 dotnet_naming_rule.test_method_naming_rule.severity = default
+
+[*.{cs,cs.nt,razor,scss,ts,ts.nt,json,sh}]
+end_of_line = lf
+
+[package.lock.json]
+end_of_line = unset

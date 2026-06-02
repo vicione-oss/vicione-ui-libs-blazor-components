@@ -7,8 +7,8 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 /// </summary>
 public interface IPropertyDescriptorProvider<TContext, TInstance> : IPropertyDescriptorProvider<TContext>
 {
-    /// <inheritdoc/>
 #pragma warning disable CA1033 // Interface methods should be callable by child types
+    /// <inheritdoc/>
     Type IPropertyDescriptorProvider.GetTargetInstanceType() => typeof(TInstance);
 #pragma warning restore CA1033 // Interface methods should be callable by child types
 

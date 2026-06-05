@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `ExpandableMenu`, expanded sticky entries can now be collapsed by clicking the label
+- `SpinEdit`, prevent parent container scrolling on mousewheel inside the component
 
 ## 5.13.0 - 2026-05-27
 

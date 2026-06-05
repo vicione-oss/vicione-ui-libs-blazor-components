@@ -9,16 +9,7 @@ export default [
             'Scripts/*.js',
             '**/*.cs.js',
             '**/*.razor.js',
-            'wwwroot/context-menu/**/*.js',
-            'wwwroot/js/array-iterator.js',
-            'wwwroot/js/point.js',
-            'wwwroot/js/pointer-event-mixins.js',
-            'wwwroot/moveable/*.js',
-            'wwwroot/pointer-capture/*.js',
-            'wwwroot/text-box/**/*.js',
-            'wwwroot/tooltip/**/*.js',
-            'wwwroot/resizing/*.js',
-            'wwwroot/breadcrumb/*.js'
+            'dist/**/*.js'
         ]
     },
     ...xoTypeScriptPatched,

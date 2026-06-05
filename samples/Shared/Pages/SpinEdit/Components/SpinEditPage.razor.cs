@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+using Bogus;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Button.Enums;
 using ViciOne.Ui.Blazor.Components.Factories;
 using ViciOne.Ui.Blazor.Components.SpinEdit;
@@ -7,6 +8,8 @@ namespace Shared.Pages.SpinEdit.Components;
 
 public sealed partial class SpinEditPage : ComponentBase
 {
+    private static readonly Faker s_faker = new();
+
     private int _value = 120;
     private int? _nullableValue;
     private ButtonSize _buttonSize = ButtonSize.GetDefaultValue();
@@ -16,6 +19,9 @@ public sealed partial class SpinEditPage : ComponentBase
 
     private SpinEdit<int, int, int>? _unboundSpinEdit;
     private int _unboundSpinEditValue = 150;
+
+    private readonly string _lorem1 = s_faker.Lorem.Paragraph(1);
+    private readonly string _lorem2 = s_faker.Lorem.Paragraph(1);
 
     private void GetUnboundSpinEditValueClick()
     {

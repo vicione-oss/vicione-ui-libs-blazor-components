@@ -55,6 +55,7 @@ variables:
 
 stages:
   - build
+  - lint
   - test
   - pack
   - push
@@ -96,7 +97,6 @@ include:
         - *activate_mise
         - *update_nuget_source_ro
         - *install_npm_packages
-        - *run_eslint 
         - 'echo "Version: ${Version:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
@@ -138,6 +138,21 @@ include:
         - *update_nuget_source_rw
       tags:
         - ${RUNNER_TAG}
+
+### ESLint ###
+ESLint:
+  stage: lint
+  image: ${IMAGE_NAME}
+  needs: ["dotnet Build"]
+  before_script:
+    - *activate_mise
+    - *update_nuget_source_ro
+    - *install_npm_packages
+  script:
+    - *run_eslint
+  rules: *rules
+  tags:
+    - ${RUNNER_TAG}
 
 ### GitLab Pages
 Publish Pages:

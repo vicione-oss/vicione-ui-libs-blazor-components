@@ -1,5 +1,17 @@
-﻿@use "../../../Styles/mixins";
+@use "../../../Styles/mixins";
+@use "../../../Styles/design/scrollbar";
 
 .options {
     @include mixins.options-styling();
+}
+
+.scrollable-container {
+    width: 400px;
+    height: 150px;
+
+    margin-bottom: 20px;
+
+    overflow-y: auto;
+
+    @include scrollbar.adjust-styles();
 }

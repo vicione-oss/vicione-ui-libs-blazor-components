@@ -1,4 +1,4 @@
-﻿@page "/spin-edit"
+@page "/spin-edit"
 
 @using ViciOne.Ui.Blazor.Components.Button
 @using ViciOne.Ui.Blazor.Components.Button.Enums
@@ -57,3 +57,15 @@ contains @(_buttonSize.GetName())
 <h3>Invalid</h3>
 
 <SpinEdit Value="@_value" Interval="1" Minimum="10" Maximum="220" IsRastered="_isRastered" Valid="false" />
+
+<h3>Within scrollable container</h3>
+
+<div class="scrollable-container">
+    <p>Scroll down to reach <code>@nameof(SpinEdit<,,>)</code>.</p>
+
+    <p>@_lorem1</p>
+
+    <SpinEdit @bind-Value="@_value" Interval="1" Minimum="10" Maximum="220" IsRastered="_isRastered" />
+
+    <p>@_lorem2</p>
+</div>

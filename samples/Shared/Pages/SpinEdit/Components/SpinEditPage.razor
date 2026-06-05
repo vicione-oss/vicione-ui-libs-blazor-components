@@ -1,4 +1,4 @@
-﻿@page "/spin-edit"
+@page "/spin-edit"
 
 @using ViciOne.Ui.Blazor.Components.Button
 @using ViciOne.Ui.Blazor.Components.Button.Enums
@@ -57,3 +57,25 @@ contains @(_buttonSize.GetName())
 <h3>Invalid</h3>
 
 <SpinEdit Value="@_value" Interval="1" Minimum="10" Maximum="220" IsRastered="_isRastered" Valid="false" />
+
+<h3>Within scrollable container</h3>
+
+<div class="container">
+    <div>
+        <b>Text before:</b>
+        <br />
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    </div>
+    <SpinEdit @bind-Value="@_value" Interval="1" Minimum="10" Maximum="220" IsRastered="_isRastered" CssClass="embedded-spin-edit" />
+    <div>
+        <b>Text after:</b>
+        <br />
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    </div>
+</div>

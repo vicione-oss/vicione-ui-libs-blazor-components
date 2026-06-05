@@ -1,5 +1,17 @@
-﻿@use "../../../Styles/mixins";
+@use "../../../Styles/mixins";
+@use "../../../Styles/design/scrollbar";
 
 .options {
     @include mixins.options-styling();
+}
+
+.container {
+    @include scrollbar.adjust-styles();
+    height: 150px;
+    width: 20%;
+    overflow-y: auto;
+}
+
+::deep .embedded-spin-edit {
+    margin: 32px 0;
 }

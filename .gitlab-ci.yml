@@ -55,7 +55,6 @@ variables:
 
 stages:
   - build
-  - lint
   - test
   - pack
   - push
@@ -79,7 +78,7 @@ Version:
 ### CI Components ###
 include:
   ### Restore
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@v2.5.1
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -89,7 +88,7 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Build
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@v2.5.1
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -101,7 +100,7 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Test
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@v2.5.1
     inputs:
       name: "dotnet Test"
       image: ${IMAGE_NAME}
@@ -115,7 +114,7 @@ include:
       filter: '/[Category!=Playwright]'
       coverage: true
   ### Pack
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@v2.5.1
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules_manual
@@ -126,7 +125,7 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Push
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@v2.5.1
     inputs:
       stage: "push"
       image: ${IMAGE_NAME}
@@ -141,7 +140,7 @@ include:
 
 ### ESLint ###
 ESLint:
-  stage: lint
+  stage: build
   image: ${IMAGE_NAME}
   needs: ["dotnet Build"]
   before_script:

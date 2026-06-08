@@ -1,5 +1,6 @@
 ﻿@use "../../Styles/animations/mixins" as animations;
 @use "../../Styles/design/colors";
+@use "../../Styles/user-interaction";
 
 .context-menu-button {
     align-items: center;
@@ -23,7 +24,7 @@
     }
 
     &:not(.disabled) {
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
 
         &:focus, &:hover {
             background-color: colors.$background-light-hover;

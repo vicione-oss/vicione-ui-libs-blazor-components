@@ -1,5 +1,6 @@
 @use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
+@use "../../Styles/user-interaction";
 @use "../Styles/mixins";
 @use "../Styles/variables";
 
@@ -22,7 +23,7 @@
         display: flex;
         align-items: center;
         position: relative;
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
 
         border-radius: variables.$border-radius;
 

@@ -1,4 +1,5 @@
 ﻿@use "../../Styles/design/colors";
+@use "../../Styles/user-interaction";
 
 .horizontal-scroll-container {
     display: grid;
@@ -16,7 +17,7 @@
 
                 &:hover {
                     &::before {
-                        cursor: pointer;
+                        @include user-interaction.show-pointer-cursor();
                         color: colors.$accent;
                     }
                 }

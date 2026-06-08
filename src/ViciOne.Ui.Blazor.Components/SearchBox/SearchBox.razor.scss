@@ -72,7 +72,7 @@
 
         @include buttons.lucent-styling();
         @include buttons.no-outline-on-focus();
-        @include buttons.show-cursor-when-not-disabled();
+        @include buttons.show-pointer-cursor-when-not-disabled();
         @include hidden-styles();
     }
 }

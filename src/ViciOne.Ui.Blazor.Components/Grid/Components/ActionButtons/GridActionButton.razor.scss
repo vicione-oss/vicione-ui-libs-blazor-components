@@ -2,6 +2,7 @@
 @use "../../../Styles/design/typography";
 @use "../../../Styles/animations/mixins" as animations;
 @use "../../../Styles/inputs/mixins" as inputs;
+@use "../../../Styles/user-interaction";
 
 @use "sass:color";
 
@@ -54,7 +55,7 @@
     @include inputs.disabled-style();
 
     &:not(:disabled) {
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
 
         &:hover {
             color: colors.$font-light;

@@ -22,7 +22,7 @@
 
             &:not(.disabled) {
                 &:hover {
-                    cursor: pointer;
+                    @include user-interaction.show-pointer-cursor();
 
                     background-color: colors.$background-light-hover;
                 }

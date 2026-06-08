@@ -1,4 +1,6 @@
-﻿li {
+﻿@use "../../Styles/user-interaction";
+
+li {
     &:focus-within {
         outline-width: 0.125rem;
         outline-style: solid;
@@ -11,7 +13,7 @@
         align-items: center;
         position: relative;
         width: 100%;
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
         white-space: nowrap;
         border-radius: inherit;
         outline: none;

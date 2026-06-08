@@ -1,5 +1,6 @@
 @use "../../Styles/animations/mixins" as animations;
 @use "../../Styles/design/colors";
+@use "../../Styles/user-interaction";
 @use "../Styles/mixins";
 @use "../Styles/variables";
 
@@ -10,7 +11,7 @@
 
     border-radius: variables.$border-radius;
 
-    cursor: pointer;
+    @include user-interaction.show-pointer-cursor();
     user-select: none;
 
     &.active {

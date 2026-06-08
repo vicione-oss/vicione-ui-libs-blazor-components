@@ -71,7 +71,7 @@
     // interaction
     @include inputs.disabled-style();
 
-    @include buttons.show-cursor-when-not-disabled();
+    @include buttons.show-pointer-cursor-when-not-disabled();
     @include buttons.no-outline-on-focus();
 
     &:not(:disabled) {

@@ -1,4 +1,5 @@
 ﻿@use "../../Styles/design/colors";
+@use "../../Styles/user-interaction";
 
 .breadcrumb-item-separator {
     display: flex;
@@ -21,7 +22,7 @@
             &:hover {
                 background-color: colors.$background-light-hover;
 
-                cursor: pointer;
+                @include user-interaction.show-pointer-cursor();
             }
 
             &.active {
@@ -34,7 +35,7 @@
         &:hover {
             background-color: colors.$background-light-hover;
 
-            cursor: pointer;
+            @include user-interaction.show-pointer-cursor();
         }
     }
 }

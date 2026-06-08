@@ -1,5 +1,6 @@
-﻿@use "../design/colors";
+@use "../design/colors";
 @use "../animations/mixins" as animations;
+@use "../user-interaction";
 
 // applies a lucent appearance with a transparent background, no borders and
 // accent coloring on hover / focus for text / icons displayed in the button
@@ -31,8 +32,8 @@
     }
 }
 
-@mixin show-cursor-when-not-disabled() {
+@mixin show-pointer-cursor-when-not-disabled() {
     &:not(:disabled) {
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
     }
 }

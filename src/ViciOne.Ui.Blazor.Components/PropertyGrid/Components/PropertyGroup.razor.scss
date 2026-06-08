@@ -4,7 +4,7 @@
 @use "../../Styles/user-interaction";
 
 .property-group {
-    cursor: pointer;
+    @include user-interaction.show-pointer-cursor();
     display: grid;
     grid-template-columns: 16px 120px auto;
     height: 40px;
@@ -42,7 +42,7 @@
 
     > .group-dropdown {
         align-items: center;
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
         display: flex;
         justify-content: center;
 

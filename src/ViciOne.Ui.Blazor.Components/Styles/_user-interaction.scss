@@ -1,3 +1,7 @@
 ﻿@mixin prevent-text-selection() {
     user-select: none;
 }
+
+@mixin show-pointer-cursor() {
+    cursor: pointer;
+}

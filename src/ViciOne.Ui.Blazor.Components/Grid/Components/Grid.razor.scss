@@ -2,6 +2,7 @@
 @use "../../Styles/design/scrollbar";
 @use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
+@use "../../Styles/user-interaction";
 
 @use "sass:color";
 
@@ -229,7 +230,7 @@
                         border-style: inherit;
                         font-size: inherit;
                         font-family: inherit;
-                        cursor: pointer;
+                        @include user-interaction.show-pointer-cursor();
 
                         .sort-icon-des, .sort-icon-asc {
                             display: none;

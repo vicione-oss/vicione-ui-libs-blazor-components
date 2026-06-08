@@ -52,7 +52,7 @@
         }
 
         &:not(:disabled) {
-            cursor: pointer;
+            @include user-interaction.show-pointer-cursor();
         }
     }
 

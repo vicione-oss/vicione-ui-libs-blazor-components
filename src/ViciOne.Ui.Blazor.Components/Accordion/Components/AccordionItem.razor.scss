@@ -2,6 +2,7 @@
 @use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
 @use "../../Styles/mixins";
+@use "../../Styles/user-interaction";
 
 @use "sass:color";
 
@@ -48,7 +49,7 @@
         font-size: 14px;
 
         user-select: none;
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
 
         @include animations.background-color();
 

@@ -1,4 +1,5 @@
 ﻿@use "../../Styles/design/colors";
+@use "../../Styles/user-interaction";
 @use "Styles/tooltip-separator";
 
 .property-editor-tool-tip {
@@ -33,7 +34,7 @@
         float: right;
         display: inline-flex;
 
-        cursor: pointer;
+        @include user-interaction.show-pointer-cursor();
     }
 
     @include tooltip-separator.styles(colors.$font);

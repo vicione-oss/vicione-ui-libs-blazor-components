@@ -80,11 +80,11 @@ namespace ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localizat
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try to recover.
+        ///   Looks up a localized string similar to Try again.
         /// </summary>
-        public static string TryToRecover {
+        public static string TryAgain {
             get {
-                return ResourceManager.GetString("TryToRecover", resourceCulture);
+                return ResourceManager.GetString("TryAgain", resourceCulture);
             }
         }
     }

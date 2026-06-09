@@ -1,12 +1,14 @@
 # Changelog
 
-## 5.14.0 - Unreleased
+## 5.14.0 - 2026-06-09
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `AdvancedErrorBoundary`, changed recovery action text to `Try again`
 - `ExpandableMenu`, expanded sticky entries can now be collapsed by clicking the label
 - `SpinEdit`, prevent parent container scrolling on mousewheel inside the component
+-  Added `TagBox`
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.11.0`
 
 ## 5.13.0 - 2026-05-27
 

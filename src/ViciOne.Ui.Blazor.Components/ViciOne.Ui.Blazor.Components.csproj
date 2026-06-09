@@ -154,6 +154,9 @@
     <GeneratedStaticWebAsset Include="Tooltip\Components\TooltipDisplay.razor.js">
       <DestinationFile>tooltip\components\tooltip-display.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="TagBox\TagBox.razor.js">
+      <DestinationFile>tag-box\tag-box.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="TextBox\TextBox.razor.js">
       <DestinationFile>text-box\text-box.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -235,7 +238,7 @@
     <ItemGroup>
       <MonochromeIcon Include="clear" Size="18" />
       <MonochromeIcon Include="chevron" Size="16" />
-      <MonochromeIcon Include="close-medium" Size="16;32" />
+      <MonochromeIcon Include="close-medium" Size="8;16;32" />
       <MonochromeIcon Include="delete" Size="24" />
       <MonochromeIcon Include="edit" Size="24" />
       <MonochromeIcon Include="expander-light-left" Size="24" />

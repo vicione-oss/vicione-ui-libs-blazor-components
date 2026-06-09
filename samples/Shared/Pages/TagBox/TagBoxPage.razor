@@ -1,0 +1,48 @@
+@page "/tag-box"
+
+@using ViciOne.Ui.Blazor.Components.TagBox
+
+<div class="tag-box-page">
+    <h3><code>@nameof(TagBox)</code></h3>
+
+    <TagBox @bind-Tags="_tags1"
+            AvailableTags="_availableTags" />
+
+    <h3><code>@nameof(TagBox.AllowCustomTags)</code></h3>
+
+    <TagBox @bind-Tags="_tags2"
+            AvailableTags="_availableTags"
+            AllowCustomTags="true" />
+
+    <h3><code>Width 200px</code></h3>
+
+    <TagBox @bind-Tags="_tags3"
+            AvailableTags="_availableTags"
+            AllowCustomTags="true"
+            CssClass="width" />
+
+    <h3><code>Max-Width 200px</code></h3>
+
+    <TagBox @bind-Tags="_tags4"
+            AvailableTags="_availableTags"
+            AllowCustomTags="true"
+            CssClass="max-width" />
+
+    <h3><code>@nameof(TagBox.HideSelectedItems)</code></h3>
+
+    <TagBox @bind-Tags="_tags5"
+            AvailableTags="_availableTags"
+            HideSelectedItems="true" />
+
+    <h3><code>@nameof(TagBox.ReadOnly)</code></h3>
+
+    <TagBox @bind-Tags="_tags6"
+            AvailableTags="_availableTags"
+            ReadOnly="true" />
+
+    <h3><code>@nameof(TagBox.Enabled)</code> is false</h3>
+
+    <TagBox @bind-Tags="_tags7"
+            AvailableTags="_availableTags"
+            Enabled="false" />
+</div>

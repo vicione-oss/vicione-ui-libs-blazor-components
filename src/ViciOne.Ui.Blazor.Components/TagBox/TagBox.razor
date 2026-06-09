@@ -1,0 +1,63 @@
+@{
+    var cssClasses = new List<string> { "tag-box" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    if (!Enabled)
+        cssClasses.Add("disabled");
+}
+
+<div class="@string.Join(" ", cssClasses)" @ref="_tagBox">
+
+     <div class="content">
+        @{
+            foreach (var tag in Tags)
+            {
+                var enabled = Enabled && !ReadOnly;
+
+                <TagElement Tag="@tag" Enabled="@enabled" OnDeleteButtonClick="async (tag) => await RemoveTagAsync(tag)" />
+            }
+
+            var inputAttributes = new Dictionary<string, object>();
+
+            if (ReadOnly)
+                inputAttributes.Add("readonly", "readonly");
+            else if (!Enabled)
+                inputAttributes.Add("disabled", "disabled");
+        }
+
+        <input class="tag-input"
+               type="text"
+               @ref="_inputElement"
+               @attributes="@inputAttributes"
+               @bind="_inputValue"
+               @bind:event="oninput"
+               @onkeydown="HandleKeyDownAsync"
+               @onfocusout="HandleFocusOutAsync" />
+    </div>
+
+    <div class="available-tags-dropdown">
+        <div class="available-tags-dropdown-container" tabindex="-1">
+            @{
+                var availableTags = FilterAvailableTags();
+
+                foreach (var tag in availableTags)
+                {
+                    var availableTagCssClasses = new List<string> { "available-tag" };
+
+                    if (Tags.Contains(tag))
+                        availableTagCssClasses.Add("selected");
+
+                    <div class="@string.Join(" ", availableTagCssClasses)"
+                         @onmousedown:preventDefault
+                         @onclick="async () => await AddOrRemoveTagAsync(tag)">
+
+                        @tag
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+

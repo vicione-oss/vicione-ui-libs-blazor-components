@@ -1,0 +1,9 @@
+.tag-box-page {
+    ::deep .width {
+        width: 200px
+    }
+
+    ::deep .max-width {
+        max-width: 200px
+    }
+}

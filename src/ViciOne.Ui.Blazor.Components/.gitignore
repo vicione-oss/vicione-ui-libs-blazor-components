@@ -18,5 +18,6 @@ dist/js/*.js
 dist/moveable/*.js
 dist/pointer-capture/*.js
 dist/resizing/*.js
+dist/tag-box/*.js
 dist/text-box/*.js
 dist/tooltip/**/*.js

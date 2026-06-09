@@ -1,0 +1,43 @@
+@use "../Styles/design/colors";
+@use "../Styles/mixins";
+@use "../Styles/buttons/mixins" as buttons;
+
+.tag-element {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    
+    max-width: calc(100% - 4em);
+    @include mixins.overflow-ellipsis();
+
+    margin-right: 3px;
+    padding: 0px 4px;
+
+    border-radius: 10px;
+
+    background-color: colors.$background-light;
+
+    .tag-label {
+        line-height: 16px;
+
+        padding-right: 4px;
+
+        @include mixins.overflow-ellipsis();
+    }
+
+    .delete-button {
+        width: 10px;
+        height: 10px;
+
+        align-items: center;
+        justify-content: space-evenly;
+
+        border-radius: 50%;
+        
+        @include buttons.lucent-styling();
+        background: colors.$background-darker;
+
+        @include buttons.show-pointer-cursor-when-not-disabled();
+        @include buttons.no-outline-on-focus();
+    }
+}

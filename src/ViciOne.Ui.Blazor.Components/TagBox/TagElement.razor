@@ -1,0 +1,20 @@
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<div class="tag-element">
+    <span class="tag-label">@Tag</span>
+
+    @{
+        var deleteButtonAdditionalAttributes = new Dictionary<string, object>();
+
+        if (!Enabled)
+            deleteButtonAdditionalAttributes.Add("disabled", "disabled");
+    }
+    <button class="delete-button"
+            @attributes="deleteButtonAdditionalAttributes"
+            @onclick="async () => await OnDeleteButtonClick.InvokeAsync(Tag)"
+            @onmousedown:preventDefault>
+
+        <MonochromeIcon Name="MonochromeIconName.CloseMedium" Size="MonochromeIconSize.Tiny" />
+    </button>
+</div>

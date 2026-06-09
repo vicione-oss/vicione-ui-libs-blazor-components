@@ -123,7 +123,7 @@
   <data name="Heading" xml:space="preserve">
     <value>Oh snap! Something went wrong :(</value>
   </data>
-  <data name="TryToRecover" xml:space="preserve">
-    <value>Try to recover</value>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try again</value>
   </data>
 </root>

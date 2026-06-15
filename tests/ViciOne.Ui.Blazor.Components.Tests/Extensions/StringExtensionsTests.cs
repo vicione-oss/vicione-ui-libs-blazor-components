@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using Xunit;
 
@@ -9,7 +9,7 @@ public sealed class StringExtensionsTests
     [Theory]
     [InlineData("camelCaseString", "camel-case-string")]
     [InlineData("CamelCaseString", "camel-case-string")]
-    public void AssertToDashCaseResult(string givenValue, string expectedValue)
+    public void Assert_to_dash_case_result(string givenValue, string expectedValue)
     {
         // Act
         var result = givenValue.ToDashCase();

@@ -14,7 +14,7 @@ public sealed class SidebarTests
         [.. TypeSafeEnumFactory<SidebarPlacement>.CreateAll().Select(placement => placement.GetName())];
 
     [Fact]
-    public void ShouldRenderComponent()
+    public void Should_render_component()
     {
         // Arrange
         using var testContext = new BunitContext();
@@ -28,7 +28,7 @@ public sealed class SidebarTests
 
     [Theory]
     [MemberData(nameof(SidebarPlacements))]
-    public void ShouldRenderPlacementModifierCssClass(string placement)
+    public void Should_render_placement_modifier_css_class(string placement)
     {
         // Arrange
         var placementTyped = TypeSafeEnumFactory<SidebarPlacement>.Create(placement);
@@ -47,7 +47,7 @@ public sealed class SidebarTests
     }
 
     [Fact]
-    public void ShouldRenderWithCompactWidth()
+    public void Should_render_with_compact_width()
     {
         // Arrange
         using var testContext = new BunitContext();
@@ -66,7 +66,7 @@ public sealed class SidebarTests
     }
 
     [Fact]
-    public void ShouldRenderWithFluidMinimumWidthByDefault()
+    public void Should_render_with_fluid_minimum_width_by_default()
     {
         // Arrange
         using var testContext = new BunitContext();
@@ -87,7 +87,7 @@ public sealed class SidebarTests
     }
 
     [Fact]
-    public void ShouldCorrectFluidMinimumWidthToBelowOrEqualFluidMaximumWidth()
+    public void Should_correct_fluid_minimum_width_to_below_or_equal_fluid_maximum_width()
     {
         // Arrange
         using var testContext = new BunitContext();
@@ -105,7 +105,7 @@ public sealed class SidebarTests
     }
 
     [Fact]
-    public void ShouldRenderChildContent()
+    public void Should_render_child_content()
     {
         // Arrange
         using var testContext = new BunitContext();

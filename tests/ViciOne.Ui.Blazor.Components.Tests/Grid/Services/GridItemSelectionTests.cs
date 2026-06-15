@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.Grid.Extensions;
@@ -10,7 +10,7 @@ namespace ViciOne.Ui.Blazor.Components.Tests.Grid.Services;
 public class GridItemSelectionTests
 {
     [Fact]
-    public void ShouldBeResolvable()
+    public void Should_be_resolvable()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -26,7 +26,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldBeResolvableViaServiceKey()
+    public void Should_be_resolvable_via_service_key()
     {
         // Arrange
         const string ServiceKey = "Foo";
@@ -44,7 +44,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void AssertCount()
+    public void Assert_count()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -64,7 +64,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void AssertAddOperation()
+    public void Assert_add_operation()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -84,7 +84,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldNotAddSameItemTwice()
+    public void Should_not_add_same_item_twice()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -105,7 +105,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void AssertAddRangeOperation()
+    public void Assert_add_range_operation()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -127,7 +127,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldNotAddSameItemTwiceViaAddRange()
+    public void Should_not_add_same_item_twice_via_add_range()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -152,7 +152,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void AssertClearOperation()
+    public void Assert_clear_operation()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -172,7 +172,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldTriggerChangedEventOnAddOperation()
+    public void Should_trigger_changed_event_on_add_operation()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -193,7 +193,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldTriggerChangedEventOnClearOperation()
+    public void Should_trigger_changed_event_on_clear_operation()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -216,7 +216,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldNotTriggerChangedEventAfterBeginUpdate()
+    public void Should_not_trigger_changed_event_after_begin_update()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -242,7 +242,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldTriggerChangedEventOnEndUpdate()
+    public void Should_trigger_changed_event_on_end_update()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -275,7 +275,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public async Task ShouldTriggerChangedEventOnOuterEndUpdateAsync()
+    public async Task Should_trigger_changed_event_on_outer_end_update_async()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -355,7 +355,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldIncreaseUpdateLockOnBeginUpdate()
+    public void Should_increase_update_lock_on_begin_update()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -373,7 +373,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldDecreaseUpdateLockOnEndUpdate()
+    public void Should_decrease_update_lock_on_end_update()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -392,7 +392,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void AssertChangedEventArgs()
+    public void Assert_changed_event_args()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -442,7 +442,7 @@ public class GridItemSelectionTests
     }
 
     [Fact]
-    public void ShouldNotTriggerChangedWhenSameItemIsAddedThenRemoved()
+    public void Should_not_trigger_changed_when_same_item_is_added_then_removed()
     {
         // Arrange
         var services = new ServiceCollection()
@@ -475,7 +475,7 @@ public class GridItemSelectionTests
 
 
     [Fact]
-    public void ShouldNotTriggerChangedWhenSameItemIsRemovedThenAdded()
+    public void Should_not_trigger_changed_when_same_item_is_removed_then_added()
     {
         // Arrange
         var services = new ServiceCollection()

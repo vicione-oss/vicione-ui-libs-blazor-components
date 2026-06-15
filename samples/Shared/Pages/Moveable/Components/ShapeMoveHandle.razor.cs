@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+using ViciOne.Ui.Blazor.Components.Moveable.Components;
 
 namespace Shared.Pages.Moveable.Components;
 

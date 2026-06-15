@@ -1,4 +1,5 @@
-﻿@use "../../Styles/mixins";
+@use "../../Styles/design/colors";
+@use "../../Styles/mixins";
 
 .left, .top, .right, .center, .bottom, .debug {
     display: grid;
@@ -9,7 +10,7 @@
 }
 
 .left, .top, .right, .bottom, .debug {
-    @include mixins.dotted-border();
+    @include mixins.dotted-border($color: colors.$accent);
 }
 
 .top, .bottom {

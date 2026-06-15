@@ -1,0 +1,10 @@
+@{
+    var cssClasses = new List<string> { "shape" };
+
+    if (Draggable)
+        cssClasses.Add("draggable");
+}
+
+<div class="@string.Join(" ", cssClasses)" @ref="_elementReference">
+    @Label
+</div>

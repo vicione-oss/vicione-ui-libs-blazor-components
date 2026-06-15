@@ -1,0 +1,18 @@
+@{
+    var cssClasses = new List<string> { "dropzone" };
+
+    if (_highlighted)
+        cssClasses.Add("highlighted");
+
+    if (_dragEntered)
+        cssClasses.Add("drag-entered");
+
+    var attributes = new Dictionary<string, object> { { "class", string.Join(" ", cssClasses) } };
+
+    if (GridSize.HasValue)
+        attributes.Add("style", $"--grid-size: {GridSize}px");
+}
+
+<div @attributes="attributes" @ref="_elementReference">
+    <span class="label">@Label</span>
+</div>

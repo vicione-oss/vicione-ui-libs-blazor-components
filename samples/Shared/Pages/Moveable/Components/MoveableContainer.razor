@@ -1,10 +1,10 @@
-﻿@using ViciOne.Ui.Blazor.Components.Moveable.Interfaces
+@using ViciOne.Ui.Blazor.Components.Moveable.Components
 
 <div class="moveable-container-border">
     <div class="moveable-container" style="--grid-size: @(GridSize)px" @ref="_elementReference">
         @if (ChildContent is not null)
         {
-            <CascadingValue TValue="IMoveContainer" Value="this" IsFixed="true">
+            <CascadingValue Value="this" IsFixed="true">
                 @ChildContent
             </CascadingValue>
         }

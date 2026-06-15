@@ -35,13 +35,15 @@
         <ShapeMoveHandle Shape="this" />
     }
 
-    @if (left is not null)
-    {
-        <span>left: @left</span>
-    }
+    <div class="shape-content">
+        @if (left is not null)
+        {
+            <span>left: @left</span>
+        }
 
-    @if (top is not null)
-    {
-        <span>top: @top</span>
-    }
+        @if (top is not null)
+        {
+            <span>top: @top</span>
+        }
+    </div>
 </div>

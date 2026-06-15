@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Extensions;
-using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Models;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 
@@ -229,7 +229,7 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
     }
 
     [JSInvokable]
-    public async Task OnMoveablePointerUpAsync(Guid moveableId, double x, double y)
+    public async Task MoveablePointerUpAsync(Guid moveableId, double x, double y)
     {
         try
         {

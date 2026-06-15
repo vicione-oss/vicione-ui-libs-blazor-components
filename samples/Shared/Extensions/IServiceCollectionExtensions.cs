@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shared.Pages.Breadcrumb.Extensions;
 using Shared.Pages.CheckBox.Extensions;
 using Shared.Pages.ContextMenu.Extensions;
+using Shared.Pages.Draggable.Extensions;
 using Shared.Pages.Dialog.Extensions;
 using Shared.Pages.ExpandableMenu.Extensions;
 using Shared.Pages.Grid.Extensions;
@@ -22,6 +23,7 @@ public static class IServiceCollectionExtensions
         services.AddBreadcrumbPage()
             .AddCheckBoxPage()
             .AddContextMenuPage()
+            .AddDraggablePage()
             .AddDialogPage()
             .AddExpandableMenuPage()
             .AddGridPage()

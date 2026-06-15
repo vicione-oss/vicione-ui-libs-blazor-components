@@ -11,8 +11,12 @@
   <Folder Name="/.vscode/">
     <File Path=".vscode/mcp.json" />
   </Folder>
+  <Folder Name="/adr/">
+    <File Path="adr/0001-use-semaphore-with-reentrant-async-lock.md" />
+  </Folder>
   <Folder Name="/docs/">
     <File Path="docs/csharp-coding-style.md" />
+    <File Path="docs/css-guide.md" />
   </Folder>
   <Folder Name="/samples/">
     <File Path="samples/.editorconfig" />
@@ -50,6 +54,7 @@
     <File Path="tests/AGENTS.md" />
     <File Path="tests/xunit.runner.json" />
     <Project Path="tests/Server.Tests/Server.Tests.csproj" />
+    <Project Path="tests/Shared.Tests/Shared.Tests.csproj" />
     <Project Path="tests/ViciOne.Ui.Blazor.Components.Tests/ViciOne.Ui.Blazor.Components.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Attributes;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;

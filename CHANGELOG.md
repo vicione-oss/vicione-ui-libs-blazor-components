@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.15.0 - Unreleased
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- Added `Draggable`
+
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- Added `Draggable`, starting with `DraggableTests` and `DropzoneTests` and extension method `AssertDraggableServices()` and `MockServicesForDragInteraction()`
+
 ## 5.14.0 - 2026-06-09
 
 ### Package `ViciOne.Ui.Blazor.Components`

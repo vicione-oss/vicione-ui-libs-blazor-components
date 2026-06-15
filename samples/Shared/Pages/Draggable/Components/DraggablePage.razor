@@ -1,0 +1,45 @@
+@page "/draggable"
+
+@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Switch
+
+@implements IDisposable
+
+<div class="options">
+    <div class="option">
+        <label>Draggable</label>
+        <Switch @bind-Value="@_draggable" />
+    </div>
+    <div class="option">
+        <label>Modifier key</label>
+        <ComboBox Items="@_modifierKeyItems"
+                  @bind-Value="@_modifierKey"
+                  ValueSelector="@(item => item.Value)"
+                  TextSelector="@(item => item.Text)" />
+    </div>
+    <div class="option">
+        <label>Snap to grid</label>
+        <Switch @bind-Value="@_snapToGrid" />
+    </div>
+    <div class="option">
+        <label>Grid size</label>
+        <SpinEdit @bind-Value="@_gridSize" Interval="10" Minimum="10" Maximum="50" />
+    </div>
+</div>
+
+<div class="content">
+    <div class="draggables">
+        <Shape Label="Shape A" Draggable="@_draggable" ModifierKey="@_modifierKey" SnapToGrid="@_snapToGrid" />
+        <Shape Label="Shape B" Draggable="@_draggable" ModifierKey="@_modifierKey" SnapToGrid="@_snapToGrid" />
+    </div>
+    <div class="dropzones">
+        <Dropzone Label="Dropzone 1" GridSize="@_gridSize" />
+        <Dropzone Label="Dropzone 2" GridSize="@_gridSize" />
+    </div>
+</div>
+
+@if (DropHandler.LastDroppedLabel is not null)
+{
+    <p class="last-drop-summary">Last drop: <strong>@DropHandler.LastDroppedLabel</strong> → <strong>@DropHandler.LastTargetLabel</strong></p>
+}

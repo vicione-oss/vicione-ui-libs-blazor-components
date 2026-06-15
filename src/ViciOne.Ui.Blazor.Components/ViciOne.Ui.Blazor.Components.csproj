@@ -136,6 +136,18 @@
     <GeneratedStaticWebAsset Include="PointerCapture\Services\Behaviors\SnapToGridPointerCaptureBehavior.cs.js">
       <DestinationFile>pointer-capture\snap-to-grid-pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Enums\ModifierKey.cs.js">
+      <DestinationFile>enums\modifier-key.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Models\DragInteractionContext.cs.js">
+      <DestinationFile>draggable\drag-interaction-context.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Models\DropzoneDescriptor.cs.js">
+      <DestinationFile>draggable\dropzone-descriptor.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Services\DragInteraction.cs.js">
+      <DestinationFile>draggable\drag-interaction.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Enums\MouseLeaveDirection.cs.js">
       <DestinationFile>context-menu\enums\mouse-leave-direction.js</DestinationFile>
     </GeneratedStaticWebAsset>

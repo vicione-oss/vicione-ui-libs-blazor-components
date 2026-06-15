@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+using ViciOne.Ui.Blazor.Components.Moveable.Components;
 
 namespace ViciOne.Ui.Blazor.Components.Popup.Components;
 

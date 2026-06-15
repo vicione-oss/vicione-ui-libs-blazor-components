@@ -10,7 +10,11 @@ end
 
 func getPropertyType(property)
     if property.Type.IsNullable
-        nullability = " | undefined"
+        # Use "null" instead of "undefined" because this is standard practice in JS interop
+        # and is the correct choice for parameters; in JavaScript, "null" inherently signifies
+        # the absence of a value, whereas "undefined" indicates that something is not defined,
+        # which cannot be the case for generated constructor parameters.
+        nullability = " | null"
     else
         nullability = ""
     end
@@ -34,7 +38,7 @@ func getPropertyType(property)
 
         typeScriptType = property.Type | Type.ToTypeScriptType
 
-        ret typeScriptType + nullability
+        ret typeScriptType
     end
 end
 
@@ -45,15 +49,32 @@ for class in data.Classes | Symbols.ThatHaveAttribute "GenerateTypeScriptClass" 
 
 export class {{ class.Name }} {
     {{~
+    lineBreakAfterLastConstructorParameter = false
+
     properties = class.Properties | Symbols.ThatArePublic
 
     if properties | Array.Size > 4 ~}}
     // eslint-disable-next-line max-params
     {{~ end ~}}
-    constructor({{ for property in properties }}{{ if !for.first }}
+    constructor({{ for property in properties }}{{ if !for.first && !property.Type.IsNullable }}
+        {{ end -}}
+        {{- if property.Type.IsNullable }}
+        {{~ if !for.first ~}}
+
+        {{~
+            else
+                lineBreakAfterLastConstructorParameter = true
+            end
+        ~}}
+        // eslint-disable-next-line @typescript-eslint/no-restricted-types
         {{ end -}}
         readonly {{ property.Name | String.ToCamelCase }}: {{ getPropertyType property }}{{ if !for.last }},{{ end ~}}
-{{ end }}) {}
+        {{~ if property.Type.IsNullable && !for.last ~}}
+
+        {{~ end ~}}
+{{ end
+    if lineBreakAfterLastConstructorParameter }}
+    {{ end }}) {}
 }
     {{~ end
 

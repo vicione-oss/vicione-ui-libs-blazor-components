@@ -18,9 +18,12 @@
             "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js": [ "./PointerCapture/Scripts/PointerCapture.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js": [ "./PointerCapture/Scripts/PointerCaptureBehavior.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js": [ "./PointerCapture/Scripts/PointerCaptureBehaviorContext.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/enums/modifier-key.js": [ "./Enums/ModifierKey.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/context-menu/enums/mouse-leave-direction.js": [ "./ContextMenu/Enums/MouseLeaveDirection.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/child-context-menu-position.js": [ "./ContextMenu/Models/ChildContextMenuPosition.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/context-menu/models/context-menu-position.js": [ "./ContextMenu/Models/ContextMenuPosition.cs.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/draggable/drag-interaction-context.js": [ "./Draggable/Models/DragInteractionContext.cs.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-descriptor.js": [ "./Draggable/Models/DropzoneDescriptor.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/moveable/move-interaction-context.js": [ "./Moveable/Models/MoveInteractionContext.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/resizing/resize-observer.js": [ "./Resizing/Services/ResizeObserver.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/breadcrumb/html-element-helper.js": [ "./Breadcrumb/Services/HtmlElementHelper.cs.ts" ]

@@ -66,7 +66,7 @@ class MoveInteraction {
     };
 
     readonly #moveablePointerUp = async (_moveable: HTMLElement, x: number, y: number) => {
-        await this.context.dotNetObject.invokeMethodAsync('OnMoveablePointerUpAsync', this.context.moveableId, x, y);
+        await this.context.dotNetObject.invokeMethodAsync('MoveablePointerUpAsync', this.context.moveableId, x, y);
     };
 }
 

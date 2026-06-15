@@ -248,7 +248,7 @@
         "dependencies": {
           "Bogus": "[35.6.4, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.8, )",
-          "ViciOne.Ui.Blazor.Components": "[5.14.0, )",
+          "ViciOne.Ui.Blazor.Components": "[5.15.0, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
           "ViciOne.Ui.MonochromeIcons.Components": "[4.11.0, )",
           "ViciOne.Ui.MonochromeIcons.Core": "[4.11.0, )"

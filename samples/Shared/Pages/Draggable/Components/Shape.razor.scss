@@ -1,0 +1,31 @@
+@use "../../../Styles/design/colors";
+
+.shape {
+    width: 120px;
+    height: 80px;
+
+    display: grid;
+    align-content: center;
+    justify-items: center;
+
+    background-color: colors.$theme-inverted;
+    color: colors.$theme;
+
+    &.draggable {
+        cursor: grab;
+    }
+
+    &:not(.draggable) {
+        opacity: 0.3;
+    }
+
+    &.dragging {
+        background-color: colors.$accent;
+    }
+
+    &.dragged::after {
+        content: "Dragged";
+
+        font-size: small;
+    }
+}

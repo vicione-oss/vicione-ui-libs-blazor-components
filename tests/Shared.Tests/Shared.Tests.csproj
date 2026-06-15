@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Bunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\samples\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\src\ViciOne.Ui.Blazor.Components.TestingHelpers\ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
+  </ItemGroup>
+
+</Project>

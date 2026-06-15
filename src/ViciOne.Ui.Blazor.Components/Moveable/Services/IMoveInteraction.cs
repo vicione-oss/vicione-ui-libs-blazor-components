@@ -1,4 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 
 namespace ViciOne.Ui.Blazor.Components.Moveable.Services;
@@ -10,14 +10,16 @@ public interface IMoveInteraction
 {
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
-    /// when a move interaction has been started. The text will be removed from the attribute again,
-    /// when finished.
+    /// of the moveable when a move interaction has been started.
     /// </summary>
+    /// <remarks>
+    /// The text will be removed from the attribute again, when the move interaction is finished.
+    /// </remarks>
     string StartedCssClass { get; }
 
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
-    /// when a move interaction has ended.
+    /// of the moveable when a move interaction has ended.
     /// </summary>
     string EndedCssClass { get; }
 

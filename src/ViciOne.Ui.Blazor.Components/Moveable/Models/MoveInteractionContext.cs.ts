@@ -10,5 +10,7 @@ export class MoveInteractionContext {
         readonly startedCssClass: string,
         readonly endedCssClass: string,
         readonly dotNetObject: DotNet.DotNetObject,
-        readonly pointerCaptureBehaviors: PointerCaptureBehavior[] | undefined) {}
+
+        // eslint-disable-next-line @typescript-eslint/no-restricted-types
+        readonly pointerCaptureBehaviors: PointerCaptureBehavior[] | null) {}
 }

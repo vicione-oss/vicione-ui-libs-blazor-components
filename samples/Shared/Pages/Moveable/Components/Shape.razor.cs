@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
@@ -35,16 +35,14 @@ public sealed partial class Shape : IMoveableShape, IMoveable, IMoveHandle
 
         if (SnapToGrid != _snapToGrid)
         {
-            _snapToGridChanged = _moveInteractionAttachTask is not null;
-
             _snapToGrid = SnapToGrid;
+
+            _snapToGridChanged = _moveInteractionAttachTask is not null;
         }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnAfterRenderAsync(firstRender);
-
         if (Moveable)
         {
             if (_moveHandleChanged)
@@ -85,7 +83,7 @@ public sealed partial class Shape : IMoveableShape, IMoveable, IMoveHandle
         if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
 
-        await RemoveMoveInteractionAsync().ConfigureAwait(false);
+        await RemoveMoveInteractionAsync();
     }
 
     private async Task RemoveMoveInteractionAsync()

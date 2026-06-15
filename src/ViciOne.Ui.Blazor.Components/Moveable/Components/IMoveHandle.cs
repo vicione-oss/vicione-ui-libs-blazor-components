@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 
-namespace ViciOne.Ui.Blazor.Components.Moveable.Interfaces;
+namespace ViciOne.Ui.Blazor.Components.Moveable.Components;
 
 /// <summary>
 /// A component that acts as a move handle in a move interaction.

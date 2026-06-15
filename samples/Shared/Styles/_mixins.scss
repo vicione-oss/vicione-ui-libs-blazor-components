@@ -1,7 +1,21 @@
-﻿@mixin dotted-border() {
+@use "../Styles/design/colors";
+
+@mixin dotted-border($color: colors.$border) {
     border-width: 2px;
     border-style: dotted;
-    border-color: rgba(255, 150, 0, 1);
+    border-color: $color;
+}
+
+@mixin dotted-grid($dot-color: colors.$border) {
+    $grid-size: var(--grid-size);
+    $grid-offset: calc(#{$grid-size} / 2);
+
+    background-image: radial-gradient(circle, #{$dot-color} 0px, transparent 1px);
+    background-size: $grid-size $grid-size; // spacing between dots
+    background-position-x: $grid-offset;
+    background-position-y: $grid-offset;
+
+    background-color: colors.$background-darker;
 }
 
 @mixin header-and-content-padding() {

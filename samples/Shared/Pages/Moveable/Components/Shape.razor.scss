@@ -4,24 +4,32 @@
     width: 160px;
     height: 160px;
 
-    background-color: colors.$theme-inverted;
-    color: colors.$theme;
-
     display: grid;
-    grid-auto-flow: row;
-    align-content: center;
-    justify-items: center;
-    font-size: smaller;
+
+    .shape-content {
+        display: grid;
+        justify-items: center;
+        align-content: center;
+
+        background-color: colors.$theme-inverted;
+        color: colors.$theme;
+
+        font-size: smaller;
+    }
 
     &:not(.moveable) {
         opacity: 0.3;
     }
 
-    &.moving, &.moved, &.positioned {
-        position: absolute;
+    &.moving {
+        .shape-content {
+            background-color: colors.$accent-hover;
+
+            opacity: 0.3;
+        }
     }
 
-    &.moving {
-        background-color: colors.$accent-hover;
+    &.moving, &.moved, &.positioned {
+        position: absolute;
     }
 }

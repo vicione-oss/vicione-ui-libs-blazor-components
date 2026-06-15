@@ -1,5 +1,4 @@
-﻿@use "../../../Styles/mixins";
-@use "../../../Styles/design/colors";
+@use "../../../Styles/mixins";
 
 .moveable-container-border {
     display: inline-block;
@@ -12,14 +11,6 @@
         width: 480px;
         height: 360px;
 
-        // dotted grid
-        $dot-color: colors.$accent;
-        $grid-size: var(--grid-size);
-        $grid-offset: calc(#{$grid-size} / 2);
-
-        background-image: radial-gradient(circle, #{$dot-color} 0px, transparent 1px);
-        background-size: $grid-size $grid-size; // spacing between dots
-        background-position-x: $grid-offset;
-        background-position-y: $grid-offset;
+        @include mixins.dotted-grid();
     }
 }

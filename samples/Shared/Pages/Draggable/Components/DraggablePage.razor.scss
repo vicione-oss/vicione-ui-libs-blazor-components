@@ -1,0 +1,28 @@
+@use "../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.content {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+    margin-top: 30px;
+
+    .draggables {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .dropzones {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+.last-drop-summary {
+    margin-top: 24px;
+}

@@ -8,7 +8,7 @@ These rules and recommendations override or add to [`common C# code conventions`
 
 General rules are ensured by Code Analyzers running in the background based on the configuration applied in [`.globalconfig`](/.globalconfig).
 
-## Is it allowed to intialize a non-nullable field with `default!`?
+## Is it allowed to initialize a non-nullable field with `default!`?
 
 Using `default!` should be **avoided whenever possible** because it assigns `null` to a member that should never be null.
 

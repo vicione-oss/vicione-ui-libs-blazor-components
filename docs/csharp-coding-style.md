@@ -8,6 +8,27 @@ These rules and recommendations override or add to [`common C# code conventions`
 
 General rules are ensured by Code Analyzers running in the background based on the configuration applied in [`.globalconfig`](/.globalconfig).
 
+## Expression body in constructors, methods, and destructors
+
+When using an expression body (`=>`) in a **constructor**, **method**, or **destructor**, the expression should be put on a new line.
+
+``` csharp
+// correct
+public Foo(int value)
+    => Value = value;
+
+public int GetValue()
+    => Value;
+
+~Foo()
+    => Cleanup();
+
+// incorrect
+public Foo(int value) => Value = value;
+public int GetValue() => Value;
+~Foo() => Cleanup();
+```
+
 ## Is it allowed to initialize a non-nullable field with `default!`?
 
 Using `default!` should be **avoided whenever possible** because it assigns `null` to a member that should never be null.

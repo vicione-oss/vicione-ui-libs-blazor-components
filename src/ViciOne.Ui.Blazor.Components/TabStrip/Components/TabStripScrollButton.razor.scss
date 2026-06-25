@@ -1,0 +1,26 @@
+@use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/buttons/mixins" as buttons;
+@use "../../Styles/user-interaction";
+
+.tab-strip-scroll-button {
+    font: inherit;
+
+    @include buttons.lucent-styling();
+    @include buttons.no-outline-on-focus();
+
+    @include animations.multiple($color: true, $opacity: true);
+
+    &.active {
+        pointer-events: initial;
+
+        &:hover {
+            @include user-interaction.show-pointer-cursor();
+        }
+    }
+
+    &:not(.active) {
+        pointer-events: none;
+
+        opacity: 0.3;
+    }
+}

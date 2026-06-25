@@ -1,0 +1,41 @@
+@using ViciOne.Ui.Blazor.Components.TabStrip.Enums
+@using ViciOne.Ui.Blazor.Components.TabStrip.Extensions
+
+@{
+    var cssClasses = new List<string> { "tab-strip", TabSize.ToModifierCssClass() };
+
+    if (!_initialized)
+        cssClasses.Add("invisible");
+
+    var withScrolling = _canScrollLeft || _canScrollRight;
+    if (withScrolling)
+        cssClasses.Add("with-scrolling");
+}
+
+<CascadingValue Value="this" IsFixed="true">
+    <div class="@string.Join(" ", cssClasses)">
+        @if (withScrolling)
+        {
+            <TabStripScrollButton Direction="ScrollDirection.Left"
+                                  TabSize="TabSize"
+                                  Active="_canScrollLeft"
+                                  OnClick="ScrollLeftAsync" />
+        }
+
+        <div class="tabs-viewport">
+            <div @ref="_scrollContainer" class="tabs-scroll-container" tabindex="-1">
+                <div class="tabs">
+                    @ChildContent
+                </div>
+            </div>
+        </div>
+
+        @if (withScrolling)
+        {
+            <TabStripScrollButton Direction="ScrollDirection.Right"
+                                  TabSize="TabSize"
+                                  Active="_canScrollRight"
+                                  OnClick="ScrollRightAsync" />
+        }
+    </div>
+</CascadingValue>

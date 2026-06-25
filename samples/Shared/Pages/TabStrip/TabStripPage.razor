@@ -1,0 +1,42 @@
+@page "/tab-strip"
+
+@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.TabStrip.Components
+
+<h3><code>@nameof(TabStrip.TabSize)</code></h3>
+
+<ComboBox Items="@_tabSizeComboBoxItems"
+            @bind-Value="@_tabSize"
+            ValueSelector="@(item => item.Value)"
+            TextSelector="@(item => item.Text)" />
+
+<h3><code>@nameof(TabStrip.ActiveTabIndex)</code> with data binding</h3>
+
+<TabStrip TabSize="_tabSize" @bind-ActiveTabIndex="_activeTabIndex">
+    <Tab Text="General" />
+    <Tab Text="Profile" />
+    <Tab Text="Settings" />
+</TabStrip>
+
+<p>Active tab index: @_activeTabIndex</p>
+
+<h3>Tabs with scrolling</h3>
+
+<div class="tabs-with-scrolling">
+    <TabStrip TabSize="_tabSize">
+        @for (var index = 0; index < 15; index++)
+        {
+            <Tab Text="@($"Tab {index + 1}")" @key="index" />
+        }
+    </TabStrip>
+</div>
+
+<h3><code>@nameof(Tab).@nameof(Tab.OnSelected)</code> callback</h3>
+
+<TabStrip TabSize="_tabSize">
+    <Tab Text="Tab A" OnSelected="OnTabSelected" />
+    <Tab Text="Tab B" OnSelected="OnTabSelected" />
+    <Tab Text="Tab C" OnSelected="OnTabSelected" />
+</TabStrip>
+
+<p>Last clicked tab index: @_lastClickedTabIndex</p>

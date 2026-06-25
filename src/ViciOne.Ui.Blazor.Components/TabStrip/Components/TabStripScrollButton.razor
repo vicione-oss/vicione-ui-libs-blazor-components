@@ -1,0 +1,12 @@
+@using ViciOne.Ui.MonochromeIcons.Components
+
+@{
+    var cssClasses = new List<string> { "tab-strip-scroll-button" };
+
+    if (Active)
+        cssClasses.Add("active");
+}
+
+<button type="button" class="@string.Join(" ", cssClasses)" tabindex="-1" @onclick="OnClick">
+    <MonochromeIcon Name="_iconName" Size="_iconSize" />
+</button>

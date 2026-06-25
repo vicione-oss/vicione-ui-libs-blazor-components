@@ -1,11 +1,12 @@
 # Changelog
 
-## 5.16.0 - Unreleased
+## 5.16.0 - 2026-06-25
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.9`
 - Added `Resizeable`
+- Added `TabStrip`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

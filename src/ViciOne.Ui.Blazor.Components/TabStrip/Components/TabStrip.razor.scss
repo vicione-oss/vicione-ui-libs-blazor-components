@@ -1,0 +1,110 @@
+@use "../../Styles/design/colors";
+
+.tab-strip {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    overflow-x: hidden;
+
+    // Make the named scroll timeline declared on .tabs-scroll-container reachable
+    // by the gradient pseudo-elements on .tabs-viewport (which are siblings).
+    timeline-scope: --tab-strip-scroll;
+
+    $tab-height: 36px;
+    $tab-text-padding-bottom: 1px;
+    $tab-line-thickness: 2px;
+
+    --tab-strip-font-size: 24px;
+    --tab-strip-height: #{$tab-height};
+    --tab-strip-margin-right: 32px;
+    --tab-strip-text-padding-bottom: #{$tab-text-padding-bottom};
+    --tab-strip-text-line-height: #{$tab-height - $tab-text-padding-bottom - $tab-line-thickness};
+    --tab-strip-overflow-background: #{colors.$background-dark};
+    --tab-strip-overflow-size: 24px;
+
+    &.small {
+        --tab-strip-font-size: 14px;
+        --tab-strip-height: 27px;
+        --tab-strip-margin-right: 16px;
+        --tab-strip-text-padding-bottom: 4px;
+        --tab-strip-text-line-height: #{27px - 4px - $tab-line-thickness};
+    }
+
+    &.invisible {
+        visibility: hidden;
+    }
+
+    .tabs-viewport {
+        position: relative;
+        overflow: hidden;
+
+        &::before,
+        &::after {
+            content: '';
+            top: 0;
+            height: 100%;
+            width: var(--tab-strip-overflow-size);
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+        }
+    }
+
+    &.with-scrolling {
+        .tabs-viewport {
+            &::before,
+            &::after {
+                animation-timeline: --tab-strip-scroll;
+                animation-duration: auto;
+                animation-fill-mode: both;
+            }
+
+            &::before {
+                left: 0;
+                background: linear-gradient(90deg, var(--tab-strip-overflow-background) 0, transparent 100%);
+                animation-name: tab-strip-fade-in-on-scroll;
+                animation-range: 0 8px;
+            }
+
+            &::after {
+                right: 0;
+                background: linear-gradient(-90deg, var(--tab-strip-overflow-background) 0, transparent 100%);
+                animation-name: tab-strip-fade-out-on-scroll;
+                animation-range: calc(100% - 12px) calc(100% - 4px);
+            }
+        }
+    }
+
+    .tabs-scroll-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-timeline: --tab-strip-scroll x;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .tabs {
+        display: flex;
+        width: max-content;
+
+        // Tiny trailing spacer to absorb sub-pixel rounding between the container's reported
+        // scrollWidth and the actual rendered width of the last tab (letter-spacing, border, etc.).
+        // Without it the last tab can appear clipped by a fraction of a pixel even when fully scrolled.
+        &::after {
+            content: '';
+            flex: 0 0 4px;
+        }
+    }
+}
+
+@keyframes tab-strip-fade-in-on-scroll {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes tab-strip-fade-out-on-scroll {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}

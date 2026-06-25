@@ -1,0 +1,13 @@
+@{
+    var cssClasses = new List<string> { "tab" };
+
+    if (Active)
+        cssClasses.Add("active");
+}
+
+<button @ref="_elementReference"
+     class="@string.Join(" ", cssClasses)"
+     @onclick="SelectAsync"
+     @onkeydown="OnKeyDownAsync">
+    <span class="text">@Text</span>
+</button>

@@ -1,0 +1,60 @@
+@use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/design/colors";
+@use "../../Styles/design/typography";
+
+.tab {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+
+    height: var(--tab-strip-height);
+    margin: 0;
+    margin-right: var(--tab-strip-margin-right);
+    padding: 0;
+    padding-bottom: var(--tab-strip-text-padding-bottom);
+
+    font: inherit;
+    font-size: var(--tab-strip-font-size);
+    font-weight: typography.$font-weight-light;
+    color: colors.$font;
+
+    border: none;
+    border-bottom: 2px solid transparent;
+
+    background-color: transparent;
+
+    @include animations.multiple($color: true, $border: true);
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &.active {
+        font-weight: typography.$font-weight-regular;
+        color: colors.$font-light;
+        border-bottom-color: colors.$accent;
+
+        &:hover, &:focus-visible {
+            border-bottom-color: colors.$accent-hover;
+        }
+    }
+
+    &:not(.active) {
+        &:hover, &:focus-visible {
+            color: colors.$font-light;
+            border-bottom-color: colors.$font-light;
+        }
+    }
+
+    .text {
+        font-size: var(--tab-strip-font-size);
+        line-height: var(--tab-strip-text-line-height);
+        letter-spacing: 0.2px;
+    }
+}

@@ -226,6 +226,9 @@
     <GeneratedStaticWebAsset Include="Tooltip\Components\TooltipDisplay.razor.js">
       <DestinationFile>tooltip\components\tooltip-display.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="TabStrip\Components\TabStrip.razor.js">
+      <DestinationFile>tab-strip\components\tab-strip.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="TagBox\TagBox.razor.js">
       <DestinationFile>tag-box\tag-box.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -313,8 +316,8 @@
       <MonochromeIcon Include="close-medium" Size="8;16;32" />
       <MonochromeIcon Include="delete" Size="24" />
       <MonochromeIcon Include="edit" Size="24" />
-      <MonochromeIcon Include="expander-light-left" Size="24" />
-      <MonochromeIcon Include="expander-light-right" Size="16;24" />
+      <MonochromeIcon Include="expander-light-left" Size="24;32" />
+      <MonochromeIcon Include="expander-light-right" Size="16;24;32" />
       <MonochromeIcon Include="filter-light" Size="18" />
       <MonochromeIcon Include="folder" Size="32" />
       <MonochromeIcon Include="general-error" Size="24" />

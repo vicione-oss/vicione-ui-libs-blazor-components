@@ -1,0 +1,73 @@
+@use "../../Styles/design/colors";
+
+@use "sass:color";
+
+.resize-handle {
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    background-color: colors.$theme-inverted;
+    color: colors.$theme;
+
+    border: 1px solid color.adjust(colors.$theme, $lightness: +40%);
+
+    z-index: 1;
+
+    &.top-left {
+        left: 0;
+        top: 0;
+        cursor: nwse-resize;
+        transform: translate(-50%, -50%);
+    }
+
+    &.top {
+        left: 50%;
+        top: 0;
+        cursor: ns-resize;
+        transform: translate(-50%, -50%);
+    }
+
+    &.top-right {
+        right: 0;
+        top: 0;
+        cursor: nesw-resize;
+        transform: translate(50%, -50%);
+    }
+
+    &.right {
+        right: 0;
+        top: 50%;
+        cursor: ew-resize;
+        transform: translate(50%, -50%);
+    }
+
+    &.bottom-right {
+        right: 0;
+        bottom: 0;
+        cursor: nwse-resize;
+        transform: translate(50%, 50%);
+    }
+
+    &.bottom {
+        left: 50%;
+        bottom: 0;
+        cursor: ns-resize;
+        transform: translate(-50%, 50%);
+    }
+
+    &.bottom-left {
+        left: 0;
+        bottom: 0;
+        cursor: nesw-resize;
+        transform: translate(-50%, 50%);
+    }
+
+    &.left {
+        left: 0;
+        top: 50%;
+        cursor: ew-resize;
+        transform: translate(-50%, -50%);
+    }
+}

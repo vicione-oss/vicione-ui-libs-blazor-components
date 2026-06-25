@@ -11,6 +11,11 @@
         width: 480px;
         height: 360px;
 
+        // default centered positioning for moveable
+        display: grid;
+        align-items: center;
+        justify-content: center;
+
         @include mixins.dotted-grid();
     }
 }

@@ -10,8 +10,8 @@ public sealed partial class MoveablePage
     private bool _moveable;
     private bool _withMoveHandle;
     private bool _snapToGrid;
-    private double? _x = DefaultGridSize * 2;
-    private double? _y = DefaultGridSize * 3;
+    private double? _x;
+    private double? _y;
     private int _gridSize = DefaultGridSize;
     private bool _initialized;
 

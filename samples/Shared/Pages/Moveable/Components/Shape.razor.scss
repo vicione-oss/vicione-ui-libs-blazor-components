@@ -1,35 +1,15 @@
-@use "../../../Styles/design/colors";
+@use "../../../Styles/mixins";
 
 .shape {
     width: 160px;
     height: 160px;
 
-    display: grid;
-
-    .shape-content {
-        display: grid;
-        justify-items: center;
-        align-content: center;
-
-        background-color: colors.$theme-inverted;
-        color: colors.$theme;
-
-        font-size: smaller;
-    }
-
-    &:not(.moveable) {
-        opacity: 0.3;
-    }
-
-    &.moving {
-        .shape-content {
-            background-color: colors.$accent-hover;
-
-            opacity: 0.3;
-        }
-    }
-
-    &.moving, &.moved, &.positioned {
+    &.moving-ongoing, &.moved, &.positioned {
         position: absolute;
     }
+
+    @include mixins.shape-styles($feature-css-class: "moveable",
+        $started-css-class: "moving",
+        $ongoing-css-class: "moving-ongoing",
+        $hide-content-when-ongoing: true);
 }

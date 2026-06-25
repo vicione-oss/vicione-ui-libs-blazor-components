@@ -76,8 +76,8 @@ class ContextMenu {
                 boundingClientRect.width,
                 boundingClientRect.height);
 
-            const clickedInsideContextMenu = boundingClientRectAdjusted.x <= x && x < boundingClientRectAdjusted.right
-                && boundingClientRectAdjusted.y <= y && y < boundingClientRectAdjusted.bottom;
+            const clickedInsideContextMenu = boundingClientRectAdjusted.x <= x && x < boundingClientRectAdjusted.right &&
+                boundingClientRectAdjusted.y <= y && y < boundingClientRectAdjusted.bottom;
 
             if (clickedInsideContextMenu) {
                 clickedInsideAnyContextMenu = true;

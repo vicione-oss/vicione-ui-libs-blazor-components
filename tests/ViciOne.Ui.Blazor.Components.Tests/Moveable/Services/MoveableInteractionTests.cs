@@ -114,6 +114,7 @@ public sealed class MoveableInteractionTests
             argument.MoveHandle.Should().Be(moveable.GetMoveHandle().GetElementReference());
             argument.MoveContainer.Should().Be(moveable.GetMoveContainer().GetElementReference());
             argument.StartedCssClass.Should().Be(moveInteraction.StartedCssClass);
+            argument.OngoingCssClass.Should().Be(moveInteraction.OngoingCssClass);
             argument.EndedCssClass.Should().Be(moveInteraction.EndedCssClass);
 
             if (withPointerCaptureBehaviors)

@@ -1,5 +1,6 @@
 import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
 import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
+import { type CaptureTargetRect } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target-rect.js';
 
 class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
     #gridSize = 10;
@@ -8,29 +9,37 @@ class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
         this.#gridSize = gridSize ?? 10;
     }
 
+    public setGridSize(value: number) {
+
+        this.#gridSize = value;
+    }
+
     public apply(context: PointerCaptureBehaviorContext, next: (context: PointerCaptureBehaviorContext) => void) {
-        let positionChanged = false;
+        const { rect, lastRect } = context.captureTarget;
 
-        let remainder = context.position.x % this.#gridSize;
-        if (remainder !== 0) {
-            context.position.x -= remainder;
+        const snappedLeft = this.#snap(rect, lastRect, 'left');
+        const snappedTop = this.#snap(rect, lastRect, 'top');
+        const snappedRight = this.#snap(rect, lastRect, 'right');
+        const snappedBottom = this.#snap(rect, lastRect, 'bottom');
 
-            positionChanged = true;
-        }
-
-        remainder = context.position.y % this.#gridSize;
-        if (remainder !== 0) {
-            context.position.y -= remainder;
-
-            positionChanged = true;
-        }
-
-        if (!positionChanged)
+        if (!snappedLeft && !snappedTop && !snappedRight && !snappedBottom)
             next(context);
     }
 
-    public setGridSize(value: number) {
-        this.#gridSize = value;
+    #snap(rect: CaptureTargetRect, lastRect: Readonly<CaptureTargetRect>, edge: 'left' | 'top' | 'right' | 'bottom'): boolean {
+        const value = rect[edge];
+        const lastValue = lastRect[edge];
+
+        if (value === lastValue)
+            return false;
+
+        const remainder = value % this.#gridSize;
+        if (remainder === 0)
+            return false;
+
+        rect[edge] -= remainder;
+
+        return true;
     }
 }
 

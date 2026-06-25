@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -109,6 +109,12 @@
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
       <DestinationFile>js\point.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\CaptureTargetRect.js">
+      <DestinationFile>pointer-capture\capture-target-rect.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\NumberMixins.js">
+      <DestinationFile>js\number-mixins.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
       <DestinationFile>js\pointer-event-mixins.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -124,6 +130,48 @@
     <GeneratedStaticWebAsset Include="Moveable\Services\MoveInteraction.cs.js">
       <DestinationFile>moveable\move-interaction.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Models\ResizeInteractionContext.cs.js">
+      <DestinationFile>resizeable\resize-interaction-context.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Models\ResizeHandleInfo.cs.js">
+      <DestinationFile>resizeable\models\resize-handle-info.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Enums\ResizeHandlePosition.cs.js">
+      <DestinationFile>resizeable\enums\resize-handle-position.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\ResetRectPointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\reset-rect-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Scripts\ResizeLeftPointerCaptureBehavior.js">
+      <DestinationFile>resizeable\scripts\resize-left-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Scripts\ResizeRightPointerCaptureBehavior.js">
+      <DestinationFile>resizeable\scripts\resize-right-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Scripts\ResizeUpPointerCaptureBehavior.js">
+      <DestinationFile>resizeable\scripts\resize-up-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Scripts\ResizeDownPointerCaptureBehavior.js">
+      <DestinationFile>resizeable\scripts\resize-down-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Scripts\ResizePointerCaptureBehavior.js">
+      <DestinationFile>resizeable\scripts\resize-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Scripts\ResizePointerCaptureBehaviorInitializeArgs.js">
+      <DestinationFile>resizeable\scripts\resize-pointer-capture-behavior-initialize-args.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\SetSizePointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\set-size-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Resizeable\Services\ResizeInteraction.cs.js">
+      <DestinationFile>resizeable\resize-interaction.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\AggregatePointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\aggregate-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\CaptureTarget.js">
+      <DestinationFile>pointer-capture\capture-target.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCapture.js">
       <DestinationFile>pointer-capture\pointer-capture.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -132,6 +180,18 @@
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehaviorContext.js">
       <DestinationFile>pointer-capture\pointer-capture-behavior-context.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehaviorPipeline.js">
+      <DestinationFile>pointer-capture\pointer-capture-behavior-pipeline.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\AdjustForScrollPositionPointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\adjust-for-scroll-position-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\MovePointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\move-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\SetPositionPointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\set-position-pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Services\Behaviors\SnapToGridPointerCaptureBehavior.cs.js">
       <DestinationFile>pointer-capture\snap-to-grid-pointer-capture-behavior.js</DestinationFile>

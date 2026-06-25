@@ -1,3 +1,3 @@
 # Copilot Instructions
 
-- Always check for `AGENTS.md` files in relevant directories before generating code.
+- Before generating or modifying code, search the entire workspace recursively for all `AGENTS.md` files and read those in directories relevant to the changes being made.

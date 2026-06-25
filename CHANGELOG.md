@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.9`
+- Added `Resizeable`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

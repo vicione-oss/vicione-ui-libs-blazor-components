@@ -16,6 +16,7 @@ internal sealed class DragInteractionContext
     public required Guid DraggableId { get; init; }
     public required ElementReference Draggable { get; init; }
     public required string StartedCssClass { get; init; }
+    public required string OngoingCssClass { get; init; }
     public required string EndedCssClass { get; init; }
     public ModifierKey? ModifierKey { get; init; }
     public required DotNetObjectReference<DragInteraction> DotNetObject { get; init; }

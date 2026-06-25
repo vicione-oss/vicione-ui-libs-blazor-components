@@ -1,0 +1,12 @@
+@using ViciOne.Ui.Blazor.Components.Resizeable.Components
+
+<div class="resizeable-container-border">
+    <div class="resizeable-container" style="--grid-size: @(GridSize)px" @ref="_elementReference">
+        @if (ChildContent is not null)
+        {
+            <CascadingValue TValue="IResizeContainer" Value="this" IsFixed="true">
+                @ChildContent
+            </CascadingValue>
+        }
+    </div>
+</div>

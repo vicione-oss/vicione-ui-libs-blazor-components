@@ -1,0 +1,15 @@
+@use "../../../Styles/mixins";
+
+.shape {
+    width: 160px;
+    height: 160px;
+
+    &.resizing-ongoing, &.resized, &.positioned {
+        position: absolute;
+    }
+
+    @include mixins.shape-styles($feature-css-class: "resizeable",
+        $started-css-class: "resizing",
+        $ongoing-css-class: "resizing-ongoing",
+        $hide-content-when-ongoing: true);
+}

@@ -8,6 +8,7 @@ export class MoveInteractionContext {
         readonly moveHandle: HTMLElement,
         readonly moveContainer: HTMLElement,
         readonly startedCssClass: string,
+        readonly ongoingCssClass: string,
         readonly endedCssClass: string,
         readonly dotNetObject: DotNet.DotNetObject,
 

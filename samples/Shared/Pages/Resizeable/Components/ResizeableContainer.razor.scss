@@ -1,0 +1,21 @@
+@use "../../../Styles/mixins";
+
+.resizeable-container-border {
+    display: inline-block;
+
+    @include mixins.dotted-border();
+
+    .resizeable-container {
+        position: relative;
+
+        width: 480px;
+        height: 360px;
+
+        // default centered positioning for resizable
+        display: grid;
+        align-items: center;
+        justify-content: center;
+
+        @include mixins.dotted-grid();
+    }
+}

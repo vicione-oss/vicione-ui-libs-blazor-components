@@ -15,6 +15,7 @@ internal sealed class MoveInteractionContext
     public required ElementReference MoveHandle { get; init; }
     public required ElementReference MoveContainer { get; init; }
     public required string StartedCssClass { get; init; }
+    public required string OngoingCssClass { get; init; }
     public required string EndedCssClass { get; init; }
     public required DotNetObjectReference<MoveInteraction> DotNetObject { get; init; }
 

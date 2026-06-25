@@ -1,5 +1,13 @@
-import { type Point } from '/_content/ViciOne.Ui.Blazor.Components/js/point.js';
+import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
 
 export class PointerCaptureBehaviorContext {
-    constructor(readonly captureTarget: HTMLElement, readonly position: Point) {}
+    /**
+     * Creates a new instance of {@link PointerCaptureBehaviorContext}.
+     * @param captureTarget - The capture target with its positional and dimensional state.
+     * @param distanceX - The horizontal distance the pointer has moved from the initial pointer-down position.
+     * @param distanceY - The vertical distance the pointer has moved from the initial pointer-down position.
+     */
+    constructor(readonly captureTarget: CaptureTarget,
+        public distanceX: number,
+        public distanceY: number) { }
 }

@@ -17,6 +17,7 @@
         "LoadingSpinner",
         "Popup",
         "PropertyGrid",
+        "Resizeable",
         "SearchBox",
         "SectionRail",
         "Sidebar",

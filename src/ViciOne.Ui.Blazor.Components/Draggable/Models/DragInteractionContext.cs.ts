@@ -7,6 +7,7 @@ export class DragInteractionContext {
     constructor(readonly draggableId: string,
         readonly draggable: HTMLElement,
         readonly startedCssClass: string,
+        readonly ongoingCssClass: string,
         readonly endedCssClass: string,
 
         // eslint-disable-next-line @typescript-eslint/no-restricted-types

@@ -1,10 +1,20 @@
-﻿namespace ViciOne.Ui.Blazor.Components.Models;
+namespace ViciOne.Ui.Blazor.Components.Models;
 
 /// <summary>
 /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/DOMRect"/>
 /// </summary>
 public sealed record DomRect
 {
+    /// <summary>
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/DOMRect/x"/>
+    /// </summary>
+    public double X { get; init; }
+
+    /// <summary>
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/DOMRect/y"/>
+    /// </summary>
+    public double Y { get; init; }
+
     /// <summary>
     /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/DOMRect/width"/>
     /// </summary>

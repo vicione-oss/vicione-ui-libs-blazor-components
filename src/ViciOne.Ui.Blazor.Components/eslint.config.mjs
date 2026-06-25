@@ -33,6 +33,7 @@ export default [
             '@stylistic/function-paren-newline': ['error', 'consistent'],
             '@stylistic/curly-newline': ['error', { minElements: 1 }],
             '@stylistic/object-curly-spacing': ['error', 'always'],
+            '@stylistic/operator-linebreak': ['error', 'after'],
             '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }]
         }
     },

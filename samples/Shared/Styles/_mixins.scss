@@ -1,5 +1,7 @@
 @use "../Styles/design/colors";
 
+@use 'sass:color';
+
 @mixin dotted-border($color: colors.$border) {
     border-width: 2px;
     border-style: dotted;
@@ -40,6 +42,63 @@
 
         & > *:last-child {
             grid-column: 2;
+        }
+    }
+}
+
+@mixin span-shape() {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+}
+
+@mixin shape-styles($feature-css-class, $started-css-class, $ongoing-css-class, $hide-content-when-ongoing: false) {
+    position: relative; // give nested elements something to align on
+
+    .bg {
+        @include span-shape();
+
+        background-color: colors.$background-light;
+    }
+
+    .content {
+        @include span-shape();
+
+        display: grid;
+        justify-items: center;
+        align-content: center;
+
+        color: colors.$font-light;
+        font-size: smaller;
+
+        border-color: color.adjust(colors.$border, $lightness: 10%); // todo: where to pull this from colors.scss?
+        border-width: 1px;
+        border-style: solid;
+
+        overflow: hidden;
+    }
+    
+    &:not(.#{$feature-css-class}) {
+        opacity: 0.3;
+    }
+
+    &.#{$started-css-class}, &.#{$ongoing-css-class} {
+        .bg {
+            opacity: 0.5;
+        }
+
+        .content {
+            border-color: colors.$accent;
+        }
+    }
+
+    @if ($hide-content-when-ongoing) {
+
+        &.#{$ongoing-css-class} {
+            .content {
+                color: transparent;
+            }
         }
     }
 }

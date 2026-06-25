@@ -22,6 +22,7 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
     private DotNetObjectReference<MoveInteraction>? _dotNetObjectReference;
 
     public string StartedCssClass => "moving";
+    public string OngoingCssClass => "moving-ongoing";
     public string EndedCssClass => "moved";
 
     public async Task AttachAsync(IMoveable moveable, IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null)
@@ -55,6 +56,7 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
                     MoveHandle = moveable.GetMoveHandle().GetElementReference(),
                     MoveContainer = moveable.GetMoveContainer().GetElementReference(),
                     StartedCssClass = StartedCssClass,
+                    OngoingCssClass = OngoingCssClass,
                     EndedCssClass = EndedCssClass,
                     DotNetObject = _dotNetObjectReference
                 };

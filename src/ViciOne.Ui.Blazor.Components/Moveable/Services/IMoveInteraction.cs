@@ -10,7 +10,7 @@ public interface IMoveInteraction
 {
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
-    /// of the moveable when a move interaction has been started.
+    /// of the moveable when the move interaction has been started.
     /// </summary>
     /// <remarks>
     /// The text will be removed from the attribute again, when the move interaction is finished.
@@ -19,7 +19,18 @@ public interface IMoveInteraction
 
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
-    /// of the moveable when a move interaction has ended.
+    /// of the moveable when the move interaction has transitioned from the started to the ongoing state.
+    /// The transition happens when the first mouse move event is received.
+    /// </summary>
+    /// <remarks>
+    /// The text will be removed from the attribute again, when the move interaction is finished.
+    /// </remarks>
+    string OngoingCssClass { get; }
+
+    /// <summary>
+    /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
+    /// of the moveable when the move interaction has transitioned from ongoing to the ended state.
+    /// That is normally the case when the mouse button was released <b>and</b> the mouse was moved.
     /// </summary>
     string EndedCssClass { get; }
 

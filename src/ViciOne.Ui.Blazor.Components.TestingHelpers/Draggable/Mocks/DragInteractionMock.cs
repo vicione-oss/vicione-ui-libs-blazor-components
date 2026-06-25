@@ -10,6 +10,7 @@ internal sealed class DragInteractionMock : IDragInteraction
     public bool IsDragStartEventHandlerAssigned => DragStart is not null;
 
     public string StartedCssClass { get; } = string.Empty;
+    public string OngoingCssClass { get; } = string.Empty;
     public string EndedCssClass { get; } = string.Empty;
 
     public event EventHandler<DragStartEventArgs>? DragStart;

@@ -26,6 +26,7 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
     private DotNetObjectReference<DragInteraction>? _dotNetObjectReference;
 
     public string StartedCssClass => "dragging";
+    public string OngoingCssClass => "dragging-ongoing";
     public string EndedCssClass => "dragged";
 
     public event EventHandler<DragStartEventArgs>? DragStart;
@@ -51,6 +52,7 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
                 DraggableId = draggableId,
                 Draggable = draggable.GetElementReference(),
                 StartedCssClass = StartedCssClass,
+                OngoingCssClass = OngoingCssClass,
                 EndedCssClass = EndedCssClass,
                 ModifierKey = modifierKey,
                 DotNetObject = _dotNetObjectReference

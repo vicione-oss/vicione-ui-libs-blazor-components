@@ -136,8 +136,8 @@ class ContextMenuItem {
 
         // Traverse through the ancestors of the element where a mouse over was detected ...
         let ancestor = e.target.parentElement;
-        while (ancestor
-            && ancestor !== this.#htmlElementObservedForMouseLeave // ... as long as the we don't find our html element
+        while (ancestor &&
+            ancestor !== this.#htmlElementObservedForMouseLeave // ... as long as the we don't find our html element
         )
             ancestor = ancestor.parentElement;
 

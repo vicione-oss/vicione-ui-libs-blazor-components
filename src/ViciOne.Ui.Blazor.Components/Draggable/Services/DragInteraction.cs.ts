@@ -1,18 +1,26 @@
 import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js';
 import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
+import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
+import { AggregatePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/aggregate-pointer-capture-behavior.js';
+import { MovePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/move-pointer-capture-behavior.js';
+import { AdjustForScrollPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/adjust-for-scroll-position-pointer-capture-behavior.js';
+import { SetPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/set-position-pointer-capture-behavior.js';
 import { ModifierKey } from '/_content/ViciOne.Ui.Blazor.Components/enums/modifier-key.js';
 import { type DragInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-interaction-context.js';
 import { type DropzoneDescriptor } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-descriptor.js';
 import '/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js';
 
 class DragInteraction {
-    readonly #pointerCaptureBehaviors: Set<PointerCaptureBehavior> = new Set<PointerCaptureBehavior>();
+    readonly #movePointerCaptureBehavior = new MovePointerCaptureBehavior();
+    readonly #adjustForScrollPositionPointerCaptureBehavior = new AdjustForScrollPositionPointerCaptureBehavior();
+    readonly #setPositionPointerCaptureBehavior = new SetPositionPointerCaptureBehavior();
+    readonly #additionalPointerCaptureBehaviors: Set<PointerCaptureBehavior> = new Set<PointerCaptureBehavior>();
 
     #dropzoneDescriptors: DropzoneDescriptor[] | undefined;
     #targetDropzoneDescriptor: DropzoneDescriptor | undefined;
 
     constructor(readonly context: DragInteractionContext) {
-        context.pointerCaptureBehaviors?.forEach(b => this.#pointerCaptureBehaviors.add(b));
+        context.pointerCaptureBehaviors?.forEach(b => this.#additionalPointerCaptureBehaviors.add(b));
 
         context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
     }
@@ -22,11 +30,11 @@ class DragInteraction {
     }
 
     public addPointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#pointerCaptureBehaviors.add(pointerCaptureBehavior);
+        this.#additionalPointerCaptureBehaviors.add(pointerCaptureBehavior);
     }
 
     public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#pointerCaptureBehaviors.delete(pointerCaptureBehavior);
+        this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
     }
 
     #hasRequiredKeyState(e: PointerEvent) {
@@ -74,9 +82,9 @@ class DragInteraction {
                 pointerCapture.onPointerMove = this.#draggableClonePointerMove;
                 pointerCapture.onPointerUp = this.#draggableClonePointerUp;
                 pointerCapture.startedCssClass = this.context.startedCssClass;
+                pointerCapture.ongoingCssClass = this.context.ongoingCssClass;
                 pointerCapture.endedCssClass = this.context.endedCssClass;
-                pointerCapture.adjustForScrollValues = true;
-                pointerCapture.behaviors = this.#pointerCaptureBehaviors.size > 0 ? [...this.#pointerCaptureBehaviors] : undefined;
+                pointerCapture.behaviors = [...this.#getAllPointerCaptureBehaviors(boundingClientRect)];
                 pointerCapture.start(e, draggableClone, boundingClientRect);
 
                 this.context.draggable.classList.add(this.context.startedCssClass);
@@ -84,7 +92,13 @@ class DragInteraction {
         }
     };
 
-    readonly #draggableClonePointerMove = async (_draggableClone: HTMLElement, x: number, y: number) => {
+    readonly #draggableClonePointerMove = async (draggableClone: CaptureTarget) => {
+        this.context.draggable.classList.remove(this.context.startedCssClass);
+        this.context.draggable.classList.add(this.context.ongoingCssClass);
+
+        const x = draggableClone.rect.left;
+        const y = draggableClone.rect.top;
+
         const newTargetDropzoneDescriptor = this.#dropzoneDescriptors?.find(dropzoneDescriptor => {
             const dropzoneBoundingClientRect = dropzoneDescriptor.element.getBoundingClientRect();
 
@@ -93,8 +107,8 @@ class DragInteraction {
                 dropzoneBoundingClientRect.width,
                 dropzoneBoundingClientRect.height);
 
-            return dropzoneBoundingClientRectAdjusted.x <= x && x < dropzoneBoundingClientRectAdjusted.right
-                && dropzoneBoundingClientRectAdjusted.y <= y && y < dropzoneBoundingClientRectAdjusted.bottom;
+            return dropzoneBoundingClientRectAdjusted.x <= x && x < dropzoneBoundingClientRectAdjusted.right &&
+                dropzoneBoundingClientRectAdjusted.y <= y && y < dropzoneBoundingClientRectAdjusted.bottom;
         });
 
         if (newTargetDropzoneDescriptor !== this.#targetDropzoneDescriptor) {
@@ -108,23 +122,41 @@ class DragInteraction {
         }
     };
 
-    readonly #draggableClonePointerUp = async (draggableClone: HTMLElement, x: number, y: number) => {
-        draggableClone.remove();
+    readonly #draggableClonePointerUp = async (draggableClone: CaptureTarget, pointerMoved: boolean) => {
+        draggableClone.element.remove();
 
         this.context.draggable.classList.remove(this.context.startedCssClass);
-        this.context.draggable.classList.add(this.context.endedCssClass);
 
-        await this.context.dotNetObject.invokeMethodAsync('DragEndAsync', this.context.draggableId, x, y);
+        if (pointerMoved) {
+            this.context.draggable.classList.remove(this.context.ongoingCssClass);
+            this.context.draggable.classList.add(this.context.endedCssClass);
 
-        if (this.#targetDropzoneDescriptor) {
-            const dropzoneBoundingClientRect = this.#targetDropzoneDescriptor.element.getBoundingClientRect();
+            let x = draggableClone.rect.left;
+            let y = draggableClone.rect.top;
 
-            x -= dropzoneBoundingClientRect.x + window.scrollX;
-            y -= dropzoneBoundingClientRect.y + window.scrollY;
+            await this.context.dotNetObject.invokeMethodAsync('DragEndAsync', this.context.draggableId, x, y);
 
-            await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id, x, y);
+            if (this.#targetDropzoneDescriptor) {
+                const dropzoneBoundingClientRect = this.#targetDropzoneDescriptor.element.getBoundingClientRect();
+
+                x -= dropzoneBoundingClientRect.x + window.scrollX;
+                y -= dropzoneBoundingClientRect.y + window.scrollY;
+
+                await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id, x, y);
+            }
         }
     };
+
+    * #getAllPointerCaptureBehaviors(boundingClientRect: DOMRect): IterableIterator<PointerCaptureBehavior> {
+        this.#movePointerCaptureBehavior.initialize(boundingClientRect);
+        yield this.#movePointerCaptureBehavior;
+
+        if (this.#additionalPointerCaptureBehaviors.size > 0)
+            yield new AggregatePointerCaptureBehavior(this.#additionalPointerCaptureBehaviors);
+
+        yield this.#adjustForScrollPositionPointerCaptureBehavior;
+        yield this.#setPositionPointerCaptureBehavior;
+    }
 }
 
 export async function attach(context: DragInteractionContext) {

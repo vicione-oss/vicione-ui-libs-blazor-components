@@ -13,6 +13,7 @@
     background-color: colors.$border;
     color: colors.$font-light;
 
+    // todo: replace by 8px icon?
     ::deep .icon {
         transform: scale(0.5);
         transform-origin: top left;

@@ -1,0 +1,32 @@
+@page "/resizeable"
+
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Switch
+
+@if (!_initialized) return;
+
+<div class="options">
+    <div class="option">
+        <label>Resizeable</label>
+
+        <Switch @bind-Value="@_resizeable" />
+    </div>
+
+    <div class="option">
+        <label>Snap to grid</label>
+
+        <Switch @bind-Value="@_snapToGrid" />
+    </div>
+
+    <div class="option">
+        <label>Grid size</label>
+
+        <SpinEdit @bind-Value="@_gridSize" @bind-Value:after="GridSizeChangedAsync" Interval="10" Minimum="10" Maximum="50" />
+    </div>
+</div>
+
+<div class="content">
+    <ResizeableContainer GridSize="@_gridSize">
+        <Shape Resizeable="@_resizeable" @bind-DomRect="_shapeDomRect" SnapToGrid="@_snapToGrid" />
+    </ResizeableContainer>
+</div>

@@ -1,15 +1,21 @@
 import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js';
 import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
+import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
+import { AggregatePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/aggregate-pointer-capture-behavior.js';
+import { MovePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/move-pointer-capture-behavior.js';
+import { SetPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/set-position-pointer-capture-behavior.js';
 import { type MoveInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/moveable/move-interaction-context.js';
 import '/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js';
 
 class MoveInteraction {
-    readonly #pointerCaptureBehaviors: Set<PointerCaptureBehavior> = new Set<PointerCaptureBehavior>();
+    readonly #movePointerCaptureBehavior = new MovePointerCaptureBehavior();
+    readonly #setPositionPointerCaptureBehavior = new SetPositionPointerCaptureBehavior();
+    readonly #additionalPointerCaptureBehaviors = new Set<PointerCaptureBehavior>();
 
     // MoveContainer should not have any border / padding because PointerCapture is based on bounding client rects
     // to avoid rounding errors!
     constructor(readonly context: MoveInteractionContext) {
-        this.context.pointerCaptureBehaviors?.forEach(b => this.#pointerCaptureBehaviors.add(b));
+        this.context.pointerCaptureBehaviors?.forEach(b => this.#additionalPointerCaptureBehaviors.add(b));
 
         this.context.moveHandle.addEventListener('pointerdown', this.#pointerDownEventListener);
         this.context.moveHandle.addEventListener('pointerup', this.#pointerUpEventListener);
@@ -20,15 +26,15 @@ class MoveInteraction {
         this.context.moveHandle.removeEventListener('pointermove', this.#pointerMoveEventListener);
         this.context.moveHandle.removeEventListener('pointerdown', this.#pointerDownEventListener);
 
-        this.#pointerCaptureBehaviors.clear();
+        this.#additionalPointerCaptureBehaviors.clear();
     }
 
     public addPointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#pointerCaptureBehaviors.add(pointerCaptureBehavior);
+        this.#additionalPointerCaptureBehaviors.add(pointerCaptureBehavior);
     }
 
     public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#pointerCaptureBehaviors.delete(pointerCaptureBehavior);
+        this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
     }
 
     readonly #pointerDownEventListener = (e: PointerEvent) => {
@@ -51,22 +57,30 @@ class MoveInteraction {
         const pointerCapture = new PointerCapture();
         pointerCapture.onPointerUp = this.#moveablePointerUp;
         pointerCapture.startedCssClass = this.context.startedCssClass;
+        pointerCapture.ongoingCssClass = this.context.ongoingCssClass;
         pointerCapture.endedCssClass = this.context.endedCssClass;
-
-        if (this.#pointerCaptureBehaviors.size > 0)
-            pointerCapture.behaviors = [...this.#pointerCaptureBehaviors];
-        else
-            pointerCapture.behaviors = undefined;
+        pointerCapture.behaviors = [...this.#getAllPointerCaptureBehaviors(moveContainerBoundingClientRect)];
 
         pointerCapture.start(e, this.context.moveable, moveContainerBoundingClientRect);
     };
+
+    * #getAllPointerCaptureBehaviors(moveContainerBoundingClientRect: DOMRect): IterableIterator<PointerCaptureBehavior> {
+        this.#movePointerCaptureBehavior.initialize(moveContainerBoundingClientRect);
+        yield this.#movePointerCaptureBehavior;
+
+        if (this.#additionalPointerCaptureBehaviors.size > 0)
+            yield new AggregatePointerCaptureBehavior(this.#additionalPointerCaptureBehaviors);
+
+        yield this.#setPositionPointerCaptureBehavior;
+    }
 
     readonly #pointerUpEventListener = (_e: PointerEvent) => {
         this.context.moveHandle.removeEventListener('pointermove', this.#pointerMoveEventListener);
     };
 
-    readonly #moveablePointerUp = async (_moveable: HTMLElement, x: number, y: number) => {
-        await this.context.dotNetObject.invokeMethodAsync('MoveablePointerUpAsync', this.context.moveableId, x, y);
+    readonly #moveablePointerUp = async (captureTarget: CaptureTarget, pointerMoved: boolean) => {
+        if (pointerMoved)
+            await this.context.dotNetObject.invokeMethodAsync('MoveablePointerUpAsync', this.context.moveableId, captureTarget.rect.left, captureTarget.rect.top);
     };
 }
 

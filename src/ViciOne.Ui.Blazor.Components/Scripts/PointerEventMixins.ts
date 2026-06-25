@@ -15,9 +15,9 @@ class PointerEventMixins {
 
             // ... otherwise we traverse through the ancestors ...
             let ancestor = this.target.parentElement;
-            while (ancestor
-                && ancestor !== rootAncestor // ... as long as the we don't find our root ancestor ...
-                && !ancestor.classList.contains(featureModifierClass)) { // ... and the ancestor does not have the required feature
+            while (ancestor &&
+                ancestor !== rootAncestor && // ... as long as the we don't find our root ancestor ...
+                !ancestor.classList.contains(featureModifierClass)) { // ... and the ancestor does not have the required feature
 
                 ancestor = ancestor.parentElement;
             }

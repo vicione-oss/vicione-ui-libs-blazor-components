@@ -1,0 +1,76 @@
+@using ViciOne.Ui.Blazor.Components.Resizeable.Enums
+@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Resizeable.Components
+
+@{
+    var cssClasses = new List<string> { "shape" };
+
+    if (Resizeable)
+        cssClasses.Add("resizeable");
+
+    var inlineStyles = new Dictionary<string, object>();
+    string? left = null;
+    string? top = null;
+    string? width = null;
+    string? height = null;
+
+    if (DomRect is not null)
+    {
+        cssClasses.Add("positioned");
+
+        left = $"{DomRect.X.ToAttributeValue(precision: 3)}px";
+        top = $"{DomRect.Y.ToAttributeValue(precision: 3)}px";
+        width = $"{DomRect.Width.ToAttributeValue(precision: 3)}px";
+        height = $"{DomRect.Height.ToAttributeValue(precision: 3)}px";
+
+        inlineStyles.Add("left", left);
+        inlineStyles.Add("top", top);
+        inlineStyles.Add("width", width);
+        inlineStyles.Add("height", height);
+    }
+
+    var attributes = new Dictionary<string, object> { { "class", string.Join(" ", cssClasses) } };
+
+    if (inlineStyles.Count > 0)
+        attributes.Add("style", string.Join("; ", inlineStyles.Select(s => $"{s.Key}: {s.Value}")));
+}
+
+<div @attributes="attributes" @ref="_elementReference">
+    @if (Resizeable)
+    {
+        <CascadingValue Value="this" IsFixed="true">
+            <ResizeHandle Position="ResizeHandlePosition.TopLeft" />
+            <ResizeHandle Position="ResizeHandlePosition.Top" />
+            <ResizeHandle Position="ResizeHandlePosition.TopRight" />
+            <ResizeHandle Position="ResizeHandlePosition.Right" />
+            <ResizeHandle Position="ResizeHandlePosition.BottomRight" />
+            <ResizeHandle Position="ResizeHandlePosition.Bottom" />
+            <ResizeHandle Position="ResizeHandlePosition.BottomLeft" />
+            <ResizeHandle Position="ResizeHandlePosition.Left" />
+        </CascadingValue>
+    }
+
+    <div class="bg"></div>
+
+    <div class="content">
+        @if (left is not null)
+        {
+            <span>left: @left</span>
+        }
+
+        @if (top is not null)
+        {
+            <span>top: @top</span>
+        }
+
+        @if (width is not null)
+        {
+            <span>width: @width</span>
+        }
+
+        @if (height is not null)
+        {
+            <span>height: @height</span>
+        }
+    </div>
+</div>

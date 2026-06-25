@@ -11,7 +11,7 @@ public interface IDragInteraction
 {
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
-    /// of the draggable when a drag interaction has been started.
+    /// of the draggable when the drag interaction has been started.
     /// </summary>
     /// <remarks>
     /// The text will be removed from the attribute again, when the drag interaction is finished.
@@ -19,8 +19,19 @@ public interface IDragInteraction
     string StartedCssClass { get; }
 
     /// <summary>
+    /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see>  attribute
+    /// of the draggable when the drag interaction has transitioned from the started to the ongoing state.
+    /// The transition happens when the first mouse move event is received.
+    /// </summary>
+    /// <remarks>
+    /// The text will be removed from the attribute again, when the drag interaction is finished.
+    /// </remarks>
+    string OngoingCssClass { get; }
+
+    /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
-    /// of the draggable when a drag interaction has ended.
+    /// of the draggable when the drag interaction has transitioned from ongoing to the ended state.
+    /// That is normally the case when the mouse button was released <b>and</b> the mouse was moved.
     /// </summary>
     string EndedCssClass { get; }
 

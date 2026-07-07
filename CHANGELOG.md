@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.17.0 - Unreleased
+
+- Unified border radius of `3px` for buttons
+
 ## 5.16.0 - 2026-06-25
 
 ### Package `ViciOne.Ui.Blazor.Components`

@@ -1,3 +1,4 @@
+@use "../Styles/design/button";
 @use "../Styles/design/colors";
 @use "../Styles/design/typography";
 @use "../Styles/animations/mixins" as animations;
@@ -16,7 +17,7 @@
     border-width: 1px;
     border-style: solid;
     border-color: #b1b1b1;
-    border-radius: 4px;
+    border-radius: button.$border-radius;
     @include animations.border-color();
 
     background-color: inherit;

@@ -1,4 +1,5 @@
 @use "../../Styles/animations/mixins" as animations;
+@use "../../Styles/design/button";
 @use "../../Styles/design/colors";
 @use "../../Styles/user-interaction";
 @use "../Styles/mixins";
@@ -9,7 +10,7 @@
 
     @include mixins.hover-effect();
 
-    border-radius: variables.$border-radius;
+    border-radius: button.$border-radius;
 
     @include user-interaction.show-pointer-cursor();
     user-select: none;

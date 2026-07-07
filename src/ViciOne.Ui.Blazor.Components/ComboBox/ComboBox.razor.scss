@@ -23,7 +23,7 @@
         border-width: 1px;
         border-style: solid;
         border-color: color.adjust(colors.$theme-inverted, $alpha: -0.8);
-        border-radius: 3px;
+        border-radius: inputs.$border-radius;
         @include animations.border-color();
 
         @include inputs.typography();

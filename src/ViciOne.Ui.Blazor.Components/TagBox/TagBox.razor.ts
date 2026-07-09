@@ -2,14 +2,11 @@ class TagBox {
     readonly #tagBoxElement: HTMLDivElement;
     readonly #tagInputElement: HTMLInputElement;
 
-    #highlightedIndex = -1;
-
     constructor(tagBoxElement: HTMLDivElement, tagInputElement: HTMLInputElement) {
         this.#tagBoxElement = tagBoxElement;
         this.#tagInputElement = tagInputElement;
 
         this.#tagBoxElement.addEventListener('click', this.#tagBoxClick);
-        this.#tagInputElement.addEventListener('keydown', this.#inputKeyDown);
         this.#tagInputElement.addEventListener('input', this.#inputChanged);
     }
 
@@ -38,63 +35,13 @@ class TagBox {
         }
     }
 
-    public getHighlightedIndex(): number {
-        return this.#highlightedIndex;
-    }
-
-    public resetHighlight() {
-        this.#setHighlight(-1);
-    }
-
     public dispose() {
         this.#tagBoxElement.removeEventListener('click', this.#tagBoxClick);
-        this.#tagInputElement.removeEventListener('keydown', this.#inputKeyDown);
         this.#tagInputElement.removeEventListener('input', this.#inputChanged);
-    }
-
-    #getAvailableTagElements(): HTMLElement[] {
-        const container = this.#tagBoxElement.querySelector('.available-tags-dropdown-container');
-
-        const availableTagElements = container ? Array.from(container.querySelectorAll<HTMLElement>('.available-tag')) : [];
-
-        return availableTagElements;
-    }
-
-    #setHighlight(index: number) {
-        const items = this.#getAvailableTagElements();
-
-        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length)
-            items[this.#highlightedIndex].classList.remove('highlighted');
-
-        this.#highlightedIndex = index;
-
-        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length) {
-            items[this.#highlightedIndex].classList.add('highlighted');
-            items[this.#highlightedIndex].scrollIntoView({ block: 'nearest' });
-        }
     }
 
     readonly #tagBoxClick = (_: MouseEvent) => {
         this.#tagInputElement.focus();
-    };
-
-    readonly #inputKeyDown = (e: KeyboardEvent) => {
-        const items = this.#getAvailableTagElements();
-        const count = items.length;
-
-        const isArrowDown = e.key === 'ArrowDown';
-
-        if ((isArrowDown || e.key === 'ArrowUp') && count > 0) {
-            if (isArrowDown)
-                this.#setHighlight((this.#highlightedIndex + 1) % count);
-            else
-                this.#setHighlight(this.#highlightedIndex <= 0 ? count - 1 : this.#highlightedIndex - 1);
-
-            e.preventDefault();
-
-        } else if (e.key !== 'Enter') {
-            this.#setHighlight(-1);
-        }
     };
 
     readonly #inputChanged = () => {
@@ -107,4 +54,3 @@ export async function attach(tagBoxElement: HTMLDivElement, tagInputElement: HTM
 
     return tagBox;
 }
-

@@ -1,4 +1,4 @@
-﻿@page "/combo-box"
+@page "/combo-box"
 
 @using Shared.Pages.ComboBox.Models
 @using ViciOne.Ui.Blazor.Components.Button
@@ -16,7 +16,15 @@ contains <code>@_buttonSize.GetName()</code>
 
 <Button Size="ButtonSize.Small" Text="Reset selection" OnClick="ResetSelectionButtonClick" />
 
-<h3>Invalid</h3>
+<h3><code>@nameof(ComboBox<,>.AllowUserInput)</code></h3>
+
+<ComboBox Items="@_customInputComboBoxItems" @bind-Value="@_city" AllowUserInput="true" />
+
+contains <code>@_city</code>
+
+<Button Size="ButtonSize.Small" Text="Reset selection" OnClick="ResetCitySelectionButtonClick" />
+
+<h3><code>@nameof(ComboBox<,>.Valid)</code> is false</h3>
 
 <ComboBox Items="@_buttonSizeComboBoxItems"
           Value="ButtonSize.Small"
@@ -24,7 +32,7 @@ contains <code>@_buttonSize.GetName()</code>
           TextSelector="@(item => item.Text)"
           Valid="false" />
 
-<h3>Read-only</h3>
+<h3><code>@nameof(ComboBox<,>.ReadOnly)</code></h3>
 
 <ComboBox ReadOnly
           Items="@_buttonSizeComboBoxItems"
@@ -32,7 +40,7 @@ contains <code>@_buttonSize.GetName()</code>
           ValueSelector="@(item => item.Value)"
           TextSelector="@(item => item.Text)" />
 
-<h3>Disabled</h3>
+<h3><code>@nameof(ComboBox<,>.Enabled)</code> is false</h3>
 
 <ComboBox Enabled="false"
           Items="@_buttonSizeComboBoxItems"

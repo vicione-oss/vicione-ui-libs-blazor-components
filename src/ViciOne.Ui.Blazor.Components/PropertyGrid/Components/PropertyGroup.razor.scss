@@ -1,4 +1,4 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
 @use "../../Styles/mixins";
 @use "../../Styles/user-interaction";
@@ -40,7 +40,7 @@
         @include mixins.overflow-ellipsis();
     }
 
-    > .group-dropdown {
+    > .group-drop-down {
         align-items: center;
         @include user-interaction.show-pointer-cursor();
         display: flex;

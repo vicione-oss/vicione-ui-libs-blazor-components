@@ -1,103 +1,105 @@
 @use "../Styles/design/colors";
-@use "../Styles/design/scrollbar";
 @use "../Styles/animations/mixins" as animations;
 @use "../Styles/inputs";
+@use "../Styles/mixins";
+@use "../Styles/user-interaction";
 
 @use "sass:color";
 
 .combo-box {
     background-color: color.adjust(colors.$theme, $alpha: -0.95);
 
+    display: inline-grid;
+    grid-template-rows: auto 0px;
+    grid-template-areas:
+        "input"
+        "drop-down";
+
+    vertical-align: middle;
+
     &.read-only {
         pointer-events: none;
     }
 
+    @include inputs.single-line-text-input-style();
+    @include inputs.typography(); 
     @include inputs.disabled-style();
 
-    select {
-        min-width: 0; // allow input to shrink when the outer element is smaller than the default minimum input width applied by the browser
+    .input-wrapper {
+        grid-area: input;
 
-        background: transparent;
-        color: color.adjust(colors.$font-light, $alpha: -0.2);
+        position: relative;
 
-        border-width: 1px;
-        border-style: solid;
-        border-color: color.adjust(colors.$theme-inverted, $alpha: -0.8);
-        border-radius: inputs.$border-radius;
-        @include animations.border-color();
+        ::deep input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
 
-        @include inputs.typography();
-        @include inputs.padding($right: 28px);
+            min-width: 0; // allow input to shrink when the outer element is smaller than the default minimum input width applied by the browser
+            height: stretch;
 
-        @include inputs.invalid-style();
+            background: transparent;
+            color: color.adjust(colors.$font-light, $alpha: -0.2);
 
-        @include inputs.single-line-text-input-style();
+            border-width: 1px;
+            border-style: solid;
+            border-color: color.adjust(colors.$theme-inverted, $alpha: -0.8);
+            border-radius: inputs.$border-radius;
+            @include animations.border-color();
 
-        @include scrollbar.adjust-styles();
+            @include inputs.typography();
+            @include inputs.padding($right: 28px);
+            @include inputs.invalid-style();
 
-        &::-webkit-scrollbar-track {
-            background: #1f1f1f; // color picked from sample pages showing a scrollbar to make select having a similar appearance
-        }
+            @include mixins.overflow-ellipsis();
 
-        option {
-            background-color: rgb(58, 58, 58);
-
-            padding: 3px;
-
-            &[selected] {
-                background-color: colors.$accent;
-                color: colors.$font-light;
+            &:disabled {
+                opacity: 1;
             }
 
-            &[disabled] {
-                display: none;
-            }
-        }
-
-        &:not(:disabled) {
-            &:focus, &.appear-focused {
-                outline: none;
-                border-color: colors.$accent;
+            &[readonly] {
+                @include user-interaction.show-pointer-cursor();
+                @include user-interaction.prevent-text-selection();
             }
 
-            &:hover {
-                border-color: colors.$accent-hover;
+            &:not([readonly]) {
+                cursor: text;
+            }
+
+            &:not(:disabled) {
+                &:focus {
+                    outline: none;
+                    border-color: colors.$accent;
+                }
+
+                &:hover {
+                    border-color: colors.$accent-hover;
+                }
             }
         }
     }
 
-    @mixin replace-default-chevron-with-custom-arrow() {
-        // hide default chevron
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
+    ::deep .drop-down-icon {
+        grid-area: input;
 
-        // custom arrow, https://moderncss.dev/custom-select-styles-with-pure-css/#custom-select-dropdown-arrow
-        & {
-            display: inline-grid;
-            grid-template-areas: "select";
-            align-items: center;
-        }
+        align-self: center;
+        justify-self: end;
 
-        select {
-            grid-area: select;
-        }
+        margin: 0;
+        right: 5px;
+        position: relative;
 
-        ::deep .drop-down-icon {
-            grid-area: select;
-
-            justify-self: end;
-            transform: rotate(90deg);
-
-            margin: 0;
-            right: 5px;
-            position: relative;
-
-            pointer-events: none;
-        }
+        pointer-events: none;
     }
 
-    @include replace-default-chevron-with-custom-arrow();
+    ::deep .drop-down {
+        grid-area: drop-down;
+
+        margin-top: inputs.$drop-down-margin-top;
+
+        .drop-down-container .drop-down-item {
+            @include inputs.padding($right: 28px);
+        }
+    }
 }

@@ -1,4 +1,6 @@
+@using ViciOne.Ui.Blazor.Components.DropDown
 @using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.TextBox
 @using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
@@ -17,49 +19,35 @@
     else if (ReadOnly)
         cssClasses.Add("read-only");
 
-    var selectCssClasses = new List<string>();
+    var inputCssClasses = new List<string> { "combo-box-input" };
 
-    if (_restoreFocus)
-    {
-        // At this point we will render a new select element which will replace the one
-        // currently visible in the browser. Because the new element will receive focus
-        // in OnAfterRenderAsync() the element will appear not focused for a tiny fraction
-        // of time which results in visual flicker. So, we fix the flickering by making
-        // the new element appear focused until it receives actual focus.
-        selectCssClasses.Add("appear-focused");
-    }
-
-    this.WithInputValidationStyling(selectCssClasses);
-
-    var selectAttributes = new Dictionary<string, object>();
-
-    if (selectCssClasses.Count > 0)
-        selectAttributes.Add("class", string.Join(" ", selectCssClasses));
-
-    if (!Enabled)
-        selectAttributes.Add("disabled", "disabled");
-    else if (ReadOnly)
-        selectAttributes.Add("tabindex", "-1");
+    this.WithInputValidationStyling(inputCssClasses);
 }
 
 <div class="@string.Join(" ", cssClasses)">
-    <select @ref="_selectElementReference"
-            @key="_selectElementKey"
-            @attributes="@selectAttributes"
-            @onchange="SelectChangedAsync"
-            @onfocus="SelectFocus"
-            @onblur="SelectBlur">
+    <div class="input-wrapper">
+        <TextBox @ref="_textBox"
+                 CssClass="@string.Join(" ", inputCssClasses)"
+                 Enabled="Enabled"
+                 TabIndex="@(Enabled && ReadOnly ? -1 : (int?)null)"
+                 Value="@_inputValue"
+                 ValueChanging="InputValueChangingAsync"
+                 EnterPressed="InputEnterPressedAsync"
+                 OnClick="OpenOrCloseDropdownAsync"
+                 FocusLost="CloseDropdownAsync" />
+    </div>
 
-        @foreach (var optionDescriptor in _optionDescriptors)
-        {
-            <option @attributes="optionDescriptor.Attributes">@optionDescriptor.Text</option>
-        }
+    <MonochromeIcon CssClass="drop-down-icon" Name="MonochromeIconName.ExpanderLightDown" Size="MonochromeIconSize.Small" />
 
-        @if (!_isAnyOptionSelected)
-        {
-            <option selected disabled></option>
-        }
-    </select>
+    <DropDown TItem="OptionDescriptor"
+              @ref="_dropDown"
+              InputElementReference="_textBox?.InputElementReference"
+              Items="GetFilteredOptionDescriptors()"
+              SelectedItems="GetSelectedOptionDescriptors()"
+              SelectedItemsChanged="DropdownSelectedItemsChangedAsync">
 
-    <MonochromeIcon CssClass="drop-down-icon" Name="MonochromeIconName.Chevron" Size="MonochromeIconSize.Small" />
+        <ItemTemplate>
+            @context.Text
+        </ItemTemplate>
+    </DropDown>
 </div>

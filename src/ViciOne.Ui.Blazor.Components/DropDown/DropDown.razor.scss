@@ -1,0 +1,56 @@
+@use "../Styles/design/colors";
+@use "../Styles/design/scrollbar";
+@use "../Styles/mixins";
+
+@use "sass:color";
+
+.drop-down {
+    overflow: hidden;
+
+    &:has(.drop-down-container.visible) {
+        overflow: visible;
+    }
+
+    .drop-down-container {
+        position: relative;
+        z-index: 1;
+
+        border-radius: 3px;
+
+        background-color: colors.$background-dark;
+        opacity: 0;
+
+        @include mixins.overflow-ellipsis();
+        overflow-y: auto;
+
+        pointer-events: none;
+
+        @include scrollbar.adjust-styles();
+
+        &.visible {
+            opacity: 1;
+            pointer-events: auto;
+            outline: none;
+        }
+
+        &:has(.drop-down-item) {
+            border-width: 1px;
+            border-style: solid;
+            border-color: color.adjust(colors.$theme-inverted, $alpha: -0.8);
+        }
+
+        .drop-down-item {
+            padding: 3px;
+
+            &.selected {
+                background-color: colors.$background-light;
+                color: colors.$font-light;
+            }
+
+            &:hover, &.highlighted {
+                background-color: colors.$accent;
+                color: colors.$font-light;
+            }
+        }
+    }
+}

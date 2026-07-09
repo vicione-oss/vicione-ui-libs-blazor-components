@@ -1,7 +1,11 @@
-﻿@use "../design/colors";
+@use "../design/colors";
 
 @use "sass:color";
 
+// border
 $border-radius: 3px;
 $border-width: 1px;
 $border-color-default: color.change(colors.$theme-inverted, $alpha: 0.2);
+
+// associated drop-down
+$drop-down-margin-top: 2px;

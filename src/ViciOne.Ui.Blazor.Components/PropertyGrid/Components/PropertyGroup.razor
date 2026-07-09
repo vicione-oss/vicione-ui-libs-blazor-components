@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models
+@using ViciOne.Ui.Blazor.Components.PropertyGrid.Models
 @using ViciOne.Ui.Blazor.Components.Resources.PropertyGrid
 @using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
@@ -7,7 +7,7 @@
 {
     <div class="property-group@(IsSubGroup ? " sub-group" : string.Empty)" style="--indent-mult: @(SubGroupLayer);" @onclick="@OnPropertyGroupContainerClick">
 
-        <div class="group-dropdown@(_expanded ? " expanded" : string.Empty)">
+        <div class="group-drop-down@(_expanded ? " expanded" : string.Empty)">
             <MonochromeIcon CssClass="icon" Name="MonochromeIconName.Chevron" Size="MonochromeIconSize.Small" />
         </div>
 

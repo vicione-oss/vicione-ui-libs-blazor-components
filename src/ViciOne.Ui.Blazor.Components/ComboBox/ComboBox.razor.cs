@@ -1,6 +1,7 @@
+using System.Globalization;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using ViciOne.Ui.Blazor.Components.DropDown;
 using ViciOne.Ui.Blazor.Components.Helpers;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 
@@ -13,28 +14,26 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
 {
     private sealed class OptionDescriptor
     {
-        public required Dictionary<string, object> Attributes { get; set; }
         public required string Text { get; init; }
         public required TValue? Value { get; init; }
-        public bool ValueAttributeHasGuid { get; set; }
     }
 
     private bool _firstParameterSet = true;
-    private readonly string _nullValue = "null";
     private TValue? _value;
     private IEnumerable<TItem> _items = [];
     private readonly List<OptionDescriptor> _optionDescriptors = [];
-    private readonly Dictionary<object, OptionDescriptor> _optionDescriptorMap = [];
-    private string _selectElementKey = Guid.NewGuid().ToString();
-    private ElementReference _selectElementReference;
-    private bool _focused;
-    private bool _restoreFocus;
-    private bool _isAnyOptionSelected;
+    private OptionDescriptor? _selectedOptionDescriptor;
+    private TextBox.TextBox? _textBox;
+    private DropDown<OptionDescriptor>? _dropDown;
+    private string _inputValue = string.Empty;
     private Expression<Func<TItem, TValue>>? _valueSelector;
     private Expression<Func<TItem, string>>? _textSelector;
     private Func<TItem, TValue>? _getValueFunc;
     private Func<TItem, string>? _getTextFunc;
     private object? _updateKey;
+    private bool _dropDownVisible;
+    private bool _keepDropDownClosed;
+    private readonly bool _hasNullableValueType = GenericParameterHelper.IsNullable<TValue>();
 
     /// <summary>
     /// Text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
@@ -90,6 +89,12 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
     public bool ReadOnly { get; set; }
 
     /// <summary>
+    /// True when user can add custom values, otherwise false
+    /// </summary>
+    [Parameter]
+    public bool AllowUserInput { get; set; }
+
+    /// <summary>
     /// True when user input should be allowed, otherwise false
     /// </summary>
     [Parameter]
@@ -130,32 +135,22 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
             UpdateKey != _updateKey)
         {
             _optionDescriptors.Clear();
-            _optionDescriptorMap.Clear();
-            _isAnyOptionSelected = false;
-
-            var useGuidKeys = false;
+            _selectedOptionDescriptor = null;
 
             foreach (var item in Items)
             {
-                var optionValueStr = $"{item}";
-                var optionValueStrContainsGuid = false;
+                var optionText = $"{item}";
                 var optionValueTyped = item is TValue itemTyped ? itemTyped : default;
-
-                var optionText = optionValueStr;
-
-                var optionSelected = false;
 
                 if (_getValueFunc is not null)
                 {
                     var value = _getValueFunc.Invoke(item);
                     if (value is null)
                     {
-                        optionValueStr = _nullValue;
                         optionValueTyped = default;
                     }
                     else if (value is TValue valueTyped)
                     {
-                        optionValueStr = $"{valueTyped}";
                         optionValueTyped = valueTyped;
                     }
                     else
@@ -167,67 +162,27 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
                 if (_getTextFunc?.Invoke(item) is string str)
                     optionText = str;
 
-                if (NoOptionSelected is not true && valueEqualityComparer.Equals(optionValueTyped, Value))
-                    optionSelected = true;
-
-                if (_optionDescriptorMap.ContainsKey(optionValueStr))
-                {
-                    optionValueStr = Guid.NewGuid().ToString(); // switch to GUID as value is not uniquely stringified
-
-                    optionValueStrContainsGuid = true;
-                    useGuidKeys = true;
-                }
-
-                var optionAttributes = new Dictionary<string, object> { { "value", optionValueStr } };
-
-                if (optionSelected)
-                {
-                    optionAttributes.Add("selected", "selected");
-
-                    _isAnyOptionSelected = true;
-                }
-
                 var optionDescriptor = new OptionDescriptor
                 {
                     Text = optionText,
-                    Attributes = optionAttributes,
-                    Value = optionValueTyped,
-                    ValueAttributeHasGuid = optionValueStrContainsGuid
+                    Value = optionValueTyped
                 };
 
                 _optionDescriptors.Add(optionDescriptor);
-                _optionDescriptorMap.Add(optionValueStr, optionDescriptor);
-            }
 
-            // If we use GUIDs as keys, ensure all keys are actually GUIDs and replace where not
-            if (useGuidKeys)
-            {
-                var pairs = _optionDescriptorMap.Where(p => !p.Value.ValueAttributeHasGuid).ToList();
-
-                foreach (var pair in pairs)
+                if (NoOptionSelected is not true &&
+                    _selectedOptionDescriptor is null &&
+                    valueEqualityComparer.Equals(optionValueTyped, Value))
                 {
-                    var oldKey = pair.Key;
-                    var optionDescriptor = pair.Value;
-
-                    var newKey = Guid.NewGuid().ToString();
-
-                    optionDescriptor.Attributes["value"] = newKey;
-                    optionDescriptor.ValueAttributeHasGuid = true;
-
-                    _optionDescriptorMap.Remove(oldKey);
-                    _optionDescriptorMap.Add(newKey, optionDescriptor);
+                    _selectedOptionDescriptor = optionDescriptor;
                 }
             }
 
             _items = Items;
             _value = Value;
 
-            // Generate new key for select element to enforce replacing the whole element,
-            // otherwise browser could get confused due to dynamic re-rendering of options ...
-            _selectElementKey = Guid.NewGuid().ToString();
-
-            // ... and because of forced re-render we need to restore our focus
-            _restoreFocus = _focused;
+            _inputValue = _selectedOptionDescriptor?.Text
+                ?? (AllowUserInput && Value is not null ? $"{Value}" : string.Empty);
         }
 
         _firstParameterSet = false;
@@ -235,58 +190,178 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
     }
 
     /// <inheritdoc />
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
-        if (_restoreFocus)
-        {
-            await _selectElementReference.FocusAsync();
+        // The compiled TypeScript runs after the first render, so the width and height values are not set yet. Re-rendering here applies
+        // those values and prevents jumping effect of the ComboBox.
+        if (firstRender)
+            StateHasChanged();
+    }
 
-            _restoreFocus = false;
-            await InvokeAsync(StateHasChanged);
+    private IReadOnlyCollection<OptionDescriptor> GetSelectedOptionDescriptors()
+    {
+        if (_selectedOptionDescriptor is null)
+            return [];
+
+        return [_selectedOptionDescriptor];
+    }
+
+    private List<OptionDescriptor> GetFilteredOptionDescriptors()
+    {
+        if (string.IsNullOrEmpty(_inputValue))
+            return _optionDescriptors;
+
+        var selectedText = _selectedOptionDescriptor?.Text ?? $"{Value}";
+
+        if (selectedText == _inputValue)
+            return _optionDescriptors;
+
+        return [.. _optionDescriptors.Where(descriptor => descriptor.Text.Contains(_inputValue, StringComparison.OrdinalIgnoreCase))];
+    }
+
+    private async Task OpenDropdownAsync()
+    {
+        _keepDropDownClosed = false;
+
+        if (_dropDown is not null && Enabled && !ReadOnly)
+        {
+            await _dropDown.ShowAsync();
+
+            _dropDownVisible = true;
         }
     }
 
-    private async Task SelectChangedAsync(ChangeEventArgs args)
+    private async Task CloseDropdownAsync()
     {
-        // Handle selection of "null"
-        var hasNullableValueType = GenericParameterHelper.IsNullable<TValue>();
+        await SetUserInputAsync();
 
-        if (args.Value is null)
+        if (_dropDown is not null)
         {
-            if (ValueChanged.HasDelegate && hasNullableValueType)
-                await ValueChanged.InvokeAsync(default);
+            await _dropDown.HideAsync();
+
+            _dropDownVisible = false;
+        }
+    }
+
+    private async Task OpenOrCloseDropdownAsync()
+    {
+        if (_dropDownVisible)
+            await CloseDropdownAsync();
+        else
+            await OpenDropdownAsync();
+    }
+
+    private async Task InputValueChangingAsync(string? value)
+    {
+        _inputValue = value ?? string.Empty;
+
+        if (!_dropDownVisible)
+            await OpenDropdownAsync();
+    }
+
+    private async Task InputEnterPressedAsync(string? _)
+    {
+        if (_keepDropDownClosed)
+        {
+            _keepDropDownClosed = false;
 
             return;
         }
 
-        if (args.Value is string s && s == _nullValue)
+        if (!_dropDownVisible)
         {
-            if (ValueChanged.HasDelegate && hasNullableValueType)
-                await ValueChanged.InvokeAsync(default);
+            await OpenDropdownAsync();
 
             return;
         }
 
-        // Handle selection for non-nullable TValue
-        if (_optionDescriptorMap.TryGetValue(args.Value, out var optionDescriptor))
+        await SetUserInputAsync();
+    }
+
+    private async Task SetUserInputAsync()
+    {
+        if (!AllowUserInput)
         {
-            if (optionDescriptor.Value is null && !hasNullableValueType)
+            _inputValue = _selectedOptionDescriptor?.Text ?? string.Empty;
+
+            return;
+        }
+
+        var matchedDescriptor = _optionDescriptors.FirstOrDefault(
+            d => string.Equals(d.Text, _inputValue, StringComparison.OrdinalIgnoreCase));
+
+        if (matchedDescriptor is not null)
+        {
+            if (matchedDescriptor.Value is null && !_hasNullableValueType)
                 return;
 
-            if (ValueChanged.HasDelegate)
-                await ValueChanged.InvokeAsync(optionDescriptor.Value);
+            if (!EqualityComparer<TValue>.Default.Equals(matchedDescriptor.Value, _value) && ValueChanged.HasDelegate)
+                await ValueChanged.InvokeAsync(matchedDescriptor.Value);
+
+            return;
+        }
+
+        if (TryConvertToValue(_inputValue, out var value) &&
+            !EqualityComparer<TValue>.Default.Equals(value, _value) &&
+            ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(value);
         }
     }
 
-    private void SelectFocus(FocusEventArgs _)
-        => _focused = true;
+    private static bool TryConvertToValue(string text, out TValue? value)
+    {
+        if (typeof(TValue) == typeof(string))
+        {
+            value = (TValue)(object)text;
 
-    private void SelectBlur(FocusEventArgs _)
-        => _focused = false;
+            return true;
+        }
+
+        try
+        {
+            var underlyingType = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+
+            value = (TValue)Convert.ChangeType(text, underlyingType, CultureInfo.CurrentCulture);
+
+            return true;
+        }
+        catch
+        {
+            value = default;
+
+            return false;
+        }
+    }
+
+    private async Task DropdownSelectedItemsChangedAsync(IEnumerable<OptionDescriptor> selectedDescriptors)
+    {
+        if (selectedDescriptors.FirstOrDefault() is not { } selectedDescriptor)
+            return;
+
+        if (selectedDescriptor.Value is null && !_hasNullableValueType)
+            return;
+
+        _inputValue = selectedDescriptor.Text;
+
+        if (_dropDown is not null)
+        {
+            await _dropDown.HideAsync();
+
+            _dropDownVisible = false;
+            _keepDropDownClosed = true;
+        }
+
+        if (ValueChanged.HasDelegate)
+            await ValueChanged.InvokeAsync(selectedDescriptor.Value);
+    }
 
     /// <inheritdoc/>
     public async Task FocusAsync()
-        => await _selectElementReference.FocusAsync();
+    {
+        if (_textBox is not null)
+            await _textBox.FocusAsync();
+    }
 
     private static bool IsItemsChanged(IEnumerable<TItem> oldItems, IEnumerable<TItem> newItems,
         EqualityComparer<TValue> valueEqualityComparer, Func<TItem, TValue>? getValue,

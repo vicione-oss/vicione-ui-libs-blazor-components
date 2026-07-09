@@ -163,6 +163,247 @@ public class TabStripTests(ServerFixture fixture)
         });
     }
 
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_reveal_tab_hidden_behind_right_overflow_when_navigating_with_arrow_key(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, scrollContainer, _, _) = await GetScrollingTabStripAsync(page);
+            await WaitForScrollToSettleAsync(scrollContainer);
+
+            var tabs = tabStrip.Locator(".tabs > .tab");
+            var overflowSize = await GetOverflowSizeAsync(scrollContainer);
+
+            var containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            // While scrolled to the start, find the first tab hidden behind the right overflow gradient.
+            var clippedTabIndex = await FindFirstTabClippedOnRightAsync(tabs, containerBox.X + containerBox.Width - overflowSize);
+            Assert.True(clippedTabIndex >= 1, "Expected a tab hidden behind the right overflow gradient to navigate to.");
+
+            // Focus the first tab, then walk focus one item at a time towards the clipped tab using the right arrow key.
+            await tabs.First.FocusAsync();
+            Assert.Equal(0, await GetFocusedTabIndexAsync(tabs));
+
+            var scrollLeftBeforeNavigation = await scrollContainer.EvaluateAsync<double>("element => element.scrollLeft");
+
+            for (var expectedIndex = 1; expectedIndex <= clippedTabIndex; expectedIndex++)
+            {
+                await page.Keyboard.PressAsync("ArrowRight");
+
+                // Each arrow key press must advance focus by exactly one item instead of scrolling by a few pixels.
+                Assert.Equal(expectedIndex, await GetFocusedTabIndexAsync(tabs));
+            }
+
+            await WaitForSelectionScrollAsync(scrollContainer, scrollLeftBeforeNavigation);
+
+            // The focused tab is now fully visible, flush with the first visible position after the left overflow area.
+            containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            var clippedTab = tabs.Nth(clippedTabIndex);
+            var tabBox = await clippedTab.BoundingBoxAsync();
+            Assert.NotNull(tabBox);
+
+            var visibleLeft = containerBox.X + overflowSize;
+            Assert.True(Math.Abs(tabBox.X - visibleLeft) <= EdgeTolerance,
+                $"Expected tab left edge at {visibleLeft}px (+/-{EdgeTolerance}px), but was {tabBox.X}px.");
+            Assert.True(tabBox.X + tabBox.Width <= containerBox.X + containerBox.Width + 1,
+                "Expected the focused tab to be fully visible within the scroll container.");
+        });
+    }
+
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_reveal_tab_hidden_behind_left_overflow_when_navigating_with_arrow_key(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, scrollContainer, _, rightButton) = await GetScrollingTabStripAsync(page);
+
+            // Arrange: scroll to the end so leading tabs become hidden behind the left overflow gradient. Scrolling all
+            // the way ensures the clipped tab sits mid-strip, so revealing it does not clamp against the scroll start.
+            await ClickScrollButtonUntilDisabledAsync(rightButton, scrollContainer);
+
+            var tabs = tabStrip.Locator(".tabs > .tab");
+            var tabCount = await tabs.CountAsync();
+            var overflowSize = await GetOverflowSizeAsync(scrollContainer);
+
+            var containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            // Find the last tab hidden behind the left overflow gradient.
+            var clippedTabIndex = await FindLastTabClippedOnLeftAsync(tabs, containerBox.X + overflowSize);
+            Assert.True(clippedTabIndex >= 0, "Expected a tab hidden behind the left overflow gradient.");
+            Assert.True(clippedTabIndex < tabCount - 1, "Expected the clipped tab to be navigable from the last tab.");
+
+            // Focus the last tab, then walk focus one item at a time towards the clipped tab using the left arrow key.
+            await tabs.Last.FocusAsync();
+            Assert.Equal(tabCount - 1, await GetFocusedTabIndexAsync(tabs));
+
+            var scrollLeftBeforeNavigation = await scrollContainer.EvaluateAsync<double>("element => element.scrollLeft");
+
+            for (var expectedIndex = tabCount - 2; expectedIndex >= clippedTabIndex; expectedIndex--)
+            {
+                await page.Keyboard.PressAsync("ArrowLeft");
+
+                // Each arrow key press must move focus back by exactly one item instead of scrolling by a few pixels.
+                Assert.Equal(expectedIndex, await GetFocusedTabIndexAsync(tabs));
+            }
+
+            await WaitForSelectionScrollAsync(scrollContainer, scrollLeftBeforeNavigation);
+
+            // The focused tab is now fully visible, flush with the last visible position before the right overflow area.
+            containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            var clippedTab = tabs.Nth(clippedTabIndex);
+            var tabBox = await clippedTab.BoundingBoxAsync();
+            Assert.NotNull(tabBox);
+
+            var visibleRight = containerBox.X + containerBox.Width - overflowSize;
+            Assert.True(Math.Abs(tabBox.X + tabBox.Width - visibleRight) <= EdgeTolerance,
+                $"Expected tab right edge at {visibleRight}px (+/-{EdgeTolerance}px), but was {tabBox.X + tabBox.Width}px.");
+            Assert.True(tabBox.X >= containerBox.X - 1,
+                "Expected the focused tab to be fully visible within the scroll container.");
+        });
+    }
+
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_reveal_tab_hidden_behind_right_overflow_when_focused_with_tab_key(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, scrollContainer, _, _) = await GetScrollingTabStripAsync(page);
+            await WaitForScrollToSettleAsync(scrollContainer);
+
+            var tabs = tabStrip.Locator(".tabs > .tab");
+            var overflowSize = await GetOverflowSizeAsync(scrollContainer);
+
+            var containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            // While scrolled to the start, find the first tab hidden behind the right overflow gradient.
+            var clippedTabIndex = await FindFirstTabClippedOnRightAsync(tabs, containerBox.X + containerBox.Width - overflowSize);
+            Assert.True(clippedTabIndex >= 1, "Expected a tab hidden behind the right overflow gradient to tab to.");
+
+            // Focus the first tab, then move focus forward one item at a time using the Tab key. Unlike the arrow keys,
+            // the Tab key moves native browser focus, so the reveal is driven by the component's focusin handler.
+            await tabs.First.FocusAsync();
+            Assert.Equal(0, await GetFocusedTabIndexAsync(tabs));
+
+            var scrollLeftBeforeNavigation = await scrollContainer.EvaluateAsync<double>("element => element.scrollLeft");
+
+            for (var expectedIndex = 1; expectedIndex <= clippedTabIndex; expectedIndex++)
+            {
+                await page.Keyboard.PressAsync("Tab");
+
+                // Focusing the next tab must advance focus by exactly one item so it can be revealed.
+                Assert.Equal(expectedIndex, await GetFocusedTabIndexAsync(tabs));
+            }
+
+            await WaitForSelectionScrollAsync(scrollContainer, scrollLeftBeforeNavigation);
+
+            // The focused tab is now fully visible, flush with the first visible position after the left overflow area
+            // (native focus scrolling would leave it under the gradient; only the component aligns past the overflow).
+            containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            var clippedTab = tabs.Nth(clippedTabIndex);
+            var tabBox = await clippedTab.BoundingBoxAsync();
+            Assert.NotNull(tabBox);
+
+            var visibleLeft = containerBox.X + overflowSize;
+            Assert.True(Math.Abs(tabBox.X - visibleLeft) <= EdgeTolerance,
+                $"Expected tab left edge at {visibleLeft}px (+/-{EdgeTolerance}px), but was {tabBox.X}px.");
+            Assert.True(tabBox.X + tabBox.Width <= containerBox.X + containerBox.Width + 1,
+                "Expected the focused tab to be fully visible within the scroll container.");
+        });
+    }
+
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_reveal_tab_hidden_behind_left_overflow_when_focused_with_shift_tab_key(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, scrollContainer, _, rightButton) = await GetScrollingTabStripAsync(page);
+
+            // Arrange: scroll to the end so leading tabs become hidden behind the left overflow gradient. Scrolling all
+            // the way ensures the clipped tab sits mid-strip, so revealing it does not clamp against the scroll start.
+            await ClickScrollButtonUntilDisabledAsync(rightButton, scrollContainer);
+
+            var tabs = tabStrip.Locator(".tabs > .tab");
+            var tabCount = await tabs.CountAsync();
+            var overflowSize = await GetOverflowSizeAsync(scrollContainer);
+
+            var containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            // Find the last tab hidden behind the left overflow gradient.
+            var clippedTabIndex = await FindLastTabClippedOnLeftAsync(tabs, containerBox.X + overflowSize);
+            Assert.True(clippedTabIndex >= 0, "Expected a tab hidden behind the left overflow gradient.");
+            Assert.True(clippedTabIndex < tabCount - 1, "Expected the clipped tab to be reachable from the last tab.");
+
+            // Focus the last tab, then move focus backward one item at a time using Shift+Tab. As with the Tab key, the
+            // reveal is driven by the component's focusin handler rather than the arrow-key handler.
+            await tabs.Last.FocusAsync();
+            Assert.Equal(tabCount - 1, await GetFocusedTabIndexAsync(tabs));
+
+            var scrollLeftBeforeNavigation = await scrollContainer.EvaluateAsync<double>("element => element.scrollLeft");
+
+            for (var expectedIndex = tabCount - 2; expectedIndex >= clippedTabIndex; expectedIndex--)
+            {
+                await page.Keyboard.PressAsync("Shift+Tab");
+
+                // Focusing the previous tab must move focus back by exactly one item so it can be revealed.
+                Assert.Equal(expectedIndex, await GetFocusedTabIndexAsync(tabs));
+            }
+
+            await WaitForSelectionScrollAsync(scrollContainer, scrollLeftBeforeNavigation);
+
+            // The focused tab is now fully visible, flush with the last visible position before the right overflow area.
+            containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            var clippedTab = tabs.Nth(clippedTabIndex);
+            var tabBox = await clippedTab.BoundingBoxAsync();
+            Assert.NotNull(tabBox);
+
+            var visibleRight = containerBox.X + containerBox.Width - overflowSize;
+            Assert.True(Math.Abs(tabBox.X + tabBox.Width - visibleRight) <= EdgeTolerance,
+                $"Expected tab right edge at {visibleRight}px (+/-{EdgeTolerance}px), but was {tabBox.X + tabBox.Width}px.");
+            Assert.True(tabBox.X >= containerBox.X - 1,
+                "Expected the focused tab to be fully visible within the scroll container.");
+        });
+    }
+
     private static async Task<(ILocator TabStrip, ILocator ScrollContainer, ILocator LeftButton, ILocator RightButton)>
         GetScrollingTabStripAsync(IPage page)
     {
@@ -197,10 +438,24 @@ public class TabStripTests(ServerFixture fixture)
         return classAttribute?.Contains("active", StringComparison.Ordinal) == true;
     }
 
-    private static async Task<int> FindFirstTabClippedOnRightAsync(ILocator tabs, double visibleRight)
+    private static async Task<int> GetFocusedTabIndexAsync(ILocator tabs)
     {
         var count = await tabs.CountAsync();
 
+        for (var index = 0; index < count; index++)
+        {
+            var isFocused = await tabs.Nth(index).EvaluateAsync<bool>("element => element === document.activeElement");
+
+            if (isFocused)
+                return index;
+        }
+
+        return -1;
+    }
+
+    private static async Task<int> FindFirstTabClippedOnRightAsync(ILocator tabs, double visibleRight)
+    {
+        var count = await tabs.CountAsync();
         for (var index = 0; index < count; index++)
         {
             var tabBox = await tabs.Nth(index).BoundingBoxAsync();

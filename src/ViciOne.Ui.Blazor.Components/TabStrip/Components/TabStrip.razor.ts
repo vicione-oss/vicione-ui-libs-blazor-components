@@ -8,6 +8,8 @@ class TabStrip {
         this.#scrollContainer = scrollContainer;
 
         this.#scrollContainer.addEventListener('scroll', this.#onScrollOrResize, { passive: true });
+        this.#scrollContainer.addEventListener('focusin', this.#onFocusIn);
+        this.#scrollContainer.addEventListener('keydown', this.#onKeyDown);
 
         this.#resizeObserver = new ResizeObserver(this.#onScrollOrResize);
         this.#resizeObserver.observe(this.#scrollContainer);
@@ -62,6 +64,8 @@ class TabStrip {
     public dispose() {
         this.#resizeObserver.disconnect();
         this.#scrollContainer.removeEventListener('scroll', this.#onScrollOrResize);
+        this.#scrollContainer.removeEventListener('focusin', this.#onFocusIn);
+        this.#scrollContainer.removeEventListener('keydown', this.#onKeyDown);
     }
 
     #scrollToAdjacentTab(direction: 'left' | 'right') {
@@ -81,13 +85,18 @@ class TabStrip {
         const tolerance = 1;
 
         if (direction === 'right') {
-            const nextTab = tabs.find(tab => tab.getBoundingClientRect().right > visibleRight + tolerance);
+            const nextTab =
+                tabs.find(tab => tab.getBoundingClientRect().left >= visibleRight - tolerance) ??
+                tabs.find(tab => tab.getBoundingClientRect().right > visibleRight + tolerance);
             if (!nextTab)
                 return;
 
             this.#scrollContainer.scrollBy({ left: nextTab.getBoundingClientRect().right - visibleRight, behavior: 'smooth' });
         } else {
-            const previousTab = [...tabs].reverse().find(tab => tab.getBoundingClientRect().left < visibleLeft - tolerance);
+            const reversedTabs = [...tabs].reverse();
+            const previousTab =
+                reversedTabs.find(tab => tab.getBoundingClientRect().right <= visibleLeft + tolerance) ??
+                reversedTabs.find(tab => tab.getBoundingClientRect().left < visibleLeft - tolerance);
             if (!previousTab)
                 return;
 
@@ -104,6 +113,45 @@ class TabStrip {
         const parsed = parseFloat(raw);
         return Number.isFinite(parsed) ? parsed : 0;
     }
+
+    readonly #onFocusIn = (event: FocusEvent) => {
+        const { target } = event;
+        if (!(target instanceof HTMLElement))
+            return;
+
+        const focusedTab = target.closest<HTMLElement>('.tab');
+        if (focusedTab && this.#getTabs().includes(focusedTab))
+            this.scrollToActiveTab(focusedTab);
+    };
+
+    readonly #onKeyDown = (event: KeyboardEvent) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft')
+            return;
+
+        const tabs = this.#getTabs();
+        if (tabs.length === 0)
+            return;
+
+        const { activeElement } = document;
+        const focusedTab = activeElement instanceof HTMLElement ?
+            activeElement.closest<HTMLElement>('.tab') :
+            null;
+
+        if (focusedTab && !tabs.includes(focusedTab))
+            return;
+
+        const currentIndex = focusedTab ? tabs.indexOf(focusedTab) : -1;
+
+        const nextIndex = currentIndex === -1 ?
+            (event.key === 'ArrowRight' ? 0 : tabs.length - 1) :
+            currentIndex + (event.key === 'ArrowRight' ? 1 : -1);
+
+        if (nextIndex < 0 || nextIndex >= tabs.length)
+            return;
+
+        event.preventDefault();
+        tabs[nextIndex].focus({ preventScroll: true });
+    };
 
     readonly #onScrollOrResize = () => {
         this.#notifyScrollState();

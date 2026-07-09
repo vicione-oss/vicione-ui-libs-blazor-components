@@ -3,6 +3,7 @@
 ## 5.17.0 - Unreleased
 
 - Unified border radius of `3px` for buttons
+- `TabStrip`, adjusted scrolling behavior to have a more consistent scrolling (scroll buttons and keyboard navigation)
 
 ## 5.16.0 - 2026-06-25
 

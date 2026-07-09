@@ -1,6 +1,7 @@
 using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.Factories;
 using ViciOne.Ui.Blazor.Components.TabStrip.Components;
 using ViciOne.Ui.Blazor.Components.TabStrip.Enums;
@@ -374,6 +375,126 @@ public sealed class TabStripTests : IAsyncDisposable
 
         // Assert
         _jsAttachResult.VerifyInvoke("scrollToActiveTab");
+    }
+
+    [Theory]
+    [InlineData("ArrowRight")]
+    [InlineData("ArrowLeft")]
+    public void Arrow_key_on_tab_should_not_change_active_tab_index(string key)
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 1)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "C")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[1].KeyDown(new KeyboardEventArgs { Key = key });
+
+        // Assert
+        renderedComponent.Instance.ActiveTabIndex.Should().Be(1);
+    }
+
+    [Theory]
+    [InlineData("ArrowRight")]
+    [InlineData("ArrowLeft")]
+    public void Arrow_key_on_tab_should_not_invoke_active_tab_index_changed_callback(string key)
+    {
+        // Arrange
+        var callbackInvocationCount = 0;
+
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 1)
+            .Add(p => p.ActiveTabIndexChanged, _ => callbackInvocationCount++)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "C")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[1].KeyDown(new KeyboardEventArgs { Key = key });
+
+        // Assert
+        callbackInvocationCount.Should().Be(0);
+    }
+
+    [Theory]
+    [InlineData("Enter")]
+    [InlineData("NumpadEnter")]
+    public void Enter_key_on_tab_should_update_active_tab_index(string key)
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 0)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "C")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[2].KeyDown(new KeyboardEventArgs { Key = key });
+
+        // Assert
+        renderedComponent.Instance.ActiveTabIndex.Should().Be(2);
+
+        var tabs = renderedComponent.FindAll(".tab");
+        tabs[0].ClassList.Should().NotContain("active");
+        tabs[2].ClassList.Should().Contain("active");
+    }
+
+    [Theory]
+    [InlineData("Enter")]
+    [InlineData("NumpadEnter")]
+    public void Enter_key_on_tab_should_invoke_active_tab_index_changed_callback(string key)
+    {
+        // Arrange
+        int? receivedIndex = null;
+
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 0)
+            .Add(p => p.ActiveTabIndexChanged, index => receivedIndex = index)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[1].KeyDown(new KeyboardEventArgs { Key = key });
+
+        // Assert
+        receivedIndex.Should().Be(1);
+    }
+
+    [Fact]
+    public void Enter_key_on_tab_should_invoke_scroll_to_active_tab_on_js()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 0)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[1].KeyDown(new KeyboardEventArgs { Key = "Enter" });
+
+        // Assert
+        _jsAttachResult.VerifyInvoke("scrollToActiveTab");
+    }
+
+    [Fact]
+    public void Enter_key_on_active_tab_should_not_invoke_active_tab_index_changed_callback()
+    {
+        // Arrange
+        var callbackInvocationCount = 0;
+
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 1)
+            .Add(p => p.ActiveTabIndexChanged, _ => callbackInvocationCount++)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[1].KeyDown(new KeyboardEventArgs { Key = "Enter" });
+
+        // Assert
+        callbackInvocationCount.Should().Be(0);
     }
 
     [Fact]

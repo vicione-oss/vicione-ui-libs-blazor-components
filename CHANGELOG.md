@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.17.1 - 2026-07-09
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- Adjusted folder casing in `sasscompiler.json` to fix missing styling
+
 ## 5.17.0 - 2026-07-09
 
 ### Package `ViciOne.Ui.Blazor.Components`

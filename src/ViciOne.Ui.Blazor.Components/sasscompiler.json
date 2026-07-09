@@ -11,7 +11,7 @@
         "ContentLoadingIndication",
         "ContextMenu",
         "Dialog",
-        "Dropdown",
+        "DropDown",
         "EditorLayout",
         "ExpandableMenu",
         "Grid",

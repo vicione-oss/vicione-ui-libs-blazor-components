@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using ViciOne.Ui.Blazor.Components.DropDown;
 using ViciOne.Ui.Blazor.Components.Extensions;
 
 namespace ViciOne.Ui.Blazor.Components.TagBox;
@@ -13,6 +14,7 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
 {
     private ElementReference? _tagBox;
     private ElementReference? _inputElement;
+    private DropDown<string>? _dropDown;
     private IJSObjectReference? _jsModule;
     private IJSObjectReference? _jsAttachResult;
     private bool _disposedAsync;
@@ -79,6 +81,10 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
                 $"./_content/{typeof(TagBox).Assembly.GetName().Name}/tag-box/tag-box.js");
 
             _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _tagBox, _inputElement);
+
+            // The compiled TypeScript runs after the first render, so the width and height values are not set yet. Re-rendering here applies
+            // those values and prevents jumping effect of the TagBox.
+            StateHasChanged();
         }
         else if (_jsAttachResult is not null && _alignInputElement)
         {
@@ -88,49 +94,33 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
         }
     }
 
-    private async Task HandleKeyDownAsync(KeyboardEventArgs e)
+    private async Task InputKeyDownAsync(KeyboardEventArgs e)
     {
         if (e.IsEnter())
         {
-            var highlightedIndex = await GetHighlightedIndexAsync();
-            var filteredTags = FilterAvailableTags().ToList();
-
-            if (highlightedIndex >= 0 && highlightedIndex < filteredTags.Count)
-            {
-                await AddOrRemoveTagAsync(filteredTags[highlightedIndex]);
-                await ResetHighlightAsync();
-            }
-            else if (!string.IsNullOrWhiteSpace(_inputValue))
-            {
+            if (!string.IsNullOrWhiteSpace(_inputValue))
                 await AddTagAsync(_inputValue.Trim());
-            }
         }
         else if (e.Key is "Escape")
         {
             _inputValue = string.Empty;
             _alignInputElement = true;
-            await ResetHighlightAsync();
         }
     }
 
-    private async Task<int> GetHighlightedIndexAsync()
-    {
-        if (_jsAttachResult is not null)
-            return await _jsAttachResult.InvokeAsync<int>("getHighlightedIndex");
-
-        return -1;
-    }
-
-    private async Task ResetHighlightAsync()
-    {
-        if (_jsAttachResult is not null)
-            await _jsAttachResult.InvokeVoidAsync("resetHighlight");
-    }
-
-    private async Task HandleFocusOutAsync(FocusEventArgs _)
+    private async Task InputFocusOutAsync(FocusEventArgs _)
     {
         if (!string.IsNullOrWhiteSpace(_inputValue))
             await AddTagAsync(_inputValue.Trim());
+
+        if (_dropDown is not null)
+            await _dropDown.HideAsync();
+    }
+
+    private async Task InputFocusAsync(FocusEventArgs _)
+    {
+        if (_dropDown is not null && !ReadOnly)
+            await _dropDown.ShowAsync();
     }
 
     private async Task AddTagAsync(string tag)
@@ -158,13 +148,8 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
         await TagsChanged.InvokeAsync(Tags);
     }
 
-    private async Task AddOrRemoveTagAsync(string tag)
-    {
-        if (Tags.Contains(tag))
-            await RemoveTagAsync(tag);
-        else
-            await AddTagAsync(tag);
-    }
+    private async Task NotifyTagsChangedAsync()
+        => await TagsChanged.InvokeAsync(Tags);
 
     private IEnumerable<string> FilterAvailableTags()
     {

@@ -78,10 +78,22 @@ public sealed partial class TextBox
     public EventCallback<string?> FocusLost { get; set; }
 
     /// <summary>
+    /// Raised when the input element is clicked
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
     /// Text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
     /// </summary>
     [Parameter]
     public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Value rendered into the <see href="https://html.spec.whatwg.org/#attr-tabindex">tabindex</see> attribute
+    /// </summary>
+    [Parameter]
+    public int? TabIndex { get; set; }
 
     /// <summary>
     /// True when input should be read-only, otherwise false
@@ -149,6 +161,11 @@ public sealed partial class TextBox
     /// <inheritdoc/>
     [Parameter]
     public object? UpdateKey { get; set; }
+
+    /// <summary>
+    /// <see cref="ElementReference"/> of the input element.
+    /// </summary>
+    public ElementReference InputElementReference => _inputElementReference;
 
     [Inject] private ILogger<TextBox> Logger { get; set; } = default!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
@@ -322,6 +339,12 @@ public sealed partial class TextBox
             if (EnterPressed.HasDelegate)
                 await EnterPressed.InvokeAsync(_valueEntered);
         }
+    }
+
+    private async Task InputClickAsync(MouseEventArgs eventArgs)
+    {
+        if (OnClick.HasDelegate)
+            await OnClick.InvokeAsync(eventArgs);
     }
 
     private async Task AfterOnInputAsync()

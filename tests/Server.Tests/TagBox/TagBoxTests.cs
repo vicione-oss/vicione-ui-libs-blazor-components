@@ -71,14 +71,14 @@ public class TagBoxTests(ServerFixture fixture)
             Assert.NotNull(initialBoundingBox);
             var initialWidth = initialBoundingBox.Width;
 
-            // Click all tags in the dropdown menu to add them to the TagBox
-            var dropdown = thirdTagBox.Locator(".available-tags-dropdown-container");
-            var availableTagCount = await dropdown.Locator(".available-tag").CountAsync();
+            // Click all tags in the drop-down menu to add them to the TagBox
+            var dropDown = thirdTagBox.Locator(".drop-down-container");
+            var availableTagCount = await dropDown.Locator(".drop-down-item").CountAsync();
 
             for (var i = 0; i < availableTagCount; i++)
             {
                 // Always click the first non-selected tag since the list re-renders after each click
-                var nextTag = dropdown.Locator(".available-tag:not(.selected)").First;
+                var nextTag = dropDown.Locator(".drop-down-item:not(.selected)").First;
 
                 if (await nextTag.CountAsync() == 0)
                     break;
@@ -153,13 +153,13 @@ public class TagBoxTests(ServerFixture fixture)
             Assert.NotNull(initialBoundingBox);
             var initialWidth = initialBoundingBox.Width;
 
-            // Click all tags in the dropdown menu to add them to the TagBox
-            var dropdown = thirdTagBox.Locator(".available-tags-dropdown-container");
-            var availableTagCount = await dropdown.Locator(".available-tag").CountAsync();
+            // Click all tags in the drop-down menu to add them to the TagBox
+            var dropDown = thirdTagBox.Locator(".drop-down-container");
+            var availableTagCount = await dropDown.Locator(".drop-down-item").CountAsync();
 
             for (var i = 0; i < availableTagCount; i++)
             {
-                var nextTag = dropdown.Locator(".available-tag:not(.selected)").First;
+                var nextTag = dropDown.Locator(".drop-down-item:not(.selected)").First;
 
                 if (await nextTag.CountAsync() == 0)
                     break;
@@ -232,13 +232,13 @@ public class TagBoxTests(ServerFixture fixture)
             Assert.NotNull(initialBoundingBox);
             var initialWidth = initialBoundingBox.Width;
 
-            // Click all tags in the dropdown menu to add them to the TagBox
-            var dropdown = thirdTagBox.Locator(".available-tags-dropdown-container");
-            var availableTagCount = await dropdown.Locator(".available-tag").CountAsync();
+            // Click all tags in the drop-down menu to add them to the TagBox
+            var dropDown = thirdTagBox.Locator(".drop-down-container");
+            var availableTagCount = await dropDown.Locator(".drop-down-item").CountAsync();
 
             for (var i = 0; i < availableTagCount; i++)
             {
-                var nextTag = dropdown.Locator(".available-tag:not(.selected)").First;
+                var nextTag = dropDown.Locator(".drop-down-item:not(.selected)").First;
 
                 if (await nextTag.CountAsync() == 0)
                     break;
@@ -330,13 +330,13 @@ public class TagBoxTests(ServerFixture fixture)
             Assert.NotNull(initialBoundingBox);
             var initialWidth = initialBoundingBox.Width;
 
-            // Click all tags in the dropdown menu to add them to the TagBox
-            var dropdown = thirdTagBox.Locator(".available-tags-dropdown-container");
-            var availableTagCount = await dropdown.Locator(".available-tag").CountAsync();
+            // Click all tags in the drop-down menu to add them to the TagBox
+            var dropDown = thirdTagBox.Locator(".drop-down-container");
+            var availableTagCount = await dropDown.Locator(".drop-down-item").CountAsync();
 
             for (var i = 0; i < availableTagCount; i++)
             {
-                var nextTag = dropdown.Locator(".available-tag:not(.selected)").First;
+                var nextTag = dropDown.Locator(".drop-down-item:not(.selected)").First;
 
                 if (await nextTag.CountAsync() == 0)
                     break;

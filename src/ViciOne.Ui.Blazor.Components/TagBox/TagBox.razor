@@ -1,3 +1,5 @@
+@using ViciOne.Ui.Blazor.Components.DropDown
+
 @{
     var cssClasses = new List<string> { "tag-box" };
 
@@ -9,14 +11,13 @@
 }
 
 <div class="@string.Join(" ", cssClasses)" @ref="_tagBox">
-
      <div class="content">
         @{
             foreach (var tag in Tags)
             {
                 var enabled = Enabled && !ReadOnly;
 
-                <TagElement Tag="@tag" Enabled="@enabled" OnDeleteButtonClick="async (tag) => await RemoveTagAsync(tag)" />
+                <TagElement Tag="@tag" Enabled="@enabled" OnDeleteButtonClick="RemoveTagAsync" />
             }
 
             var inputAttributes = new Dictionary<string, object>();
@@ -33,31 +34,22 @@
                @attributes="@inputAttributes"
                @bind="_inputValue"
                @bind:event="oninput"
-               @onkeydown="HandleKeyDownAsync"
-               @onfocusout="HandleFocusOutAsync" />
+               @onkeydown="InputKeyDownAsync"
+               @onfocus="InputFocusAsync"
+               @onfocusout="InputFocusOutAsync" />
     </div>
 
-    <div class="available-tags-dropdown">
-        <div class="available-tags-dropdown-container" tabindex="-1">
-            @{
-                var availableTags = FilterAvailableTags();
+    <DropDown TItem="string"
+              @ref="_dropDown"
+              InputElementReference="_inputElement"
+              MultiSelection="true"
+              Items="@FilterAvailableTags().ToList()"
+              @bind-SelectedItems="Tags"
+              @bind-SelectedItems:after="NotifyTagsChangedAsync">
 
-                foreach (var tag in availableTags)
-                {
-                    var availableTagCssClasses = new List<string> { "available-tag" };
-
-                    if (Tags.Contains(tag))
-                        availableTagCssClasses.Add("selected");
-
-                    <div class="@string.Join(" ", availableTagCssClasses)"
-                         @onmousedown:preventDefault
-                         @onclick="async () => await AddOrRemoveTagAsync(tag)">
-
-                        @tag
-                    </div>
-                }
-            }
-        </div>
-    </div>
+        <ItemTemplate>
+            @context
+        </ItemTemplate>
+    </DropDown>
 </div>
 

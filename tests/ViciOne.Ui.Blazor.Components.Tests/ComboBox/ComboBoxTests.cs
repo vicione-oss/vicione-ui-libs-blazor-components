@@ -8,7 +8,14 @@ namespace ViciOne.Ui.Blazor.Components.Tests.ComboBox;
 
 public sealed class ComboBoxTests : IDisposable
 {
-    private readonly BunitContext _testContext = new();
+    private readonly BunitContext _testContext;
+
+    public ComboBoxTests()
+    {
+        _testContext = new BunitContext();
+
+        _testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+    }
 
     public void Dispose()
         => _testContext.Dispose();
@@ -52,12 +59,12 @@ public sealed class ComboBoxTests : IDisposable
         );
 
         // Assert
-        var a = renderedComponent.Find("option[selected]");
-        renderedComponent.Find("option[selected]").InnerHtml.Should().Contain(GetItems().First().Text);
+        renderedComponent.Find(".combo-box input").GetAttribute("value").Should().Be(GetItems().First().Text);
+        renderedComponent.Find(".drop-down-item.selected").TextContent.Trim().Should().Be(GetItems().First().Text);
     }
 
     [Fact]
-    public void Should_select_placeholder_if_value_not_matching()
+    public void Should_show_no_selection_if_value_not_matching()
     {
         // Act
         var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
@@ -69,11 +76,12 @@ public sealed class ComboBoxTests : IDisposable
         );
 
         // Assert
-        renderedComponent.Find("option[selected][disabled]").Should().NotBeNull();
+        renderedComponent.Find(".combo-box input").GetAttribute("value").Should().BeNullOrEmpty();
+        renderedComponent.FindAll(".drop-down-item.selected").Should().BeEmpty();
     }
 
     [Fact]
-    public void Should_select_placeholder_if_no_selection_configured()
+    public void Should_show_no_selection_if_no_selection_configured()
     {
         // Act
         var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
@@ -85,7 +93,219 @@ public sealed class ComboBoxTests : IDisposable
         );
 
         // Assert
-        renderedComponent.Find("option[selected][disabled]").Should().NotBeNull();
+        renderedComponent.Find(".combo-box input").GetAttribute("value").Should().BeNullOrEmpty();
+        renderedComponent.FindAll(".drop-down-item.selected").Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Should_raise_value_changed_on_drop_down_item_click()
+    {
+        // Arrange
+        string? changedValue = null;
+
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.ValueChanged, v => changedValue = v)
+        );
+
+        // Act
+        renderedComponent.FindAll(".drop-down-item")[1].Click();
+
+        // Assert
+        changedValue.Should().Be(GetItems()[1].Value);
+    }
+
+    [Fact]
+    public void Should_render_editable_input_when_allow_user_input()
+    {
+        // Act
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.AllowUserInput, true)
+        );
+
+        // Assert
+        renderedComponent.Find(".combo-box input").HasAttribute("readonly").Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_filter_drop_down()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.AllowUserInput, true)
+        );
+
+        // Act
+        renderedComponent.Find(".combo-box input").Input("o");
+
+        // Assert - only "One" and "Two" contain 'o'
+        renderedComponent.FindAll(".drop-down-item").Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Should_filter_drop_down_without_user_input()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+        );
+
+        // Act
+        renderedComponent.Find(".combo-box input").Input("o");
+
+        // Assert - input is editable for filtering and only "One"/"Two" contain 'o'
+        renderedComponent.Find(".combo-box input").HasAttribute("readonly").Should().BeFalse();
+        renderedComponent.FindAll(".drop-down-item").Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Should_commit_value_on_enter_when_allow_user_input()
+    {
+        // Arrange
+        string? changedValue = null;
+
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.AllowUserInput, true)
+            .Add(p => p.ValueChanged, v => changedValue = v)
+        );
+
+        // Act
+        var input = renderedComponent.Find(".combo-box input");
+        input.Click();
+        input.Input("custom");
+        input.KeyUp(new Microsoft.AspNetCore.Components.Web.KeyboardEventArgs { Key = "Enter" });
+
+        // Assert
+        changedValue.Should().Be("custom");
+    }
+
+    [Fact]
+    public void Should_open_drop_down_on_enter()
+    {
+        // Arrange
+        string? changedValue = null;
+
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.ValueChanged, v => changedValue = v)
+        );
+
+        // Act
+        var input = renderedComponent.Find(".combo-box input");
+        input.KeyUp(new Microsoft.AspNetCore.Components.Web.KeyboardEventArgs { Key = "Enter" });
+
+        // Assert
+        renderedComponent.Find(".drop-down-container").ClassList.Should().Contain("visible");
+    }
+
+    [Fact]
+    public void Should_open_drop_down_on_input()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+        );
+
+        // Act
+        renderedComponent.Find(".combo-box input").Input("o");
+
+        // Assert
+        renderedComponent.Find(".drop-down-container").ClassList.Should().Contain("visible");
+    }
+
+    [Fact]
+    public void Should_commit_custom_value_on_blur_when_allow_user_input()
+    {
+        // Arrange
+        string? changedValue = null;
+
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.AllowUserInput, true)
+            .Add(p => p.ValueChanged, v => changedValue = v)
+        );
+
+        // Act
+        var input = renderedComponent.Find(".combo-box input");
+        input.Input("custom");
+        input.Blur(new Microsoft.AspNetCore.Components.Web.FocusEventArgs());
+
+        // Assert
+        changedValue.Should().Be("custom");
+    }
+
+    [Fact]
+    public void Should_ignore_custom_value_that_cannot_convert_to_value_type()
+    {
+        // Arrange
+        var changed = false;
+
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<int, string>, int>>(builder => builder
+            .Add(p => p.Items, GetNumericItems())
+            .Add(p => p.Value, 0)
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.AllowUserInput, true)
+            .Add(p => p.ValueChanged, _ => changed = true)
+        );
+
+        // Act
+        var input = renderedComponent.Find(".combo-box input");
+        input.Input("not-a-number");
+        input.Blur(new Microsoft.AspNetCore.Components.Web.FocusEventArgs());
+
+        // Assert
+        changed.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Should_commit_matching_item_on_blur_for_non_convertible_value_type()
+    {
+        // Arrange
+        SampleValue? changedValue = null;
+        var items = GetSampleValueItems();
+
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<SampleValue, string>, SampleValue>>(builder => builder
+            .Add(p => p.Items, items)
+            .Add(p => p.Value, items[0].Value)
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.AllowUserInput, true)
+            .Add(p => p.ValueChanged, v => changedValue = v)
+        );
+
+        // Act
+        var input = renderedComponent.Find(".combo-box input");
+        input.Input("Large");
+        input.Blur(new Microsoft.AspNetCore.Components.Web.FocusEventArgs());
+
+        // Assert
+        changedValue.Should().Be(items[1].Value);
     }
 
     [Theory]
@@ -120,6 +340,21 @@ public sealed class ComboBoxTests : IDisposable
             new() { Value = "2", Text = "Two" },
             new() { Value = "3", Text = "Three" }
         ];
+
+    private static List<ComboBoxItem<int, string>> GetNumericItems()
+        => [
+            new() { Value = 1, Text = "1" },
+            new() { Value = 2, Text = "2" },
+            new() { Value = 3, Text = "3" }
+        ];
+
+    private static List<ComboBoxItem<SampleValue, string>> GetSampleValueItems()
+        => [
+            new() { Value = new SampleValue("Small"), Text = "Small" },
+            new() { Value = new SampleValue("Large"), Text = "Large" }
+        ];
+
+    public sealed record SampleValue(string Name);
 
     public class TestEnumerable<T> : IEnumerable<T>
     {

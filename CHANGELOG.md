@@ -1,9 +1,15 @@
 # Changelog
 
-## 5.17.0 - Unreleased
+## 5.17.0 - 2026-07-09
+
+### Package `ViciOne.Ui.Blazor.Components`
 
 - Unified border radius of `3px` for buttons
 - `TabStrip`, adjusted scrolling behavior to have a more consistent scrolling (scroll buttons and keyboard navigation)
+- `ComboBox`
+  - Reworked to support custom input and filtering
+  - Added `AllowUserInput`
+- `TextBox`, added `TabIndex`
 
 ## 5.16.0 - 2026-06-25
 

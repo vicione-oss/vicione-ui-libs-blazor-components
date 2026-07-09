@@ -36,6 +36,9 @@
     if (SpellCheck.HasValue)
         attributes.Add("spellcheck", SpellCheck.Value ? "true" : "false");
 
+    if (TabIndex.HasValue)
+        attributes.Add("tabindex", TabIndex.Value);
+
     var type = Password ? "password" : "text";
 }
 
@@ -47,5 +50,6 @@
        @bind:event="oninput"
        @bind:after="@AfterOnInputAsync"
        @onkeyup="@InputKeyUpAsync"
+       @onclick="@InputClickAsync"
        @onblur="@InputBlurAsync"
        @ref="_inputElementReference" />

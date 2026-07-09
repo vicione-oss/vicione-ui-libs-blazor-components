@@ -148,7 +148,7 @@ public sealed class TagBoxTests : IDisposable
     }
 
     [Fact]
-    public void Should_render_available_tags_in_dropdown()
+    public void Should_render_available_tags_in_drop_down()
     {
         // Arrange
         string[] availableTags = ["Tag1", "Tag2", "Tag3"];
@@ -158,12 +158,12 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.AvailableTags, availableTags));
 
         // Assert
-        var dropdownItems = renderedComponent.FindAll(".available-tag");
-        dropdownItems.Should().HaveCount(3);
+        var dropDownItems = renderedComponent.FindAll(".drop-down-item");
+        dropDownItems.Should().HaveCount(3);
     }
 
     [Fact]
-    public void Should_mark_selected_tags_in_dropdown()
+    public void Should_mark_selected_tags_in_drop_down()
     {
         // Arrange
         string[] tags = ["Tag1"];
@@ -175,11 +175,11 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.AvailableTags, availableTags));
 
         // Assert
-        renderedComponent.FindAll(".available-tag.selected").Should().HaveCount(1);
+        renderedComponent.FindAll(".drop-down-item.selected").Should().HaveCount(1);
     }
 
     [Fact]
-    public void Should_hide_selected_items_in_dropdown_when_hide_selected_items_is_true()
+    public void Should_hide_selected_items_in_drop_down_when_hide_selected_items_is_true()
     {
         // Arrange
         string[] tags = ["Tag1"];
@@ -192,9 +192,9 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.HideSelectedItems, true));
 
         // Assert
-        var dropdownItems = renderedComponent.FindAll(".available-tag");
-        dropdownItems.Should().HaveCount(1);
-        dropdownItems[0].TextContent.Trim().Should().Be("Tag2");
+        var dropDownItems = renderedComponent.FindAll(".drop-down-item");
+        dropDownItems.Should().HaveCount(1);
+        dropDownItems[0].TextContent.Trim().Should().Be("Tag2");
     }
 
     [Fact]
@@ -376,7 +376,7 @@ public sealed class TagBoxTests : IDisposable
     }
 
     [Fact]
-    public void Should_add_tag_from_dropdown_click()
+    public void Should_add_tag_from_drop_down_click()
     {
         // Arrange
         string[] availableTags = ["Tag"];
@@ -389,7 +389,7 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.TagsChanged, t => updatedTags = t));
 
         // Act
-        renderedComponent.Find(".available-tag").Click();
+        renderedComponent.Find(".drop-down-item").Click();
 
         // Assert
         updatedTags.Should().NotBeNull();
@@ -397,7 +397,7 @@ public sealed class TagBoxTests : IDisposable
     }
 
     [Fact]
-    public void Should_remove_tag_from_dropdown_click_when_tag_is_selected()
+    public void Should_remove_tag_from_drop_down_click_when_tag_is_selected()
     {
         // Arrange
         string[] tags = ["Tag"];
@@ -410,11 +410,39 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.TagsChanged, t => updatedTags = t));
 
         // Act
-        renderedComponent.Find(".available-tag.selected").Click();
+        renderedComponent.Find(".drop-down-item.selected").Click();
 
         // Assert
         updatedTags.Should().NotBeNull();
         updatedTags.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Should_preserve_custom_tag_when_toggling_another_tag_from_drop_down()
+    {
+        // Arrange
+        string[] availableTags = ["Tag1", "Tag2"];
+        string[] emptyTags = [];
+        IEnumerable<string>? updatedTags = null;
+
+        var renderedComponent = _testContext.Render<TagBoxComponent>(b => b
+            .Add(p => p.Tags, emptyTags)
+            .Add(p => p.AvailableTags, availableTags)
+            .Add(p => p.AllowCustomTags, true)
+            .Add(p => p.TagsChanged, t => updatedTags = t));
+
+        var input = renderedComponent.Find(".tag-input");
+
+        // Add a custom tag that is not part of the available tags
+        input.Input("Custom");
+        input.KeyDown(new KeyboardEventArgs { Key = "Enter" });
+
+        // Act - select an available tag from the drop-down
+        renderedComponent.FindAll(".drop-down-item")[0].Click();
+
+        // Assert - the previously added custom tag must still be present
+        updatedTags.Should().NotBeNull();
+        updatedTags.Should().BeEquivalentTo(["Custom", "Tag1"]);
     }
 
     [Fact]
@@ -446,8 +474,8 @@ public sealed class TagBoxTests : IDisposable
         input.Input("Ta");
 
         // Assert
-        var dropdownItems = renderedComponent.FindAll(".available-tag");
-        dropdownItems.Should().HaveCount(2);
+        var dropDownItems = renderedComponent.FindAll(".drop-down-item");
+        dropDownItems.Should().HaveCount(2);
     }
 
     [Fact]
@@ -465,9 +493,9 @@ public sealed class TagBoxTests : IDisposable
         input.Input("tag");
 
         // Assert
-        var dropdownItems = renderedComponent.FindAll(".available-tag");
-        dropdownItems.Should().HaveCount(1);
-        dropdownItems[0].TextContent.Trim().Should().Be("Tag");
+        var dropDownItems = renderedComponent.FindAll(".drop-down-item");
+        dropDownItems.Should().HaveCount(1);
+        dropDownItems[0].TextContent.Trim().Should().Be("Tag");
     }
 
     [Fact]
@@ -562,19 +590,19 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.AvailableTags, availableTags));
 
         // Assert
-        var dropdownItems = renderedComponent.FindAll(".available-tag");
-        dropdownItems.Should().HaveCount(3);
+        var dropDownItems = renderedComponent.FindAll(".drop-down-item");
+        dropDownItems.Should().HaveCount(3);
     }
 
     [Fact]
-    public void Should_render_empty_dropdown_when_no_available_tags()
+    public void Should_render_empty_drop_down_when_no_available_tags()
     {
         // Act
         var renderedComponent = _testContext.Render<TagBoxComponent>(b => b
             .Add(p => p.AvailableTags, []));
 
         // Assert
-        renderedComponent.FindAll(".available-tag").Should().BeEmpty();
+        renderedComponent.FindAll(".drop-down-item").Should().BeEmpty();
     }
 
     [Fact]
@@ -622,7 +650,7 @@ public sealed class TagBoxTests : IDisposable
     }
 
     [Fact]
-    public void Should_show_no_dropdown_items_when_filter_matches_nothing()
+    public void Should_show_no_drop_down_items_when_filter_matches_nothing()
     {
         // Arrange
         string[] availableTags = ["Tag1", "Tag2"];
@@ -636,6 +664,6 @@ public sealed class TagBoxTests : IDisposable
         input.Input("xyz");
 
         // Assert
-        renderedComponent.FindAll(".available-tag").Should().BeEmpty();
+        renderedComponent.FindAll(".drop-down-item").Should().BeEmpty();
     }
 }

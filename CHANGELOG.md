@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.18.0 - 2026-07-15
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.14.0`
+
 ## 5.17.1 - 2026-07-09
 
 ### Package `ViciOne.Ui.Blazor.Components`
@@ -10,6 +16,7 @@
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.13.0`
 - Unified border radius of `3px` for buttons
 - `TabStrip`, adjusted scrolling behavior to have a more consistent scrolling (scroll buttons and keyboard navigation)
 - `ComboBox`

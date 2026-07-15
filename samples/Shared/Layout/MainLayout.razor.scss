@@ -1,8 +1,4 @@
-﻿@use "../Styles/icons/monochrome-icons" with (
-    $svg-base-url: "./icons/monochrome-icons",
-    $base-selector: "::deep"
-);
-@use "../Styles/design/scrollbar" as scrollbar;
+﻿@use "../Styles/design/scrollbar" as scrollbar;
 @use "../Styles/mixins" as mixins;
 
 main {

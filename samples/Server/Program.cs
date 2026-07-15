@@ -1,6 +1,7 @@
-﻿using Server.Extensions;
+using Server.Extensions;
 using Server.Services;
 using Shared.Extensions;
+using ViciOne.Ui.MonochromeIcons.Assets.Extensions;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -15,12 +16,14 @@ builder.Services.AddAntiforgery();
 if (useWebAssembly)
 {
     builder.Services
+        .AddUrlBasedMonochromeIconSvgMarkupProvider()
         .AddRazorComponents()
         .AddInteractiveWebAssemblyComponents();
 }
 else
 {
     builder.Services
+        .AddFileSystemBasedMonochromeIconSvgMarkupProvider<Program>()
         .AddRazorComponents()
         .AddInteractiveServerComponents()
         .AddHubOptions(configure => configure.MaximumReceiveMessageSize = 5 * 1024 * 1024);

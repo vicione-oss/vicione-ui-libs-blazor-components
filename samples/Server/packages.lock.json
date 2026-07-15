@@ -44,10 +44,8 @@
         "type": "Project",
         "dependencies": {
           "Bogus": "[35.6.4, )",
-          "ViciOne.Ui.Blazor.Components": "[5.16.0, )",
-          "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.11.0, )",
-          "ViciOne.Ui.MonochromeIcons.Core": "[4.11.0, )"
+          "ViciOne.Ui.Blazor.Components": "[5.18.0, )",
+          "ViciOne.Ui.Localization": "[3.0.1, )"
         }
       },
       "vicione.ui.blazor.components": {
@@ -55,7 +53,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.9, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.11.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.14.0, )"
         }
       },
       "Bogus": {
@@ -85,20 +83,30 @@
         "resolved": "3.0.1",
         "contentHash": "8B3ssYUJ38bxV2bGUQUPSekmK2YQ9pwXptmdXsBHOsqIku0G22kXef57Wu0zo13g9Lsf6C7KTSdi5ouCW36z+g=="
       },
+      "ViciOne.Ui.MonochromeIcons.Assets": {
+        "type": "CentralTransitive",
+        "requested": "[4.14.0, )",
+        "resolved": "4.14.0",
+        "contentHash": "8cVkBIXTtM/Lr72OgmtNTx0j2nNuKK2ykcrb3PlEekc7ARKAIflPhvn/rsr67uOumKd8Q2WX1RyxM0W74zGqqg==",
+        "dependencies": {
+          "ViciOne.Ui.MonochromeIcons.Core": "4.14.0"
+        }
+      },
       "ViciOne.Ui.MonochromeIcons.Components": {
         "type": "CentralTransitive",
-        "requested": "[4.11.0, )",
-        "resolved": "4.11.0",
-        "contentHash": "sY31+7fCK6xbxP2cKzYSaIXUkeYOq/OA6KkB88s9ifrQ5q7j3hILA5MD6qtD5Wdp4bMcT0o1bfOkIk9kcLXZqw==",
+        "requested": "[4.14.0, )",
+        "resolved": "4.14.0",
+        "contentHash": "J9sEpqH7vi+q6eurW2N2kpeIqg4s9IZihIr06yCNRVbXrBhvYDg3pQT31MCFpUZiLeFQ/prribigEvycInxjUg==",
         "dependencies": {
-          "ViciOne.Ui.MonochromeIcons.Core": "4.11.0"
+          "ViciOne.Ui.MonochromeIcons.Assets": "4.14.0",
+          "ViciOne.Ui.MonochromeIcons.Core": "4.14.0"
         }
       },
       "ViciOne.Ui.MonochromeIcons.Core": {
         "type": "CentralTransitive",
-        "requested": "[4.11.0, )",
-        "resolved": "4.11.0",
-        "contentHash": "Eni6GxXFyD4mxIPowuRtfZEt1xOgLAUjiAR5Anmam7HCR1d5u+UDjrpRv1Gnhj8lzMwWLmnNgBMr13kaeSkiuA=="
+        "requested": "[4.14.0, )",
+        "resolved": "4.14.0",
+        "contentHash": "riISEHUux7PiDhiMt20iczp3COUxbniAqz1MiqBdAZtcQEfV+4SzWeC9xHd7UaQEk1aQM5wMZ9nafV2XHFI2og=="
       }
     }
   }

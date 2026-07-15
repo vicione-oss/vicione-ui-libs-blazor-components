@@ -37,10 +37,6 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="ViciOne.Ui.Localization" />
-    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Assets">
-      <PrivateAssets>all</PrivateAssets>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
     <PackageReference Include="ViciOne.Ui.MonochromeIcons.Components" />
   </ItemGroup>
 
@@ -315,34 +311,6 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
-    <ItemGroup>
-      <MonochromeIcon Include="clear" Size="18" />
-      <MonochromeIcon Include="chevron" Size="16" />
-      <MonochromeIcon Include="close-medium" Size="8;16;32" />
-      <MonochromeIcon Include="delete" Size="24" />
-      <MonochromeIcon Include="edit" Size="24" />
-      <MonochromeIcon Include="expander-light-down" Size="16" />
-      <MonochromeIcon Include="expander-light-left" Size="24;32" />
-      <MonochromeIcon Include="expander-light-right" Size="16;24;32" />
-      <MonochromeIcon Include="filter-light" Size="18" />
-      <MonochromeIcon Include="folder" Size="32" />
-      <MonochromeIcon Include="general-error" Size="24" />
-      <MonochromeIcon Include="info-outlined" Size="16" />
-      <MonochromeIcon Include="kebab-menu" Size="24" />
-      <MonochromeIcon Include="move-down" Size="24" />
-      <MonochromeIcon Include="move-up" Size="24" />
-      <MonochromeIcon Include="plus-slim" Size="24" />
-      <MonochromeIcon Include="reload" Size="16" />
-      <MonochromeIcon Include="search" Size="18" />
-    </ItemGroup>
-
-    <PropertyGroup>
-      <MonochromeIconSvgOutputFolder>$(MSBuildProjectDirectory)/wwwroot/icons/monochrome-icons</MonochromeIconSvgOutputFolder>
-      <MonochromeIconScssOutputFolder>$(MSBuildProjectDirectory)/Styles/icons/monochrome-icons</MonochromeIconScssOutputFolder>
-    </PropertyGroup>
-  </Target>
-
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
     <PropertyGroup>
       <ButtonScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/button</ButtonScssOutputFolder>
@@ -351,30 +319,6 @@
       <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
       <TypographyScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/typography</TypographyScssOutputFolder>
     </PropertyGroup>
-  </Target>
-
-  <UsingTask TaskName="InjectCssImports" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-    <ParameterGroup>
-      <FilePath ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
-        var css = File.ReadAllText(FilePath);
-
-        var cssWithInjectedImports = "@import './icons/bundle.css';" + Environment.NewLine + css;
-
-        File.WriteAllText(FilePath, cssWithInjectedImports);
-        ]]>
-      </Code>
-    </Task>
-  </UsingTask>
-
-  <Target Name="InjectImportsIntoCssBundle" AfterTargets="BundleScopedCssFiles">
-    <InjectCssImports FilePath="$(_ScopedCssProjectOutputPath)" />
   </Target>
 
   <ItemGroup>

@@ -1,0 +1,21 @@
+@use "../Styles/design/colors";
+
+li {
+    display: grid;
+    grid-template-areas:
+        "icon link";
+    grid-template-columns: 32px auto;
+    align-items: center;
+
+    ::deep svg {
+        grid-area: icon;
+
+        polygon {
+            fill: colors.$font;
+        }
+    }
+
+    a {
+        grid-area: link;
+    }
+}

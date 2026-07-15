@@ -29,11 +29,5 @@
         "TextBox",
         "Toolbar",
         "Tooltip"
-    ],
-    "Compilations": [
-        {
-            "Source": "Styles/icons/_bundle.scss",
-            "Target": "wwwroot/icons/bundle.css"
-        }
     ]
 }

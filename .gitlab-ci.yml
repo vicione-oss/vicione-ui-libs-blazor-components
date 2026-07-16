@@ -43,8 +43,8 @@
     allow_failure: true
 
 .install_npm_packages: &install_npm_packages
-  - npm install
-  
+  - npm ci
+
 .run_eslint: &run_eslint
   - npm run lint
 
@@ -78,17 +78,7 @@ Version:
 ### CI Components ###
 include:
   ### Restore
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.2.4
-    inputs:
-      image: ${IMAGE_NAME}
-      rules: *rules
-      before_script:
-        - *activate_mise
-        - *update_nuget_source_ro
-      tags:
-        - ${RUNNER_TAG}
-  ### Build
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@v2.6.0
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -96,11 +86,21 @@ include:
         - *activate_mise
         - *update_nuget_source_ro
         - *install_npm_packages
+      tags:
+        - ${RUNNER_TAG}
+  ### Build
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@v2.6.0
+    inputs:
+      image: ${IMAGE_NAME}
+      rules: *rules
+      before_script:
+        - *activate_mise
+        - *update_nuget_source_ro
         - 'echo "Version: ${Version:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
   ### Test
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@v2.6.0
     inputs:
       name: "dotnet Test"
       image: ${IMAGE_NAME}
@@ -108,13 +108,12 @@ include:
       before_script:
         - *activate_mise
         - *update_nuget_source_ro
-        - *install_npm_packages
       tags:
         - ${RUNNER_TAG}
       filter: '/[Category!=Playwright]'
       coverage: true
   ### Pack
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@v2.6.0
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules_manual
@@ -125,7 +124,7 @@ include:
       tags:
         - ${RUNNER_TAG}
   ### Push
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.2.4
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@v2.6.0
     inputs:
       stage: "push"
       image: ${IMAGE_NAME}

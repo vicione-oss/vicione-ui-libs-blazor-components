@@ -404,6 +404,82 @@ public class TabStripTests(ServerFixture fixture)
         });
     }
 
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_select_and_reveal_partially_visible_tab_when_clicked(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, scrollContainer, _, _) = await GetScrollingTabStripAsync(page);
+            await WaitForScrollToSettleAsync(scrollContainer);
+
+            var tabs = tabStrip.Locator(".tabs > .tab");
+            var tabCount = await tabs.CountAsync();
+            var overflowSize = await GetOverflowSizeAsync(scrollContainer);
+
+            // Pick a middle tab and scroll so exactly its left half is visible while its right half is clipped by the
+            // container's right edge. Driving the scroll position ourselves (instead of relying on where tab/margin
+            // boundaries happen to fall) makes the partially-visible geometry deterministic across tab sizes.
+            var clippedTabIndex = tabCount / 2;
+            var clippedTab = tabs.Nth(clippedTabIndex);
+
+            var offsetLeft = await clippedTab.EvaluateAsync<double>("element => element.offsetLeft");
+            var offsetWidth = await clippedTab.EvaluateAsync<double>("element => element.offsetWidth");
+            var clientWidth = await scrollContainer.EvaluateAsync<double>("element => element.clientWidth");
+
+            var targetScrollLeft = Math.Max(0, offsetLeft - clientWidth + (offsetWidth / 2));
+            await scrollContainer.EvaluateAsync("(element, scrollLeft) => element.scrollTo({ left: scrollLeft })", targetScrollLeft);
+            await WaitForScrollToSettleAsync(scrollContainer);
+
+            var containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            var containerRight = containerBox.X + containerBox.Width;
+            var tabBox = await clippedTab.BoundingBoxAsync();
+            Assert.NotNull(tabBox);
+
+            // Confirm the tab really straddles the right edge: part visible (clickable), part clipped. The gradient
+            // overlay is pointer-events:none, so a click in that region still lands on the tab beneath it.
+            Assert.True(tabBox.X < containerRight, "Expected part of the clipped tab to be visible so it can be clicked.");
+            Assert.True(tabBox.X + tabBox.Width > containerRight, "Expected part of the clipped tab to be clipped by the right edge.");
+
+            // Click the still-visible left portion using raw mouse coordinates. A normal locator click would let
+            // Playwright scroll the tab fully into view first, hiding the very race this test guards against: the
+            // pointerdown focuses the tab, and if the focusin handler scrolled it away the click would be cancelled.
+            var clickX = (float)((tabBox.X + Math.Min(tabBox.X + tabBox.Width, containerRight)) / 2);
+            var clickY = tabBox.Y + (tabBox.Height / 2);
+
+            var scrollLeftBeforeClick = await scrollContainer.EvaluateAsync<double>("element => element.scrollLeft");
+
+            await page.Mouse.MoveAsync(clickX, clickY);
+            await page.Mouse.ClickAsync(clickX, clickY);
+
+            // The click must select the tab (not merely scroll it).
+            await Expect(clippedTab).ToHaveClassAsync(s_activeScrollButtonClass);
+
+            // Selection then reveals the tab: it ends up fully visible, flush before the right overflow area.
+            await WaitForSelectionScrollAsync(scrollContainer, scrollLeftBeforeClick);
+
+            containerBox = await scrollContainer.BoundingBoxAsync();
+            Assert.NotNull(containerBox);
+
+            tabBox = await clippedTab.BoundingBoxAsync();
+            Assert.NotNull(tabBox);
+
+            var visibleRight = containerBox.X + containerBox.Width - overflowSize;
+            Assert.True(tabBox.X + tabBox.Width <= visibleRight + EdgeTolerance,
+                $"Expected the selected tab right edge to be at most {visibleRight}px (+/-{EdgeTolerance}px), but was {tabBox.X + tabBox.Width}px.");
+            Assert.True(tabBox.X >= containerBox.X - 1,
+                "Expected the selected tab to be fully visible within the scroll container.");
+        });
+    }
+
     private static async Task<(ILocator TabStrip, ILocator ScrollContainer, ILocator LeftButton, ILocator RightButton)>
         GetScrollingTabStripAsync(IPage page)
     {
@@ -419,8 +495,14 @@ public class TabStripTests(ServerFixture fixture)
 
     private static async Task SelectTabSizeAsync(IPage page, string tabSize)
     {
-        var sizeSelect = page.Locator(".combo-box select").First;
-        await sizeSelect.SelectOptionAsync(new SelectOptionValue { Label = tabSize });
+        var comboBox = page.Locator(".combo-box").First;
+
+        // The reworked ComboBox renders a text input plus a custom dropdown (no native <select>), so the tab size is
+        // chosen by opening the dropdown via the input and clicking the option whose text matches the requested size.
+        await comboBox.Locator("input.combo-box-input").ClickAsync();
+
+        var option = comboBox.Locator(".drop-down-item[role='option']").Filter(new() { HasTextString = tabSize });
+        await option.First.ClickAsync();
     }
 
     private static async Task ClickScrollButtonUntilDisabledAsync(ILocator scrollButton, ILocator scrollContainer)

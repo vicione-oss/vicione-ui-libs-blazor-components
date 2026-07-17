@@ -2,12 +2,14 @@ class TabStrip {
     readonly #dotNetObject: DotNet.DotNetObject;
     readonly #scrollContainer: HTMLElement;
     readonly #resizeObserver: ResizeObserver;
+    #pointerFocus = false;
 
     constructor(dotNetObject: DotNet.DotNetObject, scrollContainer: HTMLElement) {
         this.#dotNetObject = dotNetObject;
         this.#scrollContainer = scrollContainer;
 
         this.#scrollContainer.addEventListener('scroll', this.#onScrollOrResize, { passive: true });
+        this.#scrollContainer.addEventListener('pointerdown', this.#onPointerDown, true);
         this.#scrollContainer.addEventListener('focusin', this.#onFocusIn);
         this.#scrollContainer.addEventListener('keydown', this.#onKeyDown);
 
@@ -64,6 +66,7 @@ class TabStrip {
     public dispose() {
         this.#resizeObserver.disconnect();
         this.#scrollContainer.removeEventListener('scroll', this.#onScrollOrResize);
+        this.#scrollContainer.removeEventListener('pointerdown', this.#onPointerDown, true);
         this.#scrollContainer.removeEventListener('focusin', this.#onFocusIn);
         this.#scrollContainer.removeEventListener('keydown', this.#onKeyDown);
     }
@@ -114,9 +117,22 @@ class TabStrip {
         return Number.isFinite(parsed) ? parsed : 0;
     }
 
+    // Captured before focusin so the flag is set in time. A pointerdown on (or within) a tab will
+    // focus it; remember this so the following focusin does not scroll and cancel the click.
+    readonly #onPointerDown = (event: PointerEvent) => {
+        const { target } = event;
+        this.#pointerFocus = target instanceof HTMLElement && target.closest('.tab') !== null;
+    };
+
     readonly #onFocusIn = (event: FocusEvent) => {
+        const wasPointerFocus = this.#pointerFocus;
+        this.#pointerFocus = false;
+
         const { target } = event;
         if (!(target instanceof HTMLElement))
+            return;
+
+        if (wasPointerFocus)
             return;
 
         const focusedTab = target.closest<HTMLElement>('.tab');

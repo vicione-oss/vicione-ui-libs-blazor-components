@@ -2,6 +2,10 @@
 
 ## 5.19.0 - [Unreleased]
 
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `TabStrip`, fixed clicking a partially-visible tab so it is selected instead of only scrolled into view
+
 ## 5.18.0 - 2026-07-15
 
 ### Package `ViciOne.Ui.Blazor.Components`

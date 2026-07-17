@@ -377,6 +377,25 @@ public sealed class TabStripTests : IAsyncDisposable
         _jsAttachResult.VerifyInvoke("scrollToActiveTab");
     }
 
+    [Fact]
+    public void Tab_click_should_select_and_scroll_in_a_single_click()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+            .Add(p => p.ActiveTabIndex, 0)
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "A"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "B"))
+            .AddChildContent<Tab>(t => t.Add(p => p.Text, "C")));
+
+        // Act
+        renderedComponent.FindAll(".tab")[2].Click();
+
+        // Assert
+        renderedComponent.Instance.ActiveTabIndex.Should().Be(2);
+        renderedComponent.FindAll(".tab")[2].ClassList.Should().Contain("active");
+        _jsAttachResult.VerifyInvoke("scrollToActiveTab");
+    }
+
     [Theory]
     [InlineData("ArrowRight")]
     [InlineData("ArrowLeft")]

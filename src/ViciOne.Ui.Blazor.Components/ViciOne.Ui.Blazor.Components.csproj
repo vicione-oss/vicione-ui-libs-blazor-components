@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -105,8 +105,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <GeneratedStaticWebAsset Include="Scripts\ComputedBackgroundColor.js">
+      <DestinationFile>js\computed-background-color.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
       <DestinationFile>js\point.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\RgbColor.js">
+      <DestinationFile>js\rgb-color.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\RgbaColor.js">
+      <DestinationFile>js\rgba-color.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\CaptureTargetRect.js">
       <DestinationFile>pointer-capture\capture-target-rect.js</DestinationFile>
@@ -114,8 +123,17 @@
     <GeneratedStaticWebAsset Include="Scripts\NumberMixins.js">
       <DestinationFile>js\number-mixins.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\DomRectMixins.js">
+      <DestinationFile>js\dom-rect-mixins.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\StringMixins.js">
+      <DestinationFile>js\string-mixins.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\PointerEventMixins.js">
       <DestinationFile>js\pointer-event-mixins.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\HtmlElementMixins.js">
+      <DestinationFile>js\html-element-mixins.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Resizing\Services\ResizeObserver.cs.js">
       <DestinationFile>resizing\resize-observer.js</DestinationFile>

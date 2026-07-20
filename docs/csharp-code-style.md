@@ -1,4 +1,4 @@
-# C-Sharp Coding Style
+# C-Sharp Code Style
 
 This document contains rules and recommendations specific to this repository on how to write C-Sharp code.
 

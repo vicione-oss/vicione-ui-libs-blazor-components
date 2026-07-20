@@ -13,6 +13,9 @@ public class TabStripTests(ServerFixture fixture)
 {
     private const double EdgeTolerance = 8;
 
+    private const string BeforeFadeColorProperty = "--tabs-viewport-before-fade-color";
+    private const string AfterFadeColorProperty = "--tabs-viewport-after-fade-color";
+
     private static readonly Regex s_activeScrollButtonClass = new(@"(^|\s)active(\s|$)");
 
     [Theory]
@@ -480,6 +483,75 @@ public class TabStripTests(ServerFixture fixture)
         });
     }
 
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_apply_overflow_fade_colors_when_tab_strip_is_visible(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, _, _, _) = await GetScrollingTabStripAsync(page);
+            var tabsViewport = tabStrip.Locator(".tabs-viewport");
+
+            // While the strip is on-screen the IntersectionObserver resolves the left (::before) and right (::after)
+            // gradient fade colors and writes them as inline custom properties on the tabs viewport.
+            var beforeFadeColor = await WaitForFadeColorAsync(tabsViewport, BeforeFadeColorProperty);
+            var afterFadeColor = await WaitForFadeColorAsync(tabsViewport, AfterFadeColorProperty);
+
+            Assert.StartsWith("rgb", beforeFadeColor, StringComparison.Ordinal);
+            Assert.StartsWith("rgb", afterFadeColor, StringComparison.Ordinal);
+        });
+    }
+
+    [Theory]
+    [InlineData("Large")]
+    [InlineData("Small")]
+    public async Task Should_only_recompute_overflow_fade_colors_while_tab_strip_is_visible(string tabSize)
+    {
+        var browser = new Browser().WithOptions(new() { SlowMo = 200 });
+
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tab-strip");
+            await SelectTabSizeAsync(page, tabSize);
+
+            var (tabStrip, _, _, _) = await GetScrollingTabStripAsync(page);
+            var tabsViewport = tabStrip.Locator(".tabs-viewport");
+
+            // The fade colors are resolved once the strip becomes visible on load.
+            Assert.StartsWith("rgb", await WaitForFadeColorAsync(tabsViewport, BeforeFadeColorProperty), StringComparison.Ordinal);
+
+            // Move the strip completely out of the viewport, then clear the resolved colors so a later recompute
+            // (or the absence of one) becomes observable.
+            await ScrollTabStripOutOfViewAsync(page, tabsViewport);
+            Assert.False(await IsTabStripInViewportAsync(tabsViewport), "Expected the tab strip to be scrolled out of view.");
+            await ClearFadeColorsAsync(tabsViewport);
+
+            // Resizing normally recomputes the fade colors (ResizeObserver), but while the strip is off-screen the
+            // computation must be skipped so probe points are never resolved outside the viewport. Only the width is
+            // changed so the vertical scroll position - and thus the off-screen state - is preserved.
+            var viewport = page.ViewportSize;
+            Assert.NotNull(viewport);
+            await page.SetViewportSizeAsync(viewport.Width - 100, viewport.Height);
+            await Task.Delay(300);
+
+            Assert.False(await IsTabStripInViewportAsync(tabsViewport), "Expected the tab strip to remain out of view after resizing.");
+            Assert.Equal(string.Empty, await GetInlineFadeColorAsync(tabsViewport, BeforeFadeColorProperty));
+            Assert.Equal(string.Empty, await GetInlineFadeColorAsync(tabsViewport, AfterFadeColorProperty));
+
+            // Scrolling the strip back into view must recompute the fade colors again.
+            await ScrollTabStripIntoViewAsync(tabsViewport);
+
+            Assert.StartsWith("rgb", await WaitForFadeColorAsync(tabsViewport, BeforeFadeColorProperty), StringComparison.Ordinal);
+            Assert.StartsWith("rgb", await WaitForFadeColorAsync(tabsViewport, AfterFadeColorProperty), StringComparison.Ordinal);
+        });
+    }
+
     private static async Task<(ILocator TabStrip, ILocator ScrollContainer, ILocator LeftButton, ILocator RightButton)>
         GetScrollingTabStripAsync(IPage page)
     {
@@ -620,5 +692,65 @@ public class TabStripTests(ServerFixture fixture)
         return double.TryParse(numericValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var overflowSize)
             ? overflowSize
             : 0;
+    }
+
+    private static Task<string> GetInlineFadeColorAsync(ILocator viewport, string property) => viewport.EvaluateAsync<string>(
+        "(element, name) => element.style.getPropertyValue(name)", property);
+
+    private static async Task<string> WaitForFadeColorAsync(ILocator tabsViewport, string propertyName)
+    {
+        for (var attempt = 0; attempt < 40; attempt++)
+        {
+            var value = await GetInlineFadeColorAsync(tabsViewport, propertyName);
+
+            if (!string.IsNullOrWhiteSpace(value))
+                return value;
+
+            await Task.Delay(50);
+        }
+
+        return string.Empty;
+    }
+
+    private static async Task ClearFadeColorsAsync(ILocator viewport) => await viewport.EvaluateAsync(
+        @"element => {
+                element.style.removeProperty('--tabs-viewport-before-fade-color');
+                element.style.removeProperty('--tabs-viewport-after-fade-color');
+            }");
+
+    private static Task<bool> IsTabStripInViewportAsync(ILocator viewport) => viewport.EvaluateAsync<bool>(
+        "element => { const rect = element.getBoundingClientRect(); return rect.bottom > 0 && rect.top < window.innerHeight; }");
+
+    private static async Task ScrollTabStripOutOfViewAsync(IPage page, ILocator tabsViewport)
+    {
+        // The demo page can be shorter than the viewport, leaving nothing to scroll. Append a tall spacer so the
+        // document always has enough room to push the tab strip completely above the top of the viewport.
+        await page.EvaluateAsync(
+            @"() => {
+                let spacer = document.getElementById('tab-strip-test-spacer');
+                if (!spacer) {
+                    spacer = document.createElement('div');
+                    spacer.id = 'tab-strip-test-spacer';
+                    document.body.appendChild(spacer);
+                }
+                spacer.style.height = (window.innerHeight * 3) + 'px';
+            }");
+
+        for (var attempt = 0; attempt < 30; attempt++)
+        {
+            if (!await IsTabStripInViewportAsync(tabsViewport))
+                return;
+
+            await page.EvaluateAsync("() => window.scrollBy(0, window.innerHeight)");
+            await Task.Delay(50);
+        }
+    }
+
+    private static async Task ScrollTabStripIntoViewAsync(ILocator tabsViewport)
+    {
+        await tabsViewport.EvaluateAsync("element => element.scrollIntoView({ block: 'center' })");
+
+        for (var attempt = 0; attempt < 30 && !await IsTabStripInViewportAsync(tabsViewport); attempt++)
+            await Task.Delay(50);
     }
 }

@@ -1,4 +1,20 @@
 # AGENTS.md
 
 ## Code style
-- Refer to `docs/csharp-coding-style.md` for C# coding conventions
+- Refer to `docs/csharp-code-style.md` for C# coding conventions
+- Refer to `docs/scss-code-style.md` for SCSS coding conventions
+
+## Working on `.ts` files
+
+When working on `.ts` files living in a folder of a `.csproj`, you need to keep attention to the following files to get the orchestration of the folder / file structure for generated `.js` files right.
+
+Only touch these files when you **add, rename, remove, or re-target** a `.ts` file or an import specifier. A pure in-file logic change requires no updates here.
+
+File | What to do
+-|-
+`tsconfig.json` | Maintain `compilerOptions.paths` to reflect file structure and ensure correct module resolution.
+`.csproj` | Maintain MSBuild items named `GeneratedStaticWebAsset` to ensure generated `.js` files are included as static web assets in the Blazor project.
+
+After making changes to the `.ts` files, make sure the code style is consistent by running the following command from solution root:
+
+`npm run lint-with-fix`

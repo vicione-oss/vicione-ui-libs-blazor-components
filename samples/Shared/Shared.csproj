@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
@@ -9,6 +9,10 @@
     <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
     <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="StronglyTypedId" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="ViciOne.Ui.Design">
       <PrivateAssets>all</PrivateAssets>
@@ -25,7 +29,70 @@
     <Content Update="sasscompiler.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
+    <Content Update="tsconfig.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="False" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <GeneratedStaticWebAssetDestinationFolder>dist</GeneratedStaticWebAssetDestinationFolder>
+    <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedStaticWebAsset;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GeneratedStaticWebAsset Include="Pages\ComputedBackgroundColor\ComputedBackgroundColorPage.razor.js">
+      <DestinationFile>js\computed-background-color-page.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+  </ItemGroup>
+
+  <Target Name="IncludeGeneratedStaticWebAsset" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" BeforeTargets="ResolveJSModuleStaticWebAssets;ResolveJsInitializerModuleStaticWebAssets" DependsOnTargets="MoveGeneratedStaticWebAssets" Condition="'@(GeneratedStaticWebAsset)' != ''">
+    <!-- Skeleton adopted from https://github.com/dotnet/aspnetcore/blob/61e60dcf9436709a63e61da35417e2c4d30466ed/src/Components/CustomElements/src/Microsoft.AspNetCore.Components.CustomElements.csproj#L21 -->
+
+    <ItemGroup>
+      <_CandidateAsset Include="$(MSBuildProjectDirectory)\$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" />
+      <_CandidateAsset>
+        <RelativePath>%(GeneratedStaticWebAsset.DestinationFile)</RelativePath>
+      </_CandidateAsset>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <_CandidateAssetIdentity>%(_CandidateAsset.Identity)</_CandidateAssetIdentity>
+    </PropertyGroup>
+
+    <DefineStaticWebAssets SourceType="Computed" SourceId="$(PackageId)" ContentRoot="$(MSBuildProjectDirectory)\$(GeneratedStaticWebAssetDestinationFolder)\" BasePath="$(StaticWebAssetBasePath)" CandidateAssets="@(_CandidateAsset)">
+      <Output TaskParameter="Assets" ItemName="_DefinedGeneratedStaticWebAsset" />
+    </DefineStaticWebAssets>
+
+    <DefineStaticWebAssetEndpoints CandidateAssets="@(_DefinedGeneratedStaticWebAsset)" ExistingEndpoints="@()" ContentTypeMappings="@(StaticWebAssetContentTypeMapping)">
+      <Output TaskParameter="Endpoints" ItemName="_DefinedGeneratedStaticWebAssetEndpoint" />
+    </DefineStaticWebAssetEndpoints>
+
+    <ItemGroup>
+      <StaticWebAsset Include="@(_DefinedGeneratedStaticWebAsset)" Condition="!@(StaticWebAsset-&gt;AnyHaveMetadataValue('Identity', $(_CandidateAssetIdentity)))" />
+      <StaticWebAssetEndpoint Include="@(_DefinedGeneratedStaticWebAssetEndpoint)" Condition="!@(StaticWebAssetEndpoint-&gt;AnyHaveMetadataValue('Identity', $(_CandidateAssetIdentity)))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="MoveGeneratedStaticWebAssets" BeforeTargets="GetTypeScriptOutputForPublishing">
+    <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
+  </Target>
+
+  <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="GetTypeScriptOutputForPublishing">
+    <ItemGroup>
+      <Content Remove="%(GeneratedStaticWebAsset.FullPath)" Condition="!$([MSBuild]::IsOSPlatform('Windows'))" />
+      <Content Remove="%(GeneratedStaticWebAsset.Identity)" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CleanGeneratedStaticWebAssets" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" BeforeTargets="Clean">
+    <PropertyGroup>
+      <DestinationFile>$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)</DestinationFile>
+    </PropertyGroup>
+
+    <Delete Files="$(DestinationFile)" />
+
+    <ItemGroup>
+      <Content Remove="$(DestinationFile)" Condition="@(Content-&gt;AnyHaveMetadataValue('Identity', $(DestinationFile)))" />
+    </ItemGroup>
+  </Target>
 
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
     <PropertyGroup>

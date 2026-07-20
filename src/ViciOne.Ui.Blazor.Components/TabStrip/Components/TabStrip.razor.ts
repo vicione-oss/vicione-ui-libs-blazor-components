@@ -1,20 +1,42 @@
+import { ComputedBackgroundColor } from '/_content/ViciOne.Ui.Blazor.Components/js/computed-background-color.js';
+import '/_content/ViciOne.Ui.Blazor.Components/js/html-element-mixins.js';
+import '/_content/ViciOne.Ui.Blazor.Components/js/string-mixins.js';
+
 class TabStrip {
     readonly #dotNetObject: DotNet.DotNetObject;
     readonly #scrollContainer: HTMLElement;
+    readonly #tabsViewport: HTMLElement | undefined;
     readonly #resizeObserver: ResizeObserver;
+    readonly #intersectionObserver: IntersectionObserver;
+    readonly #computedBackgroundColor = new ComputedBackgroundColor();
     #pointerFocus = false;
 
     constructor(dotNetObject: DotNet.DotNetObject, scrollContainer: HTMLElement) {
         this.#dotNetObject = dotNetObject;
         this.#scrollContainer = scrollContainer;
+        this.#tabsViewport = this.#scrollContainer.parentElement ?? undefined;
 
-        this.#scrollContainer.addEventListener('scroll', this.#onScrollOrResize, { passive: true });
+        this.#scrollContainer.addEventListener('scroll', this.#onScroll, { passive: true });
         this.#scrollContainer.addEventListener('pointerdown', this.#onPointerDown, true);
         this.#scrollContainer.addEventListener('focusin', this.#onFocusIn);
         this.#scrollContainer.addEventListener('keydown', this.#onKeyDown);
 
-        this.#resizeObserver = new ResizeObserver(this.#onScrollOrResize);
+        this.#resizeObserver = new ResizeObserver(this.#onResize);
         this.#resizeObserver.observe(this.#scrollContainer);
+
+        // ComputedBackgroundColor probes the page with document.elementsFromPoint, which only
+        // returns results while the probe point is inside the viewport. The fade of each overflow
+        // gradient is painted by the ::before (left) and ::after (right) pseudo-elements, so each
+        // one's color is resolved only while that pseudo-element itself is on-screen (see
+        // #applyOverflowBackground). This observer just triggers a recompute as the tab strip
+        // scrolls through the viewport; the graduated thresholds re-run it as more of the pseudo-
+        // elements become visible, so probe points that were off-screen resolve once on-screen.
+        this.#intersectionObserver = new IntersectionObserver(
+            this.#onIntersectionChange,
+            { threshold: [0, 0.25, 0.5, 0.75, 1] }
+        );
+        if (this.#tabsViewport)
+            this.#intersectionObserver.observe(this.#tabsViewport);
 
         this.#notifyScrollState();
     }
@@ -65,7 +87,8 @@ class TabStrip {
 
     public dispose() {
         this.#resizeObserver.disconnect();
-        this.#scrollContainer.removeEventListener('scroll', this.#onScrollOrResize);
+        this.#intersectionObserver.disconnect();
+        this.#scrollContainer.removeEventListener('scroll', this.#onScroll);
         this.#scrollContainer.removeEventListener('pointerdown', this.#onPointerDown, true);
         this.#scrollContainer.removeEventListener('focusin', this.#onFocusIn);
         this.#scrollContainer.removeEventListener('keydown', this.#onKeyDown);
@@ -169,9 +192,45 @@ class TabStrip {
         tabs[nextIndex].focus({ preventScroll: true });
     };
 
-    readonly #onScrollOrResize = () => {
+    readonly #onScroll = () => {
         this.#notifyScrollState();
     };
+
+    // On resize both the scroll state and the gradient overlay backgrounds can change, so the
+    // overflow backgrounds are refreshed here instead of each owning its own ResizeObserver. Each
+    // ::before/::after fade color is only recomputed while its pseudo-element is on-screen (see
+    // #applyOverflowBackground), so off-screen sides are skipped and probe points stay in-viewport.
+    readonly #onResize = () => {
+        this.#applyOverflowBackgrounds();
+        this.#notifyScrollState();
+    };
+
+    // Recompute the fade colors whenever the tab strip's visibility changes, so each ::before/::after
+    // pseudo-element resolves its color as soon as it is on-screen. The graduated thresholds re-run
+    // the computation as more of the pseudo-elements scroll into view, letting probe points that were
+    // off-screen resolve once they become visible.
+    readonly #onIntersectionChange = () => {
+        this.#applyOverflowBackgrounds();
+    };
+
+    #applyOverflowBackgrounds() {
+        this.#applyOverflowBackground('::before', '--tabs-viewport-before-fade-color');
+        this.#applyOverflowBackground('::after', '--tabs-viewport-after-fade-color');
+    }
+
+    // Resolves and applies the fade color for a single overflow gradient pseudo-element. The color is
+    // probed at the pseudo-element's own position; ComputedBackgroundColor clips that region to the
+    // viewport, so an off-screen pseudo-element simply resolves no color and is left unchanged.
+    #applyOverflowBackground(pseudoElement: '::before' | '::after', customProperty: string) {
+        const tabsViewport = this.#tabsViewport;
+        if (!tabsViewport)
+            return;
+
+        const pseudoElementBounds = tabsViewport.getPseudoElementBoundingClientRect(pseudoElement);
+        const backgroundColor = this.#computedBackgroundColor.resolve(tabsViewport, pseudoElementBounds);
+        if (backgroundColor)
+            tabsViewport.style.setProperty(customProperty, backgroundColor);
+    }
 
     #notifyScrollState() {
         const { scrollLeft, scrollWidth, clientWidth } = this.#scrollContainer;

@@ -15,8 +15,8 @@
     <File Path="adr/0001-use-semaphore-with-reentrant-async-lock.md" />
   </Folder>
   <Folder Name="/docs/">
-    <File Path="docs/csharp-coding-style.md" />
-    <File Path="docs/css-guide.md" />
+    <File Path="docs/csharp-code-style.md" />
+    <File Path="docs/scss-code-style.md" />
   </Folder>
   <Folder Name="/samples/">
     <File Path="samples/.editorconfig" />

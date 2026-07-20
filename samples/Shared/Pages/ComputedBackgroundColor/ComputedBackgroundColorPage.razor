@@ -1,0 +1,125 @@
+@page "/computed-background-color"
+
+<p>
+    Each stage below feeds its inner element to <code>ComputedBackgroundColor.resolve(...)</code>.
+    The resolved color drives the left-edge overflow gradient.
+</p>
+
+<section class="demo">
+    <h3>1 Layer</h3>
+    <p>A single translucent layer blended onto the page background.</p>
+
+    <div class="layer layer-1">
+                    <div @ref="_innerElements[0]" class="inner-layer">
+                    Testing
+                </div>
+            </div>
+        </section>
+
+<section class="demo">
+    <h3>2 Layers</h3>
+    <p>Two translucent layers stacked, blended top-to-bottom onto the page background.</p>
+
+    <div class="layer layer-1">
+        <div class="layer layer-2">
+            <div @ref="_innerElements[1]" class="inner-layer">
+                Testing
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="demo">
+    <h3>3 Layers</h3>
+    <p>Three translucent layers stacked, blended top-to-bottom onto the page background.</p>
+
+    <div class="layer layer-1">
+        <div class="layer layer-2">
+            <div class="layer layer-3">
+                <div @ref="_innerElements[2]" class="inner-layer">
+                    Testing
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="demo">
+    <h3>Opaque layer in the middle</h3>
+    <p>
+        An opaque layer hides everything behind it. The outer translucent red layer must be ignored;
+        only the blue layer above the opaque green one contributes to the result.
+    </p>
+
+    <div class="layer layer-1">
+        <div class="layer layer-opaque">
+            <div @ref="_innerElements[3]" class="inner-layer">
+                Testing
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="demo">
+    <h3>Fully transparent layer</h3>
+    <p>
+        A <code>transparent</code> layer paints nothing and must be skipped, so the result equals the
+        single translucent red layer below it.
+    </p>
+
+    <div class="layer layer-1">
+        <div class="layer layer-clear">
+            <div @ref="_innerElements[4]" class="inner-layer">
+                Testing
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="demo">
+    <h3>Opacity multiplied with alpha</h3>
+    <p>
+        The layer uses <code>background-color: rgba(255, 0, 0, 0.5)</code> together with
+        <code>opacity: 0.5</code>, so its effective alpha is <code>0.25</code>.
+    </p>
+
+    <div class="layer layer-opacity">
+        <div @ref="_innerElements[5]" class="inner-layer">
+            Testing
+        </div>
+    </div>
+</section>
+
+<section class="demo">
+    <h3>Non-uniform background</h3>
+    <p>
+        A translucent blue layer covers the whole area while a translucent red layer covers only the
+        left half. The inner element is 50% wide and left-aligned, so every probe point lands on the
+        red-over-blue overlap and resolves to a single blended color.
+    </p>
+
+    <div class="split split-start">
+        <div class="split-full split-blue"></div>
+        <div class="split-left-half split-red"></div>
+        <div @ref="_innerElements[6]" class="inner-layer split-inner split-inner-half">
+            Testing
+        </div>
+    </div>
+</section>
+
+<section class="demo">
+    <h3>Split background with a half-width probe</h3>
+    <p>
+        The area is split into a translucent red left half and a translucent blue right half. The inner
+        element is 50% wide and left-aligned, so it only overlaps the red half and the overflow gradient
+        turns red.
+    </p>
+
+    <div class="split split-start">
+        <div class="split-half split-left"></div>
+        <div class="split-half split-right"></div>
+        <div @ref="_innerElements[7]" class="inner-layer split-inner split-inner-half">
+            Testing
+        </div>
+    </div>
+</section>

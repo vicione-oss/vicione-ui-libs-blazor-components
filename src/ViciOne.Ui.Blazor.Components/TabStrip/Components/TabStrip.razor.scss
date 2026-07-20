@@ -18,7 +18,6 @@
     --tab-strip-margin-right: 32px;
     --tab-strip-text-padding-bottom: #{$tab-text-padding-bottom};
     --tab-strip-text-line-height: #{$tab-height - $tab-text-padding-bottom - $tab-line-thickness};
-    --tab-strip-overflow-background: #{colors.$background-dark};
     --tab-strip-overflow-size: 24px;
 
     &.small {
@@ -51,6 +50,9 @@
 
     &.with-scrolling {
         .tabs-viewport {
+            --before-fade-color: var(--tabs-viewport-before-fade-color, #{colors.$background-dark});
+            --after-fade-color: var(--tabs-viewport-after-fade-color, #{colors.$background-dark});
+
             &::before,
             &::after {
                 animation-timeline: --tab-strip-scroll;
@@ -60,14 +62,14 @@
 
             &::before {
                 left: 0;
-                background: linear-gradient(90deg, var(--tab-strip-overflow-background) 0, transparent 100%);
+                background: linear-gradient(90deg, var(--before-fade-color) 0, transparent 100%);
                 animation-name: tab-strip-fade-in-on-scroll;
                 animation-range: 0 8px;
             }
 
             &::after {
                 right: 0;
-                background: linear-gradient(-90deg, var(--tab-strip-overflow-background) 0, transparent 100%);
+                background: linear-gradient(-90deg, var(--after-fade-color) 0, transparent 100%);
                 animation-name: tab-strip-fade-out-on-scroll;
                 animation-range: calc(100% - 12px) calc(100% - 4px);
             }

@@ -4,3 +4,6 @@ wwwroot/css/site.css
 
 # Files unpacked by target 'CopyDesignAssets'
 Styles/design
+
+# Files generated as a result of GeneratedStaticWebAsset handling
+dist/**/*.js

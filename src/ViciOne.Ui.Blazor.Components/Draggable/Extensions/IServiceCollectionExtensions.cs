@@ -14,6 +14,7 @@ public static class IServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddDraggable(this IServiceCollection services)
     {
+        services.TryAddScoped<ITableRowDragGhost, TableRowDragGhost>();
         services.TryAddScoped<IDragInteraction, DragInteraction>();
 
         return services;

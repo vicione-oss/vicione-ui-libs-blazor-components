@@ -49,7 +49,9 @@ for class in data.Classes | Symbols.ThatHaveAttribute "GenerateTypeScriptClass" 
 
 export class {{ class.Name }} {
     {{~
+
     lineBreakAfterLastConstructorParameter = false
+    previousWasNullable = false
 
     properties = class.Properties | Symbols.ThatArePublic
 
@@ -59,19 +61,18 @@ export class {{ class.Name }} {
     constructor({{ for property in properties }}{{ if !for.first && !property.Type.IsNullable }}
         {{ end -}}
         {{- if property.Type.IsNullable }}
-        {{~ if !for.first ~}}
+            {{~ if for.first ~}}
+                {{~ lineBreakAfterLastConstructorParameter = true ~}}
+            {{~ else if !previousWasNullable ~}}
 
-        {{~
-            else
-                lineBreakAfterLastConstructorParameter = true
-            end
-        ~}}
+            {{~ end ~}}
         // eslint-disable-next-line @typescript-eslint/no-restricted-types
         {{ end -}}
         readonly {{ property.Name | String.ToCamelCase }}: {{ getPropertyType property }}{{ if !for.last }},{{ end ~}}
         {{~ if property.Type.IsNullable && !for.last ~}}
 
         {{~ end ~}}
+        {{~ previousWasNullable = property.Type.IsNullable ~}}
 {{ end
     if lineBreakAfterLastConstructorParameter }}
     {{ end }}) {}

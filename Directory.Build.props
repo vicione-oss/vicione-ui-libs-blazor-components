@@ -110,4 +110,9 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
+    <!-- Show .adr folders with files in it in each project by default -->
+    <ItemGroup>
+      <None Include="**\.adr\**" />
+    </ItemGroup>
+
 </Project>

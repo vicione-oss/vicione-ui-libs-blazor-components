@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
+using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Services;
 using ViciOne.Ui.Blazor.Components.Enums;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services;
@@ -12,15 +13,18 @@ public sealed partial class Shape : ComponentBase, IDraggable, IHasLabel, IAsync
     private ElementReference _elementReference;
     private bool _disposedAsync;
     private ModifierKey? _modifierKey;
+    private IDragGhost? _dragGhost;
     private bool _snapToGrid;
     private bool _snapToGridChanged;
     private bool _modifierKeyChanged;
+    private bool _dragGhostChanged;
     private Task? _dragInteractionAttachTask;
 
     [Parameter, EditorRequired] public string Label { get; set; } = default!;
     [Parameter] public bool Draggable { get; set; }
     [Parameter] public ModifierKey? ModifierKey { get; set; }
     [Parameter] public bool SnapToGrid { get; set; }
+    [Parameter] public IDragGhost? DragGhost { get; set; }
 
     [Inject] private IDragInteraction DragInteraction { get; set; } = default!;
     [Inject] private ISnapToGridPointerCaptureBehavior SnapToGridPointerCaptureBehavior { get; set; } = default!;
@@ -44,23 +48,32 @@ public sealed partial class Shape : ComponentBase, IDraggable, IHasLabel, IAsync
 
             _modifierKeyChanged = _dragInteractionAttachTask is not null;
         }
+
+        if (DragGhost != _dragGhost)
+        {
+            _dragGhost = DragGhost;
+
+            _dragGhostChanged = _dragInteractionAttachTask is not null;
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (Draggable)
         {
-            if (Interlocked.CompareExchange(ref _modifierKeyChanged, false, true))
+            var modifierKeyChanged = Interlocked.CompareExchange(ref _modifierKeyChanged, false, true);
+            var dragGhostChanged = Interlocked.CompareExchange(ref _dragGhostChanged, false, true);
+
+            if ((modifierKeyChanged || dragGhostChanged) && _dragInteractionAttachTask is not null)
             {
-                if (_dragInteractionAttachTask is not null)
-                    await RemoveDragInteractionAsync();
+                await RemoveDragInteractionAsync();
             }
 
             if (_dragInteractionAttachTask is null)
             {
                 IPointerCaptureBehavior[]? pointerCaptureBehaviors = _snapToGrid ? [SnapToGridPointerCaptureBehavior] : null;
 
-                _dragInteractionAttachTask = DragInteraction.AttachAsync(this, ModifierKey, pointerCaptureBehaviors);
+                _dragInteractionAttachTask = DragInteraction.AttachAsync(this, ModifierKey, pointerCaptureBehaviors, DragGhost);
 
                 await _dragInteractionAttachTask;
             }

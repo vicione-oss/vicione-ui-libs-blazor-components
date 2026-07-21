@@ -1,3 +1,4 @@
+using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
 using ViciOne.Ui.Blazor.Components.Enums;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
@@ -21,7 +22,7 @@ public interface IDragInteraction
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see>  attribute
     /// of the draggable when the drag interaction has transitioned from the started to the ongoing state.
-    /// The transition happens when the first mouse move event is received.
+    /// The transition happens when the first pointer move event is received.
     /// </summary>
     /// <remarks>
     /// The text will be removed from the attribute again, when the drag interaction is finished.
@@ -31,7 +32,7 @@ public interface IDragInteraction
     /// <summary>
     /// Gets the text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
     /// of the draggable when the drag interaction has transitioned from ongoing to the ended state.
-    /// That is normally the case when the mouse button was released <b>and</b> the mouse was moved.
+    /// That is normally the case when the pointer was released <b>and</b> the pointer was moved.
     /// </summary>
     string EndedCssClass { get; }
 
@@ -49,12 +50,17 @@ public interface IDragInteraction
     ///     only when that key is held.
     /// </para>
     /// <para>
-    ///     Optional <paramref name="pointerCaptureBehaviors"/> are applied to the drag clone
+    ///     Optional <paramref name="pointerCaptureBehaviors"/> are applied to the drag ghost
     ///     while dragging — for example to snap movement to a grid.
+    /// </para>
+    /// <para>
+    ///     An optional <paramref name="dragGhost"/> that provides the visual drag ghost element shown while
+    ///     dragging. When omitted (<see langword="null"/>), the default drag ghost element is used.
     /// </para>
     /// </summary>
     Task AttachAsync(IDraggable draggable, ModifierKey? modifierKey = null,
-        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null);
+        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null,
+        IDragGhost? dragGhost = null);
 
     /// <summary>
     /// Removes the interaction from the given <paramref name="draggable"/>.
@@ -65,7 +71,7 @@ public interface IDragInteraction
     /// Adds the specified <paramref name="pointerCaptureBehavior"/> to the specified <paramref name="draggable"/>.
     /// </summary>
     /// <remarks>
-    /// The drag interaction must already be <see cref="AttachAsync(IDraggable, ModifierKey?, IEnumerable{IPointerCaptureBehavior}?)">attached</see>
+    /// The drag interaction must already be <see cref="AttachAsync(IDraggable, ModifierKey?, IEnumerable{IPointerCaptureBehavior}?, IDragGhost?)">attached</see>
     /// when calling this method, otherwise the method does nothing.
     /// </remarks>
     Task AddPointerCaptureBehaviorAsync(IDraggable draggable, IPointerCaptureBehavior pointerCaptureBehavior);
@@ -74,7 +80,7 @@ public interface IDragInteraction
     /// Removes the specified <paramref name="pointerCaptureBehavior"/> from the specified <paramref name="draggable"/>.
     /// </summary>
     /// <remarks>
-    /// The drag interaction must already be <see cref="AttachAsync(IDraggable, ModifierKey?, IEnumerable{IPointerCaptureBehavior}?)">attached</see>
+    /// The drag interaction must already be <see cref="AttachAsync(IDraggable, ModifierKey?, IEnumerable{IPointerCaptureBehavior}?, IDragGhost?)">attached</see>
     /// when calling this method, otherwise the method does nothing.
     /// </remarks>
     Task RemovePointerCaptureBehaviorAsync(IDraggable draggable, IPointerCaptureBehavior pointerCaptureBehavior);

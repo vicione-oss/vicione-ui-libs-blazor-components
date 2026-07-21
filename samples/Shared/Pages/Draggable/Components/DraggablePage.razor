@@ -1,10 +1,16 @@
 @page "/draggable"
 
 @using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.Draggable.Components
+@using ViciOne.Ui.Blazor.Components.Draggable.Services
 @using ViciOne.Ui.Blazor.Components.SpinEdit
 @using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
 
 @implements IDisposable
+
+<TimeTickerDragGhost @ref="TimeTickerDragGhostRef" />
 
 <div class="options">
     <div class="option">
@@ -30,8 +36,25 @@
 
 <div class="content">
     <div class="draggables">
-        <Shape Label="Shape A" Draggable="@_draggable" ModifierKey="@_modifierKey" SnapToGrid="@_snapToGrid" />
-        <Shape Label="Shape B" Draggable="@_draggable" ModifierKey="@_modifierKey" SnapToGrid="@_snapToGrid" />
+        <p>Shape with default drag clone:</p>
+        <Shape Label="Shape A" Draggable="@_draggable" ModifierKey="@_modifierKey" SnapToGrid="@_snapToGrid"/>
+
+        <p>Shape with time ticker drag ghost:</p>
+        <Shape Label="Shape B" Draggable="@_draggable" ModifierKey="@_modifierKey" SnapToGrid="@_snapToGrid" DragGhost="TimeTickerDragGhostRef"/>
+
+        <p>Table where first row has default ghost and second row has the custom drag ghost fixing the width collapse: </p>
+        <table class="demo-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <DraggableRow Name="Alice Anderson" Status="Active" Draggable="@_draggable"/>
+                <DraggableRow Name="Bob Brown" Status="Away" Draggable="@_draggable" DragGhost="TableRowDragGhost" />
+            </tbody>
+        </table>
     </div>
     <div class="dropzones">
         <Dropzone Label="Dropzone 1" GridSize="@_gridSize" />

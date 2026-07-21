@@ -1,0 +1,18 @@
+@use "../../../Styles/design/colors";
+
+.draggable-row {
+    &.draggable {
+        cursor: grab;
+    }
+
+    &.dragging {
+        background-color: colors.$accent;
+    }
+
+    td {
+        border: 1px solid colors.$theme-inverted;
+        padding: 6px 12px;
+        text-align: left;
+        white-space: nowrap;
+    }
+}

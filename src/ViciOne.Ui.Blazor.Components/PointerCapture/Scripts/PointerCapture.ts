@@ -1,5 +1,5 @@
 import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
+import { MutablePointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/mutable-pointer-capture-behavior-context.js';
 import { PointerCaptureBehaviorPipeline } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-pipeline.js';
 import { CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
 import { CaptureTargetRect } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target-rect.js';
@@ -15,6 +15,7 @@ export class PointerCapture {
 
     #userSelectBefore?: string;
     #behaviorPipeline?: PointerCaptureBehaviorPipeline;
+    #behaviorContext?: MutablePointerCaptureBehaviorContext;
 
     public start(pointerEvent: PointerEvent, captureTargetElement: HTMLElement, boundingClientRect: DOMRect) {
         let pointerMoved = false;
@@ -61,6 +62,11 @@ export class PointerCapture {
 
         const captureTarget = new CaptureTarget(captureTargetElement, captureTargetRect);
 
+        // Remember the behavior context so the pipeline can be re-run against the last pointer distance
+        // (e.g. a mid-gesture re-anchor) without a new pointer event. Seeded with a zero distance so a
+        // re-apply that lands before the first pointermove positions from the initial capture origin.
+        this.#behaviorContext = new MutablePointerCaptureBehaviorContext(captureTarget, 0, 0);
+
         const pointerMoveEventListener = (e: PointerEvent) => {
             pointerMoved = true;
 
@@ -70,16 +76,12 @@ export class PointerCapture {
             if (this.ongoingCssClass)
                 captureTargetElement.classList.add(this.ongoingCssClass);
 
-            const distanceX = e.clientX - pointerDownClientX;
-            const distanceY = e.clientY - pointerDownClientY;
-
-            if (this.#behaviorPipeline) {
-                const behaviorContext = new PointerCaptureBehaviorContext(captureTarget, distanceX, distanceY);
-
-                this.#behaviorPipeline.start(behaviorContext);
+            if (this.#behaviorContext) {
+                this.#behaviorContext.distanceX = e.clientX - pointerDownClientX;
+                this.#behaviorContext.distanceY = e.clientY - pointerDownClientY;
             }
 
-            captureTarget.saveRect();
+            this.applyBehaviors();
 
             if (this.onPointerMove)
                 this.onPointerMove(captureTarget);
@@ -111,5 +113,18 @@ export class PointerCapture {
         captureTargetElement.setPointerCapture(pointerEvent.pointerId);
         captureTargetElement.addEventListener('pointermove', pointerMoveEventListener);
         captureTargetElement.addEventListener('pointerup', pointerUpEventListener);
+    }
+
+    // Runs the behavior pipeline against the current behavior context.
+    //
+    // Also callable by a consumer to apply state it has recorded on a behavior (e.g. a mid-gesture re-anchor) immediately,
+    // through the same pipeline a pointermove uses, instead of waiting for the next move or positioning the element directly.
+    public applyBehaviors() {
+        if (!this.#behaviorPipeline || !this.#behaviorContext)
+            return;
+
+        this.#behaviorPipeline.start(this.#behaviorContext);
+
+        this.#behaviorContext.captureTarget.saveRect();
     }
 }

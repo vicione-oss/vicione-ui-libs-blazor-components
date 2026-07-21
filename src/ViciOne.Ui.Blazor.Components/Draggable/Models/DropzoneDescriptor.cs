@@ -4,7 +4,7 @@ using ViciOne.Ui.Blazor.Components.Attributes;
 namespace ViciOne.Ui.Blazor.Components.Draggable.Models;
 
 /// <summary>
-/// Descriptor passed to JS to identify a dropzone by element reference.
+/// Descriptor passed to JavaScript to identify a dropzone by element reference.
 /// </summary>
 [GenerateTypeScriptClass]
 public sealed class DropzoneDescriptor

@@ -10,6 +10,8 @@ namespace ViciOne.Ui.Blazor.Components.Draggable.Models;
     ModulePath = "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js")]
 [GenerateTypeScriptImport(Type = "ModifierKey",
     ModulePath = "/_content/ViciOne.Ui.Blazor.Components/enums/modifier-key.js")]
+[GenerateTypeScriptImport(Type = "DragGhostJsModuleDescriptor",
+    ModulePath = "/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-js-module-descriptor.js")]
 [GenerateTypeScriptClass]
 internal sealed class DragInteractionContext
 {
@@ -23,4 +25,7 @@ internal sealed class DragInteractionContext
 
     [TypeScriptPropertyInfo(Type = "PointerCaptureBehavior[]")]
     public IJSObjectReference[]? PointerCaptureBehaviors { get; set; }
+
+    [TypeScriptPropertyInfo(Type = "DragGhostJsModuleDescriptor")]
+    public DragGhostJsModuleDescriptor? DragGhostJsModule { get; set; }
 }

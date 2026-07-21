@@ -1,0 +1,11 @@
+@{
+    var cssClasses = new List<string> { "draggable-row" };
+
+    if (Draggable)
+        cssClasses.Add("draggable");
+}
+
+<tr class="@string.Join(" ", cssClasses)" @ref="_elementReference">
+    <td>@Name</td>
+    <td>@Status</td>
+</tr>

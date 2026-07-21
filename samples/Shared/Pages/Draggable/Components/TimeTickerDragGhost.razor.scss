@@ -1,0 +1,27 @@
+@use "../../../Styles/design/colors";
+
+.ticker-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    &.large {
+        font-size: 2rem;
+    }
+
+    &.outside-dropzone {
+        ::deep .icon {
+            color: colors.$error;
+        }
+    }
+
+    &.over-dropzone {
+        ::deep .icon {
+            color: colors.$accent;
+        }
+    }
+}
+
+.ticker-time {
+    font-variant-numeric: tabular-nums;
+}

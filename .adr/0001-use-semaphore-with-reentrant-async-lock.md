@@ -1,5 +1,9 @@
 # Use SemaphoreSlim with Reentrant AsyncLocal-Based Lock
 
+## Status
+
+Accepted
+
 ## Initial Question
 
 In `DragInteraction.cs` we are using a semaphore in all async methods to avoid concurrent issues.

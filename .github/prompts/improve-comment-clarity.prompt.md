@@ -1,0 +1,7 @@
+- Apply the `improve-comment-clarity` skill at `.claude/skills/improve-comment-clarity/SKILL.md`; read that file first and follow its principles and workflow.
+- Scope: `${input:scope:Files, folder, or changeset to review (leave empty for the current file)}`. When the scope is empty, review the currently open file.
+- Enumerate the in-scope source files, excluding generated files (`*.cs.js`, `*.cs.ts`) and — unless explicitly asked — samples and tests.
+- Rework only comments and documentation. DO NOT change behavior.
+- Edit only where clarity is genuinely lacking; leave already-clear comments untouched.
+- Report anything odd instead of silently skipping it (empty/stray files, genuine `todo` markers); do not remove a `todo` unless explicitly told to.
+- Build to validate that the comment/documentation-only edits did not break anything.

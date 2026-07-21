@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
+using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Models;
 using ViciOne.Ui.Blazor.Components.Enums;
 using ViciOne.Ui.Blazor.Components.Extensions;
@@ -32,7 +33,8 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
     public event EventHandler<DragStartEventArgs>? DragStart;
 
     public Task AttachAsync(IDraggable draggable, ModifierKey? modifierKey = null,
-        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null)
+        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null,
+        IDragGhost? dragGhost = null)
         => ExecuteGuardedAsync(async () =>
         {
             if (_jsAttachResults.ContainsKey(draggable))
@@ -55,7 +57,8 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
                 OngoingCssClass = OngoingCssClass,
                 EndedCssClass = EndedCssClass,
                 ModifierKey = modifierKey,
-                DotNetObject = _dotNetObjectReference
+                DotNetObject = _dotNetObjectReference,
+                DragGhostJsModule = dragGhost?.GetJsModule()
             };
 
             if (pointerCaptureBehaviors is not null)
@@ -170,7 +173,7 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
             var args = new DragStartEventArgs { Draggable = draggable };
             dragStartEvent.Invoke(this, args);
 
-            // Reverse so last-rendered dropzones come first, reflecting visual z-order for bounds checking on the JS side.
+            // Reverse so last-rendered dropzones come first, reflecting visual z-order for bounds checking on the JavaScript side.
             var dropzones = args.Dropzones.Distinct().Reverse();
             var descriptors = new List<DropzoneDescriptor>();
 

@@ -1,9 +1,16 @@
 <Solution>
+  <Folder Name="/.adr/">
+    <File Path=".adr/0001-use-semaphore-with-reentrant-async-lock.md" />
+  </Folder>
+  <Folder Name="/.claude/skills/improve-comment-clarity/">
+    <File Path=".claude/skills/improve-comment-clarity/SKILL.md" />
+  </Folder>
   <Folder Name="/.github/">
     <File Path=".github/copilot-instructions.md" />
   </Folder>
   <Folder Name="/.github/prompts/">
     <File Path=".github/prompts/add-playwright-test.prompt.md" />
+    <File Path=".github/prompts/improve-comment-clarity.prompt.md" />
   </Folder>
   <Folder Name="/.playwright-mcp/">
     <File Path=".playwright-mcp/.gitignore" />
@@ -11,11 +18,10 @@
   <Folder Name="/.vscode/">
     <File Path=".vscode/mcp.json" />
   </Folder>
-  <Folder Name="/adr/">
-    <File Path="adr/0001-use-semaphore-with-reentrant-async-lock.md" />
-  </Folder>
   <Folder Name="/docs/">
-    <File Path="docs/csharp-code-style.md" />
+    <File Path="docs/csharp-coding-style.md" />
+    <File Path="docs/css-guide.md" />
+    <File Path="docs/documentation-style.md" />
     <File Path="docs/scss-code-style.md" />
   </Folder>
   <Folder Name="/samples/">

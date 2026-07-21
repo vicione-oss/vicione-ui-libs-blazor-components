@@ -13,17 +13,17 @@ public interface IDropzone
     ElementReference GetElementReference();
 
     /// <summary>
-    /// Called when a drag enters the drop zone.
+    /// Called when a drag enters the dropzone.
     /// </summary>
     Task DragEnterAsync(IDraggable draggable);
 
     /// <summary>
-    /// Called when a drag leaves the drop zone.
+    /// Called when a drag leaves the dropzone.
     /// </summary>
     Task DragLeaveAsync();
 
     /// <summary>
-    /// Called when a drag ends (such as releasing a mouse button).
+    /// Called when a drag ends (such as releasing the pointer).
     /// This method is called before <see cref="DragDroppedAsync(IDraggable, double, double)"/>.
     /// </summary>
     /// <param name="draggable">Component that was dragged</param>
@@ -32,10 +32,10 @@ public interface IDropzone
     Task DragEndAsync(IDraggable draggable, double x, double y);
 
     /// <summary>
-    /// Called when a <paramref name="draggable"/> was dropped on this drop zone.
+    /// Called when a <paramref name="draggable"/> was dropped on this dropzone.
     /// </summary>
     /// <param name="draggable">Component that has been dropped</param>
-    /// <param name="x">Horizontal coordinate relative to the bounding client rectangle of this drop zone</param>
-    /// <param name="y">Vertical coordinate relative to the bounding client rectangle of this drop zone</param>
+    /// <param name="x">Horizontal coordinate relative to the bounding client rectangle of this dropzone</param>
+    /// <param name="y">Vertical coordinate relative to the bounding client rectangle of this dropzone</param>
     Task DragDroppedAsync(IDraggable draggable, double x, double y);
 }

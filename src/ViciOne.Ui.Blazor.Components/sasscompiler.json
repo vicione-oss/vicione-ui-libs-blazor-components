@@ -11,6 +11,7 @@
         "ContentLoadingIndication",
         "ContextMenu",
         "Dialog",
+        "Draggable",
         "DropDown",
         "EditorLayout",
         "ExpandableMenu",

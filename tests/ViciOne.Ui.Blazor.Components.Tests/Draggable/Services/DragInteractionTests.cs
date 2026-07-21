@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using NSubstitute;
+using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
 using ViciOne.Ui.Blazor.Components.Draggable.Extensions;
 using ViciOne.Ui.Blazor.Components.Draggable.Models;
@@ -446,6 +447,59 @@ public sealed class DragInteractionTests
         // Act — would deadlock before the fix because RemoveAsync re-enters ExecuteGuardedAsync
         var act = async () => await dragInteraction.DragDroppedAsync(draggableId, dropzoneId, X, Y);
         await act.Should().CompleteWithinAsync(TimeSpan.FromSeconds(5));
+    }
+
+    [Fact]
+    public async Task Should_not_set_create_context_when_no_drag_ghost_given()
+    {
+        // Arrange
+        await using var testContext = new BunitContext();
+        testContext.Services.MockServicesForDragInteraction().AddDraggable();
+
+        var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
+        jsModule.SetupModule("attach", _ => true);
+
+        var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
+        var draggable = new TestDraggable();
+
+        // Act
+        await dragInteraction.AttachAsync(draggable);
+
+        // Assert — no drag ghost → JS falls back to the default ghost element
+        var context = (DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!;
+        context.DragGhostJsModule.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Should_pass_drag_ghost_js_module_descriptor_to_drag_interaction_context()
+    {
+        // Arrange
+        await using var testContext = new BunitContext();
+        testContext.Services.MockServicesForDragInteraction().AddDraggable();
+
+        var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
+        jsModule.SetupModule("attach", _ => true);
+
+        var dragGhostJsModuleDescriptor = new DragGhostJsModuleDescriptor
+        {
+            ModuleName = "./module.js",
+            CreateFunction = new() { Name = "the-function", Args = "the-arguments" }
+        };
+
+        var dragGhost = Substitute.For<IDragGhost>();
+        dragGhost.GetJsModule().Returns(dragGhostJsModuleDescriptor);
+
+        var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
+        var draggable = new TestDraggable();
+
+        // Act
+        await dragInteraction.AttachAsync(draggable, dragGhost: dragGhost);
+
+        var context = (DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!;
+        context.DragGhostJsModule.Should().BeSameAs(dragGhostJsModuleDescriptor);
+        context.DragGhostJsModule!.ModuleName.Should().Be("./module.js");
+        context.DragGhostJsModule.CreateFunction.Name.Should().Be("the-function");
+        context.DragGhostJsModule.CreateFunction.Args.Should().Be("the-arguments");
     }
 
 #pragma warning disable RCS1060 // Declare each type in separate file

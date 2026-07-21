@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
+using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Services;
 using ViciOne.Ui.Blazor.Components.Enums;
+using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 
 namespace ViciOne.Ui.Blazor.Components.TestingHelpers.Draggable.Components;
 
@@ -34,9 +36,14 @@ public class DraggableTests<TComponent>()
 
         // Assert
         if (draggable)
-            dragInteraction.Received().AttachAsync(renderedComponent.Instance, modifierKey);
+        {
+            dragInteraction.Received().AttachAsync(renderedComponent.Instance, modifierKey,
+                Arg.Any<IEnumerable<IPointerCaptureBehavior>?>(), Arg.Any<IDragGhost?>());
+        }
         else
+        {
             dragInteraction.DidNotReceiveWithAnyArgs().AttachAsync(Arg.Any<IDraggable>(), Arg.Any<ModifierKey>());
+        }
     }
 
     /// <summary>

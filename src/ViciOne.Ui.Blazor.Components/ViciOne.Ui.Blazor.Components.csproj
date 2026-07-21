@@ -108,6 +108,9 @@
     <GeneratedStaticWebAsset Include="Scripts\ComputedBackgroundColor.js">
       <DestinationFile>js\computed-background-color.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Models\JsFunctionDescriptor.cs.js">
+      <DestinationFile>js\js-function-descriptor.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
       <DestinationFile>js\point.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -198,6 +201,9 @@
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehaviorContext.js">
       <DestinationFile>pointer-capture\pointer-capture-behavior-context.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\MutablePointerCaptureBehaviorContext.js">
+      <DestinationFile>pointer-capture\mutable-pointer-capture-behavior-context.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\PointerCaptureBehaviorPipeline.js">
       <DestinationFile>pointer-capture\pointer-capture-behavior-pipeline.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -207,6 +213,9 @@
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\MovePointerCaptureBehavior.js">
       <DestinationFile>pointer-capture\move-pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="PointerCapture\Scripts\ReanchorPointerCaptureBehavior.js">
+      <DestinationFile>pointer-capture\reanchor-pointer-capture-behavior.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="PointerCapture\Scripts\SetPositionPointerCaptureBehavior.js">
       <DestinationFile>pointer-capture\set-position-pointer-capture-behavior.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -215,15 +224,60 @@
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Enums\ModifierKey.cs.js">
       <DestinationFile>enums\modifier-key.js</DestinationFile>
-    </GeneratedStaticWebAsset>
+  </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Draggable\Models\DragInteractionContext.cs.js">
       <DestinationFile>draggable\drag-interaction-context.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Models\DragGhostJsModuleDescriptor.cs.js">
+      <DestinationFile>draggable\drag-ghost-js-module-descriptor.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Draggable\Models\DropzoneDescriptor.cs.js">
       <DestinationFile>draggable\dropzone-descriptor.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Draggable\Services\DragInteraction.cs.js">
       <DestinationFile>draggable\drag-interaction.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragGhostContentSource.js">
+      <DestinationFile>draggable\drag-ghost-content-source.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragGhostDraggableLink.js">
+      <DestinationFile>draggable\drag-ghost-draggable-link.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragImminentListener.js">
+      <DestinationFile>draggable\drag-imminent-listener.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragStartListener.js">
+      <DestinationFile>draggable\drag-start-listener.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragEndListener.js">
+      <DestinationFile>draggable\drag-end-listener.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DropzoneEnterListener.js">
+      <DestinationFile>draggable\dropzone-enter-listener.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DropzoneLeaveListener.js">
+      <DestinationFile>draggable\dropzone-leave-listener.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\ResolvedDragGhost.js">
+      <DestinationFile>draggable\resolved-drag-ghost.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DefaultDragGhost.js">
+      <DestinationFile>draggable\default-drag-ghost.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragGhostContentChangedNotifier.js">
+      <DestinationFile>draggable\drag-ghost-content-changed-notifier.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragGhostHost.js">
+      <DestinationFile>draggable\drag-ghost-host.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Services\TableRowDragGhost.cs.js">
+      <DestinationFile>draggable\table-row-drag-ghost.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Components\DragGhostBase.cs.js">
+      <DestinationFile>draggable\components\drag-ghost-base.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Models\CreateDragGhostArgs.cs.js">
+      <DestinationFile>draggable\models\create-drag-ghost-args.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Enums\MouseLeaveDirection.cs.js">
       <DestinationFile>context-menu\enums\mouse-leave-direction.js</DestinationFile>

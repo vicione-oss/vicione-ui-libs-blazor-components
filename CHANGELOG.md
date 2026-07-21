@@ -4,6 +4,9 @@
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
+- `Draggable`
+  - Allow customization of drag ghosts
+  - Drag now starts on the first pointer move instead of on the click, so no drag ghost appears on a plain click
 - `TabStrip`
   - Fixed clicking a partially-visible tab so it is selected instead of only scrolled into view
   - Adjusted overflow effect

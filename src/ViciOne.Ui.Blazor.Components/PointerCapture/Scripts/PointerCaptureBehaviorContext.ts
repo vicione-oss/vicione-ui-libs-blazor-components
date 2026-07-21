@@ -1,13 +1,25 @@
 import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
 
-export class PointerCaptureBehaviorContext {
+/**
+ * The readonly view of the behavior context handed to behaviors.
+ */
+export type PointerCaptureBehaviorContext = {
+    /** The capture target with its positional and dimensional state. */
+    readonly captureTarget: CaptureTarget;
+
     /**
-     * Creates a new instance of {@link PointerCaptureBehaviorContext}.
-     * @param captureTarget - The capture target with its positional and dimensional state.
-     * @param distanceX - The horizontal distance the pointer has moved from the initial pointer-down position.
-     * @param distanceY - The vertical distance the pointer has moved from the initial pointer-down position.
+     * The horizontal distance the pointer has moved from the initial pointer-down position.
+     *
+     * Behaviors treat the horizontaldistance as a readonly source for their computations;
+     * only the owning pointer capture updates it through {@link MutablePointerCaptureBehaviorContext}.
      */
-    constructor(readonly captureTarget: CaptureTarget,
-        public distanceX: number,
-        public distanceY: number) { }
-}
+    readonly distanceX: number;
+
+    /**
+     * The vertical distance the pointer has moved from the initial pointer-down position.
+     *
+     * Behaviors treat the vertical distance as a readonly source for their computations;
+     * only the owning pointer capture updates it through {@link MutablePointerCaptureBehaviorContext}.
+     */
+    readonly distanceY: number;
+};

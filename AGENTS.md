@@ -4,6 +4,18 @@
 - Refer to `docs/csharp-code-style.md` for C# coding conventions
 - Refer to `docs/scss-code-style.md` for SCSS coding conventions
 
+## Documentation style
+- Refer to `docs/documentation-style.md` for comment and documentation conventions, including consistent terminology
+
+## Skills
+
+Reusable skill definitions located in `.claude/skills/` following the [Agent Skills](https://agentskills.io/) open standard.
+Supported by GitHub Copilot and Claude Code.
+
+| Skill                                                                      | Description                          |
+|----------------------------------------------------------------------------|--------------------------------------|
+| [improve-comment-clarity](.claude/skills/improve-comment-clarity/SKILL.md) | Improve the clarity of code comments |
+
 ## Working on `.ts` files
 
 When working on `.ts` files living in a folder of a `.csproj`, you need to keep attention to the following files to get the orchestration of the folder / file structure for generated `.js` files right.

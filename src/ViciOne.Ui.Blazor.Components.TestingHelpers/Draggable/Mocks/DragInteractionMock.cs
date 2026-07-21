@@ -1,4 +1,5 @@
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
+using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Services;
 using ViciOne.Ui.Blazor.Components.Enums;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
@@ -16,7 +17,8 @@ internal sealed class DragInteractionMock : IDragInteraction
     public event EventHandler<DragStartEventArgs>? DragStart;
 
     public Task AttachAsync(IDraggable draggable, ModifierKey? modifierKey = null,
-        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null)
+        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors = null,
+        IDragGhost? dragGhost = null)
             => Task.CompletedTask;
 
     public Task RemoveAsync(IDraggable draggable)

@@ -3,7 +3,8 @@
   "extends": [
     "local>vicione-oss/tooling/renovate-orchestrator"
   ],
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": true,
   "enabledManagers": [ "nuget" ],
   "packageRules": [
     {
@@ -15,9 +16,16 @@
       "matchFileNames": [ "Directory.Packages.props" ],
       "matchJsonata": [ "sharedVariableName = 'DotNetVersion'" ],
       "enabled": true,
-      "groupName": ".NET shared-version packages",
-      "groupSlug": "dotnet-version",
-      "separateMajorMinor": false
+      "rebaseWhen": "never",
+      "groupName": ".NET packages",
+      "separateMajorMinor": true,
+      "semanticCommits": "disabled",
+      "commitMessagePrefix": "",
+      "commitMessageAction": "Update to",
+      "commitMessageTopic": ".NET",
+      "commitMessageExtra": "{{newVersion}}",
+      "branchTopic": "update-to-net-{{newMajor}}-{{newMinor}}-{{newPatch}}",
+      "addLabels": [ "Dependencies", "Modernization" ]
     }
   ]
 }

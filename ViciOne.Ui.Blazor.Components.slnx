@@ -3,7 +3,14 @@
     <File Path=".adr/0001-use-semaphore-with-reentrant-async-lock.md" />
   </Folder>
   <Folder Name="/.claude/" />
+  <Folder Name="/.claude/commands/">
+    <File Path=".claude/commands/delete-orphaned-css.md" />
+    <File Path=".claude/commands/improve-comment-clarity.md" />
+  </Folder>
   <Folder Name="/.claude/skills/" />
+  <Folder Name="/.claude/skills/delete-orphaned-css/">
+    <File Path=".claude/skills/delete-orphaned-css/SKILL.md" />
+  </Folder>
   <Folder Name="/.claude/skills/improve-comment-clarity/">
     <File Path=".claude/skills/improve-comment-clarity/SKILL.md" />
   </Folder>
@@ -12,6 +19,7 @@
   </Folder>
   <Folder Name="/.github/prompts/">
     <File Path=".github/prompts/add-playwright-test.prompt.md" />
+    <File Path=".github/prompts/delete-orphaned-css.prompt.md" />
     <File Path=".github/prompts/improve-comment-clarity.prompt.md" />
   </Folder>
   <Folder Name="/.playwright-mcp/">

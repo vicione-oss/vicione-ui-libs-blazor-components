@@ -38,6 +38,5 @@
         background: colors.$background-darker;
 
         @include buttons.show-pointer-cursor-when-not-disabled();
-        @include buttons.no-outline-on-focus();
     }
 }

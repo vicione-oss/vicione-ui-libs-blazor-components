@@ -6,7 +6,6 @@
     font: inherit;
 
     @include buttons.lucent-styling();
-    @include buttons.no-outline-on-focus();
 
     @include animations.multiple($color: true, $opacity: true);
 

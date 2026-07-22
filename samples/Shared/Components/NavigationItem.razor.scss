@@ -1,21 +1,44 @@
 @use "../Styles/design/colors";
+@use "../../../src/ViciOne.Ui.Blazor.Components/Styles/buttons/mixins" as buttons;
 
 li {
-    display: grid;
-    grid-template-areas:
-        "icon link";
-    grid-template-columns: 32px auto;
-    align-items: center;
+    padding-left: 0;
 
-    ::deep svg {
-        grid-area: icon;
+    .navigation-item {
+        display: grid;
+        grid-template-areas: "left right";
+        grid-template-columns: 16px auto;
+        align-items: center;
+        gap: 4px;
 
-        polygon {
-            fill: colors.$font;
+        .expand-collapse-button {
+            grid-area: left;
+
+            @include buttons.lucent-styling();
+        }
+
+        ::deep .icon {
+            grid-area: left;
+
+            justify-self: center;
+        }
+
+        .link {
+            grid-area: right;
+
+            text-decoration: none;
+
+            &.current {
+                color: colors.$font-light;
+
+                cursor: default;
+            }
         }
     }
 
-    a {
-        grid-area: link;
+    .nested-navigation-items {
+        list-style: none;
+        padding-left: 16px;
+        margin: 0;
     }
 }

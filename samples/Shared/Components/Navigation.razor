@@ -1,33 +1,8 @@
 <nav class="navigation">
     <ul>
-        <NavigationItem Text="Accordion" Href="/accordion" />
-        <NavigationItem Text="AdvancedErrorBoundary" Href="/advanced-error-boundary" />
-        <NavigationItem Text="Breadcrumb" Href="/breadcrumb" />
-        <NavigationItem Text="Button" Href="/button" />
-        <NavigationItem Text="CheckBox" Href="/check-box" />
-        <NavigationItem Text="ComboBox" Href="/combo-box" />
-        <NavigationItem Text="ComputedBackgroundColor" Href="/computed-background-color" />
-        <NavigationItem Text="ContextMenu" Href="/context-menu" />
-        <NavigationItem Text="Dialog" Href="/dialog" />
-        <NavigationItem Text="Draggable" Href="/draggable" />
-        <NavigationItem Text="EditorLayout" Href="/editor-layout" />
-        <NavigationItem Text="ExpandableMenu" Href="/expandable-menu" />
-        <NavigationItem Text="Grid" Href="/grid" />
-        <NavigationItem Text="ContentLoadingIndication" Href="/content-loading-indication" />
-        <NavigationItem Text="LoadingSpinner" Href="/loading-spinner" />
-        <NavigationItem Text="Moveable" Href="/moveable" />
-        <NavigationItem Text="Resizeable" Href="/resizeable" />
-        <NavigationItem Text="Popup" Href="/popup" />
-        <NavigationItem Text="PropertyGrid" Href="/property-grid" />
-        <NavigationItem Text="SearchBox" Href="/search-box" />
-        <NavigationItem Text="SectionRail" Href="/section-rail" />
-        <NavigationItem Text="Sidebar" Href="/sidebar" />
-        <NavigationItem Text="SpinEdit" Href="/spin-edit" />
-        <NavigationItem Text="Switch" Href="/switch" />
-        <NavigationItem Text="TabStrip" Href="/tab-strip" />
-        <NavigationItem Text="TagBox" Href="/tag-box" />
-        <NavigationItem Text="TextBox" Href="/text-box" />
-        <NavigationItem Text="Toolbar" Href="/toolbar" />
-        <NavigationItem Text="Tooltip" Href="/tooltip" />
+        @foreach (var navigationItemDescriptor in _rootNavigationItemDescriptors)
+        {
+            @NavigationRenderFragments.Render(navigationItemDescriptor)
+        }
     </ul>
 </nav>

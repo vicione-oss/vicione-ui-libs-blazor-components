@@ -1,23 +1,63 @@
 using Microsoft.AspNetCore.Components;
-using ViciOne.Ui.MonochromeIcons.Assets.Services;
-using ViciOne.Ui.MonochromeIcons.Core.Enums;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace Shared.Components;
 
-public sealed partial class NavigationItem : ComponentBase
+public sealed partial class NavigationItem : ComponentBase, IDisposable
 {
-    private MarkupString _iconSvgMarkup;
+    private bool _expanded;
+    private bool _isCurrent;
 
-    [Parameter, EditorRequired] public string Text { get; set; }
-    [Parameter, EditorRequired] public string Href { get; set; }
+    [Parameter, EditorRequired]
+    public required string Text { get; set; }
 
-    [Inject] private IMonochromeIconSvgMarkupProvider MonochromeIconSvgMarkupProvider { get; set; } = default!;
+    [Parameter, EditorRequired]
+    public required string Href { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = default!;
+
+    protected override void OnInitialized()
     {
-        var iconSvgMarkup = await MonochromeIconSvgMarkupProvider.GetSvgMarkupAsync(MonochromeIconName.ExpanderLightRight,
-            MonochromeIconSize.Medium);
+        UpdateExpanded();
+        UpdateIsCurrent();
 
-        _iconSvgMarkup = new MarkupString(iconSvgMarkup ?? string.Empty);
+        NavigationManager.LocationChanged += OnLocationChanged;
     }
+
+    public void Dispose()
+        => NavigationManager.LocationChanged -= OnLocationChanged;
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        UpdateExpanded();
+        UpdateIsCurrent();
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateExpanded()
+    {
+        if (ChildContent is null)
+            return;
+
+        var path = NavigationManager.ToAbsoluteUri(NavigationManager.Uri).AbsolutePath;
+
+        // Match whole path segments, so /advanced-table does not also match /advanced-table-foo.
+        if (path == Href || path.StartsWith($"{Href}/", StringComparison.Ordinal))
+            _expanded = true;
+    }
+
+    private void UpdateIsCurrent()
+    {
+        var path = NavigationManager.ToAbsoluteUri(NavigationManager.Uri).AbsolutePath;
+
+        _isCurrent = path == Href;
+    }
+
+    private void ExpandCollapseButtonClick()
+        => _expanded = !_expanded;
 }

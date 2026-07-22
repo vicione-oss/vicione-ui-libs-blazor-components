@@ -1,0 +1,14 @@
+@using Shared.Models
+
+@code
+{
+    public static RenderFragment Render(NavigationItemDescriptor descriptor)
+        => descriptor.Children.Count > 0
+            ? @<NavigationItem Text="@descriptor.Text" Href="@descriptor.Href">
+                    @foreach (var childDescriptor in descriptor.Children)
+                    {
+                        @Render(childDescriptor)
+                    }
+                </NavigationItem>
+            : @<NavigationItem Text="@descriptor.Text" Href="@descriptor.Href" />;
+}

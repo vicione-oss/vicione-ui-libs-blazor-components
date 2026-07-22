@@ -24,6 +24,8 @@
     &:focus {
         color: colors.$accent;
     }
+
+    @include no-outline-on-focus();
 }
 
 @mixin no-outline-on-focus() {

@@ -2,6 +2,5 @@
 
 .popup-header-action-button {
     @include buttons.lucent-styling();
-    @include buttons.no-outline-on-focus();
     @include buttons.show-pointer-cursor-when-not-disabled();
 }

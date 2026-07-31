@@ -272,7 +272,7 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
     /// Called from the browser to determine which HTML element represents a visible context menu
     /// </summary>
     [JSInvokable]
-    public async Task<ElementReference[]> GetVisibleContextMenuHtmlElementsAsync()
+    public ElementReference[] GetVisibleContextMenuHtmlElements()
     {
         var result = new List<ElementReference>();
 
@@ -282,8 +282,6 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
         var visibleChildContextMenus = GetVisibleChildContextMenus(_items);
 
         result.AddRange(visibleChildContextMenus.Select(c => c.ElementReference));
-
-        await Task.CompletedTask;
 
         return [.. result];
     }

@@ -61,7 +61,7 @@ class ContextMenu {
     }
 
     readonly #windowPointerDownEventListener = async (e: PointerEvent) => {
-        const contextMenuHtmlElements = await this.#dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElementsAsync');
+        const contextMenuHtmlElements = await this.#dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElements');
 
         let clickedInsideAnyContextMenu = false;
 

@@ -98,6 +98,7 @@
     <PropertyGroup>
       <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
       <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
+      <TooltipScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/tooltip</TooltipScssOutputFolder>
       <TypographyScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/typography</TypographyScssOutputFolder>
     </PropertyGroup>
   </Target>

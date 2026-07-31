@@ -1,4 +1,4 @@
-﻿@page "/tooltip"
+@page "/tooltip"
 
 @using ViciOne.Ui.Blazor.Components.Switch
 @using ViciOne.Ui.Blazor.Components.Tooltip.Components
@@ -29,9 +29,8 @@
 
             <TooltipContent>
                 <div class="tabular-tooltip-content">
-                    <h4>This is the tooltip header</h4>
-                    <hr />
-
+                    <div class="header">This is the tooltip header</div>
+                    <div class="separator" />
                     <div class="data-table">
                         @for (int j = 0; j < _tableRows; j++)
                         {

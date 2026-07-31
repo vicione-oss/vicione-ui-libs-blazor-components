@@ -7,8 +7,6 @@
 @use "sass:color";
 
 .combo-box {
-    background-color: color.adjust(colors.$theme, $alpha: -0.95);
-
     display: inline-grid;
     grid-template-rows: auto 0px;
     grid-template-areas:
@@ -17,80 +15,47 @@
 
     vertical-align: middle;
 
-    &.read-only {
-        pointer-events: none;
-    }
-
     @include inputs.single-line-text-input-style();
-    @include inputs.typography(); 
+    @include inputs.typography();
     @include inputs.disabled-style();
+
+    $drop-down-icon-wrapper-width: inputs.$single-line-text-input-height;
 
     .input-wrapper {
         grid-area: input;
 
         position: relative;
 
-        ::deep input {
+        ::deep .combo-box-input {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
 
-            min-width: 0; // allow input to shrink when the outer element is smaller than the default minimum input width applied by the browser
-            height: stretch;
-
-            background: transparent;
-            color: color.adjust(colors.$font-light, $alpha: -0.2);
-
-            border-width: 1px;
-            border-style: solid;
-            border-color: color.adjust(colors.$theme-inverted, $alpha: -0.8);
-            border-radius: inputs.$border-radius;
-            @include animations.border-color();
-
-            @include inputs.typography();
-            @include inputs.padding($right: 28px);
-            @include inputs.invalid-style();
-
-            @include mixins.overflow-ellipsis();
+            @include inputs.padding($right: $drop-down-icon-wrapper-width);
 
             &:disabled {
-                opacity: 1;
-            }
-
-            &[readonly] {
-                @include user-interaction.show-pointer-cursor();
-                @include user-interaction.prevent-text-selection();
-            }
-
-            &:not([readonly]) {
-                cursor: text;
-            }
-
-            &:not(:disabled) {
-                &:focus {
-                    outline: none;
-                    border-color: colors.$accent;
-                }
-
-                &:hover {
-                    border-color: colors.$accent-hover;
-                }
+                opacity: unset; // avoids applying styles from @include inputs.disabled-style() twice
             }
         }
     }
 
-    ::deep .drop-down-icon {
+    .drop-down-icon-wrapper {
         grid-area: input;
 
-        align-self: center;
-        justify-self: end;
+        justify-self: end; // display icon on the right
 
-        margin: 0;
-        right: 5px;
-        position: relative;
+        width: $drop-down-icon-wrapper-width;
 
-        pointer-events: none;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+    }
+
+    &.read-only {
+        .drop-down-icon-wrapper {
+            opacity: inputs.$disabled-opacity;
+        }
     }
 
     ::deep .drop-down {
@@ -99,7 +64,21 @@
         margin-top: inputs.$drop-down-margin-top;
 
         .drop-down-container .drop-down-item {
-            @include inputs.padding($right: 28px);
+            @include inputs.padding($right: $drop-down-icon-wrapper-width); // same padding to ensure input text does not flow into drop-down icon
+        }
+    }
+    // interaction
+    &:hover {
+        &:not(.disabled):not(.read-only) {
+            .drop-down-icon-wrapper {
+                cursor: pointer;
+            }
+
+            &:has(.drop-down-icon-wrapper:hover) {
+                .input-wrapper ::deep .combo-box-input {
+                    border-color: colors.$accent-hover;
+                }
+            }
         }
     }
 }

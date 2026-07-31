@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using DropDownLocalization = ViciOne.Ui.Blazor.Components.Resources.DropDown.Localization.DropDown;
 
 namespace ViciOne.Ui.Blazor.Components.DropDown;
 
@@ -17,7 +18,7 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
     private IJSObjectReference? _jsModule;
     private IJSObjectReference? _jsAttachResult;
     private bool _visible;
-    private int _adjustedItemCount = -1;
+    private bool _placementApplied;
     private bool _disposedAsync;
 
     /// <summary>
@@ -56,8 +57,16 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
     [Parameter, EditorRequired]
     public ElementReference? InputElementReference { get; set; }
 
+    /// <summary>
+    /// Selector for the title property of <typeparamref name="TItem"/>
+    /// </summary>
+    [Parameter]
+    public Func<TItem, string>? TitleSelector { get; set; }
+
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
     [Inject] private ILogger<DropDown<TItem>> Logger { get; set; } = default!;
+
+    private static string NoMatchText => DropDownLocalization.NoMatch;
 
     /// <inheritdoc/>
     protected override async Task OnParametersSetAsync()
@@ -66,48 +75,53 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (_disposedAsync)
+            return;
+
         if (firstRender)
         {
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(DropDown<TItem>).Assembly.GetName().Name}/drop-down/drop-down.js");
+        }
 
+        if (!_disposedAsync && _jsModule is not null && _jsAttachResult is null)
+        {
             _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _containerElement);
 
-            if (_jsAttachResult is not null)
-                await _jsAttachResult.InvokeVoidAsync("reserveWidth");
+            if (!_disposedAsync && _jsAttachResult is not null)
+                await _jsAttachResult.InvokeVoidAsync("setMinimumWidth");
         }
 
         await AttachInputElementIfNeededAsync();
-        await AdjustMaxHeightIfNeededAsync();
         await UpdatePlacementIfNeededAsync();
     }
 
     private async Task AttachInputElementIfNeededAsync()
     {
-        if (_jsAttachResult is null || InputElementReference is not { } inputElement)
+        if (_disposedAsync || _jsAttachResult is null || InputElementReference is not { } inputElement)
             return;
 
         await _jsAttachResult.InvokeVoidAsync("attachInputElement", inputElement);
     }
 
-    private async Task AdjustMaxHeightIfNeededAsync()
-    {
-        if (_jsAttachResult is null || Items.Count == 0)
-            return;
-
-        if (_adjustedItemCount == Items.Count)
-            return;
-
-        if (await _jsAttachResult.InvokeAsync<bool>("adjustMaxHeight"))
-            _adjustedItemCount = Items.Count;
-    }
-
     private async Task UpdatePlacementIfNeededAsync()
     {
-        if (_jsAttachResult is null || !_visible)
+        if (_disposedAsync || _jsAttachResult is null)
             return;
 
+        if (!_visible)
+        {
+            if (_placementApplied)
+            {
+                _placementApplied = false;
+                await _jsAttachResult.InvokeVoidAsync("resetPlacement");
+            }
+
+            return;
+        }
+
         await _jsAttachResult.InvokeVoidAsync("updatePlacement");
+        _placementApplied = true;
     }
 
     /// <summary>

@@ -13,11 +13,11 @@
     if (!string.IsNullOrWhiteSpace(CssClass))
         cssClasses.AddRange(CssClass.Split(" "));
 
+    if (ReadOnly)
+        cssClasses.Add("read-only");
+
     if (!Enabled)
         cssClasses.Add("disabled");
-
-    else if (ReadOnly)
-        cssClasses.Add("read-only");
 
     var inputCssClasses = new List<string> { "combo-box-input" };
 
@@ -29,7 +29,7 @@
         <TextBox @ref="_textBox"
                  CssClass="@string.Join(" ", inputCssClasses)"
                  Enabled="Enabled"
-                 TabIndex="@(Enabled && ReadOnly ? -1 : (int?)null)"
+                 ReadOnly="ReadOnly"
                  Value="@_inputValue"
                  ValueChanging="InputValueChangingAsync"
                  EnterPressed="InputEnterPressedAsync"
@@ -37,14 +37,32 @@
                  FocusLost="CloseDropdownAsync" />
     </div>
 
-    <MonochromeIcon CssClass="drop-down-icon" Name="MonochromeIconName.ExpanderLightDown" Size="MonochromeIconSize.Small" />
+    @{
+        var iconWrapperAttributes = new Dictionary<string, object> { { "class", "drop-down-icon-wrapper" } };
+
+        var optionDescriptors = GetFilteredOptionDescriptors();
+        var hasOptionDescriptors = optionDescriptors.Count > 0;
+
+        if (!hasOptionDescriptors)
+            iconWrapperAttributes.Add("title", GetDropDownIconTooltipText());
+    }
+
+    <div @attributes="iconWrapperAttributes"
+         @onclick="DropDownIconWrapperClickAsync"
+         @onmousedown:preventDefault="true">
+
+        <MonochromeIcon CssClass="drop-down-icon"
+                        Name="@GetDropDownIcon(hasOptionDescriptors)"
+                        Size="MonochromeIconSize.Small" />
+    </div>
 
     <DropDown TItem="OptionDescriptor"
               @ref="_dropDown"
               InputElementReference="_textBox?.InputElementReference"
-              Items="GetFilteredOptionDescriptors()"
+              Items="optionDescriptors"
               SelectedItems="GetSelectedOptionDescriptors()"
-              SelectedItemsChanged="DropdownSelectedItemsChangedAsync">
+              SelectedItemsChanged="DropDownSelectedItemsChangedAsync"
+              TitleSelector="@(item => item.Text)">
 
         <ItemTemplate>
             @context.Text

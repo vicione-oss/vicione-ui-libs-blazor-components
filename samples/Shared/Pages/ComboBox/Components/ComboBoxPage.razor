@@ -24,6 +24,12 @@ contains <code>@_city</code>
 
 <Button Size="ButtonSize.Small" Text="Reset selection" OnClick="ResetCitySelectionButtonClick" />
 
+<h3><code>Width 200px</code></h3>
+
+<div style="width: 200px;">
+    <ComboBox Items="@_connectionComboBoxItems" @bind-Value="@_connection" />
+</div>
+
 <h3><code>@nameof(ComboBox<,>.Valid)</code> is false</h3>
 
 <ComboBox Items="@_buttonSizeComboBoxItems"

@@ -2,6 +2,9 @@
 
 @use "sass:color";
 
+// dimensions
+$single-line-text-input-height: 24px;
+
 // border
 $border-radius: 3px;
 $border-width: 1px;
@@ -9,3 +12,6 @@ $border-color-default: color.change(colors.$theme-inverted, $alpha: 0.2);
 
 // associated drop-down
 $drop-down-margin-top: 2px;
+
+// states
+$disabled-opacity: 0.5;

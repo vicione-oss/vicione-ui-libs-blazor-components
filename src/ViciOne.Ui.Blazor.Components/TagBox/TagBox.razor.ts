@@ -11,11 +11,19 @@ class TagBox {
     }
 
     public alignInputElement() {
-        this.#tagInputElement.style.removeProperty('flex-basis');
-        this.#tagInputElement.style.removeProperty('width');
-
         const offset = 10;
+
+        // Collapse the input before measuring so scrollWidth reflects the actual typed
+        // text width and not the width the flex-grown input currently fills. Without
+        // collapsing, scrollWidth equals the already reserved/filled width, so adding
+        // `offset` would widen the whole control by `offset` on the very first input.
+        this.#tagInputElement.style.removeProperty('flex-basis');
+        this.#tagInputElement.style.flex = '0 0 0';
+        this.#tagInputElement.style.width = '0';
+
         const { scrollWidth } = this.#tagInputElement;
+
+        this.#tagInputElement.style.removeProperty('flex');
 
         let lineBreak = false;
 

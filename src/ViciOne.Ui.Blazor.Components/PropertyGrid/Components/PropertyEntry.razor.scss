@@ -106,8 +106,18 @@
     position: relative;
 
     // make input components span full width
-    display: flex;
-    flex-direction: column;
+    &:not(:has(.combo-box)) {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &:has(.combo-box) {
+        align-self: center;
+
+        ::deep .combo-box {
+            width: 100%;
+        }
+    }
 }
 
 .property-wizard {

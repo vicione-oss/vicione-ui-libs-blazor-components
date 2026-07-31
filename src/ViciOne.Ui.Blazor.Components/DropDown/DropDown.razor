@@ -9,20 +9,32 @@
 
 <div class="drop-down">
     <div class="@string.Join(" ", containerCssClasses)" @ref="_containerElement" role="listbox" tabindex="-1">
-        @foreach (var item in Items)
-        {
-            var itemCssClasses = new List<string> { "drop-down-item" };
+        @{
+            if (Items.Count == 0)
+            {
+                <div class="drop-down-item drop-down-empty" title="@NoMatchText">
+                    @NoMatchText
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Items)
+                {
+                    var itemCssClasses = new List<string> { "drop-down-item" };
 
-            if (IsSelected(item))
-                itemCssClasses.Add("selected");
+                    if (IsSelected(item))
+                        itemCssClasses.Add("selected");
 
-            <div class="@string.Join(" ", itemCssClasses)"
-                 role="option"
-                 @onclick="async () => await SelectItemAsync(item)"
-                 @onmousedown:preventDefault>
+                    <div class="@string.Join(" ", itemCssClasses)"
+                         role="option"
+                         title="@TitleSelector?.Invoke(item)"
+                         @onclick="async () => await SelectItemAsync(item)"
+                         @onmousedown:preventDefault>
 
-                @ItemTemplate(item)
-            </div>
+                        @ItemTemplate(item)
+                    </div>
+                }
+            }
         }
     </div>
 </div>

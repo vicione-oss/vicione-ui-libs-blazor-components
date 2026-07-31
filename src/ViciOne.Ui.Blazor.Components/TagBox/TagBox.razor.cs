@@ -158,8 +158,8 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
         if (HideSelectedItems)
             filtered = filtered.Where(t => !Tags.Contains(t));
 
-        if (!string.IsNullOrEmpty(_inputValue))
-            filtered = filtered.Where(t => t.Contains(_inputValue, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(_inputValue))
+            filtered = filtered.Where(t => t.Contains(_inputValue.Trim(), StringComparison.OrdinalIgnoreCase));
 
         return filtered;
     }

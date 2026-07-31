@@ -465,7 +465,7 @@
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.10, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.10, )",
           "ViciOne.Ui.Localization": "[3.0.1, )",
-          "ViciOne.Ui.MonochromeIcons.Components": "[4.14.0, )"
+          "ViciOne.Ui.MonochromeIcons.Components": "[4.15.0, )"
         }
       },
       "vicione.ui.blazor.components.testinghelpers": {
@@ -546,31 +546,31 @@
       },
       "ViciOne.Ui.MonochromeIcons.Assets": {
         "type": "CentralTransitive",
-        "requested": "[4.14.0, )",
-        "resolved": "4.14.0",
-        "contentHash": "8cVkBIXTtM/Lr72OgmtNTx0j2nNuKK2ykcrb3PlEekc7ARKAIflPhvn/rsr67uOumKd8Q2WX1RyxM0W74zGqqg==",
+        "requested": "[4.15.0, )",
+        "resolved": "4.15.0",
+        "contentHash": "16UHEPy4EohHTgM85Hs0lOdEAxWOY6CK4WYHxHZOOZfD+2zQdMhxZrnSui9CNkaiykkJrYLeNQyDVIkkSv0C/g==",
         "dependencies": {
           "Microsoft.AspNetCore.Components.Web": "10.0.8",
           "Microsoft.Extensions.Logging": "10.0.9",
-          "ViciOne.Ui.MonochromeIcons.Core": "4.14.0"
+          "ViciOne.Ui.MonochromeIcons.Core": "4.15.0"
         }
       },
       "ViciOne.Ui.MonochromeIcons.Components": {
         "type": "CentralTransitive",
-        "requested": "[4.14.0, )",
-        "resolved": "4.14.0",
-        "contentHash": "J9sEpqH7vi+q6eurW2N2kpeIqg4s9IZihIr06yCNRVbXrBhvYDg3pQT31MCFpUZiLeFQ/prribigEvycInxjUg==",
+        "requested": "[4.15.0, )",
+        "resolved": "4.15.0",
+        "contentHash": "PpyOL0Ed0KklTNUV4SoOI3hymOsYSBDhn3PXWe7XYAJvyrjNLghVR5ThR5/DsfQPvtwnURnoOekcK/7PquQVYg==",
         "dependencies": {
           "Microsoft.AspNetCore.Components.Web": "10.0.8",
-          "ViciOne.Ui.MonochromeIcons.Assets": "4.14.0",
-          "ViciOne.Ui.MonochromeIcons.Core": "4.14.0"
+          "ViciOne.Ui.MonochromeIcons.Assets": "4.15.0",
+          "ViciOne.Ui.MonochromeIcons.Core": "4.15.0"
         }
       },
       "ViciOne.Ui.MonochromeIcons.Core": {
         "type": "CentralTransitive",
-        "requested": "[4.14.0, )",
-        "resolved": "4.14.0",
-        "contentHash": "riISEHUux7PiDhiMt20iczp3COUxbniAqz1MiqBdAZtcQEfV+4SzWeC9xHd7UaQEk1aQM5wMZ9nafV2XHFI2og=="
+        "requested": "[4.15.0, )",
+        "resolved": "4.15.0",
+        "contentHash": "054WmujygCqVLehdSuidb4fpVZ+8z44O5bPSvx2Vn6HgjlE2LhzrK9AkIA+KnVMBFbMu54TY26zmxL44W9FbLg=="
       }
     }
   }

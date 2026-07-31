@@ -602,7 +602,7 @@ public sealed class TagBoxTests : IDisposable
             .Add(p => p.AvailableTags, []));
 
         // Assert
-        renderedComponent.FindAll(".drop-down-item").Should().BeEmpty();
+        renderedComponent.FindAll(".drop-down-item:not(.drop-down-empty)").Should().BeEmpty();
     }
 
     [Fact]
@@ -664,6 +664,6 @@ public sealed class TagBoxTests : IDisposable
         input.Input("xyz");
 
         // Assert
-        renderedComponent.FindAll(".drop-down-item").Should().BeEmpty();
+        renderedComponent.FindAll(".drop-down-item:not(.drop-down-empty)").Should().BeEmpty();
     }
 }

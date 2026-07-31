@@ -54,6 +54,10 @@
 
     ::deep .drop-down {
         margin-top: inputs.$drop-down-margin-top;
+
+        .drop-down-container .drop-down-item {
+            @include inputs.padding();
+        }
     }
 
     &:not(:has(.tag-input:disabled, .tag-input:read-only)) {

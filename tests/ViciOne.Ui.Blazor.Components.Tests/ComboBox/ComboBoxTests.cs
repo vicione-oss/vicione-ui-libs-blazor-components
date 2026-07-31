@@ -152,6 +152,27 @@ public sealed class ComboBoxTests : IDisposable
     }
 
     [Fact]
+    public void Should_show_empty_state_when_input_matches_no_item()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+            .Add(p => p.AllowUserInput, true)
+        );
+
+        // Act
+        renderedComponent.Find(".combo-box input").Input("no-such-item");
+
+        // Assert
+        renderedComponent.FindAll(".drop-down-item:not(.drop-down-empty)").Should().BeEmpty();
+
+        renderedComponent.Find(".drop-down-empty").Should().NotBeNull();
+    }
+
+    [Fact]
     public void Should_filter_drop_down_without_user_input()
     {
         // Arrange
@@ -332,6 +353,69 @@ public sealed class ComboBoxTests : IDisposable
 
         // Assert
         updatedItems.IterationCount.Should().Be(expectedEnumerations);
+    }
+
+    [Fact]
+    public void Should_render_title_on_drop_down_items()
+    {
+        // Act
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+        );
+
+        // Assert - each item exposes its text as the title (tooltip)
+        var items = renderedComponent.FindAll(".drop-down-item");
+        items.Select(item => item.GetAttribute("title"))
+            .Should().Equal(GetItems().Select(item => item.Text));
+    }
+
+    [Fact]
+    public void Should_open_drop_down_on_icon_click()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+        );
+
+        // Act
+        renderedComponent.Find(".drop-down-icon-wrapper").Click();
+
+        // Assert - the menu is shown and the icon reflects the open state
+        renderedComponent.Find(".drop-down-container").ClassList.Should().Contain("visible");
+        renderedComponent.FindAll(".monochrome-icon-expander-light-top").Should().ContainSingle();
+    }
+
+    [Fact]
+    public void Should_toggle_drop_down_on_icon_click()
+    {
+        // Arrange
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+            .Add(p => p.Items, GetItems())
+            .Add(p => p.Value, "")
+            .Add(p => p.ValueSelector, x => x.Value)
+            .Add(p => p.TextSelector, x => x.Text)
+        );
+
+        var iconWrapper = renderedComponent.Find(".drop-down-icon-wrapper");
+
+        // Act - open
+        iconWrapper.Click();
+
+        // Assert - open
+        renderedComponent.Find(".drop-down-container").ClassList.Should().Contain("visible");
+
+        // Act - close
+        renderedComponent.Find(".drop-down-icon-wrapper").Click();
+
+        // Assert - closed and the icon points down again
+        renderedComponent.Find(".drop-down-container").ClassList.Should().NotContain("visible");
+        renderedComponent.FindAll(".monochrome-icon-expander-light-down").Should().ContainSingle();
     }
 
     private static List<ComboBoxItem<string, string>> GetItems()

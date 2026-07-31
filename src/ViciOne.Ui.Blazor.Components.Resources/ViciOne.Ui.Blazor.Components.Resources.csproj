@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
@@ -9,6 +9,16 @@
       <DependentUpon>Content.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="ComboBox\Localization\ComboBox.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComboBox.resx</DependentUpon>
+    </Compile>
+    <Compile Update="DropDown\Localization\Dropdown.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DropDown.resx</DependentUpon>
     </Compile>
     <Compile Update="PropertyGrid\ContextMenu\Localization\PropertyEntryContextMenu.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -42,6 +52,14 @@
       <LastGenOutput>Content.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="ComboBox\Localization\ComboBox.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComboBox.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DropDown\Localization\DropDown.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dropdown.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="PropertyGrid\ContextMenu\Localization\PropertyEntryContextMenu.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PropertyEntryContextMenu.Designer.cs</LastGenOutput>
@@ -65,5 +83,5 @@
       <LastGenOutput>SpinButton.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  
+
 </Project>

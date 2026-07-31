@@ -17,7 +17,7 @@
 
 @mixin disabled-style() {
     &:disabled, &.disabled {
-        opacity: 0.5;
+        opacity: variables.$disabled-opacity;
     }
 }
 
@@ -99,5 +99,5 @@
 }
 
 @mixin single-line-text-input-style() {
-    height: 24px; // ensure that display height is exactly 24px, otherwise a smaller value is calculated when using display scaling > 100%
+    height: variables.$single-line-text-input-height; // ensure that display height is exactly 24px, otherwise a smaller value is calculated when using display scaling > 100%
 }

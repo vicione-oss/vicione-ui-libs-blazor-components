@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.DropDown;
 using ViciOne.Ui.Blazor.Components.Helpers;
 using ViciOne.Ui.Blazor.Components.Interfaces;
+using ViciOne.Ui.MonochromeIcons.Core.Enums;
+using ComboBoxLocalization = ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization.ComboBox;
 
 namespace ViciOne.Ui.Blazor.Components.ComboBox;
 
@@ -208,15 +210,36 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
 
     private List<OptionDescriptor> GetFilteredOptionDescriptors()
     {
-        if (string.IsNullOrEmpty(_inputValue))
+        if (string.IsNullOrWhiteSpace(_inputValue))
             return _optionDescriptors;
 
         var selectedText = _selectedOptionDescriptor?.Text ?? $"{Value}";
 
-        if (selectedText == _inputValue)
+        if (selectedText == _inputValue.Trim())
             return _optionDescriptors;
 
-        return [.. _optionDescriptors.Where(descriptor => descriptor.Text.Contains(_inputValue, StringComparison.OrdinalIgnoreCase))];
+        return [.. _optionDescriptors.Where(descriptor =>
+            descriptor.Text.Contains(_inputValue.Trim(), StringComparison.OrdinalIgnoreCase))];
+    }
+
+    private MonochromeIconName GetDropDownIcon(bool hasOptionDescriptors)
+    {
+        if (!hasOptionDescriptors)
+            return AllowUserInput ? MonochromeIconName.WarningLight : MonochromeIconName.TriangleExclamationLight;
+
+        if (_dropDownVisible)
+            return MonochromeIconName.ExpanderLightTop;
+        else
+            return MonochromeIconName.ExpanderLightDown;
+    }
+
+    private string GetDropDownIconTooltipText()
+    {
+        var appendix = AllowUserInput
+            ? ComboBoxLocalization.PressEnterOrLeaveTheFieldToApplyYourInput
+            : ComboBoxLocalization.PressingEnterOrLeavingTheFieldWillRevertYourInput;
+
+        return $"{ComboBoxLocalization.NoMatchingItemFound}\n{appendix}";
     }
 
     private async Task OpenDropdownAsync()
@@ -334,7 +357,7 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
         }
     }
 
-    private async Task DropdownSelectedItemsChangedAsync(IEnumerable<OptionDescriptor> selectedDescriptors)
+    private async Task DropDownSelectedItemsChangedAsync(IEnumerable<OptionDescriptor> selectedDescriptors)
     {
         if (selectedDescriptors.FirstOrDefault() is not { } selectedDescriptor)
             return;
@@ -447,5 +470,11 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
         }
 
         return false;
+    }
+
+    private async Task DropDownIconWrapperClickAsync()
+    {
+        await FocusAsync();
+        await OpenOrCloseDropdownAsync();
     }
 }

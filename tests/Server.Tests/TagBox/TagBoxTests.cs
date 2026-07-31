@@ -395,4 +395,60 @@ public class TagBoxTests(ServerFixture fixture)
                 $"Expected input (Y={inputBox.Y}) to be on the same line as last tag (Y={lastTagBoundingBox.Y})");
         });
     }
+
+    [Fact]
+    public async Task Should_not_render_drop_down_item_wider_than_tag_box_with_200px_width()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tag-box");
+
+            // The dedicated 200px-width TagBox contains an item wider than the box itself
+            var tagBox = page.Locator(".tag-box").Nth(3);
+
+            // Open the drop-down by clicking the input
+            await tagBox.Locator(".tag-input").ClickAsync();
+
+            // Assert
+            var tagBoxBoundingBox = await tagBox.BoundingBoxAsync();
+            Assert.NotNull(tagBoxBoundingBox);
+
+            // The tag-box div is exactly 200px wide
+            Assert.True(Math.Abs(tagBoxBoundingBox.Width - 200) < 1,
+                $"Expected tag-box width to be 200px, but was {tagBoxBoundingBox.Width}px");
+
+            var dropDownItems = tagBox.Locator(".drop-down-container .drop-down-item");
+            var itemCount = await dropDownItems.CountAsync();
+            Assert.True(itemCount > 0, "Expected at least one drop-down-item to be rendered");
+
+            var hasOverflowingItem = false;
+
+            for (var i = 0; i < itemCount; i++)
+            {
+                var item = dropDownItems.Nth(i);
+
+                var itemBoundingBox = await item.BoundingBoxAsync();
+                Assert.NotNull(itemBoundingBox);
+
+                // A drop-down-item must never be wider than its parent tag-box
+                Assert.True(itemBoundingBox.Width <= tagBoxBoundingBox.Width + 1,
+                    $"Expected drop-down-item width ({itemBoundingBox.Width}px) to not exceed tag-box width ({tagBoxBoundingBox.Width}px)");
+
+                // Detect whether the item content is larger than the rendered (clipped) width
+                var isOverflowing = await item.EvaluateAsync<bool>("element => element.scrollWidth > element.clientWidth");
+
+                if (isOverflowing)
+                    hasOverflowingItem = true;
+            }
+
+            // At least one drop-down-item has content larger than the tag-box (but is still clipped to its width)
+            Assert.True(hasOverflowingItem,
+                "Expected at least one drop-down-item to have content larger than the tag-box");
+        });
+    }
 }

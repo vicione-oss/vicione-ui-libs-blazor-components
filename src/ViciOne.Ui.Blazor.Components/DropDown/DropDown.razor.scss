@@ -5,11 +5,21 @@
 @use "sass:color";
 
 .drop-down {
-    overflow: hidden;
+    position: relative;
 
-    &:has(.drop-down-container.visible) {
-        overflow: visible;
+    @mixin restrictMaximumWidth() {
+        // Ensures:
+        // - that the container element does not have a width larger than the outer layout (e.g. ComboBox with it's own grid-layout).
+        // - getComputedStyle() in setMinimumWidth() returns the restricted width of the container element, instead of the width of the widest drop-down item.
+        overflow: hidden;
+
+        // After the calculation in setMinimumWidth() took place and the drop-down should be visible, we need to allow the drop-down to overflow the container element again.
+        &:has(.drop-down-container.visible) {
+            overflow: visible;
+        }
     }
+
+    @include restrictMaximumWidth();
 
     .drop-down-container {
         position: relative;
@@ -18,19 +28,46 @@
         border-radius: 3px;
 
         background-color: colors.$background-dark;
+
+        // Initial reset for placement calculation *1
         opacity: 0;
+        pointer-events: none;
 
         @include mixins.overflow-ellipsis();
         overflow-y: auto;
+        overflow-x: hidden;
 
-        pointer-events: none;
+        // Reserves space for possible vertical scrollbar caused by setMaxHeight(),
+        // while also ensuring that setMinimumWidth() calculates the correct width including possible scrollbar.
+        scrollbar-gutter: stable;
 
         @include scrollbar.adjust-styles();
 
         &.visible {
-            opacity: 1;
-            pointer-events: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+
             outline: none;
+
+            // Until the script has computed the placement, keep the menu collapsed
+            // so it cannot briefly expand to its (stale) max-height and flash a
+            // scrollbar the moment it becomes 'visible'. The script clears the inline
+            // max-height while unplaced, so this rule takes effect; once placed it
+            // sets the real inline max-height together with the '.placed' class.
+            &:not(.placed) {
+                max-height: 0;
+            }
+
+            // *1
+            // Revealed by script only once its placement (drop-down/drop-up) has
+            // been computed, to avoid a flicker where it briefly paints at the
+            // default position before jumping to the final one.
+            &.placed {
+                opacity: 1; 
+                pointer-events: auto;
+            }
         }
 
         &:has(.drop-down-item) {
@@ -42,14 +79,26 @@
         .drop-down-item {
             padding: 3px;
 
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            cursor: pointer;
+
             &.selected {
                 background-color: colors.$background-light;
                 color: colors.$font-light;
             }
 
-            &:hover, &.highlighted {
-                background-color: colors.$accent;
-                color: colors.$font-light;
+            &:not(.drop-down-empty) {
+                &:hover, &.highlighted {
+                    background-color: colors.$accent;
+                    color: colors.$font-light;
+                }
+            }
+
+            &.drop-down-empty {
+                cursor: default;
             }
         }
     }

@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.19.0 - [Unreleased]
+## 5.19.0 - 2026-07-31
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
@@ -13,7 +13,19 @@
   - Adjusted overflow effect
 - `Tooltip`, `PropertyGrid`
     - Updated tooltip styling to use `ViciOne.Ui.Design`
+- `ComboBox`, `TagBox`
+  - Added tooltip to drop-down items
+  - Improved cursor display
+  - Improved drop-down width, height and placement calculation
+- `ComboBox`
+  - Improved drop-down icon click handling
+  - Improved drop-down icon handling to display open and closed state
+  - Added warning icon with tooltip, when no matching item is found while filtering
+  - Enabled tab navigation in the read-only state
+- `PropertyGrid`
+  - Adjusted alignment of `ComboBox`
 - `.NET` packages, updated to version `10.0.10`
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.15.0`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

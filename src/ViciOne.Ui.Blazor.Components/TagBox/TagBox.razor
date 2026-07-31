@@ -44,6 +44,7 @@
               InputElementReference="_inputElement"
               MultiSelection="true"
               Items="@FilterAvailableTags().ToList()"
+              TitleSelector="@(t => t)"
               @bind-SelectedItems="Tags"
               @bind-SelectedItems:after="NotifyTagsChangedAsync">
 

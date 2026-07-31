@@ -6,43 +6,50 @@
     <h3><code>@nameof(TagBox)</code></h3>
 
     <TagBox @bind-Tags="_tags1"
-            AvailableTags="_availableTags" />
+            AvailableTags="s_availableTags" />
 
     <h3><code>@nameof(TagBox.AllowCustomTags)</code></h3>
 
     <TagBox @bind-Tags="_tags2"
-            AvailableTags="_availableTags"
+            AvailableTags="s_availableTags"
             AllowCustomTags="true" />
 
     <h3><code>Width 200px</code></h3>
 
     <TagBox @bind-Tags="_tags3"
-            AvailableTags="_availableTags"
+            AvailableTags="s_availableTags"
+            AllowCustomTags="true"
+            CssClass="width" />
+
+    <h3><code>Width 200px</code> with wider drop-down-item</h3>
+
+    <TagBox @bind-Tags="_tags4"
+            AvailableTags="s_availableTagsWithWiderItem"
             AllowCustomTags="true"
             CssClass="width" />
 
     <h3><code>Max-Width 200px</code></h3>
 
-    <TagBox @bind-Tags="_tags4"
-            AvailableTags="_availableTags"
+    <TagBox @bind-Tags="_tags5"
+            AvailableTags="s_availableTags"
             AllowCustomTags="true"
             CssClass="max-width" />
 
     <h3><code>@nameof(TagBox.HideSelectedItems)</code></h3>
 
-    <TagBox @bind-Tags="_tags5"
-            AvailableTags="_availableTags"
+    <TagBox @bind-Tags="_tags6"
+            AvailableTags="s_availableTags"
             HideSelectedItems="true" />
 
     <h3><code>@nameof(TagBox.ReadOnly)</code></h3>
 
-    <TagBox @bind-Tags="_tags6"
-            AvailableTags="_availableTags"
+    <TagBox @bind-Tags="_tags7"
+            AvailableTags="s_availableTags"
             ReadOnly="true" />
 
     <h3><code>@nameof(TagBox.Enabled)</code> is false</h3>
 
-    <TagBox @bind-Tags="_tags7"
-            AvailableTags="_availableTags"
+    <TagBox @bind-Tags="_tags8"
+            AvailableTags="s_availableTags"
             Enabled="false" />
 </div>

@@ -10,6 +10,7 @@ public sealed partial class ComboBoxPage : ComponentBase
 {
     private ButtonSize _buttonSize = ButtonSize.Medium;
     private string _city = "Berlin";
+    private string _connection = "MQTT connection";
     private SampleObject? _selectedSampleObject;
 
     private readonly List<ComboBoxItem<ButtonSize, string>> _buttonSizeComboBoxItems = [..
@@ -25,6 +26,12 @@ public sealed partial class ComboBoxPage : ComponentBase
         "Zurich",
         "Paris",
         "Rome"
+    ];
+
+    private readonly List<string> _connectionComboBoxItems = [
+        "MQTT connection",
+        "Microsoft SQL Server Database connection",
+        "Azure IoT Hub connection"
     ];
 
     private readonly List<ButtonSize> _simpleItems = [.. TypeSafeEnumFactory<ButtonSize>.CreateAll()];

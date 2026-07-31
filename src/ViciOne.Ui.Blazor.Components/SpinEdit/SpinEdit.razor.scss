@@ -88,6 +88,14 @@
         }
     }
 
+    &.read-only {
+        .buttons {
+            opacity: inputs.$disabled-opacity;
+
+            pointer-events: none; // avoid tooltips
+        }
+    }
+
     // interaction
     &.focused {
         &:not(.disabled):not(.read-only) {

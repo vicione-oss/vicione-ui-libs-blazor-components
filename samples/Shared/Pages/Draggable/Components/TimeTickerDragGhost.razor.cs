@@ -56,7 +56,7 @@ public sealed partial class TimeTickerDragGhost
 
     public async Task DragStartAsync()
     {
-        Logger.LogInformation("Drag start recognized.");
+        DragStartRecognized(Logger);
 
         _stateCssModifier = "outside-dropzone";
 
@@ -65,7 +65,7 @@ public sealed partial class TimeTickerDragGhost
 
     public async Task DragEndAsync()
     {
-        Logger.LogInformation("Drag end recognized.");
+        DragEndRecognized(Logger);
 
         _stateCssModifier = null;
 
@@ -74,7 +74,7 @@ public sealed partial class TimeTickerDragGhost
 
     public async Task DropzoneEnterAsync()
     {
-        Logger.LogInformation("Dropzone enter recognized.");
+        DropzoneEnterRecognized(Logger);
 
         _stateCssModifier = "over-dropzone";
 
@@ -83,10 +83,22 @@ public sealed partial class TimeTickerDragGhost
 
     public async Task DropzoneLeaveAsync()
     {
-        Logger.LogInformation("Dropzone leave recognized.");
+        DropzoneLeaveRecognized(Logger);
 
         _stateCssModifier = "outside-dropzone";
 
         await RenderContentAsync();
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Drag end recognized.")]
+    private static partial void DragEndRecognized(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Drag start recognized.")]
+    private static partial void DragStartRecognized(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Dropzone enter recognized.")]
+    private static partial void DropzoneEnterRecognized(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Dropzone leave recognized.")]
+    private static partial void DropzoneLeaveRecognized(ILogger logger);
 }

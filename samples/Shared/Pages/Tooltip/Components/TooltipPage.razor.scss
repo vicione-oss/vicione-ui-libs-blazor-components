@@ -1,16 +1,9 @@
-﻿@use "../../../Styles/design/colors";
+@use "../../../Styles/design/colors";
 @use "../../../Styles/mixins";
+@use "../../../Styles/design/tooltip";
 
 .options {
     @include mixins.options-styling();
-}
-
-.data-table {
-    display: grid;
-    grid-column-gap: 16px;
-    grid-template-columns: 1fr 2fr;
-    padding: 8px;
-    white-space: nowrap;
 }
 
 .page-container {
@@ -20,7 +13,34 @@
 }
 
 .tabular-tooltip-content {
-    padding: 8px;
+    @include tooltip.separator-styles();
+
+    display: grid;
+    grid-template-rows: auto auto auto;
+
+    & .header {
+        color: tooltip.$header-text-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 24px;
+    }
+
+    & .data-table {
+        display: grid;
+        grid-column-gap: 16px;
+        grid-template-columns: 1fr 2fr;
+        padding: 8px;
+        white-space: nowrap;
+
+        & label {
+            color: colors.$font;
+        }
+
+        & span {
+            color: colors.$font-light;
+        }
+    }
 }
 
 .tooltip-area {
@@ -41,8 +61,7 @@
 }
 
 .tooltip-content {
-    border: 2px dashed colors.$accent;
-    border-radius: 8px;
+    color: tooltip.$content-text-color;
     display: grid;
     grid-column-gap: 8px;
     grid-template-columns: auto min-content;

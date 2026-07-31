@@ -1,6 +1,6 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 @use "../../Styles/user-interaction";
-@use "Styles/tooltip-separator";
+@use "../../Styles/design/tooltip";
 
 .property-editor-tool-tip {
     border-radius: 8px;
@@ -37,5 +37,5 @@
         @include user-interaction.show-pointer-cursor();
     }
 
-    @include tooltip-separator.styles(colors.$font);
+    @include tooltip.separator-styles();
 }

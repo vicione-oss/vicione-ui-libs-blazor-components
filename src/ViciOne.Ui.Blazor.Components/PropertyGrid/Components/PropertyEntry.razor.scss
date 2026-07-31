@@ -1,7 +1,7 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 @use "../../Styles/mixins";
 @use "../../Styles/user-interaction";
-@use "Styles/tooltip-separator";
+@use "../../Styles/design/tooltip";
 
 .expansion-placeholder {
     grid-area: expansion;
@@ -15,27 +15,29 @@
     top: 8px;
 
     padding: 5px 8px;
-
-    background-color: colors.$background-dark !important;
-
-    border-radius: 8px !important;
-    box-shadow: 0px 0px 12px -2px black !important;
-
-    align-content: center;
 }
 
 .name-tooltip {
+    @include tooltip.separator-styles();
+
     @extend .tooltip;
+    padding: 0px;
+    display: grid;
+    grid-template-rows: auto, auto, auto;
 
-    .display-name, .description {
-        padding: 0px 5px;
-    }
-
-    .display-name {
+    & .display-name {
         @include mixins.overflow-ellipsis();
+        color: tooltip.$header-text-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 24px;
+        padding: 0px 8px;
     }
 
-    @include tooltip-separator.styles(colors.$border);
+    & .description {
+        padding: 8px;
+    }
 }
 
 .information-tooltip {

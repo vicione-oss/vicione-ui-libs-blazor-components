@@ -1,16 +1,17 @@
-﻿@use "./../../Styles/design/colors";
-@use "./../../Styles/design/popup";
+@use "./../../Styles/design/tooltip";
 
 .pre-render-container {
     visibility: collapse;
 }
 
 .tooltip-container {
-    color: colors.$font;
-    font-size: 11px;
+    color: tooltip.$content-text-color;
+    font-size: tooltip.$font-size;
+    font-weight: tooltip.$font-weight;
     height: min-content;
     left: var(--position-x);
-    line-height: 14px;
+    letter-spacing: tooltip.$letter-spacing;
+    line-height: tooltip.$line-height;
     min-width: 100px;
     pointer-events: none;
     position: fixed;
@@ -19,9 +20,9 @@
 
     & ::deep > * {
         // some visible parameters set here to allow tooltip implementations to override these parameters
-        background-color: colors.$background-darker;
-        border-radius: popup.$border-radius;
-        box-shadow: popup.$box-shadow;
+        background-color: tooltip.$background-color;
+        border-radius: tooltip.$border-radius;
+        box-shadow: tooltip.$box-shadow;
         width: min-content;
     }
 }

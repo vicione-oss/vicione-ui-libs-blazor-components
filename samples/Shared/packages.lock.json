@@ -70,9 +70,9 @@
       },
       "ViciOne.Ui.Design": {
         "type": "Direct",
-        "requested": "[2.2.0, )",
-        "resolved": "2.2.0",
-        "contentHash": "9YE0HVaYj3QZlHC3B7I/0fWFSUmpWulRgJIKKhVHXFsl7Y/peGsJK6/qLKUXmRVjepJycGQv1prtGJRHx1h7eA=="
+        "requested": "[2.3.0, )",
+        "resolved": "2.3.0",
+        "contentHash": "1Vn3DMzALpo9olYrL/u3vIlEF50PKtr/kfYFj+p1cZML/I3eRXXvW9ZVdK4bxQnceVkuQ7h749EjXrk8CtOULQ=="
       },
       "ViciOne.Ui.Localization": {
         "type": "Direct",

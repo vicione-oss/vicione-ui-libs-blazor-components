@@ -11,6 +11,8 @@
 - `TabStrip`
   - Fixed clicking a partially-visible tab so it is selected instead of only scrolled into view
   - Adjusted overflow effect
+- `Tooltip`, `PropertyGrid`
+    - Updated tooltip styling to use `ViciOne.Ui.Design`
 - `.NET` packages, updated to version `10.0.10`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`

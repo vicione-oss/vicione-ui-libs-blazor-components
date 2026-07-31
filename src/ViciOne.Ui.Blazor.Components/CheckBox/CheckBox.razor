@@ -1,6 +1,7 @@
-﻿@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Extensions
 @using ViciOne.Ui.Blazor.Components.CheckBox.Enums
-@using ViciOne.Ui.Blazor.Components.Resources.CheckBox
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
 
 @typeparam TValue
 
@@ -48,12 +49,12 @@
            @oninput="@InputChangeAsync"
            @ref="_inputElementReference" />
 
-    <div class="icon-checked">
-        @((MarkupString)SvgIcons.EditorCheck)
+    <div class="checked-icon-container">
+        <MonochromeIcon CssClass="checked-icon" Name="MonochromeIconName.Check" Size="MonochromeIconSize.SmallMedium" />
     </div>
 
     @if (isIndeterminate)
     {
-        @((MarkupString)SvgIcons.EditorIndeterminate)
+        <MonochromeIcon CssClass="indeterminate-icon" Name="MonochromeIconName.MinusSlim" Size="MonochromeIconSize.SmallMedium" />
     }
 </div>

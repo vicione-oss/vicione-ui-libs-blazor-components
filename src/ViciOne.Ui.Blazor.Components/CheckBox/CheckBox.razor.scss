@@ -1,4 +1,4 @@
-﻿@use "../Styles/design/colors";
+@use "../Styles/design/colors";
 @use "../Styles/animations/mixins" as animations;
 @use "../Styles/inputs";
 
@@ -91,30 +91,30 @@
     }
 
     &#{$checked-selector} {
-        .icon-checked {
+        .checked-icon-container {
             display: block;
         }
     }
 
     &.indeterminate {
-        .icon-checked {
+        .checked-icon-container {
             display: none !important;
         }
     }
 
-    .icon-checked {
+    .checked-icon-container {
         display: none;
     }
 
-    ::deep svg {
-        fill: currentcolor;
-        position: absolute;
-        width: 0.875rem;
-        height: 0.875rem;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+    ::deep {
+        .checked-icon, .indeterminate-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
+
     // interaction
     @include inputs.disabled-style();
 

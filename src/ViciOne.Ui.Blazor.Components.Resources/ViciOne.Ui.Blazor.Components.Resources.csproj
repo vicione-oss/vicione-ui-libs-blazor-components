@@ -10,11 +10,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="CheckBox\SvgIcons.Designer.cs">
-      <DependentUpon>SvgIcons.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="PropertyGrid\ContextMenu\Localization\PropertyEntryContextMenu.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -45,10 +40,6 @@
   <ItemGroup>
     <EmbeddedResource Update="AdvancedErrorBoundary\Localization\Content.resx">
       <LastGenOutput>Content.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="CheckBox\SvgIcons.resx">
-      <LastGenOutput>SvgIcons.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="PropertyGrid\ContextMenu\Localization\PropertyEntryContextMenu.resx">

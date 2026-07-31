@@ -4,6 +4,7 @@
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
+- `CheckBox`, replaced inline svgs with monochrome icons
 - `Draggable`
   - Allow customization of drag ghosts
   - Drag now starts on the first pointer move instead of on the click, so no drag ghost appears on a plain click

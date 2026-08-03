@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using AngleSharp.Dom;
 using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -97,13 +96,15 @@ public sealed partial class PropertyEntryTests
         var informationIconContainer = renderedComponent.Find(".information-icon-container");
         informationIconContainer.PointerEnter();
 
-        renderedComponent.Render();
-
         // Assert
-        var informationTooltip = renderedComponent.Find(".information-tooltip");
+        renderedComponent.WaitForAssertion(() =>
+        {
+            var informationTooltip = renderedComponent.Find(
+                ".tooltip-display-container > .tooltip-container .information-tooltip");
 
-        informationTooltip.TextContent.Should()
-            .BeEquivalentTo("The selection is disabled because the selected items have selectable values that are mutually exclusive.");
+            informationTooltip.TextContent.Should()
+                .BeEquivalentTo("The selection is disabled because the selected items have selectable values that are mutually exclusive.");
+        }, TimeSpan.FromSeconds(2));
 
         var nullablePropertyValueType = typeof(TPropertyValue).MakeNullableType();
 

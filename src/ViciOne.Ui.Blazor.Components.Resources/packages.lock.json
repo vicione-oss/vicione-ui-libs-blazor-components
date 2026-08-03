@@ -16,9 +16,9 @@
       },
       "ViciOne.CodeAnalysis": {
         "type": "Direct",
-        "requested": "[1.5.0, )",
-        "resolved": "1.5.0",
-        "contentHash": "wKct0pLyQfLpZkRIbF2SEGPD6RKsuWfPl6D2caMMeJj6asE2zuF/wly+Fdcnu3CDvfKSDzv0NgDvqR7W9ft6XA=="
+        "requested": "[1.7.0, )",
+        "resolved": "1.7.0",
+        "contentHash": "rxY6ZdH/V0n/va0T6Kcbq0XCmhCnueA1iCj2gu1i6+gxVsAw+mk0HsYMoCiGB0aVRVplMc2fBRW4deJt0U3HsA=="
       }
     },
     "net10.0/linux-arm64": {},

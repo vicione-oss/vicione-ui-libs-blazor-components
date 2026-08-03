@@ -10,6 +10,7 @@ dotnet_diagnostic.VO2005.severity = warning # Constructors should be grouped by 
 dotnet_diagnostic.VO2006.severity = none # Methods should be sorted in alphabetical order
 dotnet_diagnostic.VO2008.severity = none # Property assignments in the object initializer are not sorted alphabetically by property name
 dotnet_diagnostic.VO2009.severity = none # Property assignments in the constructor are not sorted alphabetically by property name
+dotnet_diagnostic.VO2010.severity = warning # Generic type file names should match the pattern `TypeName{GenericParameterName, ...}.cs`
 
 dotnet_diagnostic.ROS0003.severity = error # Report missing options leading to non-working analyzers
 

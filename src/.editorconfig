@@ -10,6 +10,7 @@ dotnet_diagnostic.CA1859.severity = warning # Use concrete types when possible f
 dotnet_diagnostic.CA2251.severity = warning # Use 'string.Equals' instead of comparing the result of 'string.Compare' to 0
 
 dotnet_diagnostic.SYSLIB1006.severity = warning # Multiple logging methods cannot use the same event ID
+dotnet_diagnostic.SYSLIB1045.severity = warning # Use GeneratedRegexAttribute to generate the regular expression implementation at compile time
 
 [*.nt.cs]
 dotnet_diagnostic.IDE0057.severity = none # NTypewriter templates require Substring() instead of range operator to avoid CS0518 (System.Range not defined)

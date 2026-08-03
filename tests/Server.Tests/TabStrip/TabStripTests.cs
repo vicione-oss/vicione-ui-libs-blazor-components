@@ -9,14 +9,15 @@ using static Microsoft.Playwright.Assertions;
 namespace Server.Tests.TabStrip;
 
 [Collection<ServerTestCollection>]
-public class TabStripTests(ServerFixture fixture)
+public partial class TabStripTests(ServerFixture fixture)
 {
     private const double EdgeTolerance = 8;
 
     private const string BeforeFadeColorProperty = "--tabs-viewport-before-fade-color";
     private const string AfterFadeColorProperty = "--tabs-viewport-after-fade-color";
 
-    private static readonly Regex s_activeScrollButtonClass = new(@"(^|\s)active(\s|$)");
+    [GeneratedRegex(@"(^|\s)active(\s|$)")]
+    private static partial Regex ActiveScrollButtonClass { get; }
 
     [Theory]
     [InlineData("Large")]
@@ -33,14 +34,14 @@ public class TabStripTests(ServerFixture fixture)
             var (_, scrollContainer, leftButton, rightButton) = await GetScrollingTabStripAsync(page);
 
             // Initially the strip is scrolled to the start: left disabled, right enabled.
-            await Expect(leftButton).Not.ToHaveClassAsync(s_activeScrollButtonClass);
-            await Expect(rightButton).ToHaveClassAsync(s_activeScrollButtonClass);
+            await Expect(leftButton).Not.ToHaveClassAsync(ActiveScrollButtonClass);
+            await Expect(rightButton).ToHaveClassAsync(ActiveScrollButtonClass);
 
             await ClickScrollButtonUntilDisabledAsync(rightButton, scrollContainer);
 
             // After scrolling to the end: right disabled, left enabled.
-            await Expect(rightButton).Not.ToHaveClassAsync(s_activeScrollButtonClass);
-            await Expect(leftButton).ToHaveClassAsync(s_activeScrollButtonClass);
+            await Expect(rightButton).Not.ToHaveClassAsync(ActiveScrollButtonClass);
+            await Expect(leftButton).ToHaveClassAsync(ActiveScrollButtonClass);
         });
     }
 
@@ -60,14 +61,14 @@ public class TabStripTests(ServerFixture fixture)
 
             // Arrange: scroll to the end so the left scroll button becomes enabled.
             await ClickScrollButtonUntilDisabledAsync(rightButton, scrollContainer);
-            await Expect(leftButton).ToHaveClassAsync(s_activeScrollButtonClass);
+            await Expect(leftButton).ToHaveClassAsync(ActiveScrollButtonClass);
 
             // Act: scroll back to the start.
             await ClickScrollButtonUntilDisabledAsync(leftButton, scrollContainer);
 
             // After scrolling to the start: left disabled, right enabled.
-            await Expect(leftButton).Not.ToHaveClassAsync(s_activeScrollButtonClass);
-            await Expect(rightButton).ToHaveClassAsync(s_activeScrollButtonClass);
+            await Expect(leftButton).Not.ToHaveClassAsync(ActiveScrollButtonClass);
+            await Expect(rightButton).ToHaveClassAsync(ActiveScrollButtonClass);
         });
     }
 
@@ -464,7 +465,7 @@ public class TabStripTests(ServerFixture fixture)
             await page.Mouse.ClickAsync(clickX, clickY);
 
             // The click must select the tab (not merely scroll it).
-            await Expect(clippedTab).ToHaveClassAsync(s_activeScrollButtonClass);
+            await Expect(clippedTab).ToHaveClassAsync(ActiveScrollButtonClass);
 
             // Selection then reveals the tab: it ends up fully visible, flush before the right overflow area.
             await WaitForSelectionScrollAsync(scrollContainer, scrollLeftBeforeClick);

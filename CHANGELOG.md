@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.20.0 - Unreleased
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `Button`, adjusted hover and focus effect
+
 ## 5.19.0 - 2026-07-31
 
 ### Package `ViciOne.Ui.Blazor.Components`

@@ -18,10 +18,10 @@
     border-style: solid;
     border-color: #b1b1b1;
     border-radius: button.$border-radius;
-    @include animations.border-color();
 
     background-color: inherit;
     color: color.change(colors.$font-light, $alpha: 0.8);
+    @include animations.multiple($border: true, $background-color: true);
 
     font-family: inherit;
     font-weight: typography.$font-weight-light;
@@ -77,11 +77,11 @@
 
     &:not(:disabled) {
          &:hover {
-            border-color: colors.$font-light;
+            background-color: color.change(colors.$font-light, $alpha: 0.03);
         }
     }
 
     &:focus {
-        border-color: colors.$font-light;
+        border-color: colors.$accent;
     }
 }

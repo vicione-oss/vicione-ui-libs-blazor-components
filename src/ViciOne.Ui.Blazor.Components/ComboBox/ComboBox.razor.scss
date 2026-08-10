@@ -1,8 +1,5 @@
 @use "../Styles/design/colors";
-@use "../Styles/animations/mixins" as animations;
 @use "../Styles/inputs";
-@use "../Styles/mixins";
-@use "../Styles/user-interaction";
 
 @use "sass:color";
 
@@ -33,10 +30,6 @@
             right: 0;
 
             @include inputs.padding($right: $drop-down-icon-wrapper-width);
-
-            &:disabled {
-                opacity: unset; // avoids applying styles from @include inputs.disabled-style() twice
-            }
         }
     }
 
@@ -52,12 +45,6 @@
         justify-items: center;
     }
 
-    &.read-only {
-        .drop-down-icon-wrapper {
-            opacity: inputs.$disabled-opacity;
-        }
-    }
-
     ::deep .drop-down {
         grid-area: drop-down;
 
@@ -67,6 +54,20 @@
             @include inputs.padding($right: $drop-down-icon-wrapper-width); // same padding to ensure input text does not flow into drop-down icon
         }
     }
+
+    // state
+    &.disabled {
+        .input-wrapper ::deep .combo-box-input {
+            opacity: unset; // avoids applying styles from @include inputs.disabled-style() twice
+        }
+    }
+
+    &.read-only {
+        .drop-down-icon-wrapper {
+            opacity: inputs.$disabled-opacity;
+        }
+    }
+
     // interaction
     &:hover {
         &:not(.disabled):not(.read-only) {

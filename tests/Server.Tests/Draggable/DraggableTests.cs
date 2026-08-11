@@ -32,8 +32,8 @@ public class DraggableTests(ServerFixture fixture)
                 // The default drag clone renders a copy of the dragged shape, so the drag ghost carries the
                 // shape's own markup and not any custom drag ghost content.
                 var ghostHtml = await GetDragGhostHtmlAsync(p);
-                Assert.Contains("Shape A", ghostHtml);
-                Assert.DoesNotContain("ticker-container", ghostHtml);
+                Assert.Contains("Shape A", ghostHtml, StringComparison.Ordinal);
+                Assert.DoesNotContain("ticker-container", ghostHtml, StringComparison.Ordinal);
             });
 
             await AssertLastDropAsync(page, "Shape A", "Dropzone 1");
@@ -59,8 +59,8 @@ public class DraggableTests(ServerFixture fixture)
                 // Shape B supplies the TimeTickerDragGhost, so the drag ghost shows the ticker markup
                 // instead of a plain clone of the shape.
                 var ghostHtml = await GetDragGhostHtmlAsync(p);
-                Assert.Contains("ticker-container", ghostHtml);
-                Assert.Contains("ticker-time", ghostHtml);
+                Assert.Contains("ticker-container", ghostHtml, StringComparison.Ordinal);
+                Assert.Contains("ticker-time", ghostHtml, StringComparison.Ordinal);
             });
 
             await AssertLastDropAsync(page, "Shape B", "Dropzone 2");
@@ -86,8 +86,8 @@ public class DraggableTests(ServerFixture fixture)
                 // The default drag clone copies the row as-is, so the drag ghost carries the row's name but
                 // none of the custom table-row drag ghost's inline table layout styling.
                 var ghostHtml = await GetDragGhostHtmlAsync(p);
-                Assert.Contains("Alice Anderson", ghostHtml);
-                Assert.DoesNotContain("table-layout: fixed", ghostHtml);
+                Assert.Contains("Alice Anderson", ghostHtml, StringComparison.Ordinal);
+                Assert.DoesNotContain("table-layout: fixed", ghostHtml, StringComparison.Ordinal);
             });
 
             await AssertLastDropAsync(page, "Alice Anderson", "Dropzone 1");
@@ -114,8 +114,8 @@ public class DraggableTests(ServerFixture fixture)
                 // self-contained fixed-layout table box. That inline styling is the marker distinguishing it
                 // from the plain default row clone.
                 var ghostHtml = await GetDragGhostHtmlAsync(p);
-                Assert.Contains("Bob Brown", ghostHtml);
-                Assert.Contains("table-layout: fixed", ghostHtml);
+                Assert.Contains("Bob Brown", ghostHtml, StringComparison.Ordinal);
+                Assert.Contains("table-layout: fixed", ghostHtml, StringComparison.Ordinal);
             });
 
             await AssertLastDropAsync(page, "Bob Brown", "Dropzone 2");

@@ -1,6 +1,7 @@
 [*.cs]
 dotnet_diagnostic.IDE0120.severity = warning # Simplify LINQ expression
 
+dotnet_diagnostic.CA1307.severity = warning # Specify StringComparison for clarity
 dotnet_diagnostic.CA1515.severity = none # Because an application's API isn't typically referenced from outside the assembly, types can be made internal
 dotnet_diagnostic.CA1812.severity = none # Avoid uninstantiated internal classes
 dotnet_diagnostic.CA1822.severity = warning # Mark members as static

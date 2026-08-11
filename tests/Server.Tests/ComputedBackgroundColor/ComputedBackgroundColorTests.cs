@@ -145,8 +145,8 @@ public class ComputedBackgroundColorTests(ServerFixture fixture)
         if (string.IsNullOrWhiteSpace(value) || value == "transparent")
             return false;
 
-        var start = value.IndexOf('(');
-        var end = value.IndexOf(')');
+        var start = value.IndexOf('(', StringComparison.Ordinal);
+        var end = value.IndexOf(')', StringComparison.Ordinal);
         if (start < 0 || end <= start)
             return false;
 

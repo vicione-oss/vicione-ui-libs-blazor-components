@@ -96,6 +96,7 @@
 
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
     <PropertyGroup>
+      <BaselineScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/baseline</BaselineScssOutputFolder>
       <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
       <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
       <TooltipScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/tooltip</TooltipScssOutputFolder>

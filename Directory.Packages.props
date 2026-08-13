@@ -32,7 +32,7 @@
     <PackageVersion Include="NTypewriter.SourceGenerator" Version="0.5.9" />
     <PackageVersion Include="StronglyTypedId" Version="0.2.1" />
     <PackageVersion Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage" Version="2.0.0" />
-    <PackageVersion Include="ViciOne.Ui.Design" Version="2.3.0" />
+    <PackageVersion Include="ViciOne.Ui.Design" Version="2.4.0" />
     <PackageVersion Include="ViciOne.Ui.Localization" Version="3.0.1" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />

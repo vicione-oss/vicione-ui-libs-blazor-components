@@ -1,10 +1,13 @@
 # Changelog
 
-## 5.20.0 - Unreleased
+## 5.20.0 - 2026-08-13
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
+- `.NET` packages, updated to version `10.0.11`
 - `Button`, adjusted hover and focus effect
+- `SectionRail`, buttons to navigate to sections use <button> instead of <a>
+- Removed `cursor: pointer` styling applied to all `<button>` tags implemented in components as we expect this to be applied by baseline styling in the consumer project
 
 ## 5.19.0 - 2026-07-31
 

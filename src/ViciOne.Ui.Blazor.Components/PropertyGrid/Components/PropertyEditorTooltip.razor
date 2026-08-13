@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
 @{
@@ -11,7 +11,7 @@
 <div class="@string.Join(" ", cssClasses)">
     @if (HasCloseButton)
     {
-        <button type="button" class="btn close-button" @onclick="CloseButtonClickAsync">
+        <button type="button" class="close-button" @onclick="CloseButtonClickAsync">
             <MonochromeIcon Name="MonochromeIconName.CloseMedium" Size="MonochromeIconSize.Small" />
         </button>
     }

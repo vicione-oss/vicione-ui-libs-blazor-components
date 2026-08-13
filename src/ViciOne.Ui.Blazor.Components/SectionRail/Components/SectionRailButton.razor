@@ -1,10 +1,10 @@
-﻿@{
+@{
     var cssClasses = new List<string> { "section-rail-button" };
 
     if (Active)
         cssClasses.Add("active");
 }
 
-<a href="#" class="@string.Join(" ", cssClasses)" title="@Title" @onclick="AnchorClickAsync" @onclick:preventDefault="true">
+<button type="button" class="@string.Join(" ", cssClasses)" title="@Title" @onclick="ButtonClickAsync" @onclick:preventDefault="true">
     @Shared.RenderFragments.Icon(this)
-</a>
+</button>

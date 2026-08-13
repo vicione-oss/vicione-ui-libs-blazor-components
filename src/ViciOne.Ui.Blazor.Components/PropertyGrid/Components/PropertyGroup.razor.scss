@@ -4,7 +4,6 @@
 @use "../../Styles/user-interaction";
 
 .property-group {
-    @include user-interaction.show-pointer-cursor();
     display: grid;
     grid-template-columns: 16px 120px auto;
     height: 40px;
@@ -13,6 +12,7 @@
     background-color: colors.$background-darker;
 
     @include user-interaction.prevent-text-selection();
+    @include user-interaction.show-pointer-cursor();
 
     &.sub-group {
         background-color: colors.$background-dark;
@@ -42,9 +42,10 @@
 
     > .group-drop-down {
         align-items: center;
-        @include user-interaction.show-pointer-cursor();
         display: flex;
         justify-content: center;
+
+        @include user-interaction.show-pointer-cursor();
 
         &.expanded > ::deep .icon {
             transform: rotate(90deg);

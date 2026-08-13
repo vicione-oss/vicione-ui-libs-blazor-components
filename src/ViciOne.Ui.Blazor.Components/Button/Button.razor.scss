@@ -1,7 +1,7 @@
 @use "../Styles/design/button";
 @use "../Styles/design/colors";
 @use "../Styles/design/typography";
-@use "../Styles/animations/mixins" as animations;
+@use "../Styles/design/animations/mixins" as animations;
 @use "../Styles/buttons/mixins" as buttons;
 @use "../Styles/inputs/mixins" as inputs;
 
@@ -72,7 +72,6 @@
     // interaction
     @include inputs.disabled-style();
 
-    @include buttons.show-pointer-cursor-when-not-disabled();
     @include buttons.no-outline-on-focus();
 
     &:not(:disabled) {

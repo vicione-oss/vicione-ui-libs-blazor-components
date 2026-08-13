@@ -7,9 +7,6 @@
   <PropertyGroup>
     <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
     <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
-
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>C:\temp</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -385,6 +382,7 @@
 
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
     <PropertyGroup>
+      <AnimationsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/animations</AnimationsScssOutputFolder>
       <ButtonScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/button</ButtonScssOutputFolder>
       <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
       <PopupScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/popup</PopupScssOutputFolder>

@@ -36,7 +36,5 @@
         
         @include buttons.lucent-styling();
         background: colors.$background-darker;
-
-        @include buttons.show-pointer-cursor-when-not-disabled();
     }
 }

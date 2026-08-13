@@ -22,12 +22,11 @@
       "matchJsonata": [ "sharedVariableName = 'DotNetVersion'" ],
       "enabled": true,
       "rebaseWhen": "never",
-      "groupName": ".NET packages",
+      "groupName": ".NET",
       "separateMajorMinor": true,
       "semanticCommits": "disabled",
       "commitMessagePrefix": "",
       "commitMessageAction": "Update to",
-      "commitMessageTopic": ".NET",
       "commitMessageExtra": "{{newVersion}}",
       "branchTopic": "update-to-net-{{newMajor}}-{{newMinor}}-{{newPatch}}",
       "addLabels": [ "Dependencies", "Modernization" ]

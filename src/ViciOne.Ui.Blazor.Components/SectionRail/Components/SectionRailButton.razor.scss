@@ -1,16 +1,22 @@
-﻿@use "../../Styles/design/colors";
+@use "../../Styles/design/colors";
 
 @use "sass:color";
 
 .section-rail-button {
+    // General resets
+    box-sizing: border-box;
     padding: 8px 0px;
+    margin: 0;
+    border: 0;
+    color: colors.$font;
+    background-color: unset;
+    font-family: unset;
+    font-weight: unset;
+    line-height: unset;
     
     display: flex;
     align-content: center;
     justify-content: center;
-    
-    text-decoration: none;
-    color: colors.$font;
 
     $background-color-active: rgb(200, 200, 200);
     $color-active: colors.$background-darker;

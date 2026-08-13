@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 
@@ -37,7 +37,7 @@ public sealed partial class SectionRailButton : ComponentBase, IHasIcon
     [Parameter]
     public EventCallback OnClick { get; set; }
 
-    private async Task AnchorClickAsync(MouseEventArgs e)
+    private async Task ButtonClickAsync(MouseEventArgs e)
     {
         if (OnClick.HasDelegate)
             await OnClick.InvokeAsync(e);

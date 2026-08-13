@@ -1,3 +1,11 @@
-.tabs-with-scrolling {
-    max-width: 400px;
+@use "../../Styles/design/colors";
+
+.tab-strip-page {
+    ::deep .tab-strip {
+        --tab-strip-overflow-background: #{colors.$background-darker};
+    }
+
+    .tabs-with-scrolling {
+        max-width: 400px;
+    }
 }

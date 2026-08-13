@@ -1,5 +1,5 @@
 @use "../design/colors";
-@use "../animations/mixins" as animations;
+@use "../design/animations/mixins" as animations;
 @use "../user-interaction";
 
 // applies a lucent appearance with a transparent background, no borders and
@@ -31,11 +31,5 @@
 @mixin no-outline-on-focus() {
     &:focus {
         outline: none;
-    }
-}
-
-@mixin show-pointer-cursor-when-not-disabled() {
-    &:not(:disabled) {
-        @include user-interaction.show-pointer-cursor();
     }
 }

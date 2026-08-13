@@ -1,7 +1,6 @@
 @use "../../Styles/design/button";
 @use "../../Styles/design/colors";
 @use "../../Styles/design/typography";
-@use "../../Styles/user-interaction";
 
 @use "sass:color";
 
@@ -50,10 +49,6 @@
 
         &:focus:not(:focus-visible) {
             outline: 0;
-        }
-
-        &:not(:disabled) {
-            @include user-interaction.show-pointer-cursor();
         }
     }
 

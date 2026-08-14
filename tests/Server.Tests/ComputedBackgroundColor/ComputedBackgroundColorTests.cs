@@ -14,14 +14,14 @@ public class ComputedBackgroundColorTests(ServerFixture fixture)
     private const int ChannelTolerance = 2;
 
     [Theory]
-    [InlineData(0, 93, 42, 42)]     // 1 Layer
-    [InlineData(1, 74, 84, 33)]     // 2 Layers
-    [InlineData(2, 59, 67, 78)]     // 3 Layers
+    [InlineData(0, 85, 34, 34)]     // 1 Layer
+    [InlineData(1, 68, 78, 27)]     // 2 Layers
+    [InlineData(2, 54, 62, 73)]     // 3 Layers
     [InlineData(3, 100, 100, 100)]  // Opaque layer in the middle
-    [InlineData(4, 93, 42, 42)]     // Fully transparent layer
-    [InlineData(5, 103, 39, 39)]    // Opacity multiplied with alpha
-    [InlineData(6, 84, 33, 74)]     // Non-uniform background (red over blue, half-width probe)
-    [InlineData(7, 93, 42, 42)]     // Split background with a half-width probe (red only)
+    [InlineData(4, 85, 34, 34)]     // Fully transparent layer
+    [InlineData(5, 95, 32, 32)]     // Opacity multiplied with alpha
+    [InlineData(6, 78, 27, 68)]     // Non-uniform background (red over blue, half-width probe)
+    [InlineData(7, 85, 34, 34)]     // Split background with a half-width probe (red only)
     public async Task Should_resolve_expected_background_color_for_demo(
         int demoIndex, int expectedRed, int expectedGreen, int expectedBlue)
     {

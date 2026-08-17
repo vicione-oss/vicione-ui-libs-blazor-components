@@ -1,5 +1,17 @@
+@use "../Styles/design/scrollbar" as scrollbar;
+
 .navigation {
     font-size: 16px;
+
+    // The pane this sits in is a grid item sized to its own content, so a navigation taller than the window
+    // stretches the layout's rows and carries the page area below the bottom of the screen with them. A
+    // percentage height cannot cap it — the pane's height is the very thing being derived from this content —
+    // so the cap comes from the window, which the pane spans top to bottom. One more sample page then costs a
+    // row of scrolling in here rather than a row of layout height.
+    max-height: 100vh;
+    overflow: auto;
+
+    @include scrollbar.adjust-styles();
 
     ul {
         list-style-type: none;

@@ -11,7 +11,7 @@ using TabStripComponent = ViciOne.Ui.Blazor.Components.TabStrip.Components.TabSt
 
 namespace ViciOne.Ui.Blazor.Components.Tests.TabStrip.Components;
 
-public sealed class TabStripTests : IAsyncDisposable
+public sealed partial class TabStripTests : IAsyncDisposable
 {
     public static readonly TheoryData<string> TabSizes =
         [.. TypeSafeEnumFactory<TabSize>.CreateAll().Select(size => size.GetName())];
@@ -164,24 +164,6 @@ public sealed class TabStripTests : IAsyncDisposable
         var scrollButtons = renderedComponent.FindAll(".tab-strip-scroll-button");
         scrollButtons[1].ClassList.Should().Contain("active");
         scrollButtons[0].ClassList.Should().NotContain("active");
-    }
-
-    [Fact]
-    public async Task ScrollStateChangedAsync_should_re_render_only_when_state_changes()
-    {
-        // Arrange
-        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
-            .Add(p => p.ChildContent, _ => { }));
-
-        await renderedComponent.Instance.ScrollStateChangedAsync(canScrollLeft: true, canScrollRight: true);
-
-        var renderCountAfterFirstChange = renderedComponent.RenderCount;
-
-        // Act
-        await renderedComponent.Instance.ScrollStateChangedAsync(canScrollLeft: true, canScrollRight: true);
-
-        // Assert
-        renderedComponent.RenderCount.Should().Be(renderCountAfterFirstChange);
     }
 
     [Fact]
@@ -516,23 +498,4 @@ public sealed class TabStripTests : IAsyncDisposable
         callbackInvocationCount.Should().Be(0);
     }
 
-    [Fact]
-    public async Task ScrollStateChangedAsync_should_not_throw_for_repeated_invocations()
-    {
-        // Arrange
-        var renderedComponent = _testContext.Render<TabStripComponent>(b => b
-            .Add(p => p.ChildContent, _ => { }));
-
-        // Act
-        var act = async () =>
-        {
-            await renderedComponent.Instance.ScrollStateChangedAsync(true, false);
-            await renderedComponent.Instance.ScrollStateChangedAsync(false, true);
-            await renderedComponent.Instance.ScrollStateChangedAsync(true, true);
-            await renderedComponent.Instance.ScrollStateChangedAsync(false, false);
-        };
-
-        // Assert
-        await act.Should().NotThrowAsync();
-    }
 }

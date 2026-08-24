@@ -7,7 +7,7 @@ using PopupComponent = ViciOne.Ui.Blazor.Components.Popup.Components.Popup;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Popup.Components;
 
-public sealed class PopupTests : IAsyncDisposable
+public sealed partial class PopupTests : IAsyncDisposable
 {
     private readonly BunitContext _testContext = new();
 
@@ -45,27 +45,6 @@ public sealed class PopupTests : IAsyncDisposable
 
             assert.Should().Throw<ElementNotFoundException>();
         }
-    }
-
-    [Fact]
-    public async Task ShowAsync_should_make_popup_visible()
-    {
-        // Arrange
-        var popup = _testContext.Render<PopupComponent>(b => b
-            .Add(p => p.CssClass, "test-popup"));
-
-        // Act
-        await popup.Instance.ShowAsync();
-
-        // Assert
-        var assert = () =>
-        {
-            var sectionContent = popup.RenderSectionContent(_testContext);
-
-            sectionContent.Find(".test-popup");
-        };
-
-        assert.Should().NotThrow();
     }
 
     [Fact]
@@ -200,22 +179,6 @@ public sealed class PopupTests : IAsyncDisposable
 
         // Assert
         onClosingCallCount.Should().Be(0);
-    }
-
-    [Fact]
-    public async Task CloseAsync_should_not_throw_when_disposed()
-    {
-        // Arrange
-        var popup = _testContext.Render<PopupComponent>(b => b
-            .Add(p => p.Visible, true));
-
-        await popup.Instance.DisposeAsync();
-
-        // Act
-        var closeAction = async () => popup.Instance.CloseAsync();
-
-        // Assert
-        await closeAction.Should().NotThrowAsync();
     }
 
     [Fact]

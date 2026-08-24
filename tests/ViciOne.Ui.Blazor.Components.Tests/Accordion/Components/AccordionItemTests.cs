@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Accordion.Components;
 
-public sealed class AccordionItemTests
+public sealed partial class AccordionItemTests
 {
     [Fact]
     public void Should_render_root_element_with_accordion_item_class()
@@ -225,139 +225,6 @@ public sealed class AccordionItemTests
 
         // Assert
         receivedValue.Should().Be(expectedExpanded);
-    }
-
-    [Fact]
-    public void OnBeforeExpand_should_be_invoked_with_sender()
-    {
-        // Arrange
-        using var testContext = new BunitContext();
-        IAccordionItem? receivedSender = null;
-
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-        {
-            b.Add(p => p.Text, "Network");
-            b.Add(p => p.OnBeforeExpand, args => receivedSender = args.Sender);
-            b.Add(p => p.ChildContent, "<div>Content</div>");
-        });
-
-        // Act
-        renderedComponent.Find(".header").Click();
-
-        // Assert
-        receivedSender.Should().NotBeNull();
-        receivedSender!.Text.Should().Be("Network");
-    }
-
-    [Fact]
-    public void OnBeforeExpand_cancel_should_prevent_expansion()
-    {
-        // Arrange
-        using var testContext = new BunitContext();
-
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-        {
-            b.Add(p => p.Text, "Item");
-            b.Add(p => p.OnBeforeExpand, args => args.Cancel = true);
-            b.Add(p => p.ChildContent, "<div>Content</div>");
-        });
-
-        // Act
-        renderedComponent.Find(".header").Click();
-
-        // Assert
-        renderedComponent.FindAll(".content").Should().BeEmpty();
-        renderedComponent.Instance.Expanded.Should().BeFalse();
-    }
-
-    [Fact]
-    public void OnBeforeExpand_cancel_should_not_invoke_expanded_changed()
-    {
-        // Arrange
-        using var testContext = new BunitContext();
-        var expandedChangedInvoked = false;
-
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-        {
-            b.Add(p => p.Text, "Item");
-            b.Add(p => p.OnBeforeExpand, args => args.Cancel = true);
-            b.Add(p => p.ExpandedChanged, _ => expandedChangedInvoked = true);
-            b.Add(p => p.ChildContent, "<div>Content</div>");
-        });
-
-        // Act
-        renderedComponent.Find(".header").Click();
-
-        // Assert
-        expandedChangedInvoked.Should().BeFalse();
-    }
-
-    [Fact]
-    public void OnBeforeCollapse_should_be_invoked_with_sender()
-    {
-        // Arrange
-        using var testContext = new BunitContext();
-        IAccordionItem? receivedSender = null;
-
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-        {
-            b.Add(p => p.Text, "Settings");
-            b.Add(p => p.Expanded, true);
-            b.Add(p => p.OnBeforeCollapse, args => receivedSender = args.Sender);
-            b.Add(p => p.ChildContent, "<div>Content</div>");
-        });
-
-        // Act
-        renderedComponent.Find(".header").Click();
-
-        // Assert
-        receivedSender.Should().NotBeNull();
-        receivedSender!.Text.Should().Be("Settings");
-    }
-
-    [Fact]
-    public void OnBeforeCollapse_cancel_should_prevent_collapse()
-    {
-        // Arrange
-        using var testContext = new BunitContext();
-
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-        {
-            b.Add(p => p.Text, "Item");
-            b.Add(p => p.Expanded, true);
-            b.Add(p => p.OnBeforeCollapse, args => args.Cancel = true);
-            b.Add(p => p.ChildContent, "<div class=\"inner\">Content</div>");
-        });
-
-        // Act
-        renderedComponent.Find(".header").Click();
-
-        // Assert
-        renderedComponent.Find(".content .inner");
-        renderedComponent.Instance.Expanded.Should().BeTrue();
-    }
-
-    [Fact]
-    public void OnBeforeCollapse_cancel_should_not_invoke_expanded_changed()
-    {
-        // Arrange
-        using var testContext = new BunitContext();
-        var expandedChangedInvoked = false;
-
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-        {
-            b.Add(p => p.Text, "Item");
-            b.Add(p => p.Expanded, true);
-            b.Add(p => p.OnBeforeCollapse, args => args.Cancel = true);
-            b.Add(p => p.ExpandedChanged, _ => expandedChangedInvoked = true);
-            b.Add(p => p.ChildContent, "<div>Content</div>");
-        });
-
-        // Act
-        renderedComponent.Find(".header").Click();
-
-        // Assert
-        expandedChangedInvoked.Should().BeFalse();
     }
 
     [Fact]

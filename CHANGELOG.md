@@ -2,6 +2,10 @@
 
 ## 5.21.0 - Unreleased
 
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `ContextMenu`, updated styling to use `ViciOne.Ui.Design`
+
 ## 5.20.0 - 2026-08-13
 
 ### Package `ViciOne.Ui.Blazor.Components`

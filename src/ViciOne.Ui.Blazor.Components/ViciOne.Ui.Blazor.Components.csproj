@@ -385,6 +385,7 @@
       <AnimationsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/animations</AnimationsScssOutputFolder>
       <ButtonScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/button</ButtonScssOutputFolder>
       <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
+      <ContextMenuScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/context-menu</ContextMenuScssOutputFolder>
       <PopupScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/popup</PopupScssOutputFolder>
       <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
       <TooltipScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/tooltip</TooltipScssOutputFolder>

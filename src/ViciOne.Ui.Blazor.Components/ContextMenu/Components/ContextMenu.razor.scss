@@ -1,15 +1,15 @@
-﻿@use "../../Styles/design/colors";
-@use "../../Styles/design/popup";
+@use "../../Styles/design/colors";
+@use "../../Styles/design/context-menu";
 
 .context-menu {
     font-family: inherit;
     font-size: 0.875rem;
-    line-height: popup.$line-height;
+    line-height: context-menu.$line-height;
     color: colors.$font;
     background-color: colors.$background-dark;
     border: 1px solid colors.$border;
-    border-radius: popup.$border-radius;
-    box-shadow: popup.$box-shadow;
+    border-radius: context-menu.$border-radius;
+    box-shadow: context-menu.$box-shadow;
     flex: 1 1 auto;
     display: flex;
     position: relative;

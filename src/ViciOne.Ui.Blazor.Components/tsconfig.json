@@ -12,6 +12,9 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitOverride": true,
         "skipLibCheck": true,
+        "declaration": true,
+        "declarationDir": "obj/types",
+        "types": [ "blazor__javascript-interop" ],
         "paths": {
             "/_content/ViciOne.Ui.Blazor.Components/js/js-function-descriptor.js": [ "./Models/JsFunctionDescriptor.cs.ts" ],
             "/_content/ViciOne.Ui.Blazor.Components/js/point.js": [ "./Scripts/Point.ts" ],
@@ -73,6 +76,8 @@
         }
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "bin",
+        "obj"
     ]
 }

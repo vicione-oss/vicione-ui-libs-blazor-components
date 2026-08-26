@@ -3,6 +3,8 @@
   <PropertyGroup>
     <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
     <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
+
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>
 
   <ItemGroup>
@@ -71,11 +73,11 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="MoveGeneratedStaticWebAssets" BeforeTargets="GetTypeScriptOutputForPublishing">
+  <Target Name="MoveGeneratedStaticWebAssets" AfterTargets="RunTscCompile">
     <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
   </Target>
 
-  <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="GetTypeScriptOutputForPublishing">
+  <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="MoveGeneratedStaticWebAssets">
     <ItemGroup>
       <Content Remove="%(GeneratedStaticWebAsset.FullPath)" Condition="!$([MSBuild]::IsOSPlatform('Windows'))" />
       <Content Remove="%(GeneratedStaticWebAsset.Identity)" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />

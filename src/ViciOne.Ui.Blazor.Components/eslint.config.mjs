@@ -9,7 +9,8 @@ export default [
             'Scripts/*.js',
             '**/*.cs.js',
             '**/*.razor.js',
-            'dist/**/*.js'
+            'dist/**/*.js',
+            'obj/types/**/*.d.ts'
         ]
     },
     ...xoTypeScriptPatched,

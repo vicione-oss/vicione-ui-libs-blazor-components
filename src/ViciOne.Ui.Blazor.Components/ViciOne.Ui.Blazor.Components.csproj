@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -7,6 +7,8 @@
   <PropertyGroup>
     <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
     <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
+
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>
 
   <ItemGroup>
@@ -86,8 +88,39 @@
     <Move SourceFiles="PropertyGrid\Extensions\IServiceCollectionExtensions.PropertyGrid.g.cs" DestinationFiles="PropertyGrid\Extensions\IServiceCollectionExtensions.g.cs" Condition="Exists('PropertyGrid\Extensions\IServiceCollectionExtensions.PropertyGrid.g.cs')" />
   </Target>
 
-  <!-- https://github.com/microsoft/TypeScript/issues/57695 -->
-  <Target Name="EnforceTypeScriptCompileAfterSourceGenerators" BeforeTargets="PreComputeCompileTypeScriptWithTSConfig" DependsOnTargets="CoreCompile" />
+  <!--
+    https://github.com/microsoft/TypeScript/issues/57695
+
+    Some TypeScript sources are emitted from .cs files annotated with "GenerateTypeScript..." attributes
+    by the NTypewriter source generator, which runs as part of 'CoreCompile'.
+
+    As of Microsoft.TypeScript.MSBuild 7.0.0, the TypeScript compile is hooked into 'CoreCompileDependsOn'
+    (as 'SetTscExecutable;RunTscCompile'), which means it runs *before* the NTypewriter source generator.
+    Leaving it like this, would force us to build twice, because changes to those .cs files only reach
+    their associated .js files on the following build.
+
+    Pinning the TypeScript compile to a later stage via the 'DependsOnTargets="CoreCompile"' approach suggested in
+    the GitHub issue linked above produces a circular dependency error, hence we re-schedule it to run after
+    'CoreCompile' instead: we strip it from $(CoreCompileDependsOn) and re-attach it via 'AfterTargets'.
+  -->
+  <Target Name="UnhookTypeScriptCompileFromCoreCompile" BeforeTargets="BeforeCompile">
+    <ItemGroup>
+      <_CoreCompileDependsOnTarget Include="$(CoreCompileDependsOn)" Exclude="SetTscExecutable;RunTscCompile" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <CoreCompileDependsOn>@(_CoreCompileDependsOnTarget)</CoreCompileDependsOn>
+    </PropertyGroup>
+  </Target>
+
+  <!--
+    The re-scheduled compile has to repeat the "Condition" that Microsoft.TypeScript.MSBuild dropped in 7.0.0.
+
+    Up to 5.9.3 every compile target was guarded with "'$(BuildingProject)' != 'false' AND '$(DesignTimeBuild)' != 'true'",
+    but 'RunTscCompile' carries no such guard anymore. Without it the compile also runs during the design-time builds
+    Visual Studio triggers on its own, which results in strange behavior like re-creating the just deleted output right after a 'Clean'.
+  -->
+  <Target Name="EnforceTypeScriptCompileAfterSourceGenerators" AfterTargets="CoreCompile" DependsOnTargets="SetTscExecutable;RunTscCompile" Condition="'$(BuildingProject)' != 'false' AND '$(DesignTimeBuild)' != 'true'" />
 
   <PropertyGroup>
     <!--
@@ -340,7 +373,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="MoveGeneratedStaticWebAssets" BeforeTargets="GetTypeScriptOutputForPublishing">
+  <Target Name="MoveGeneratedStaticWebAssets" AfterTargets="RunTscCompile">
     <!--
       Move generated static web asset to destination file in the content root.
 
@@ -357,9 +390,9 @@
     <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
   </Target>
 
-  <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="GetTypeScriptOutputForPublishing">
+  <Target Name="RemoveMovedGeneratedStaticWebAssets" AfterTargets="MoveGeneratedStaticWebAssets">
     <!--
-      Remove generated files from Content that were added in target 'GetTypeScriptOutputForPublishing' and got moved by
+      Remove generated files from Content that were emitted by the TypeScript compile 'RunTscCompile' and got moved by
       target 'MoveGeneratedStaticWebAssets', so that these generated files are not included in NuGet-package and staticwebassets.
     -->
     <ItemGroup>

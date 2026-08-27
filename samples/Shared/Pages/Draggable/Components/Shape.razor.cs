@@ -65,9 +65,7 @@ public sealed partial class Shape : ComponentBase, IDraggable, IHasLabel, IAsync
             var dragGhostChanged = Interlocked.CompareExchange(ref _dragGhostChanged, false, true);
 
             if ((modifierKeyChanged || dragGhostChanged) && _dragInteractionAttachTask is not null)
-            {
                 await RemoveDragInteractionAsync();
-            }
 
             if (_dragInteractionAttachTask is null)
             {

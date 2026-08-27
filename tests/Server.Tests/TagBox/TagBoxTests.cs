@@ -353,9 +353,7 @@ public class TagBoxTests(ServerFixture fixture)
             var charsToDelete = LongText.Length - TargetText.Length;
 
             for (var i = 0; i < charsToDelete; i++)
-            {
                 await tagInput.PressAsync("Backspace");
-            }
 
             // Assert
             var finalBoundingBox = await thirdTagBox.BoundingBoxAsync();

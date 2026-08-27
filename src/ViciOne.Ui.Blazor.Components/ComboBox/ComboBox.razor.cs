@@ -148,17 +148,11 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
                 {
                     var value = _getValueFunc.Invoke(item);
                     if (value is null)
-                    {
                         optionValueTyped = default;
-                    }
                     else if (value is TValue valueTyped)
-                    {
                         optionValueTyped = valueTyped;
-                    }
                     else
-                    {
                         throw new InvalidOperationException($"Value could not be handled for {item}");
-                    }
                 }
 
                 if (_getTextFunc?.Invoke(item) is string str)

@@ -1,10 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
     <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
-
-    <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>
 
   <ItemGroup>

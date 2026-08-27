@@ -4,10 +4,10 @@ import { type DragImminentListener } from '/_content/ViciOne.Ui.Blazor.Component
 import { type DragEndListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-end-listener.js';
 
 /**
- * A drag ghost for table rows. Cloning a <tr> on its own drops the surrounding <table> that sized its
- * columns, so the copied cells collapse to their content width. This drag ghost rebuilds the row as a self-contained
- * table box and pins each cell to the width it had inside the real table, so the dragged row looks identical to
- * the one being dragged. The clone is prepared up front on `dragImminent` and discarded on `dragEnd`.
+ A drag ghost for table rows. Cloning a <tr> on its own drops the surrounding <table> that sized its
+ columns, so the copied cells collapse to their content width. This drag ghost rebuilds the row as a self-contained
+ table box and pins each cell to the width it had inside the real table, so the dragged row looks identical to
+ the one being dragged. The clone is prepared up front on `dragImminent` and discarded on `dragEnd`.
  */
 class TableRowDragGhost implements DragGhostContentSource, DragGhostDraggableLink, DragImminentListener, DragEndListener {
     readonly #emptyContent = document.createElement('div');
@@ -26,7 +26,6 @@ class TableRowDragGhost implements DragGhostContentSource, DragGhostDraggableLin
         // A cloned <tr> keeps its cells but loses the table context that sized them, so its columns collapse.
         // Make the drag ghost its own table box and pin each cell to the original cell's rendered width.
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         const ghost = this.#draggable.cloneNode(true) as HTMLElement;
 
         ghost.style.display = 'table';

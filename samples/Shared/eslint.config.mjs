@@ -5,9 +5,8 @@ const config = [
 
     {
         ignores: [
-            'Scripts/*.js',
             'dist/**/*.js',
-            'obj/types/**/*.d.ts'
+            'wwwroot/css/site.css'
         ]
     }
 ];

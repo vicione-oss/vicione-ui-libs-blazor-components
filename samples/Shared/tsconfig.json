@@ -12,17 +12,24 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitOverride": true,
         "skipLibCheck": true,
-        "types": [ "blazor__javascript-interop" ],
         "paths": {
-            "/_content/ViciOne.Ui.Blazor.Components/js/computed-background-color.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/ComputedBackgroundColor.d.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/html-element-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/HtmlElementMixins.d.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/rgb-color.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/RgbColor.d.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/rgba-color.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/RgbaColor.d.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/string-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/StringMixins.d.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/number-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/NumberMixins.d.ts" ],
-            "/_content/ViciOne.Ui.Blazor.Components/js/dom-rect-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/obj/types/Scripts/DomRectMixins.d.ts" ]
+            "/_content/ViciOne.Ui.Blazor.Components/js/computed-background-color.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/ComputedBackgroundColor.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/html-element-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/HtmlElementMixins.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/rgb-color.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/RgbColor.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/rgba-color.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/RgbaColor.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/string-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/StringMixins.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/number-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/NumberMixins.ts" ],
+            "/_content/ViciOne.Ui.Blazor.Components/js/dom-rect-mixins.js": [ "../../src/ViciOne.Ui.Blazor.Components/Scripts/DomRectMixins.ts" ]
         }
     },
+
+    // Keeps the .ts sources mapped above out of this compilation, which would otherwise emit a .js next to
+    // each of them in the referenced project. TypeScript substitutes the declarations that project emits,
+    // while Visual Studio reads the sources directly and so needs no build to resolve the imports
+    "references": [
+        { "path": "../../src/ViciOne.Ui.Blazor.Components" }
+    ],
+
     "include": [
         "Pages/**/*.ts"
     ],

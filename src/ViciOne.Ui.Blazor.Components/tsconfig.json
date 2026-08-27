@@ -12,8 +12,22 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitOverride": true,
         "skipLibCheck": true,
+
+        // Required for "samples/Shared" to reference this project. It also pins two settings below:
+        // declaration emit may not be turned off, and the compile is always incremental, which is what
+        // makes the build info necessary
+        "composite": true,
+
         "declaration": true,
         "declarationDir": "obj/types",
+
+        // Has to stay below "obj". The build info records which outputs were written already, but
+        // 'MoveGeneratedStaticWebAssets' relocates the emitted .js files to the content root and a 'Clean'
+        // deletes them there. A build info outliving them marks the project as up to date, so the next
+        // compile emits nothing at all and leaves the content root empty, which breaks JSInterop at
+        // runtime. Below "obj" a 'Clean' discards it together with the declarations
+        "tsBuildInfoFile": "obj/types/.tsbuildinfo",
+
         "types": [ "blazor__javascript-interop" ],
         "paths": {
             "/_content/ViciOne.Ui.Blazor.Components/js/js-function-descriptor.js": [ "./Models/JsFunctionDescriptor.cs.ts" ],

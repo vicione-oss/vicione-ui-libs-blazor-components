@@ -4,23 +4,25 @@ import { PointerCaptureBehaviorPipeline } from '/_content/ViciOne.Ui.Blazor.Comp
 import { CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
 import { CaptureTargetRect } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target-rect.js';
 
+const hasCssClass = (value?: string): value is string => value !== undefined && value !== '';
+
 export class PointerCapture {
+    #userSelectBefore?: string;
+    #behaviorPipeline?: PointerCaptureBehaviorPipeline;
+    #behaviorContext?: MutablePointerCaptureBehaviorContext;
+
     public startedCssClass?: string;
     public ongoingCssClass?: string;
     public endedCssClass?: string;
     public behaviors?: PointerCaptureBehavior[];
 
     public onPointerMove?: (captureTarget: CaptureTarget) => void;
-    public onPointerUp?: (captureTarget: CaptureTarget, pointerMoved: boolean) => void;
-
-    #userSelectBefore?: string;
-    #behaviorPipeline?: PointerCaptureBehaviorPipeline;
-    #behaviorContext?: MutablePointerCaptureBehaviorContext;
+    public onPointerUp?: (captureTarget: CaptureTarget, wasPointerMoved: boolean) => void;
 
     public start(pointerEvent: PointerEvent, captureTargetElement: HTMLElement, boundingClientRect: DOMRect) {
-        let pointerMoved = false;
+        let hasPointerMoved = false;
 
-        if (this.behaviors?.length)
+        if (this.behaviors !== undefined && this.behaviors.length > 0)
             this.#behaviorPipeline = new PointerCaptureBehaviorPipeline(this.behaviors);
 
         const pointerDownClientX = pointerEvent.clientX;
@@ -29,7 +31,7 @@ export class PointerCapture {
         const captureTargetBoundingClientRect = captureTargetElement.getBoundingClientRect();
 
         const clearSelection = () => {
-            window.getSelection()?.empty();
+            globalThis.getSelection()?.empty();
         };
 
         const avoidTextSelection = () => {
@@ -44,13 +46,13 @@ export class PointerCapture {
         // ... and we avoid that new text can be selected before start of the pointer capture
         avoidTextSelection();
 
-        if (this.endedCssClass)
+        if (hasCssClass(this.endedCssClass))
             captureTargetElement.classList.remove(this.endedCssClass);
 
-        if (this.ongoingCssClass)
+        if (hasCssClass(this.ongoingCssClass))
             captureTargetElement.classList.remove(this.ongoingCssClass);
 
-        if (this.startedCssClass)
+        if (hasCssClass(this.startedCssClass))
             captureTargetElement.classList.add(this.startedCssClass);
 
         const originalX = captureTargetBoundingClientRect.x - boundingClientRect.left;
@@ -67,18 +69,18 @@ export class PointerCapture {
         // re-apply that lands before the first pointermove positions from the initial capture origin.
         this.#behaviorContext = new MutablePointerCaptureBehaviorContext(captureTarget, 0, 0);
 
-        const pointerMoveEventListener = (e: PointerEvent) => {
-            pointerMoved = true;
+        const pointerMoveEventListener = (event: PointerEvent) => {
+            hasPointerMoved = true;
 
-            if (this.startedCssClass)
+            if (hasCssClass(this.startedCssClass))
                 captureTargetElement.classList.remove(this.startedCssClass);
 
-            if (this.ongoingCssClass)
+            if (hasCssClass(this.ongoingCssClass))
                 captureTargetElement.classList.add(this.ongoingCssClass);
 
             if (this.#behaviorContext) {
-                this.#behaviorContext.distanceX = e.clientX - pointerDownClientX;
-                this.#behaviorContext.distanceY = e.clientY - pointerDownClientY;
+                this.#behaviorContext.distanceX = event.clientX - pointerDownClientX;
+                this.#behaviorContext.distanceY = event.clientY - pointerDownClientY;
             }
 
             this.applyBehaviors();
@@ -87,18 +89,18 @@ export class PointerCapture {
                 this.onPointerMove(captureTarget);
         };
 
-        const pointerUpEventListener = async (e: PointerEvent) => {
+        const handlePointerUp = async (event: PointerEvent) => {
             captureTargetElement.removeEventListener('pointerup', pointerUpEventListener);
             captureTargetElement.removeEventListener('pointermove', pointerMoveEventListener);
-            captureTargetElement.releasePointerCapture(e.pointerId);
+            captureTargetElement.releasePointerCapture(event.pointerId);
 
-            if (this.startedCssClass)
+            if (hasCssClass(this.startedCssClass))
                 captureTargetElement.classList.remove(this.startedCssClass);
 
-            if (this.ongoingCssClass)
+            if (hasCssClass(this.ongoingCssClass))
                 captureTargetElement.classList.remove(this.ongoingCssClass);
 
-            if (this.endedCssClass && pointerMoved)
+            if (hasPointerMoved && hasCssClass(this.endedCssClass))
                 captureTargetElement.classList.add(this.endedCssClass);
 
             captureTargetElement.style.userSelect = this.#userSelectBefore ?? '';
@@ -107,7 +109,11 @@ export class PointerCapture {
             clearSelection();
 
             if (this.onPointerUp)
-                this.onPointerUp(captureTarget, pointerMoved);
+                this.onPointerUp(captureTarget, hasPointerMoved);
+        };
+
+        const pointerUpEventListener = (event: PointerEvent): void => {
+            void handlePointerUp(event);
         };
 
         captureTargetElement.setPointerCapture(pointerEvent.pointerId);

@@ -13,15 +13,145 @@ class DropDown {
     #highlightedIndex = -1;
     #lastSelectedIndex = -1;
 
+    readonly #click = (event: MouseEvent) => {
+        if (!(event.target instanceof Element))
+            return;
+
+        const item = event.target.closest<HTMLElement>('.drop-down-item');
+
+        if (!item)
+            return;
+
+        this.#lastSelectedIndex = item.classList.contains('selected') ?
+            -1 :
+            this.#getItemElements().indexOf(item);
+    };
+
+    readonly #keyDown = (event: KeyboardEvent) => {
+        if (!this.#isVisible())
+            return;
+
+        const items = this.#getItemElements();
+        const count = items.length;
+
+        const isArrowDown = event.key === 'ArrowDown';
+
+        if ((isArrowDown || event.key === 'ArrowUp') && count > 0) {
+            let currentIndex = this.#highlightedIndex >= 0 ?
+                this.#highlightedIndex :
+                this.#getLastSelectedIndex();
+
+            if (currentIndex >= count)
+                currentIndex = -1;
+
+            if (isArrowDown)
+                this.#setHighlight((currentIndex + 1) % count);
+            else
+                this.#setHighlight((currentIndex <= 0 ? count : currentIndex) - 1);
+
+            event.preventDefault();
+
+        } else if (event.key === 'Enter') {
+            if (this.#highlightedIndex >= 0 && this.#highlightedIndex < count) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                items[this.#highlightedIndex].click();
+                this.#setHighlight(-1);
+            }
+
+        } else {
+            this.#setHighlight(-1);
+        }
+    };
+
     constructor(containerElement: HTMLElement) {
         this.#containerElement = containerElement;
         this.#containerElement.addEventListener('click', this.#click);
     }
 
-    public attachInputElement(inputElement: HTMLElement) {
+    #getItemElements(): HTMLElement[] {
+        return [...this.#containerElement.querySelectorAll<HTMLElement>('.drop-down-item')];
+    }
+
+    #getItemMetrics(items: HTMLElement[]): { itemOuterHeight: number; containerVerticalExtra: number } | undefined {
+        const itemStyle = getComputedStyle(items[0]);
+
+        const itemOuterHeight = items[0].getBoundingClientRect().height +
+            Number.parseFloat(itemStyle.marginTop) +
+            Number.parseFloat(itemStyle.marginBottom);
+
+        if (itemOuterHeight <= 0)
+            return undefined;
+
+        const containerStyle = getComputedStyle(this.#containerElement);
+
+        const containerVerticalExtra =
+            Number.parseFloat(containerStyle.borderTopWidth) +
+            Number.parseFloat(containerStyle.borderBottomWidth) +
+            Number.parseFloat(containerStyle.paddingTop) +
+            Number.parseFloat(containerStyle.paddingBottom);
+
+        return { itemOuterHeight, containerVerticalExtra };
+    }
+
+    #setMaxHeight(metrics: { itemOuterHeight: number; containerVerticalExtra: number }, visibleItemCount: number) {
+        this.#containerElement.style.maxHeight =
+            `${(metrics.itemOuterHeight * visibleItemCount) + metrics.containerVerticalExtra}px`;
+    }
+
+    #getOverflowParent(element: HTMLElement): HTMLElement | undefined {
+        let parent = element.parentElement;
+
+        while (parent) {
+            const style = getComputedStyle(parent);
+            const { overflowY } = style;
+
+            if (overflowY === 'auto' || overflowY === 'scroll')
+                return parent;
+
+            parent = parent.parentElement;
+        }
+
+        return undefined;
+    }
+
+    #isVisible(): boolean {
+        return this.#containerElement.classList.contains('visible');
+    }
+
+    #getLastSelectedIndex(): number {
+        if (this.#lastSelectedIndex >= 0)
+            return this.#lastSelectedIndex;
+
+        const items = this.#getItemElements();
+
+        for (let index = items.length - 1; index >= 0; index--) {
+            if (items[index].classList.contains('selected'))
+                return index;
+        }
+
+        return -1;
+    }
+
+    #setHighlight(index: number) {
+        const items = this.#getItemElements();
+
+        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length)
+            items[this.#highlightedIndex].classList.remove('highlighted');
+
+        this.#highlightedIndex = index;
+
+        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length) {
+            items[this.#highlightedIndex].classList.add('highlighted');
+            items[this.#highlightedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+
+    public attachInputElement(inputElement: HTMLElement | undefined) {
         this.detachInputElement();
 
-        if (!inputElement)
+        if (inputElement === undefined)
             return;
 
         this.#inputElement = inputElement;
@@ -29,10 +159,11 @@ class DropDown {
     }
 
     public detachInputElement() {
-        if (this.#inputElement) {
-            this.#inputElement.removeEventListener('keydown', this.#keyDown);
-            this.#inputElement = undefined;
-        }
+        if (!this.#inputElement)
+            return;
+
+        this.#inputElement.removeEventListener('keydown', this.#keyDown);
+        this.#inputElement = undefined;
     }
 
     public setMinimumWidth() {
@@ -120,7 +251,7 @@ class DropDown {
         const itemsFittingBelow = countItemsFittingIn(spaceBelow);
         const itemsFittingAbove = countItemsFittingIn(spaceAbove);
 
-        let dropUp = false;
+        let shouldDropUp = false;
         let visibleItemCount: number;
 
         // Prefer dropping down; only drop up when doing so shows more items and
@@ -128,7 +259,7 @@ class DropDown {
         if (itemsFittingBelow >= minVisibleCount) {
             visibleItemCount = itemsFittingBelow;
         } else if (itemsFittingAbove > itemsFittingBelow) {
-            dropUp = true;
+            shouldDropUp = true;
             visibleItemCount = itemsFittingAbove;
         } else {
             visibleItemCount = itemsFittingBelow;
@@ -138,12 +269,13 @@ class DropDown {
 
         this.#setMaxHeight(metrics, visibleItemCount);
 
-        if (dropUp) {
+        if (shouldDropUp) {
             const wrapper = container.parentElement;
 
             if (wrapper) {
                 const wrapperRect = wrapper.getBoundingClientRect();
-                const gap = parseFloat(getComputedStyle(wrapper).marginTop) || 0;
+                const marginTop = Number.parseFloat(getComputedStyle(wrapper).marginTop);
+                const gap = Number.isNaN(marginTop) ? 0 : marginTop;
 
                 // Anchor the menu above the whole control, leaving the same gap as
                 // the drop-down direction so the entire control stays visible.
@@ -166,140 +298,10 @@ class DropDown {
         this.detachInputElement();
         this.#containerElement.removeEventListener('click', this.#click);
     }
-
-    #getItemElements(): HTMLElement[] {
-        return Array.from(this.#containerElement.querySelectorAll<HTMLElement>('.drop-down-item'));
-    }
-
-    #getItemMetrics(items: HTMLElement[]): { itemOuterHeight: number; containerVerticalExtra: number } | undefined {
-        const itemStyle = getComputedStyle(items[0]);
-
-        const itemOuterHeight = items[0].getBoundingClientRect().height +
-            parseFloat(itemStyle.marginTop) +
-            parseFloat(itemStyle.marginBottom);
-
-        if (itemOuterHeight <= 0)
-            return undefined;
-
-        const containerStyle = getComputedStyle(this.#containerElement);
-
-        const containerVerticalExtra =
-            parseFloat(containerStyle.borderTopWidth) +
-            parseFloat(containerStyle.borderBottomWidth) +
-            parseFloat(containerStyle.paddingTop) +
-            parseFloat(containerStyle.paddingBottom);
-
-        return { itemOuterHeight, containerVerticalExtra };
-    }
-
-    #setMaxHeight(metrics: { itemOuterHeight: number; containerVerticalExtra: number }, visibleItemCount: number) {
-        this.#containerElement.style.maxHeight =
-            `${(metrics.itemOuterHeight * visibleItemCount) + metrics.containerVerticalExtra}px`;
-    }
-
-    #getOverflowParent(element: HTMLElement): HTMLElement | undefined {
-        let parent = element.parentElement;
-
-        while (parent) {
-            const style = getComputedStyle(parent);
-            const { overflowY } = style;
-
-            if (overflowY === 'auto' || overflowY === 'scroll')
-                return parent;
-
-            parent = parent.parentElement;
-        }
-
-        return undefined;
-    }
-
-    #isVisible(): boolean {
-        return this.#containerElement.classList.contains('visible');
-    }
-
-    #getLastSelectedIndex(): number {
-        if (this.#lastSelectedIndex >= 0)
-            return this.#lastSelectedIndex;
-
-        const items = this.#getItemElements();
-
-        for (let index = items.length - 1; index >= 0; index--) {
-            if (items[index].classList.contains('selected'))
-                return index;
-        }
-
-        return -1;
-    }
-
-    #setHighlight(index: number) {
-        const items = this.#getItemElements();
-
-        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length)
-            items[this.#highlightedIndex].classList.remove('highlighted');
-
-        this.#highlightedIndex = index;
-
-        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length) {
-            items[this.#highlightedIndex].classList.add('highlighted');
-            items[this.#highlightedIndex].scrollIntoView({ block: 'nearest' });
-        }
-    }
-
-    readonly #click = (e: MouseEvent) => {
-        if (!(e.target instanceof Element))
-            return;
-
-        const item = e.target.closest<HTMLElement>('.drop-down-item');
-
-        if (!item)
-            return;
-
-        this.#lastSelectedIndex = item.classList.contains('selected') ?
-            -1 :
-            this.#getItemElements().indexOf(item);
-    };
-
-    readonly #keyDown = (e: KeyboardEvent) => {
-        if (!this.#isVisible())
-            return;
-
-        const items = this.#getItemElements();
-        const count = items.length;
-
-        const isArrowDown = e.key === 'ArrowDown';
-
-        if ((isArrowDown || e.key === 'ArrowUp') && count > 0) {
-            let currentIndex = this.#highlightedIndex >= 0 ?
-                this.#highlightedIndex :
-                this.#getLastSelectedIndex();
-
-            if (currentIndex >= count)
-                currentIndex = -1;
-
-            if (isArrowDown)
-                this.#setHighlight((currentIndex + 1) % count);
-            else
-                this.#setHighlight(currentIndex <= 0 ? count - 1 : currentIndex - 1);
-
-            e.preventDefault();
-
-        } else if (e.key === 'Enter') {
-            if (this.#highlightedIndex >= 0 && this.#highlightedIndex < count) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                items[this.#highlightedIndex].click();
-                this.#setHighlight(-1);
-            }
-
-        } else {
-            this.#setHighlight(-1);
-        }
-    };
 }
 
-export async function attach(containerElement: HTMLElement) {
-    if (!containerElement)
+export async function attach(containerElement: HTMLElement | undefined) {
+    if (containerElement === undefined)
         return undefined;
 
     const dropDown = new DropDown(containerElement);

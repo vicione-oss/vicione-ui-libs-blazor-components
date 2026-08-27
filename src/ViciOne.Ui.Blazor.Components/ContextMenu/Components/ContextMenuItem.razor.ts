@@ -5,19 +5,93 @@ class ContextMenuItem {
     readonly #dotNetObject: DotNet.DotNetObject;
     #htmlElementObservedForMouseLeave: HTMLElement | undefined = undefined;
 
+    readonly #htmlElementMouseLeaveListener = (event: MouseEvent): void => {
+        void this.#handleHtmlElementMouseLeave(event);
+    };
+
+    readonly #handleHtmlElementMouseLeave = async (event: MouseEvent) => {
+        if (!this.#htmlElementObservedForMouseLeave)
+            return;
+
+        const mouseLeaveDirection = this.#getMouseLeaveDirection(this.#htmlElementObservedForMouseLeave, event);
+
+        if (mouseLeaveDirection !== undefined)
+            await this.#dotNetObject.invokeMethodAsync('MouseLeaveAsync', mouseLeaveDirection);
+    };
+
+    readonly #bodyMouseOverListener = (event: MouseEvent): void => {
+        void this.#handleBodyMouseOver(event);
+    };
+
+    readonly #handleBodyMouseOver = async (event: MouseEvent) => {
+        if (!this.#htmlElementObservedForMouseLeave)
+            return;
+
+        if (event.target === this.#htmlElementObservedForMouseLeave)
+            return;
+
+        if (!(event.target instanceof HTMLElement))
+            return;
+
+        // Traverse through the ancestors of the element where a mouse over was detected ...
+        let ancestor = event.target.parentElement;
+        while (ancestor &&
+            ancestor !== this.#htmlElementObservedForMouseLeave // ... as long as the we don't find our html element
+        )
+            ancestor = ancestor.parentElement;
+
+        // If the resulting ancestor is null ...
+        if (!ancestor) {
+            // ... then the element does not belong to our context menu and we have to notify the mouse leave
+
+            const mouseLeaveDirection = this.#getMouseLeaveDirection(this.#htmlElementObservedForMouseLeave, event);
+
+            if (mouseLeaveDirection !== undefined)
+                await this.#dotNetObject.invokeMethodAsync('MouseLeaveAsync', mouseLeaveDirection);
+        }
+    };
+
     constructor(dotNetObject: DotNet.DotNetObject) {
         this.#dotNetObject = dotNetObject;
     }
 
-    public calculateChildContextMenuPosition(htmlElement: HTMLElement, childContextMenuHtmlElement: HTMLElement) {
-        const { visualViewport } = window;
+    #getMouseLeaveDirection(htmlElement: HTMLElement | undefined, event: MouseEvent): MouseLeaveDirection | undefined {
+        if (htmlElement === undefined)
+            return undefined;
+
+        const x = event.clientX;
+        const y = event.clientY;
+
+        const boundingClientRect = htmlElement.getBoundingClientRect();
+
+        const boundingClientRectAdjusted = new DOMRect(boundingClientRect.x + window.scrollX,
+            boundingClientRect.y + window.scrollY,
+            boundingClientRect.width,
+            boundingClientRect.height);
+
+        let mouseLeaveDirection: MouseLeaveDirection | undefined;
+
+        if (x < boundingClientRectAdjusted.x)
+            mouseLeaveDirection = MouseLeaveDirection.Left;
+        else if (x > boundingClientRectAdjusted.right)
+            mouseLeaveDirection = MouseLeaveDirection.Right;
+        else if (y < boundingClientRectAdjusted.y)
+            mouseLeaveDirection = MouseLeaveDirection.Top;
+        else if (y > boundingClientRectAdjusted.bottom)
+            mouseLeaveDirection = MouseLeaveDirection.Bottom;
+
+        return mouseLeaveDirection;
+    }
+
+    public calculateChildContextMenuPosition(htmlElement: HTMLElement | undefined, childContextMenuHtmlElement: HTMLElement) {
+        const { visualViewport } = globalThis;
         if (!visualViewport) {
             console.error('Visual Viewport API missing');
 
             return null;
         }
 
-        if (!htmlElement) {
+        if (htmlElement === undefined) {
             console.error('ContextMenuItem.calculateChildContextMenuPosition() -> HTML element is undefined');
             return null;
         }
@@ -55,8 +129,8 @@ class ContextMenuItem {
         return new ChildContextMenuPosition(Math.trunc(x), Math.trunc(y), mouseLeaveDirection);
     }
 
-    public startObserveMouseLeave(htmlElement: HTMLElement) {
-        if (!htmlElement)
+    public startObserveMouseLeave(htmlElement: HTMLElement | undefined) {
+        if (htmlElement === undefined)
             return;
 
         if (htmlElement === this.#htmlElementObservedForMouseLeave)
@@ -86,71 +160,6 @@ class ContextMenuItem {
         if (this.#htmlElementObservedForMouseLeave !== undefined)
             this.endObserveMouseLeave();
     }
-
-    readonly #htmlElementMouseLeaveListener = async (e: MouseEvent) => {
-        if (this.#htmlElementObservedForMouseLeave) {
-            const mouseLeaveDirection = this.#getMouseLeaveDirection(this.#htmlElementObservedForMouseLeave, e);
-
-            if (mouseLeaveDirection !== undefined)
-                await this.#dotNetObject.invokeMethodAsync('MouseLeaveAsync', mouseLeaveDirection);
-        }
-    };
-
-    #getMouseLeaveDirection(htmlElement: HTMLElement, e: MouseEvent): MouseLeaveDirection | undefined {
-        if (!htmlElement)
-            return undefined;
-
-        const x = e.clientX;
-        const y = e.clientY;
-
-        const boundingClientRect = htmlElement.getBoundingClientRect();
-
-        const boundingClientRectAdjusted = new DOMRect(boundingClientRect.x + window.scrollX,
-            boundingClientRect.y + window.scrollY,
-            boundingClientRect.width,
-            boundingClientRect.height);
-
-        let mouseLeaveDirection: MouseLeaveDirection | undefined;
-
-        if (x < boundingClientRectAdjusted.x)
-            mouseLeaveDirection = MouseLeaveDirection.Left;
-        else if (x > boundingClientRectAdjusted.right)
-            mouseLeaveDirection = MouseLeaveDirection.Right;
-        else if (y < boundingClientRectAdjusted.y)
-            mouseLeaveDirection = MouseLeaveDirection.Top;
-        else if (y > boundingClientRectAdjusted.bottom)
-            mouseLeaveDirection = MouseLeaveDirection.Bottom;
-
-        return mouseLeaveDirection;
-    }
-
-    readonly #bodyMouseOverListener = async (e: MouseEvent) => {
-        if (!this.#htmlElementObservedForMouseLeave)
-            return;
-
-        if (e.target === this.#htmlElementObservedForMouseLeave)
-            return;
-
-        if (!(e.target instanceof HTMLElement))
-            return;
-
-        // Traverse through the ancestors of the element where a mouse over was detected ...
-        let ancestor = e.target.parentElement;
-        while (ancestor &&
-            ancestor !== this.#htmlElementObservedForMouseLeave // ... as long as the we don't find our html element
-        )
-            ancestor = ancestor.parentElement;
-
-        // If the resulting ancestor is null ...
-        if (!ancestor) {
-            // ... then the element does not belong to our context menu and we have to notify the mouse leave
-
-            const mouseLeaveDirection = this.#getMouseLeaveDirection(this.#htmlElementObservedForMouseLeave, e);
-
-            if (mouseLeaveDirection !== undefined)
-                await this.#dotNetObject.invokeMethodAsync('MouseLeaveAsync', mouseLeaveDirection);
-        }
-    };
 }
 
 export async function attach(dotNetObject: DotNet.DotNetObject) {

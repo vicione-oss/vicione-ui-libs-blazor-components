@@ -2,16 +2,16 @@
 
 class HtmlElementMixins {
     /**
-     * Calculates the bounding client rectangle of one of the element's pseudo-elements
-     * (::before or ::after), expressed in viewport coordinates like getBoundingClientRect().
-     *
-     * A fixed pseudo-element is positioned against the viewport, otherwise against the host box.
-     * When a dimension is not expressed in pixels it falls back to the host's size (or the
-     * viewport size for fixed pseudo-elements), matching full-cover backdrops.
-     *
-     * @param pseudoElement - Which pseudo-element to measure, '::before' or '::after'.
-     * @returns The pseudo-element's bounding rectangle, or undefined when it is not rendered
-     *          (for example 'content: none').
+     Calculates the bounding client rectangle of one of the element's pseudo-elements
+     (::before or ::after), expressed in viewport coordinates like getBoundingClientRect().
+
+     A fixed pseudo-element is positioned against the viewport, otherwise against the host box.
+     When a dimension is not expressed in pixels it falls back to the host's size (or the
+     viewport size for fixed pseudo-elements), matching full-cover backdrops.
+
+     @param pseudoElement - Which pseudo-element to measure, '::before' or '::after'.
+     @returns The pseudo-element's bounding rectangle, or undefined when it is not rendered
+     (for example 'content: none').
      */
     getPseudoElementBoundingClientRect(this: HTMLElement, pseudoElement: '::before' | '::after'): DOMRect | undefined {
         const style = getComputedStyle(this, pseudoElement);

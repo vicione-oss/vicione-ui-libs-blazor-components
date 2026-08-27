@@ -110,6 +110,18 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
+    <!--
+      Settings for projects referencing "Microsoft.TypeScript.MSBuild" (see TypeScript.props)
+
+      They cannot live in this file: the package ships its own .props carrying the defaults it wants, and NuGet
+      imports those after this file. $(CustomAfterMicrosoftCommonProps) names a file that is imported afterwards
+      instead, which is late enough to correct those defaults and still early enough for the package to pick the
+      corrections up. Directory.Build.targets would already be too late.
+    -->
+    <PropertyGroup>
+        <CustomAfterMicrosoftCommonProps>$(MSBuildThisFileDirectory)TypeScript.props</CustomAfterMicrosoftCommonProps>
+    </PropertyGroup>
+
     <!-- Show .adr folders with files in it in each project by default -->
     <ItemGroup>
       <None Include="**\.adr\**" />

@@ -1,0 +1,30 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <!--
+      Imported through $(CustomAfterMicrosoftCommonProps), which is set in Directory.Build.props. That hook puts
+      this file after the .props of "Microsoft.TypeScript.MSBuild" and before its .targets assemble the "tsc"
+      command line, the only window in which the defaults below can still be corrected.
+
+      The package sets $(TypeScriptMSBuildVersion) in its .props, so a non-empty value marks exactly those
+      projects that reference the package.
+    -->
+    <PropertyGroup Condition="'$(TypeScriptMSBuildVersion)' != ''">
+        <!--
+          Keeps the "sourcemap" switch off the "tsc" command line, which the package would pass because it
+          defaults this property to "true". Switches given on the command line win over tsconfig.json, and
+          "sourcemap" is rejected next to the "inlineSourceMap" our tsconfig.json files ask for (error TS5053).
+        -->
+        <TypeScriptSourceMap>false</TypeScriptSourceMap>
+
+        <!--
+          Deliberately empty, not an unfinished setting.
+
+          The package passes a "target" switch to "tsc" only while this property has a value, and its own .props
+          already filled in "ES2020" by the time this file is imported. Clearing it again is therefore what keeps
+          the switch off the command line, where it would win over the value that our tsconfig.json files hold
+          and silently emit JavaScript for the older language version.
+        -->
+        <TypeScriptTarget></TypeScriptTarget>
+    </PropertyGroup>
+
+</Project>

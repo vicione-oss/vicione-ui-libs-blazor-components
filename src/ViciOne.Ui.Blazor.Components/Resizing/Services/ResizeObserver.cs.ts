@@ -1,7 +1,12 @@
 /**
- * Allows to subscribe to elements by their property 'data-observer-id'.
- * When a resize occurs, the subcriber is notified and receives the new dimension.
+ Allows to subscribe to elements by their property 'data-observer-id'.
+ When a resize occurs, the subcriber is notified and receives the new dimension.
  */
+const parseCssLength = (value: string): number => {
+    const parsed = Number.parseFloat(value);
+    return Number.isNaN(parsed) ? 0 : parsed;
+};
+
 export class HtmlElementResizeObserver {
     readonly #observers = new Map<string, ObserverDetails>();
 
@@ -13,28 +18,28 @@ export class HtmlElementResizeObserver {
 
                 const { observerId } = entry.target.dataset;
 
-                if (!observerId)
+                if (observerId === undefined || observerId === '')
                     continue;
 
                 const observerDetails = this.#observers.get(observerId);
 
                 let style;
                 if (observerDetails?.includeStyle) {
-                    const computedStyle = window.getComputedStyle(entry.target);
+                    const computedStyle = globalThis.getComputedStyle(entry.target);
 
                     style = {
-                        marginLeft: parseFloat(computedStyle.marginLeft) || 0,
-                        marginRight: parseFloat(computedStyle.marginRight) || 0,
-                        marginTop: parseFloat(computedStyle.marginTop) || 0,
-                        marginBottom: parseFloat(computedStyle.marginBottom) || 0,
-                        paddingLeft: parseFloat(computedStyle.paddingLeft) || 0,
-                        paddingRight: parseFloat(computedStyle.paddingRight) || 0,
-                        paddingTop: parseFloat(computedStyle.paddingTop) || 0,
-                        paddingBottom: parseFloat(computedStyle.paddingBottom) || 0,
-                        borderLeft: parseFloat(computedStyle.borderLeft) || 0,
-                        borderRight: parseFloat(computedStyle.borderRight) || 0,
-                        borderTop: parseFloat(computedStyle.borderTop) || 0,
-                        borderBottom: parseFloat(computedStyle.borderBottom) || 0
+                        marginLeft: parseCssLength(computedStyle.marginLeft),
+                        marginRight: parseCssLength(computedStyle.marginRight),
+                        marginTop: parseCssLength(computedStyle.marginTop),
+                        marginBottom: parseCssLength(computedStyle.marginBottom),
+                        paddingLeft: parseCssLength(computedStyle.paddingLeft),
+                        paddingRight: parseCssLength(computedStyle.paddingRight),
+                        paddingTop: parseCssLength(computedStyle.paddingTop),
+                        paddingBottom: parseCssLength(computedStyle.paddingBottom),
+                        borderLeft: parseCssLength(computedStyle.borderLeft),
+                        borderRight: parseCssLength(computedStyle.borderRight),
+                        borderTop: parseCssLength(computedStyle.borderTop),
+                        borderBottom: parseCssLength(computedStyle.borderBottom)
                     };
                 }
 
@@ -49,12 +54,13 @@ export class HtmlElementResizeObserver {
     );
 
     /**
-    * Adds an element to the list of observer elements.
-    * Beware: Each HTML Element can only have a single watcher at a time as of now.
-    * If more are needed, code needs to be refactored.
-    * @param {HTMLElement} elementReference The reference to the element which should be observed
-    * @param {string} id The id which will be used to report back changes to the element
-    * @param {DotNetRef} dotNetObject The reference to the caller which should be notified on a resize of the element
+    Adds an element to the list of observer elements.
+    Beware: Each HTML Element can only have a single watcher at a time as of now.
+    If more are needed, code needs to be refactored.
+    @param elementReference The reference to the element which should be observed
+    @param id The id which will be used to report back changes to the element
+    @param dotNetObject The reference to the caller which should be notified on a resize of the element
+    @param includeStyle When set to true, computed style changes are also be reported
     */
     public observe = (
         elementReference: HTMLElement | undefined,
@@ -62,7 +68,7 @@ export class HtmlElementResizeObserver {
         dotNetObject: DotNet.DotNetObject,
         includeStyle: boolean
     ): void => {
-        if (!elementReference?.dataset || !id || !dotNetObject)
+        if (id === undefined || id === '' || elementReference?.dataset === undefined)
             return;
 
         elementReference.dataset.observerId = id;
@@ -72,8 +78,8 @@ export class HtmlElementResizeObserver {
     };
 
     /**
-     * Removes an element from the list of observed elements via it's reference.
-     * @param elementRef The reference to the element which should no be observed
+     Removes an element from the list of observed elements via it's reference.
+     @param elementRef The reference to the element which should no be observed
      */
     public unobserve(elementRef: HTMLElement | undefined): void {
         if (!elementRef)
@@ -87,8 +93,8 @@ export class HtmlElementResizeObserver {
 }
 
 /**
- * Creates and returns a new instance
- * @returns The created observer
+ Creates and returns a new instance
+ @returns The created observer
  */
 export function createInstance(): HtmlElementResizeObserver {
     return new HtmlElementResizeObserver();

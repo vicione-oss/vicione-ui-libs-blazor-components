@@ -51,6 +51,7 @@
     <File Path="CLAUDE.md" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="eslint.config.mjs" />
     <File Path="global.json" />
     <File Path="LICENSE.txt" />
     <File Path="mise.toml" />
@@ -59,6 +60,7 @@
     <File Path="README.md" />
     <File Path="renovate.json" />
     <File Path="testconfig.json" />
+    <File Path="TypeScript.props" />
     <File Path="VERSION" />
   </Folder>
   <Folder Name="/src/">

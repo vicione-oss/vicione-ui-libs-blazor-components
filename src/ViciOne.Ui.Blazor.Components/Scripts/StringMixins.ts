@@ -20,6 +20,8 @@ class StringMixins {
     // Reads a CSS color string like "rgb(10, 20, 30)" or "rgba(10, 20, 30, 0.5)" into an RgbaColor.
     // Returns undefined when the string has no usable numbers. A missing alpha defaults to 1 (opaque).
     toRgbaColor(this: string): RgbaColor | undefined {
+        // Switch to `match(/[\d.]+/gv)` once the TS compiler/lib target supports it reliably.
+        // eslint-disable-next-line require-unicode-regexp
         const numbers = this.valueOf().match(/[\d.]+/g);
         if (!numbers || numbers.length < 3)
             return undefined;

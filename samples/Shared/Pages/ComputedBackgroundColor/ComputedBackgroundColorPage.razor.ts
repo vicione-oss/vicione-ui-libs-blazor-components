@@ -25,7 +25,7 @@ function resolve(element: HTMLElement): void {
         element.getPseudoElementBoundingClientRect('::before')
     );
 
-    if (!backgroundColor)
+    if (backgroundColor === undefined)
         return;
 
     // Set the resolved color on the surrounding demo section so the overflow gradient picks it up,

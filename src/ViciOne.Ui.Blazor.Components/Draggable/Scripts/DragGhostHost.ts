@@ -23,11 +23,13 @@ export class DragGhostHost {
     }
 
     public get left(): number {
-        return Number.parseFloat(this.#element.style.left) || 0;
+        const left = Number.parseFloat(this.#element.style.left);
+        return Number.isNaN(left) ? 0 : left;
     }
 
     public get top(): number {
-        return Number.parseFloat(this.#element.style.top) || 0;
+        const top = Number.parseFloat(this.#element.style.top);
+        return Number.isNaN(top) ? 0 : top;
     }
 
     public setContent(content: HTMLElement) {

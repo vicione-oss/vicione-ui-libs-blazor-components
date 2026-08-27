@@ -2,8 +2,9 @@
 
 class PointerEventMixins {
     /**
-     * @param rootAncestor - Element that potentially contains the element having raised the pointer event
-     * @param featureModifierClass - CSS class that identifies the required feature on the nested element like 'moveable'
+     Determines whether the pointer event was raised by a nested element that carries its own handler for the given feature.
+     @param rootAncestor - Element that potentially contains the element having raised the pointer event
+     @param featureModifierClass - CSS class that identifies the required feature on the nested element like 'moveable'
      */
     isRaisedByElementWithOwnHandlerNestedIn(this: PointerEvent, rootAncestor: HTMLElement, featureModifierClass: string): boolean {
         // If event was raised by a nested element ...

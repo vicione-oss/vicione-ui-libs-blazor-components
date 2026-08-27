@@ -2,6 +2,14 @@ class TagBox {
     readonly #tagBoxElement: HTMLDivElement;
     readonly #tagInputElement: HTMLInputElement;
 
+    readonly #tagBoxClick = (_: MouseEvent) => {
+        this.#tagInputElement.focus();
+    };
+
+    readonly #inputChanged = () => {
+        this.alignInputElement();
+    };
+
     constructor(tagBoxElement: HTMLDivElement, tagInputElement: HTMLInputElement) {
         this.#tagBoxElement = tagBoxElement;
         this.#tagInputElement = tagInputElement;
@@ -25,7 +33,7 @@ class TagBox {
 
         this.#tagInputElement.style.removeProperty('flex');
 
-        let lineBreak = false;
+        let shouldPerformLineBreak = false;
 
         // Set current width of input box with overflow + offset to suppress bouncing effect
         this.#tagInputElement.style.width = scrollWidth + offset + 'px';
@@ -34,10 +42,10 @@ class TagBox {
         // Use Math.ceil to round up to the next higher integer, since scrollWidth returns integers,
         // to avoid rounding issues and prevent unnecessary line breaks
         // e.g. line with 4 tags -> input box width = 33.33px -> scrollWidth returns 34
-        if (scrollWidth > Math.ceil(parseFloat(getComputedStyle(this.#tagInputElement).width)))
-            lineBreak = true;
+        if (scrollWidth > Math.ceil(Number.parseFloat(getComputedStyle(this.#tagInputElement).width)))
+            shouldPerformLineBreak = true;
 
-        if (lineBreak) {
+        if (shouldPerformLineBreak) {
             // Perform line break if input is too long
             this.#tagInputElement.style.flexBasis = '100%';
         }
@@ -47,14 +55,6 @@ class TagBox {
         this.#tagBoxElement.removeEventListener('click', this.#tagBoxClick);
         this.#tagInputElement.removeEventListener('input', this.#inputChanged);
     }
-
-    readonly #tagBoxClick = (_: MouseEvent) => {
-        this.#tagInputElement.focus();
-    };
-
-    readonly #inputChanged = () => {
-        this.alignInputElement();
-    };
 }
 
 export async function attach(tagBoxElement: HTMLDivElement, tagInputElement: HTMLInputElement) {

@@ -5,77 +5,11 @@ import { RgbColor } from '/_content/ViciOne.Ui.Blazor.Components/js/rgb-color.js
 import type { RgbaColor } from '/_content/ViciOne.Ui.Blazor.Components/js/rgba-color.js';
 
 /**
- * Finds the real background color behind an element, even when several see-through layers overlap.
- * Stateless: call refreshBackgroundColor() whenever the value needs to be recomputed
- * (for example when the observed element changes size).
+ Finds the real background color behind an element, even when several see-through layers overlap.
+ Stateless: call refreshBackgroundColor() whenever the value needs to be recomputed
+ (for example when the observed element changes size).
  */
 export class ComputedBackgroundColor {
-    /**
-     * Resolves the background color behind the element (or the given probe region) Call this
-     * whenever the element or its probe region may have changed (for example on resize).
-     *
-     * @param element - The element whose background is written to.
-     * @param probeBounds - Optional region to probe. When omitted, the element's own bounding
-     *        rectangle is used. Supply this to probe a sub-region (for example a gradient
-     *        pseudo-element) that needs its background resolved independently of the host box.
-     */
-    public resolve(
-        element: HTMLElement, probeBounds?: DOMRect
-    ): string | undefined {
-        if (!element)
-            return undefined;
-
-        // Probe the caller-provided region when supplied (for example a gradient pseudo-element),
-        // otherwise fall back to the element's own box.
-        const bounds = probeBounds ?? element.getBoundingClientRect();
-        if (!bounds || bounds.width === 0 || bounds.height === 0)
-            return undefined;
-
-        // Document.elementsFromPoint only returns results for points inside the viewport, so clip the
-        // probe region to the viewport first. Probing the clipped rectangle keeps every probe point
-        // on-screen (partially visible regions resolve from their visible part), and a region entirely
-        // off-screen produces an empty intersection and no color.
-        const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-        const visibleBounds = bounds.intersect(new DOMRect(0, 0, viewportWidth, viewportHeight));
-        if (!visibleBounds)
-            return undefined;
-
-        // Inset the corners one pixel on every edge, so probing stays off the box boundary (which is
-        // shared with adjacent elements) and off the exclusive right/bottom edges that hit-testing
-        // can miss under fractional zoom coordinates.
-        const left = visibleBounds.left + 1;
-        const top = visibleBounds.top + 1;
-        const right = visibleBounds.right - 1;
-        const bottom = visibleBounds.bottom - 1;
-
-        const probePoints = [
-            { x: left, y: top },
-            { x: right, y: top },
-            { x: left, y: bottom },
-            { x: right, y: bottom },
-            { x: (visibleBounds.left + visibleBounds.right) / 2, y: (visibleBounds.top + visibleBounds.bottom) / 2 }
-        ];
-
-        const colors: RgbColor[] = [];
-        for (const point of probePoints) {
-            const color = this.#resolveColorAtPoint(element, point.x, point.y);
-            if (color)
-                colors.push(color);
-        }
-
-        if (colors.length === 0)
-            return undefined;
-
-        const averageColor = new RgbColor(
-            colors.map(color => color.red).average(),
-            colors.map(color => color.green).average(),
-            colors.map(color => color.blue).average()
-        );
-
-        return averageColor.toCssValue();
-    }
-
     // Collects every background layer stacked at a point (top to bottom, stopping at the first opaque
     // one) and blends them into a single solid color, falling back to the page background.
     #resolveColorAtPoint(
@@ -98,18 +32,22 @@ export class ComputedBackgroundColor {
         if (layers.length === 0)
             return this.#resolvePageBackgroundColor();
 
-        const bottomLayer = layers[layers.length - 1];
-        const bottomLayerIsOpaque = bottomLayer.alpha === 1;
+        const bottomLayer = layers.at(-1);
+
+        if (!bottomLayer)
+            return this.#resolvePageBackgroundColor();
+
+        const isBottomLayerOpaque = bottomLayer.alpha === 1;
 
         // Start from the bottom opaque layer, or the page background when the whole stack is
         // see-through (the page background is painted on the viewport, not a real element, so it never
         // shows up in hit-testing; without it dark themes would wash out over an assumed white page).
-        let color: RgbColor = bottomLayerIsOpaque ?
+        let color: RgbColor = isBottomLayerOpaque ?
             new RgbColor(bottomLayer.red, bottomLayer.green, bottomLayer.blue) :
             this.#resolvePageBackgroundColor();
 
         // Blend each remaining layer from bottom to top over the accumulated color.
-        const topLayerIndex = bottomLayerIsOpaque ?
+        const topLayerIndex = isBottomLayerOpaque ?
             layers.length - 2 :
             layers.length - 1;
 
@@ -133,7 +71,7 @@ export class ComputedBackgroundColor {
         // If our element is not painted here (e.g. the point lands in a rounded-corner cut-out), it has
         // no background; an empty list avoids wrongly averaging in the page background.
         const startIndex = elementsAtPoint.indexOf(startElement);
-        if (startIndex < 0)
+        if (startIndex === -1)
             return [];
 
         // Keep only our element and everything behind it; skip whatever is painted on top.
@@ -176,6 +114,9 @@ export class ComputedBackgroundColor {
 
         // Own background first, then pseudo-elements above it; reverse to topmost-first.
         const bottomToTop: CSSStyleDeclaration[] = [getComputedStyle(element), ...pseudoStyles];
+
+        // Switch to `bottomToTop.toReversed()` once the TS compiler/lib target supports it reliably.
+        // eslint-disable-next-line unicorn/no-array-reverse
         return bottomToTop.reverse();
     }
 
@@ -190,9 +131,6 @@ export class ComputedBackgroundColor {
     // opaque layer is found. Defaults to white when neither has an opaque background.
     #resolvePageBackgroundColor(): RgbColor {
         for (const element of [document.body, document.documentElement]) {
-            if (!element)
-                continue;
-
             const color = getComputedStyle(element).backgroundColor.toRgbaColor();
             if (color?.alpha === 1)
                 return new RgbColor(color.red, color.green, color.blue);
@@ -241,5 +179,71 @@ export class ComputedBackgroundColor {
 
         return pointX >= left && pointX <= left + width &&
             pointY >= top && pointY <= top + height;
+    }
+
+    /**
+    Resolves the background color behind the element (or the given probe region) Call this
+    whenever the element or its probe region may have changed (for example on resize).
+
+    @param element - The element whose background is written to.
+    @param probeBounds - Optional region to probe. When omitted, the element's own bounding
+    rectangle is used. Supply this to probe a sub-region (for example a gradient
+    pseudo-element) that needs its background resolved independently of the host box.
+    */
+    public resolve(
+        element: HTMLElement | undefined, probeBounds?: DOMRect
+    ): string | undefined {
+        if (element === undefined)
+            return undefined;
+
+        // Probe the caller-provided region when supplied (for example a gradient pseudo-element),
+        // otherwise fall back to the element's own box.
+        const bounds = probeBounds ?? element.getBoundingClientRect();
+        if (bounds.width === 0 || bounds.height === 0)
+            return undefined;
+
+        // Document.elementsFromPoint only returns results for points inside the viewport, so clip the
+        // probe region to the viewport first. Probing the clipped rectangle keeps every probe point
+        // on-screen (partially visible regions resolve from their visible part), and a region entirely
+        // off-screen produces an empty intersection and no color.
+        const viewportWidth = window.innerWidth === 0 ? document.documentElement.clientWidth : window.innerWidth;
+        const viewportHeight = window.innerHeight === 0 ? document.documentElement.clientHeight : window.innerHeight;
+        const visibleBounds = bounds.intersect(new DOMRect(0, 0, viewportWidth, viewportHeight));
+        if (!visibleBounds)
+            return undefined;
+
+        // Inset the corners one pixel on every edge, so probing stays off the box boundary (which is
+        // shared with adjacent elements) and off the exclusive right/bottom edges that hit-testing
+        // can miss under fractional zoom coordinates.
+        const left = visibleBounds.left + 1;
+        const top = visibleBounds.top + 1;
+        const right = visibleBounds.right - 1;
+        const bottom = visibleBounds.bottom - 1;
+
+        const probePoints = [
+            { x: left, y: top },
+            { x: right, y: top },
+            { x: left, y: bottom },
+            { x: right, y: bottom },
+            { x: (visibleBounds.left + visibleBounds.right) / 2, y: (visibleBounds.top + visibleBounds.bottom) / 2 }
+        ];
+
+        const colors: RgbColor[] = [];
+        for (const point of probePoints) {
+            const color = this.#resolveColorAtPoint(element, point.x, point.y);
+            if (color)
+                colors.push(color);
+        }
+
+        if (colors.length === 0)
+            return undefined;
+
+        const averageColor = new RgbColor(
+            colors.map(color => color.red).average(),
+            colors.map(color => color.green).average(),
+            colors.map(color => color.blue).average()
+        );
+
+        return averageColor.toCssValue();
     }
 }

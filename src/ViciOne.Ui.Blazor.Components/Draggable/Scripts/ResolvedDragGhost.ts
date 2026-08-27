@@ -8,14 +8,14 @@ import { type DropzoneEnterListener } from '/_content/ViciOne.Ui.Blazor.Componen
 import { type DropzoneLeaveListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-leave-listener.js';
 
 /**
- * A drag ghost as resolved by the central `createDragGhost` factory and consumed by
- * `DragInteraction`: the required content detail plus any opt-in details. Drag ghosts that build their clone from
- * the dragged element implement `DragGhostDraggableLink` so `DragInteraction` can bind the draggable
- * once when it attaches the drag ghost; drag ghosts that render from their own source (e.g. `DragGhostBase`)
- * simply omit it. `DragInteraction` assigns `contentChanged` to learn when to re-fetch and swap the drag ghost
- * content, and calls each opt-in lifecycle listener the drag ghost implements: `dragImminent` (synchronously
- * on `pointerdown`, warming the content before the drag begins), `dragStart` (on the first move, when the drag
- * actually begins), `dragEnd`, `dropzoneEnter` and `dropzoneLeave`.
+ A drag ghost as resolved by the central `createDragGhost` factory and consumed by
+ `DragInteraction`: the required content detail plus any opt-in details. Drag ghosts that build their clone from
+ the dragged element implement `DragGhostDraggableLink` so `DragInteraction` can bind the draggable
+ once when it attaches the drag ghost; drag ghosts that render from their own source (e.g. `DragGhostBase`)
+ simply omit it. `DragInteraction` assigns `contentChanged` to learn when to re-fetch and swap the drag ghost
+ content, and calls each opt-in lifecycle listener the drag ghost implements: `dragImminent` (synchronously
+ on `pointerdown`, warming the content before the drag begins), `dragStart` (on the first move, when the drag
+ actually begins), `dragEnd`, `dropzoneEnter` and `dropzoneLeave`.
  */
 export type ResolvedDragGhost =
     DragGhostContentSource &

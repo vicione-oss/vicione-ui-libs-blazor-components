@@ -1,5 +1,6 @@
 {
-  "dependencies": {
-    "three-dots": "^0.3.2"
+  "scripts": {
+    "lint": "eslint .",
+    "lint-with-fix": "eslint . --fix"
   }
 }

@@ -9,6 +9,22 @@ class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
         this.#gridSize = gridSize ?? 10;
     }
 
+    #snap(rect: CaptureTargetRect, lastRect: Readonly<CaptureTargetRect>, edge: 'left' | 'top' | 'right' | 'bottom'): boolean {
+        const value = rect[edge];
+        const lastValue = lastRect[edge];
+
+        if (value === lastValue)
+            return false;
+
+        const remainder = value % this.#gridSize;
+        if (remainder === 0)
+            return false;
+
+        rect[edge] -= remainder;
+
+        return true;
+    }
+
     public setGridSize(value: number) {
 
         this.#gridSize = value;
@@ -24,22 +40,6 @@ class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
 
         if (!snappedLeft && !snappedTop && !snappedRight && !snappedBottom)
             next(context);
-    }
-
-    #snap(rect: CaptureTargetRect, lastRect: Readonly<CaptureTargetRect>, edge: 'left' | 'top' | 'right' | 'bottom'): boolean {
-        const value = rect[edge];
-        const lastValue = lastRect[edge];
-
-        if (value === lastValue)
-            return false;
-
-        const remainder = value % this.#gridSize;
-        if (remainder === 0)
-            return false;
-
-        rect[edge] -= remainder;
-
-        return true;
     }
 }
 

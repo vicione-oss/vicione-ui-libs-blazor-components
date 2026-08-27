@@ -1,4 +1,5 @@
 import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js';
+import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
 import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
 import { type ResizeInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/resize-interaction-context.js';
 import { AggregatePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/aggregate-pointer-capture-behavior.js';
@@ -28,35 +29,12 @@ class ResizeInteraction {
 
     readonly #additionalPointerCaptureBehaviors: Set<PointerCaptureBehavior> = new Set<PointerCaptureBehavior>();
 
-    constructor(readonly context: ResizeInteractionContext) {
-        this.context.pointerCaptureBehaviors?.forEach(b => this.#additionalPointerCaptureBehaviors.add(b));
-
-        this.context.resizeHandles.forEach(resizeHandleInfo => {
-            resizeHandleInfo.element.addEventListener('pointerdown', this.#pointerDownEventListener);
-        });
-    }
-
-    public dispose() {
-        this.context.resizeHandles.forEach(resizeHandleInfo => {
-            resizeHandleInfo.element.removeEventListener('pointerdown', this.#pointerDownEventListener);
-        });
-
-        this.#additionalPointerCaptureBehaviors.clear();
-    }
-
-    public addPointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#additionalPointerCaptureBehaviors.add(pointerCaptureBehavior);
-    }
-
-    public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
-    }
-
-    readonly #pointerDownEventListener = (e: PointerEvent) => {
-        if (e.isModifierKeyPressed())
+    readonly #pointerDownEventListener = (event: PointerEvent) => {
+        if (event.isModifierKeyPressed())
             return;
 
-        const resizeHandleInfo = this.context.resizeHandles.find(h => h.element === e.currentTarget);
+        const { currentTarget } = event;
+        const resizeHandleInfo = this.context.resizeHandles.find(h => h.element === currentTarget);
 
         if (resizeHandleInfo === undefined)
             return;
@@ -69,16 +47,30 @@ class ResizeInteraction {
         pointerCapture.endedCssClass = this.context.endedCssClass;
         pointerCapture.behaviors = [...this.#getAllPointerCaptureBehaviors(resizeHandleInfo.position, resizeContainerBoundingClientRect)];
 
-        pointerCapture.onPointerUp = async (captureTarget, pointerMoved) => {
-            if (pointerMoved) {
-                const domRect = captureTarget.rect.toDomRect();
-
-                await this.context.dotNetObject.invokeMethodAsync('OnUpdatePositionAndSizeAsync', this.context.resizeableId, domRect);
-            }
+        pointerCapture.onPointerUp = (captureTarget, pointerMoved): void => {
+            void this.#handleResizePointerUp(captureTarget, pointerMoved);
         };
 
-        pointerCapture.start(e, this.context.resizeable, resizeContainerBoundingClientRect);
+        pointerCapture.start(event, this.context.resizeable, resizeContainerBoundingClientRect);
     };
+
+    readonly #handleResizePointerUp = async (captureTarget: CaptureTarget, hasPointerMoved: boolean) => {
+        if (!hasPointerMoved)
+            return;
+
+        const domRect = captureTarget.rect.toDomRect();
+
+        await this.context.dotNetObject.invokeMethodAsync('OnUpdatePositionAndSizeAsync', this.context.resizeableId, domRect);
+    };
+
+    constructor(readonly context: ResizeInteractionContext) {
+        for (const behavior of this.context.pointerCaptureBehaviors ?? [])
+            this.#additionalPointerCaptureBehaviors.add(behavior);
+
+        for (const resizeHandleInfo of this.context.resizeHandles)
+            resizeHandleInfo.element.addEventListener('pointerdown', this.#pointerDownEventListener);
+
+    }
 
     * #getAllPointerCaptureBehaviors(resizeHandlePosition: ResizeHandlePosition, resizeContainerBoundingClientRect: DOMRect): IterableIterator<PointerCaptureBehavior> {
         yield this.#resetRectPointerCaptureBehavior;
@@ -90,11 +82,12 @@ class ResizeInteraction {
         };
 
         for (const behavior of this.#resizePointerCaptureBehaviors) {
-            if (behavior.appliesTo(resizeHandlePosition)) {
-                behavior.initialize(initializeArgs);
+            if (!behavior.appliesTo(resizeHandlePosition))
+                continue;
 
-                yield behavior;
-            }
+            behavior.initialize(initializeArgs);
+
+            yield behavior;
         }
 
         if (this.#additionalPointerCaptureBehaviors.size > 0)
@@ -102,6 +95,21 @@ class ResizeInteraction {
 
         yield this.#setPositionPointerCaptureBehavior;
         yield this.#setSizePointerCaptureBehavior;
+    }
+
+    public dispose() {
+        for (const resizeHandleInfo of this.context.resizeHandles)
+            resizeHandleInfo.element.removeEventListener('pointerdown', this.#pointerDownEventListener);
+
+        this.#additionalPointerCaptureBehaviors.clear();
+    }
+
+    public addPointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
+        this.#additionalPointerCaptureBehaviors.add(pointerCaptureBehavior);
+    }
+
+    public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
+        this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
     }
 }
 

@@ -35,50 +35,11 @@ class DragInteraction {
     #grabFractionX = 0;
     #grabFractionY = 0;
 
-    constructor(readonly context: DragInteractionContext, dragGhost: ResolvedDragGhost) {
-        this.#dragGhost = dragGhost;
-        this.#dragGhost.setDraggable?.(context.draggable);
-
-        context.pointerCaptureBehaviors?.forEach(b => this.#additionalPointerCaptureBehaviors.add(b));
-
-        context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
-        context.draggable.addEventListener('pointerup', this.#pointerUpEventListener);
-    }
-
-    public dispose() {
-        this.context.draggable.removeEventListener('pointerdown', this.#pointerDownEventListener);
-        this.context.draggable.removeEventListener('pointerup', this.#pointerUpEventListener);
-        this.context.draggable.removeEventListener('pointermove', this.#pointerMoveEventListener);
-
-        this.#endDrag();
-
-        // Release the draggable link once, when the interaction is torn down. The link is stable across
-        // drags, so it must survive #endDrag (which runs after every drag) to keep repeated drags working.
-        this.#dragGhost.clearDraggable?.();
-    }
-
-    public addPointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#additionalPointerCaptureBehaviors.add(pointerCaptureBehavior);
-    }
-
-    public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
-        this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
-    }
-
-    #hasRequiredKeyState(e: PointerEvent) {
-        if (this.context.modifierKey === null)
-            return !e.isModifierKeyPressed();
-
-        // A modifier is configured: the required key state is satisfied while that modifier is held.
-        // Note: this only checks the configured modifier, so it is also satisfied when additional keys are held.
-        return e.getModifierState(ModifierKey[this.context.modifierKey]);
-    }
-
-    readonly #pointerDownEventListener = (e: PointerEvent) => {
-        if (!this.#hasRequiredKeyState(e))
+    readonly #pointerDownEventListener = (event: PointerEvent) => {
+        if (!this.#hasRequiredKeyState(event))
             return;
 
-        if (e.isRaisedByElementWithOwnHandlerNestedIn(this.context.draggable, 'draggable'))
+        if (event.isRaisedByElementWithOwnHandlerNestedIn(this.context.draggable, 'draggable'))
             return; // Nested draggable has its own handler
 
         // Record where inside the dragged element the pointer grabbed it, expressed as a fraction of the
@@ -90,8 +51,8 @@ class DragInteraction {
         // this fresh pointerdown event because the dragged element is the only thing on screen at grab time;
         // the drag ghost element does not exist yet.
         const draggableBoundingClientRect = this.context.draggable.getBoundingClientRect();
-        this.#grabFractionX = (e.clientX - draggableBoundingClientRect.left) / draggableBoundingClientRect.width;
-        this.#grabFractionY = (e.clientY - draggableBoundingClientRect.top) / draggableBoundingClientRect.height;
+        this.#grabFractionX = (event.clientX - draggableBoundingClientRect.left) / draggableBoundingClientRect.width;
+        this.#grabFractionY = (event.clientY - draggableBoundingClientRect.top) / draggableBoundingClientRect.height;
 
         // Give the drag ghost a heads-up that a drag may be about to start, using the brief idle window
         // between pressing and moving to do any preparation work up front. This is only a "get ready" signal:
@@ -105,12 +66,16 @@ class DragInteraction {
         this.context.draggable.addEventListener('pointermove', this.#pointerMoveEventListener, { once: true });
     };
 
-    readonly #pointerMoveEventListener = async (e: PointerEvent) => {
+    readonly #pointerMoveEventListener = (event: PointerEvent): void => {
+        void this.#handlePointerMove(event);
+    };
+
+    readonly #handlePointerMove = async (event: PointerEvent) => {
         // Re-check the modifier gate: the state may have changed between pointerdown and the first move.
-        if (!this.#hasRequiredKeyState(e))
+        if (!this.#hasRequiredKeyState(event))
             return;
 
-        const { visualViewport } = window;
+        const { visualViewport } = globalThis;
         if (!visualViewport) {
             console.error('Visual Viewport API not supported');
 
@@ -150,8 +115,8 @@ class DragInteraction {
         // reflect the rendered content (one reflow, accepted). From here the pipeline (originalRect + pointer
         // delta) keeps the fraction under the pointer for the rest of the drag; nothing recurring remains.
         dragGhostHost.setPosition(
-            e.clientX - (this.#grabFractionX * dragGhostHost.offsetWidth) + window.scrollX,
-            e.clientY - (this.#grabFractionY * dragGhostHost.offsetHeight) + window.scrollY
+            event.clientX - (this.#grabFractionX * dragGhostHost.offsetWidth) + window.scrollX,
+            event.clientY - (this.#grabFractionY * dragGhostHost.offsetHeight) + window.scrollY
         );
 
         const boundingClientRect = new DOMRect(0, 0, visualViewport.width, visualViewport.height);
@@ -163,7 +128,7 @@ class DragInteraction {
         this.#pointerCapture.ongoingCssClass = this.context.ongoingCssClass;
         this.#pointerCapture.endedCssClass = this.context.endedCssClass;
         this.#pointerCapture.behaviors = [...this.#getAllPointerCaptureBehaviors(boundingClientRect)];
-        this.#pointerCapture.start(e, dragGhostHost.element, boundingClientRect);
+        this.#pointerCapture.start(event, dragGhostHost.element, boundingClientRect);
 
         this.context.draggable.classList.add(this.context.startedCssClass);
 
@@ -183,10 +148,104 @@ class DragInteraction {
         this.#dropzoneDescriptors = await this.context.dotNetObject.invokeMethodAsync('DragStartAsync', this.context.draggableId);
     };
 
-    readonly #pointerUpEventListener = (_e: PointerEvent) => {
+    readonly #pointerUpEventListener = (_event: PointerEvent) => {
         // Pointer released without moving: cancel the pending drag-start so a plain click never drags.
         this.context.draggable.removeEventListener('pointermove', this.#pointerMoveEventListener);
     };
+
+    // Runs on every pipeline-driven pointer move of the drag ghost. Flips the draggable from its "started" to its
+    // "ongoing" CSS state, then hit-tests the drag ghost's current top-left corner against the resolved dropzones
+    // to fire enter/leave callbacks as the pointer crosses them. The dropzone rects are shifted by
+    // window.scrollX/Y because getBoundingClientRect is viewport-relative, whereas the drag ghost position
+    // (captureTarget.rect) is page-relative; without the shift they would disagree once the page is scrolled.
+    readonly #draggableGhostPointerMove = (captureTarget: CaptureTarget): void => {
+        void this.#handleDraggableGhostPointerMove(captureTarget);
+    };
+
+    readonly #handleDraggableGhostPointerMove = async (captureTarget: CaptureTarget) => {
+        this.context.draggable.classList.remove(this.context.startedCssClass);
+        this.context.draggable.classList.add(this.context.ongoingCssClass);
+
+        const x = captureTarget.rect.left;
+        const y = captureTarget.rect.top;
+
+        const newTargetDropzoneDescriptor = this.#dropzoneDescriptors?.find(dropzoneDescriptor => {
+            const dropzoneBoundingClientRect = dropzoneDescriptor.element.getBoundingClientRect();
+
+            const dropzoneBoundingClientRectAdjusted = new DOMRect(dropzoneBoundingClientRect.x + window.scrollX,
+                dropzoneBoundingClientRect.y + window.scrollY,
+                dropzoneBoundingClientRect.width,
+                dropzoneBoundingClientRect.height);
+
+            return dropzoneBoundingClientRectAdjusted.x <= x && x < dropzoneBoundingClientRectAdjusted.right &&
+                dropzoneBoundingClientRectAdjusted.y <= y && y < dropzoneBoundingClientRectAdjusted.bottom;
+        });
+
+        if (newTargetDropzoneDescriptor !== this.#targetDropzoneDescriptor) {
+            if (this.#targetDropzoneDescriptor) {
+                this.#dragGhost.dropzoneLeave?.();
+
+                await this.context.dotNetObject.invokeMethodAsync('DragLeaveAsync', this.#targetDropzoneDescriptor.id);
+            }
+
+            this.#targetDropzoneDescriptor = newTargetDropzoneDescriptor;
+
+            if (this.#targetDropzoneDescriptor) {
+                this.#dragGhost.dropzoneEnter?.();
+
+                await this.context.dotNetObject.invokeMethodAsync('DragEnterAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id);
+            }
+        }
+    };
+
+    readonly #draggableGhostPointerUp = (captureTarget: CaptureTarget, wasPointerMoved: boolean): void => {
+        void this.#handleDraggableGhostPointerUp(captureTarget, wasPointerMoved);
+    };
+
+    readonly #handleDraggableGhostPointerUp = async (captureTarget: CaptureTarget, wasPointerMoved: boolean) => {
+        let x = captureTarget.rect.left;
+        let y = captureTarget.rect.top;
+
+        this.#endDrag();
+
+        this.context.draggable.classList.remove(this.context.startedCssClass);
+
+        if (wasPointerMoved) {
+            this.context.draggable.classList.remove(this.context.ongoingCssClass);
+            this.context.draggable.classList.add(this.context.endedCssClass);
+
+            await this.context.dotNetObject.invokeMethodAsync('DragEndAsync', this.context.draggableId, x, y);
+
+            if (this.#targetDropzoneDescriptor) {
+                const dropzoneBoundingClientRect = this.#targetDropzoneDescriptor.element.getBoundingClientRect();
+
+                x -= dropzoneBoundingClientRect.x + window.scrollX;
+                y -= dropzoneBoundingClientRect.y + window.scrollY;
+
+                await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id, x, y);
+            }
+        }
+    };
+
+    constructor(readonly context: DragInteractionContext, dragGhost: ResolvedDragGhost) {
+        this.#dragGhost = dragGhost;
+        this.#dragGhost.setDraggable?.(context.draggable);
+
+        for (const behavior of context.pointerCaptureBehaviors ?? [])
+            this.#additionalPointerCaptureBehaviors.add(behavior);
+
+        context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
+        context.draggable.addEventListener('pointerup', this.#pointerUpEventListener);
+    }
+
+    #hasRequiredKeyState(event: PointerEvent) {
+        if (this.context.modifierKey === null)
+            return !event.isModifierKeyPressed();
+
+        // A modifier is configured: the required key state is satisfied while that modifier is held.
+        // Note: this only checks the configured modifier, so it is also satisfied when additional keys are held.
+        return event.getModifierState(ModifierKey[this.context.modifierKey]);
+    }
 
     #swapDragGhostContent(ticket: number) {
         if (ticket !== this.#dragTicket)
@@ -228,72 +287,6 @@ class DragInteraction {
         this.#pointerCapture?.applyBehaviors();
     }
 
-    // Runs on every pipeline-driven pointer move of the drag ghost. Flips the draggable from its "started" to its
-    // "ongoing" CSS state, then hit-tests the drag ghost's current top-left corner against the resolved dropzones
-    // to fire enter/leave callbacks as the pointer crosses them. The dropzone rects are shifted by
-    // window.scrollX/Y because getBoundingClientRect is viewport-relative, whereas the drag ghost position
-    // (captureTarget.rect) is page-relative; without the shift they would disagree once the page is scrolled.
-    readonly #draggableGhostPointerMove = async (captureTarget: CaptureTarget) => {
-        this.context.draggable.classList.remove(this.context.startedCssClass);
-        this.context.draggable.classList.add(this.context.ongoingCssClass);
-
-        const x = captureTarget.rect.left;
-        const y = captureTarget.rect.top;
-
-        const newTargetDropzoneDescriptor = this.#dropzoneDescriptors?.find(dropzoneDescriptor => {
-            const dropzoneBoundingClientRect = dropzoneDescriptor.element.getBoundingClientRect();
-
-            const dropzoneBoundingClientRectAdjusted = new DOMRect(dropzoneBoundingClientRect.x + window.scrollX,
-                dropzoneBoundingClientRect.y + window.scrollY,
-                dropzoneBoundingClientRect.width,
-                dropzoneBoundingClientRect.height);
-
-            return dropzoneBoundingClientRectAdjusted.x <= x && x < dropzoneBoundingClientRectAdjusted.right &&
-                dropzoneBoundingClientRectAdjusted.y <= y && y < dropzoneBoundingClientRectAdjusted.bottom;
-        });
-
-        if (newTargetDropzoneDescriptor !== this.#targetDropzoneDescriptor) {
-            if (this.#targetDropzoneDescriptor) {
-                this.#dragGhost.dropzoneLeave?.();
-
-                await this.context.dotNetObject.invokeMethodAsync('DragLeaveAsync', this.#targetDropzoneDescriptor.id);
-            }
-
-            this.#targetDropzoneDescriptor = newTargetDropzoneDescriptor;
-
-            if (this.#targetDropzoneDescriptor) {
-                this.#dragGhost.dropzoneEnter?.();
-
-                await this.context.dotNetObject.invokeMethodAsync('DragEnterAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id);
-            }
-        }
-    };
-
-    readonly #draggableGhostPointerUp = async (captureTarget: CaptureTarget, pointerMoved: boolean) => {
-        let x = captureTarget.rect.left;
-        let y = captureTarget.rect.top;
-
-        this.#endDrag();
-
-        this.context.draggable.classList.remove(this.context.startedCssClass);
-
-        if (pointerMoved) {
-            this.context.draggable.classList.remove(this.context.ongoingCssClass);
-            this.context.draggable.classList.add(this.context.endedCssClass);
-
-            await this.context.dotNetObject.invokeMethodAsync('DragEndAsync', this.context.draggableId, x, y);
-
-            if (this.#targetDropzoneDescriptor) {
-                const dropzoneBoundingClientRect = this.#targetDropzoneDescriptor.element.getBoundingClientRect();
-
-                x -= dropzoneBoundingClientRect.x + window.scrollX;
-                y -= dropzoneBoundingClientRect.y + window.scrollY;
-
-                await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id, x, y);
-            }
-        }
-    };
-
     #endDrag() {
         this.#dragTicket++;
 
@@ -320,6 +313,26 @@ class DragInteraction {
         yield this.#adjustForScrollPositionPointerCaptureBehavior;
         yield this.#setPositionPointerCaptureBehavior;
     }
+
+    public dispose() {
+        this.context.draggable.removeEventListener('pointerdown', this.#pointerDownEventListener);
+        this.context.draggable.removeEventListener('pointerup', this.#pointerUpEventListener);
+        this.context.draggable.removeEventListener('pointermove', this.#pointerMoveEventListener);
+
+        this.#endDrag();
+
+        // Release the draggable link once, when the interaction is torn down. The link is stable across
+        // drags, so it must survive #endDrag (which runs after every drag) to keep repeated drags working.
+        this.#dragGhost.clearDraggable?.();
+    }
+
+    public addPointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
+        this.#additionalPointerCaptureBehaviors.add(pointerCaptureBehavior);
+    }
+
+    public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
+        this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
+    }
 }
 
 async function resolveDragGhost(jsModule: DragGhostJsModuleDescriptor | undefined): Promise<ResolvedDragGhost> {
@@ -330,7 +343,7 @@ async function resolveDragGhost(jsModule: DragGhostJsModuleDescriptor | undefine
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const module = await import(jsModule.moduleName);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-type-assertion
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         return module[jsModule.createFunction.name](jsModule.createFunction.args) as ResolvedDragGhost;
 
     } catch (error) {

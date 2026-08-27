@@ -3,22 +3,64 @@ import { ContextMenuPosition } from '/_content/ViciOne.Ui.Blazor.Components/cont
 class ContextMenu {
     readonly #dotNetObject: DotNet.DotNetObject;
 
+    readonly #windowPointerDownEventListener = (event: PointerEvent): void => {
+        void this.#handleWindowPointerDown(event);
+    };
+
+    readonly #handleWindowPointerDown = async (event: PointerEvent) => {
+        const contextMenuHtmlElements = await this.#dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElements');
+
+        let wasClickedInsideAnyContextMenu = false;
+
+        for (const contextMenuHtmlElement of contextMenuHtmlElements) {
+            const x = event.clientX;
+            const y = event.clientY;
+
+            const boundingClientRect = contextMenuHtmlElement.getBoundingClientRect();
+
+            const boundingClientRectAdjusted = new DOMRect(boundingClientRect.x + window.scrollX,
+                boundingClientRect.y + window.scrollY,
+                boundingClientRect.width,
+                boundingClientRect.height);
+
+            const wasClickedInsideContextMenu = boundingClientRectAdjusted.x <= x && x < boundingClientRectAdjusted.right &&
+                boundingClientRectAdjusted.y <= y && y < boundingClientRectAdjusted.bottom;
+
+            if (wasClickedInsideContextMenu) {
+                wasClickedInsideAnyContextMenu = true;
+
+                break;
+            }
+        }
+
+        if (!wasClickedInsideAnyContextMenu)
+            await this.#dotNetObject.invokeMethodAsync('CloseAsync');
+    };
+
     constructor(dotNetObject: DotNet.DotNetObject) {
         this.#dotNetObject = dotNetObject;
     }
 
+    #addPointerDownEventListener() {
+        globalThis.addEventListener('pointerdown', this.#windowPointerDownEventListener);
+    }
+
+    #removePointerDownEventListener() {
+        globalThis.removeEventListener('pointerdown', this.#windowPointerDownEventListener);
+    }
+
     /**
-     * Returns a position based on the given mouse event that ensures the context menu is fully visible
+     Returns a position based on the given mouse event that ensures the context menu is fully visible
      */
-    public calculatePosition(htmlElement: HTMLElement, mouseEvent: MouseEvent) {
-        if (!htmlElement) {
+    public calculatePosition(htmlElement: HTMLElement | undefined, mouseEvent: MouseEvent) {
+        if (htmlElement === undefined) {
             console.error('ContextMenu.calculatePosition() -> HTML element is undefined');
             return null;
         }
 
         const boundingClientRect = htmlElement.getBoundingClientRect();
 
-        const { visualViewport } = window;
+        const { visualViewport } = globalThis;
         if (!visualViewport) {
             console.error('Visual Viewport API missing');
 
@@ -51,44 +93,6 @@ class ContextMenu {
     public dispose() {
         this.endObserveWindowPointerDown();
     }
-
-    #addPointerDownEventListener() {
-        window.addEventListener('pointerdown', this.#windowPointerDownEventListener);
-    }
-
-    #removePointerDownEventListener() {
-        window.removeEventListener('pointerdown', this.#windowPointerDownEventListener);
-    }
-
-    readonly #windowPointerDownEventListener = async (e: PointerEvent) => {
-        const contextMenuHtmlElements = await this.#dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElements');
-
-        let clickedInsideAnyContextMenu = false;
-
-        for (const contextMenuHtmlElement of contextMenuHtmlElements) {
-            const x = e.clientX;
-            const y = e.clientY;
-
-            const boundingClientRect = contextMenuHtmlElement.getBoundingClientRect();
-
-            const boundingClientRectAdjusted = new DOMRect(boundingClientRect.x + window.scrollX,
-                boundingClientRect.y + window.scrollY,
-                boundingClientRect.width,
-                boundingClientRect.height);
-
-            const clickedInsideContextMenu = boundingClientRectAdjusted.x <= x && x < boundingClientRectAdjusted.right &&
-                boundingClientRectAdjusted.y <= y && y < boundingClientRectAdjusted.bottom;
-
-            if (clickedInsideContextMenu) {
-                clickedInsideAnyContextMenu = true;
-
-                break;
-            }
-        }
-
-        if (!clickedInsideAnyContextMenu)
-            await this.#dotNetObject.invokeMethodAsync('CloseAsync');
-    };
 }
 
 export async function attach(dotNetObject: DotNet.DotNetObject) {

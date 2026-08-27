@@ -1,10 +1,18 @@
-﻿{
+{
   "name": "vicione-blazor-components-root",
   "private": true,
   "workspaces": [
     "src/ViciOne.Ui.Blazor.Components",
     "samples/Shared"
   ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "eslint": "^10.0.2",
+    "eslint-config-xo": "^1.0.0",
+    "three-dots": "^0.3.2",
+    "typescript": "^6.0.3"
+  },
   "scripts": {
     "build": "npm --workspaces --if-present run build",
     "lint": "npm --workspaces --if-present run lint",

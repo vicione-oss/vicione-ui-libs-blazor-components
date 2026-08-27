@@ -108,9 +108,7 @@ internal sealed class PropertyGridState<TContext> : IPropertyGridState<TContext>
     public void BeginUpdate()
     {
         lock (_concurrentLock)
-        {
             _updateLock++;
-        }
     }
 
     public void EndUpdate()

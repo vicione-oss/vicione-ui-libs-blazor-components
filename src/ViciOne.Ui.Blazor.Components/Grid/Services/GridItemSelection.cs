@@ -123,17 +123,13 @@ internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGrid
     public bool Contains(TGridItemKey item)
     {
         lock (_concurrentLock)
-        {
             return _items.Contains(item);
-        }
     }
 
     public void BeginUpdate()
     {
         lock (_concurrentLock)
-        {
             _updateLock++;
-        }
     }
 
     public void EndUpdate()
@@ -160,16 +156,12 @@ internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGrid
     public IEnumerator<TGridItemKey> GetEnumerator()
     {
         lock (_concurrentLock)
-        {
             return _items.ToList().GetEnumerator();
-        }
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         lock (_concurrentLock)
-        {
             return _items.ToList().GetEnumerator();
-        }
     }
 }

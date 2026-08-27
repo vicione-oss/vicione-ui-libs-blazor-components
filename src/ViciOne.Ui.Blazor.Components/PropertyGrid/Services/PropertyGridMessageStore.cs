@@ -23,9 +23,7 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
     private ICollection<IPropertyGridItem> GetKeys()
     {
         lock (_concurrentLock)
-        {
             return [.. _messageMap.Keys];
-        }
     }
 
     public bool Add(IPropertyGridItem propertyGridItem, IMessage message)
@@ -159,9 +157,7 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
     public void BeginUpdate()
     {
         lock (_concurrentLock)
-        {
             _updateLock++;
-        }
     }
 
     public void EndUpdate()
@@ -194,8 +190,6 @@ internal class PropertyGridMessageStore<TContext> : IPropertyGridMessageStore<TC
     public bool Contains<TMessage>() where TMessage : IMessage
     {
         lock (_concurrentLock)
-        {
             return _messageMap.Values.Any(messages => messages.OfType<TMessage>().Any());
-        }
     }
 }

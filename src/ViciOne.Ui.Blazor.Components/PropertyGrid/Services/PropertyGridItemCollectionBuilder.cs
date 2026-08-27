@@ -76,9 +76,7 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
             }
 
             if (propertyGridItem is not null)
-            {
                 result.TryAdd(propertyGridItem.Name, propertyGridItem);
-            }
         }
 
         return result.Values;
@@ -192,9 +190,7 @@ internal sealed class PropertyGridItemCollectionBuilder<TContext>(
                     var commonPropertyKey = propertyDescriptorGrouping.Key;
 
                     if (result.TryGetValue(commonPropertyKey, out var associatedPropertyDescriptor))
-                    {
                         associatedPropertyDescriptor.AddRange(propertyDescriptorGrouping);
-                    }
                 }
             }
         }

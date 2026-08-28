@@ -52,6 +52,34 @@ public class Bar
 }
 ```
 
+## Data that belongs together lives in one type, not in parallel collections
+
+Do not use index-based access when it is not absolutely necessary. An `a[i]` that reaches into a second collection is almost always a defect. Introduce a type that carries the pairing and iterate it with `foreach`.
+
+``` csharp
+// incorrect
+List<string> studentNames = GetStudentNames();
+List<int> studentScores = GetStudentScores();
+
+for (var i = 0; i < studentNames.Count; i++)
+    PrintCertificate(studentNames[i], studentScores[i]);
+
+// correct
+public class StudentResult
+{
+    public required string Name { get; init; }
+
+    public required int Score { get; init; }
+}
+
+List<StudentResult> studentResults = GetStudentResults();
+
+foreach (StudentResult studentResult in studentResults)
+    PrintCertificate(studentResult.Name, studentResult.Score);
+```
+
+The same applies to parameters. `PrintCertificates(string[] studentNames, int[] studentScores)` allows the two arrays to arrive with different lengths, while `PrintCertificates(StudentResult[] studentResults)` makes that mismatch unrepresentable.
+
 ## Conditional expressions
 
 Prefer early returns or conventional `if` statements over the conditional (ternary) `? :` operator when the branches involve complex expressions, such as `await` calls, method invocations with multiple arguments, or logic that is hard to read on a single line.

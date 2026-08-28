@@ -67,7 +67,13 @@ public sealed partial class IPropertyDescriptorExtensionsTests
             {
                 Name = nameof(Foo.Name),
                 GetValue = instance => instance.Name,
-                GetSelectableValues = instance => instance == instance1 ? selectableValues1 : selectableValues2
+                GetSelectableValues = instance =>
+                {
+                    if (instance == instance1)
+                        return selectableValues1;
+
+                    return selectableValues2;
+                }
             };
 
             // Act
@@ -101,7 +107,13 @@ public sealed partial class IPropertyDescriptorExtensionsTests
             {
                 Name = nameof(Foo.Name),
                 GetValue = instance => instance.Name,
-                GetSelectableValues = instance => instance == instance1 ? firstValues : secondValues
+                GetSelectableValues = instance =>
+                {
+                    if (instance == instance1)
+                        return firstValues;
+
+                    return secondValues;
+                }
             };
 
             // Act

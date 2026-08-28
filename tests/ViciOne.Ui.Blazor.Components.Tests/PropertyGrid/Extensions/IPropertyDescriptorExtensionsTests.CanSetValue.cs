@@ -26,7 +26,13 @@ public sealed partial class IPropertyDescriptorExtensionsTests
                 Name = nameof(Foo.Name),
                 GetValue = instance => instance.Name,
                 SetValue = (instance, value) => instance.Name = value,
-                Enabled = instance => instance == instance1 ? enabled1 : enabled2
+                Enabled = instance =>
+                {
+                    if (instance == instance1)
+                        return enabled1;
+
+                    return enabled2;
+                }
             };
 
             // Act
@@ -53,7 +59,13 @@ public sealed partial class IPropertyDescriptorExtensionsTests
                 Name = nameof(Foo.Name),
                 GetValue = instance => instance.Name,
                 SetValue = (instance, value) => instance.Name = value,
-                ReadOnly = instance => instance == instance1 ? readOnly1 : readOnly2
+                ReadOnly = instance =>
+                {
+                    if (instance == instance1)
+                        return readOnly1;
+
+                    return readOnly2;
+                }
             };
 
             // Act

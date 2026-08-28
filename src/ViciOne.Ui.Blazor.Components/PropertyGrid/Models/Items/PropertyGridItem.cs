@@ -21,11 +21,9 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
 
     private readonly IPropertyDescriptor _firstPropertyDescriptor = propertyDescriptors.First();
 
-    public string? Description { get; } = propertyDescriptors.Select(d => d.Description)
-        .Distinct().Count() == 1 ? propertyDescriptors.First().Description : null;
+    public string? Description { get; } = ReadUnified(propertyDescriptors, d => d.Description);
 
-    public string? InformationTooltipText { get; } = propertyDescriptors.Select(d => d.InformationTooltip)
-        .Distinct().Count() == 1 ? propertyDescriptors.First().InformationTooltip : null;
+    public string? InformationTooltipText { get; } = ReadUnified(propertyDescriptors, d => d.InformationTooltip);
 
     protected IReadOnlyList<PropertyOperationIteration> PropertyOperationIterations { get; } =
         CreatePropertyOperationIterations(instancesByType, propertyDescriptors, s_valueType);
@@ -149,6 +147,15 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
 
     private void HandleUnexpectedException(Exception unexpectedException, IPropertyGridMessageStore messageStore)
         => messageStore.Add(this, new ErrorMessage { Text = unexpectedException.Message });
+
+    private static string? ReadUnified(IEnumerable<IPropertyDescriptor> propertyDescriptors,
+        Func<IPropertyDescriptor, string?> propertySelector)
+    {
+        if (propertyDescriptors.Select(propertySelector).Distinct().Count() != 1)
+            return null;
+
+        return propertySelector(propertyDescriptors.First());
+    }
 
     private static List<PropertyOperationIteration> CreatePropertyOperationIterations(ILookup<Type, object> instancesByType,
         IEnumerable<IPropertyDescriptor> propertyDescriptors, Type propertyValueType)

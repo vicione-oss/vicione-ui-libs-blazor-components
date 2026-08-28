@@ -91,15 +91,18 @@ public sealed class ResizeableInteractionTests
 
         var skipInvocationCount = 0;
 
+        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors =
+            withPointerCaptureBehaviors ? [pointerCaptureBehavior] : null;
+
         if (isAlreadyAttached)
         {
-            await resizeInteraction.AttachAsync(resizeable, withPointerCaptureBehaviors ? [pointerCaptureBehavior] : null);
+            await resizeInteraction.AttachAsync(resizeable, pointerCaptureBehaviors);
 
             skipInvocationCount = jsModule.Invocations.Count;
         }
 
         // Act
-        await resizeInteraction.AttachAsync(resizeable, withPointerCaptureBehaviors ? [pointerCaptureBehavior] : null);
+        await resizeInteraction.AttachAsync(resizeable, pointerCaptureBehaviors);
 
         // Assert
         Expression<Func<JSRuntimeInvocation, bool>> invocationMatcher = i => i.Identifier == "attach";

@@ -11,8 +11,11 @@ internal static class MarkupStringExtensions
         => new($"<i>{str}</i>");
 
     public static MarkupString WithHighlightedText(this MarkupString str, string? text)
-        => string.IsNullOrWhiteSpace(text)
-            ? str
-            : new MarkupString(str.ToString().Replace(text, $"<code>{text}</code>", StringComparison.Ordinal));
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return str;
+
+        return new MarkupString(str.ToString().Replace(text, $"<code>{text}</code>", StringComparison.Ordinal));
+    }
 
 }

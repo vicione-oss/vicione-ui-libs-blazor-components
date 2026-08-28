@@ -27,7 +27,13 @@ public sealed partial class IPropertyDescriptorExtensionsTests
             var propertyDescriptor = new PropertyDescriptor<Foo, string?>
             {
                 Name = nameof(Foo.Description),
-                GetDefaultValue = instance => instance == instance1 ? defaultValue1 : defaultValue2,
+                GetDefaultValue = instance =>
+                {
+                    if (instance == instance1)
+                        return defaultValue1;
+
+                    return defaultValue2;
+                },
                 GetValue = instance => instance.Description
             };
 

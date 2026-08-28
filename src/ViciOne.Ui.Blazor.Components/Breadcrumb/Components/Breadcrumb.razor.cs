@@ -71,7 +71,10 @@ public sealed partial class Breadcrumb : ComponentBase
     {
         var index = _itemContexts.IndexOf(itemContext);
 
-        return _itemContexts.Count > index + 1 ? _itemContexts[index + 1].Instance : null;
+        if (_itemContexts.Count > index + 1)
+            return _itemContexts[index + 1].Instance;
+
+        return null;
     }
 
     private async Task ItemClickAsync(BreadcrumbItem item)

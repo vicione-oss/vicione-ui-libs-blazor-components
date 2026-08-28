@@ -32,9 +32,10 @@ public sealed class PropertyGridStateTests
         var a = new List<IPropertyGridItem>();
         var b = new List<IPropertyGridItem>();
 
-        _tests.AssertChangedEventHandlingWhenPropertyIsSet(state => state.Items,
-            initialValue == AOrB.A ? a : b,
-            value == AOrB.A ? a : b,
+        var initialItems = initialValue == AOrB.A ? a : b;
+        var items = value == AOrB.A ? a : b;
+
+        _tests.AssertChangedEventHandlingWhenPropertyIsSet(state => state.Items, initialItems, items,
             shouldTriggerChangedEvent);
     }
 
@@ -49,10 +50,11 @@ public sealed class PropertyGridStateTests
         var a = new Dictionary<IPropertyGridItem, HashSet<IPropertyGridItem>>();
         var b = new Dictionary<IPropertyGridItem, HashSet<IPropertyGridItem>>();
 
+        var initialItemDependentsMap = initialValue == AOrB.A ? a : b;
+        var itemDependentsMap = value == AOrB.A ? a : b;
+
         _tests.AssertChangedEventHandlingWhenPropertyIsSet(state => state.ItemDependentsMap,
-            initialValue == AOrB.A ? a : b,
-            value == AOrB.A ? a : b,
-            shouldTriggerChangedEvent);
+            initialItemDependentsMap, itemDependentsMap, shouldTriggerChangedEvent);
     }
 
     [Fact]

@@ -89,15 +89,18 @@ public sealed class MoveableInteractionTests
 
         var skipInvocationCount = 0;
 
+        IEnumerable<IPointerCaptureBehavior>? pointerCaptureBehaviors =
+            withPointerCaptureBehaviors ? [pointerCaptureBehavior] : null;
+
         if (isAlreadyAttached)
         {
-            await moveInteraction.AttachAsync(moveable, withPointerCaptureBehaviors ? [pointerCaptureBehavior] : null);
+            await moveInteraction.AttachAsync(moveable, pointerCaptureBehaviors);
 
             skipInvocationCount = jsModule.Invocations.Count;
         }
 
         // Act
-        await moveInteraction.AttachAsync(moveable, withPointerCaptureBehaviors ? [pointerCaptureBehavior] : null);
+        await moveInteraction.AttachAsync(moveable, pointerCaptureBehaviors);
 
         // Assert
         Expression<Func<JSRuntimeInvocation, bool>> invocationMatcher = i => i.Identifier == "attach";

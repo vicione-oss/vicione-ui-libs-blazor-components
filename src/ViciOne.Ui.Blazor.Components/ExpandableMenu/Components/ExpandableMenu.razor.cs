@@ -83,8 +83,9 @@ public sealed partial class ExpandableMenu : ComponentBase, IDisposable
             }
         }
 
-        return $"repeat({topCount}, min-content) minmax(0, 100%)" +
-               (bottomCount > 0 ? $" repeat({bottomCount}, min-content)" : string.Empty);
+        var bottomRowsDefinition = bottomCount > 0 ? $" repeat({bottomCount}, min-content)" : string.Empty;
+
+        return $"repeat({topCount}, min-content) minmax(0, 100%)" + bottomRowsDefinition;
     }
 
     private string GetStickyAreaRowsDefinition()
@@ -110,8 +111,9 @@ public sealed partial class ExpandableMenu : ComponentBase, IDisposable
             }
         }
 
-        return $"repeat({topCount}, min-content) fit-content(50%)" +
-               (bottomCount > 0 ? $" repeat({bottomCount}, min-content)" : string.Empty);
+        var bottomRowsDefinition = bottomCount > 0 ? $" repeat({bottomCount}, min-content)" : string.Empty;
+
+        return $"repeat({topCount}, min-content) fit-content(50%)" + bottomRowsDefinition;
     }
 
     private async Task MenuServiceCompactChangedAsync()

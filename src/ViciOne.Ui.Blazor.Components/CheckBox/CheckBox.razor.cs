@@ -109,7 +109,10 @@ public sealed partial class CheckBox<TValue> : ComponentBase, IFocusable, ICheck
         else
             value = ValueUnchecked;
 
-        return value is null ? "null" : $"{value}";
+        if (value is null)
+            return "null";
+
+        return $"{value}";
     }
 
     private async Task InputChangeAsync(ChangeEventArgs _)

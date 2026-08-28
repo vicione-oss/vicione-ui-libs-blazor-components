@@ -690,9 +690,10 @@ public partial class TabStripTests(ServerFixture fixture)
 
         var numericValue = rawValue.Replace("px", string.Empty, StringComparison.Ordinal).Trim();
 
-        return double.TryParse(numericValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var overflowSize)
-            ? overflowSize
-            : 0;
+        if (double.TryParse(numericValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var overflowSize))
+            return overflowSize;
+
+        return 0;
     }
 
     private static Task<string> GetInlineFadeColorAsync(ILocator viewport, string property) => viewport.EvaluateAsync<string>(

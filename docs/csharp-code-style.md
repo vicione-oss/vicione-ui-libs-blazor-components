@@ -52,6 +52,45 @@ public class Bar
 }
 ```
 
+## Conditional expressions
+
+Prefer early returns or conventional `if` statements over the conditional (ternary) `? :` operator when the branches involve complex expressions, such as `await` calls, method invocations with multiple arguments, or logic that is hard to read on a single line.
+
+Never use a conditional (ternary) `? :` operator directly as the whole body of a `return` (or an expression-bodied member acting as a return). Such expressions are hard to debug because you cannot set a breakpoint on an individual branch. Use `if` statements with early returns instead.
+
+``` csharp
+// avoid: ternary used directly as the return value
+public static Type MakeNonNullableType(this Type type)
+    => type.IsNullableValueType() ? new NullableConverter(type).UnderlyingType : type;
+
+// prefer: early return
+public static Type MakeNonNullableType(this Type type)
+{
+    if (type.IsNullableValueType())
+        return new NullableConverter(type).UnderlyingType;
+
+    return type;
+}
+```
+
+Reserve the conditional operator for simple, short value selections assigned to a local variable, where readability is not compromised.
+
+``` csharp
+// avoid: complex ternary
+var boundingClientRects = elementReferences is null
+    ? null
+    : await HtmlElementHelper.GetBoundingClientRectsAsync(elementReferences);
+
+// prefer: early return
+if (elementReferences is null)
+    return;
+
+var boundingClientRects = await HtmlElementHelper.GetBoundingClientRectsAsync(elementReferences);
+
+// still fine: simple value selection
+var label = isEnabled ? "On" : "Off";
+```
+
 ### Test methods
 
 - Test method names should use [snake case](https://en.wikipedia.org/wiki/Snake_case) pattern.

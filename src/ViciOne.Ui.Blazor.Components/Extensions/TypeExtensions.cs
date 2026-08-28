@@ -15,7 +15,12 @@ public static class TypeExtensions
     /// otherwise <paramref name="type"/> itself.
     /// </returns>
     public static Type MakeNonNullableType(this Type type)
-        => type.IsNullableValueType() ? new NullableConverter(type).UnderlyingType : type;
+    {
+        if (type.IsNullableValueType())
+            return new NullableConverter(type).UnderlyingType;
+
+        return type;
+    }
 
     /// <summary>
     /// Determines whether the given <paramref name="type"/> is a closed <see cref="Nullable{T}"/>.
@@ -37,7 +42,10 @@ public static class TypeExtensions
     /// otherwise returns <paramref name="type"/> unchanged.
     /// </returns>
     public static Type MakeNullableType(this Type type)
-        => (type.IsValueType && !type.IsNullableValueType())
-            ? typeof(Nullable<>).MakeGenericType(type)
-            : type;
+    {
+        if (type.IsValueType && !type.IsNullableValueType())
+            return typeof(Nullable<>).MakeGenericType(type);
+
+        return type;
+    }
 }

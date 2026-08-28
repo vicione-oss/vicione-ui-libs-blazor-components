@@ -219,7 +219,12 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
     private MonochromeIconName GetDropDownIcon(bool hasOptionDescriptors)
     {
         if (!hasOptionDescriptors)
-            return AllowUserInput ? MonochromeIconName.WarningLight : MonochromeIconName.TriangleExclamationLight;
+        {
+            if (AllowUserInput)
+                return MonochromeIconName.WarningLight;
+
+            return MonochromeIconName.TriangleExclamationLight;
+        }
 
         if (_dropDownVisible)
             return MonochromeIconName.ExpanderLightTop;

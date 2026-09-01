@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Resizing.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Resizing.Service;
 

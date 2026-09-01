@@ -1,10 +1,8 @@
 using System.Linq.Expressions;
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 using ViciOne.Ui.Blazor.Components.Resizeable.Components;
@@ -13,7 +11,6 @@ using ViciOne.Ui.Blazor.Components.Resizeable.Extensions;
 using ViciOne.Ui.Blazor.Components.Resizeable.Models;
 using ViciOne.Ui.Blazor.Components.Resizeable.Services;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Resizeable.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Resizeable.Services;
 

@@ -1,11 +1,9 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using ViciOne.Ui.Blazor.Components.Draggable.Abstractions;
 using ViciOne.Ui.Blazor.Components.Draggable.Components;
 using ViciOne.Ui.Blazor.Components.Draggable.Models;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Draggable.Components;
 

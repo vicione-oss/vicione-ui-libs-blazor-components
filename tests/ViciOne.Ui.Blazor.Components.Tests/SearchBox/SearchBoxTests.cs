@@ -1,6 +1,4 @@
-using AwesomeAssertions;
 using Bunit;
-using Xunit;
 using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.SearchBox;

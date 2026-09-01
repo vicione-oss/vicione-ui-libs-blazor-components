@@ -1,10 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Shared.Pages.Draggable.Components;
 using ViciOne.Ui.Blazor.Components.Enums;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Draggable.Components;
-using Xunit;
 
 namespace Shared.Tests.Pages.Draggable.Components;
 

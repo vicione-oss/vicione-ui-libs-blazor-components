@@ -1,6 +1,5 @@
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Toolbar.Components;
 using ViciOne.Ui.Blazor.Components.Toolbar.Components;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Toolbar.Components;
 

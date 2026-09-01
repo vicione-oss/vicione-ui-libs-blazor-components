@@ -1,9 +1,7 @@
 using System.Security.Cryptography;
-using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.Grid.Extensions;
 using ViciOne.Ui.Blazor.Components.Grid.Services;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Grid.Services;
 

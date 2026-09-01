@@ -1,14 +1,11 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Microsoft.Testing.Platform.Services;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Services;
 

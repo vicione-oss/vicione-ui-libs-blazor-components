@@ -1,14 +1,11 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using ViciOne.Ui.Blazor.Components.Toolbar.Components;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Toolbar.Components;
 

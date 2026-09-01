@@ -1,9 +1,7 @@
 using Bunit;
-using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Factories;
 using ViciOne.Ui.Blazor.Components.Sidebar.Enums;
 using ViciOne.Ui.Blazor.Components.Sidebar.Extensions;
-using Xunit;
 using SidebarComponent = ViciOne.Ui.Blazor.Components.Sidebar.Sidebar;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Components;

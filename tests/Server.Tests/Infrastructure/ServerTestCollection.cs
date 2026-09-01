@@ -1,5 +1,4 @@
 using ViciOne.Ui.Testing.Playwright.Attributes;
-using Xunit;
 
 namespace Server.Tests.Infrastructure;
 

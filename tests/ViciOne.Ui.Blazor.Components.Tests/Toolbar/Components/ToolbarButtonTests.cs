@@ -1,11 +1,8 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Toolbar.Components;
 using ViciOne.Ui.Blazor.Components.Toolbar.Components;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Toolbar.Components;
 

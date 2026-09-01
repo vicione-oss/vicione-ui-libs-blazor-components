@@ -120,6 +120,12 @@
       "stopUpdatingLabel": "Renovate::Frozen"
     },
     {
+      "description": "npm: version ceiling for the TypeScript entry of the eslint group above",
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "typescript" ],
+      "allowedVersions": "<7"
+    },
+    {
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "three-dots" ],
       "enabled": true

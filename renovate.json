@@ -5,6 +5,9 @@
   ],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
+  "configMigration": true,
+  "pruneStaleBranches": false,
+  "prTitleStrict": true,
   "enabledManagers": [ "nuget", "npm" ],
   "vulnerabilityAlerts": {
     "enabled": true,
@@ -13,57 +16,113 @@
   "osvVulnerabilityAlerts": true,
   "packageRules": [
     {
+      "description": "MR configuration",
+      "matchManagers": [ "nuget", "npm" ],
+      "addLabels": [ "Dependencies", "Modernization" ],
+      "rebaseWhen": "auto",
+      "separateMajorMinor": true,
+      "separateMultipleMajor": true,
+      "separateMultipleMinor": true,
+      "separateMinorPatch": true
+    },
+    {
+      "description": "MR label for the update type, as it is not part of the naming. version:: is a scoped label, so GitLab keeps only one per MR: the most significant update in the MR wins",
+      "matchManagers": [ "nuget", "npm" ],
+      "matchUpdateTypes": [ "major", "minor", "patch" ],
+      "addLabels": [ "version::{{#if (includes (lookupArray upgrades 'updateType') 'major')}}major{{else}}{{#if (includes (lookupArray upgrades 'updateType') 'minor')}}minor{{else}}patch{{/if}}{{/if}}" ]
+    },
+    {
+      "description": "MR / commit naming",
+      "matchManagers": [ "nuget", "npm" ],
+      "semanticCommits": "disabled",
+      "commitMessagePrefix": "",
+      "commitMessageAction": "Update"
+    },
+    {
+      "description": "MR / commit naming for ungrouped updates",
+      "matchManagers": [ "nuget", "npm" ],
+      "commitMessageTopic": "{{{depName}}}",
+      "commitMessageExtra": "to {{{newVersion}}}"
+    },
+    {
+      "description": "MR / commit naming for grouped updates",
+      "matchManagers": [ "nuget", "npm" ],
+      "groupSingleUpdates": true,
+      "recreateWhen": "never",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} ({{#each upgrades}}{{{depName}}}@{{{newVersion}}}{{#unless @last}}, {{/unless}}{{/each}})",
+        "commitMessageExtra": ""
+      }
+    },
+    {
+      "description": "Branch naming for ungrouped updates",
+      "matchManagers": [ "nuget", "npm" ],
+      "branchTopic": "update-{{{replace '\\.' '-' depNameSanitized}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}"
+    },
+    {
+      "description": "Branch naming for grouped updates",
+      "matchManagers": [ "nuget", "npm" ],
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}"
+      }
+    },
+    {
+      "description": "NuGet: opt out of everything, then opt back in below",
       "matchManagers": [ "nuget" ],
       "enabled": false
     },
     {
+      "description": ".NET packages pinned to $(DotNetVersion). They all move to the same version, so commitMessageTopic names the group and the version instead of listing every single package",
       "matchManagers": [ "nuget" ],
       "matchFileNames": [ "Directory.Packages.props" ],
       "matchJsonata": [ "sharedVariableName = 'DotNetVersion'" ],
       "enabled": true,
-      "rebaseWhen": "never",
       "groupName": ".NET",
-      "separateMajorMinor": true,
-      "semanticCommits": "disabled",
-      "commitMessagePrefix": "",
-      "commitMessageAction": "Update to",
-      "commitMessageExtra": "{{newVersion}}",
-      "branchTopic": "update-to-net-{{newMajor}}-{{newMinor}}-{{newPatch}}",
-      "addLabels": [ "Dependencies", "Modernization" ]
+      "groupSlug": "net",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
     },
     {
+      "description": "npm: bump the range in package.json instead of only moving package-lock.json, so both files always state the same version",
       "matchManagers": [ "npm" ],
-      "enabled": true
+      "rangeStrategy": "bump"
+    },
+    {
+      "description": "npm: opt out of everything, then opt back in below",
+      "matchManagers": [ "npm" ],
+      "enabled": false
     },
     {
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "@types/blazor__javascript-interop" ],
-      "groupName": "interop types",
-      "groupSlug": "interop-types"
+      "enabled": true,
+      "addLabels": [ "JS interop" ]
     },
     {
+      "description": "npm: eslint and the packages it depends on updated as one group",
       "matchManagers": [ "npm" ],
       "matchPackageNames": [
-        "eslint",
-        "eslint-config-xo",
-        "eslint-config-xo-typescript",
+        "/^eslint/",
         "/^@typescript-eslint//",
-        "/^eslint-/"
+        "typescript"
       ],
+      "enabled": true,
       "groupName": "eslint",
-      "groupSlug": "eslint"
-    },
-    {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "typescript" ],
-      "groupName": "typescript",
-      "groupSlug": "typescript"
+      "groupSlug": "eslint",
+      "separateMajorMinor": false,
+      "separateMultipleMajor": false,
+      "separateMultipleMinor": false,
+      "separateMinorPatch": false,
+      "addLabels": [ "ESLint", "TypeScript", "Renovate::Frozen" ],
+      "stopUpdatingLabel": "Renovate::Frozen"
     },
     {
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "three-dots" ],
-      "groupName": "three-dots",
-      "groupSlug": "three-dots"
+      "enabled": true
     }
   ]
 }

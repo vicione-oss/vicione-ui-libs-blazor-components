@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `ContextMenu`, updated styling to use `ViciOne.Ui.Design`
+- Fixed missing values for members in TypeScript enums
 
 ## 5.20.0 - 2026-08-13
 

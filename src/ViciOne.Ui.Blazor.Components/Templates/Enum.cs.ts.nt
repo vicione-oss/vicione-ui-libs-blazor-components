@@ -5,7 +5,7 @@
 
 export enum {{ enum.BareName }} {
 {{ for value in enum.Values ~}}
-    {{ value.Name }}{{ if !for.last }},{{ end }}
+    {{ value.Name }} = {{ value.Value }}{{ if !for.last }},{{ end }}
 {{~ end ~}}
 }
     {{~ end

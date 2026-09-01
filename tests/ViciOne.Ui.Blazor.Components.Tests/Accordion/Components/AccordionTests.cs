@@ -1,6 +1,4 @@
-using AwesomeAssertions;
 using Bunit;
-using Xunit;
 using AccordionComponent = ViciOne.Ui.Blazor.Components.Accordion.Components.Accordion;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Accordion.Components;

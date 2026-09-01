@@ -1,17 +1,14 @@
 using System.Linq.Expressions;
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Extensions;
 using ViciOne.Ui.Blazor.Components.Moveable.Models;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Moveable.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Moveable.Services;
 

@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using AwesomeAssertions;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PropertyGrid.Services;
 

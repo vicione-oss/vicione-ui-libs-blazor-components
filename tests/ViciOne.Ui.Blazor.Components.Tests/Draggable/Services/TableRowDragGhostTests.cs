@@ -1,6 +1,4 @@
-using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Draggable.Services;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Draggable.Services;
 

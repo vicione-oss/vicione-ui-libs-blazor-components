@@ -1,11 +1,9 @@
 using System.Linq.Expressions;
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Extensions;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Services;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.PointerCapture.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PointerCapture.Services;
 

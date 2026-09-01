@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.Moveable.Extensions;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Moveable.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Moveable.Extensions;
 

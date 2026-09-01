@@ -1,10 +1,8 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ViciOne.Ui.Blazor.Components.TabStrip.Components;
 using ViciOne.Ui.Blazor.Components.TabStrip.Models;
-using Xunit;
 using TabStripComponent = ViciOne.Ui.Blazor.Components.TabStrip.Components.TabStrip;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.TabStrip.Components;

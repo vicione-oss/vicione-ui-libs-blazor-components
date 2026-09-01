@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.PointerCapture.Extensions;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.PointerCapture.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PointerCapture.Extensions;
 

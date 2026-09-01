@@ -1,6 +1,4 @@
-using AwesomeAssertions;
 using Bunit;
-using Xunit;
 using TabStripComponent = ViciOne.Ui.Blazor.Components.TabStrip.Components.TabStrip;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.TabStrip.Components;

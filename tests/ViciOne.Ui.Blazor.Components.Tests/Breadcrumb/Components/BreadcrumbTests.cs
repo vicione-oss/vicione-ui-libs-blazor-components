@@ -1,13 +1,10 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Components;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Extensions;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Models;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Services;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
-using Xunit;
 using BreadcrumbComponent = ViciOne.Ui.Blazor.Components.Breadcrumb.Components.Breadcrumb;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Components;

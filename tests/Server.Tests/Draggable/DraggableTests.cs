@@ -1,7 +1,6 @@
 using Microsoft.Playwright;
 using Server.Tests.Infrastructure;
 using ViciOne.Ui.Testing.Playwright.Infrastructure;
-using Xunit;
 using static Microsoft.Playwright.Assertions;
 
 namespace Server.Tests.Draggable;

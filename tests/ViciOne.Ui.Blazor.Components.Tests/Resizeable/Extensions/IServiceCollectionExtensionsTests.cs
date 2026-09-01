@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.Resizeable.Extensions;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Resizeable.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Resizeable.Extensions;
 

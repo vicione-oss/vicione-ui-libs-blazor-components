@@ -1,10 +1,8 @@
 using AngleSharp.Dom;
-using AwesomeAssertions;
 using Bunit;
 using ViciOne.Ui.Blazor.Components.Dialog.Components;
 using ViciOne.Ui.Blazor.Components.Dialog.Extensions;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.Dialog.Extensions;
-using Xunit;
 using DialogComponent = ViciOne.Ui.Blazor.Components.Dialog.Components.Dialog;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Dialog.Components;

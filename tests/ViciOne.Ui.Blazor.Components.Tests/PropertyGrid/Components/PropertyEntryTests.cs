@@ -1,10 +1,8 @@
 using System.Linq.Expressions;
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Components;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Components.Editors;
@@ -16,7 +14,6 @@ using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
 using ViciOne.Ui.Blazor.Components.Tests.Enums;
 using ViciOne.Ui.Blazor.Components.Tests.Extensions;
 using ViciOne.Ui.Blazor.Components.Tooltip.Components;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PropertyGrid.Components;
 

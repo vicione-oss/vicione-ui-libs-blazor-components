@@ -1,8 +1,6 @@
-using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Comparers;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PropertyGrid.Comparers;
 

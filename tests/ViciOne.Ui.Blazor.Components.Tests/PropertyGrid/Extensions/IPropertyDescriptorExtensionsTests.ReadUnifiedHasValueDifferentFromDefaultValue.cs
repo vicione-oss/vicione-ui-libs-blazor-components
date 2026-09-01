@@ -1,7 +1,5 @@
-﻿using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PropertyGrid.Extensions;
 

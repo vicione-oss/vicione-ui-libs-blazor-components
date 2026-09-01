@@ -1,13 +1,10 @@
-using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using ViciOne.Ui.Blazor.Components.Breadcrumb.Components;
 using ViciOne.Ui.Blazor.Components.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Models;
 using ViciOne.Ui.Blazor.Components.Resizing.Services;
-using Xunit;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Breadcrumb.Components;
 

@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using AwesomeAssertions;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 using ViciOne.Ui.Blazor.Components.Tests.Extensions;
 

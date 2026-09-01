@@ -1,6 +1,5 @@
 using Server.Tests.Infrastructure;
 using ViciOne.Ui.Testing.Playwright.Infrastructure;
-using Xunit;
 
 namespace Server.Tests.TagBox;
 

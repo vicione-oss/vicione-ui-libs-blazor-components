@@ -13,6 +13,7 @@ public sealed partial class PropertyGrid<TContext> : ComponentBase, IDisposable
     private IPropertyGridController<TContext>? _controller;
     private IPropertyGridEvents? _events;
     private IPropertyGridState? _state;
+    private bool _disposed;
 
     /// <summary>
     /// Controller for the property grid
@@ -44,17 +45,31 @@ public sealed partial class PropertyGrid<TContext> : ComponentBase, IDisposable
 
     /// <inheritdoc/>
     public void Dispose()
-        => _state?.PropertiesChanged -= StatePropertiesChangedAsync;
+    {
+        _disposed = true;
+
+        _state?.PropertiesChanged -= StatePropertiesChangedAsync;
+    }
 
     private async void StatePropertiesChangedAsync(PropertiesChangedEventArgs args)
     {
+        if (_disposed)
+            return;
+
         if (args.PropertyNames.Contains(nameof(IPropertyGridState.Items)) ||
             args.PropertyNames.Contains(nameof(IPropertyGridState.CategoryComparer)) ||
             args.PropertyNames.Contains(nameof(IPropertyGridState.GroupByCategory)) ||
             args.PropertyNames.Contains(nameof(IPropertyGridState.KeepMessages)) ||
             args.PropertyNames.Contains(nameof(IPropertyGridState.PropertyComparer)))
         {
-            await InvokeAsync(StateHasChanged);
+            try
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (ObjectDisposedException)
+            {
+                // Component most likey disposed already, nothing we can do, return gracefully
+            }
         }
     }
 }

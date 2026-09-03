@@ -6,6 +6,7 @@
 
 - `ContextMenu`, updated styling to use `ViciOne.Ui.Design`
 - `PropertyGrid`, fixed possible `ObjectDisposedException` in state change handling
+- `SearchBox`, text input does not reach into clear button anymore
 - Fixed missing values for members in TypeScript enums
 
 ## 5.20.0 - 2026-08-13

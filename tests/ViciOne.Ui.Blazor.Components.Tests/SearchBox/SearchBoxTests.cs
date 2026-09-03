@@ -56,6 +56,17 @@ public sealed class SearchBoxTests : IDisposable
     }
 
     [Fact]
+    public void Should_render_input_with_search_text_box_css_class()
+    {
+        // Act
+        var renderedComponent = _testContext.Render<SearchBoxComponent>();
+
+        // Assert
+        var input = renderedComponent.Find("input");
+        input.GetAttribute("class").Should().Contain("search-box-input");
+    }
+
+    [Fact]
     public void Should_render_disabled_input_when_not_enabled()
     {
         // Act

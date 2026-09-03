@@ -12,7 +12,8 @@
 }
 
 <div class="@string.Join(" ", searchBoxCssClasses)">
-    <TextBox Placeholder="@Placeholder"
+    <TextBox CssClass="search-box-input"
+             Placeholder="@Placeholder"
              Value="@Text"
              ValueChanging="@TextBoxValueChangingAsync"
              ValueChanged="@TextBoxValueChangedAsync"

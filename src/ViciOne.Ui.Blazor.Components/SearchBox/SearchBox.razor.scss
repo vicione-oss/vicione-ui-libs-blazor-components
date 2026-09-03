@@ -42,9 +42,8 @@
     display: inline-grid;
     align-items: center;
 
-    ::deep .search-text-box {
-        padding-right: 35px;
-        align-self: stretch;
+    ::deep .search-box-input {
+        padding-right: 25px;
     }
 
     .icon-container {

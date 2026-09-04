@@ -8,12 +8,12 @@ namespace ViciOne.Ui.Blazor.Components.Sidebar.Enums;
 public readonly record struct SidebarMode : ITypeSafeEnumImplemention<SidebarMode>
 {
     /// <summary>
-    /// Width of the sidebar will be set to <see cref="Sidebar.CompactWidth"/>, no mover element will be rendered
+    /// Width of the sidebar will be set to <see cref="Sidebar.CompactWidth"/>, no resize handle will be rendered
     /// </summary>
     public static readonly SidebarMode Compact = new(nameof(Compact));
 
     /// <summary>
-    /// Width of the sidebar is adjustable by the mover element in range from <see cref="Sidebar.FluidMinimumWidth"/>
+    /// Width of the sidebar is adjustable by the resize handle in range from <see cref="Sidebar.FluidMinimumWidth"/>
     /// to <see cref="Sidebar.FluidMaximumWidth"/>
     /// </summary>
     public static readonly SidebarMode Fluid = new(nameof(Fluid));

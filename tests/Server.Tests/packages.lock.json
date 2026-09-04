@@ -553,7 +553,7 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.AspNetCore.Components.WebAssembly.Server": "[10.0.11, )",
-          "Shared": "[5.21.0, )"
+          "Shared": "[6.0.0, )"
         }
       },
       "shared": {
@@ -561,7 +561,7 @@
         "dependencies": {
           "Bogus": "[35.6.4, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.11, )",
-          "ViciOne.Ui.Blazor.Components": "[5.21.0, )",
+          "ViciOne.Ui.Blazor.Components": "[6.0.0, )",
           "ViciOne.Ui.Localization": "[3.0.1, )"
         }
       },

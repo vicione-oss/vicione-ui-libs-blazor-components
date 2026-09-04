@@ -1,7 +1,8 @@
-﻿@using ViciOne.Ui.Blazor.Components.Sidebar.Enums
+@using ViciOne.Ui.Blazor.Components.Resizeable.Components
+@using ViciOne.Ui.Blazor.Components.Sidebar.Enums
 @using ViciOne.Ui.Blazor.Components.Sidebar.Extensions
 
-<div class="sidebar @Placement.ToModifierCssClass()" style="--width: @(_width)px">
+<div @ref="_sidebarElementReference" class="sidebar @Placement.ToModifierCssClass()" style="--width: @(_width)px">
     @if (ChildContent is not null)
     {
         <div class="content">
@@ -11,21 +12,10 @@
 
     @if (Mode == SidebarMode.Fluid)
     {
-        <div @onclick:stopPropagation
-             @onpointerdown:stopPropagation
-             @onpointerdown="@OnMoverPointerDown"
-             class="mover">
+        <div @ref="_resizeContainerElementReference" class="resize-container" style="width: @(_fluidMaximumWidth)px" />
 
-            @if (_changingWidth)
-            {
-                <div @onpointerleave="OnMoverGhostPointerUpAsync"
-                     @onpointerleave:stopPropagation
-                     @onpointermove="@OnMoverGhostPointerMove"
-                     @onpointermove:stopPropagation
-                     @onpointerup="@OnMoverGhostPointerUpAsync"
-                     @onpointerup:stopPropagation
-                     class="mover-ghost" />
-            }
-        </div>
+        <CascadingValue TValue="IResizeable" Value="this" IsFixed="true">
+            <ResizeHandle Position="Placement.ToResizeHandlePosition()" />
+        </CascadingValue>
     }
 </div>

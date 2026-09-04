@@ -11,6 +11,7 @@ using Shared.Pages.Popup.Extensions;
 using Shared.Pages.PropertyGrid.Extensions;
 using Shared.Pages.Resizeable.Extensions;
 using Shared.Pages.SectionRail.Extensions;
+using Shared.Pages.Sidebar.Extensions;
 using Shared.Pages.SpinEdit.Extensions;
 using Shared.Pages.Toolbar.Extensions;
 using Shared.Pages.ToolTip.Extensions;
@@ -33,6 +34,7 @@ public static class IServiceCollectionExtensions
             .AddPropertyGridPage()
             .AddResizeablePage()
             .AddSectionRailPage()
+            .AddSidebarPage()
             .AddSpinEditPage()
             .AddToolbarPage()
             .AddTooltipPage();

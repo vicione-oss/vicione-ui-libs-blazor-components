@@ -1,24 +1,33 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components;
+using ViciOne.Ui.Blazor.Components.Models;
+using ViciOne.Ui.Blazor.Components.Resizeable.Components;
+using ViciOne.Ui.Blazor.Components.Resizeable.Services;
 using ViciOne.Ui.Blazor.Components.Sidebar.Enums;
 
 namespace ViciOne.Ui.Blazor.Components.Sidebar;
 
 /// <summary>
-/// A component for rendering a sidebar with support for a mover element to allow adjusting the width of the sidebar via drag.
-/// The mover element is rendered when <see cref="Mode"/> is set to <see cref="SidebarMode.Fluid"/>.
-/// It covers the box shadow and leaks slightly into the content area to allow for easier dragging.
+/// A component for rendering a sidebar with support for a resize handle to allow adjusting the width of the sidebar via drag.
+/// The resize handle is rendered when <see cref="Mode"/> is set to <see cref="SidebarMode.Fluid"/>.
 /// </summary>
 /// <remarks>
 /// https://en.wikipedia.org/wiki/Sidebar_(computing)
 /// </remarks>
-public sealed partial class Sidebar : ComponentBase
+public sealed partial class Sidebar : ComponentBase, IResizeable, IResizeContainer, IAsyncDisposable
 {
+    private readonly List<IResizeHandle> _resizeHandles = [];
+
+    private ElementReference _sidebarElementReference;
+    private ElementReference _resizeContainerElementReference;
+
+    private Task? _resizeInteractionAttachTask;
+    private bool _reattachResizeInteraction;
+    private bool _disposedAsync;
+
     private int _width;
     private int _fluidMinimumWidth;
     private int _fluidMaximumWidth;
-    private double _lastGhostMoveX;
-    private bool _changingWidth;
+    private SidebarPlacement _placement;
 
     /// <summary>
     /// Placement in the outer container
@@ -66,11 +75,16 @@ public sealed partial class Sidebar : ComponentBase
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    [Inject] private IResizeInteraction ResizeInteraction { get; set; } = default!;
+
+    bool IResizeable.Resizeable => Mode == SidebarMode.Fluid;
+
     /// <inheritdoc/>
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
+        _placement = Placement;
         _fluidMinimumWidth = FluidMinimumWidth;
         _fluidMaximumWidth = FluidMaximumWidth;
 
@@ -103,39 +117,111 @@ public sealed partial class Sidebar : ComponentBase
         if (fluidMinimumWidthChanged || fluidMaximumWidthChanged)
             EnsureFluidMinimumBelowOrEqualFluidMaximum();
 
+        // The resize interaction reads the minimum width and the resize handle position once while it is
+        // being attached, so it has to be attached anew to pick either of them up.
+        if (fluidMinimumWidthChanged || Placement != _placement)
+        {
+            _placement = Placement;
+
+            _reattachResizeInteraction = true;
+        }
+
         UpdateWidth();
     }
 
-    private void OnMoverGhostPointerMove(MouseEventArgs e)
+    /// <inheritdoc/>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!_changingWidth)
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (_disposedAsync)
             return;
 
-        var newWidth = _width;
+        if (Mode != SidebarMode.Fluid)
+        {
+            await RemoveResizeInteractionAsync();
 
-        if (Placement == SidebarPlacement.Left)
-            newWidth += (int)(e.ClientX - _lastGhostMoveX);
-        else
-            newWidth -= (int)(e.ClientX - _lastGhostMoveX);
+            return;
+        }
 
-        _width = Math.Max(Math.Min(_fluidMaximumWidth, newWidth), _fluidMinimumWidth);
-        _lastGhostMoveX = e.ClientX;
+        if (_reattachResizeInteraction)
+        {
+            await RemoveResizeInteractionAsync();
+
+            _reattachResizeInteraction = false;
+        }
+
+        if (_resizeInteractionAttachTask is null && _resizeHandles.Count > 0)
+        {
+            _resizeInteractionAttachTask = ResizeInteraction.AttachAsync(this);
+
+            await _resizeInteractionAttachTask;
+        }
     }
 
-    private async Task OnMoverGhostPointerUpAsync()
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
     {
-        _changingWidth = false;
+        if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
+            return;
+
+        await RemoveResizeInteractionAsync();
+    }
+
+    ElementReference IResizeable.GetElementReference()
+        => _sidebarElementReference;
+
+    ElementReference IResizeContainer.GetElementReference()
+        => _resizeContainerElementReference;
+
+    IReadOnlyCollection<IResizeHandle> IResizeable.GetResizeHandles()
+        => _resizeHandles;
+
+    IResizeContainer IResizeable.GetResizeContainer()
+        => this;
+
+    double IResizeable.GetMinimumWidth()
+        => _fluidMinimumWidth;
+
+    double IResizeable.GetMinimumHeight()
+        => 0;
+
+    void IResizeable.RegisterResizeHandle(IResizeHandle resizeHandle)
+    {
+        if (_resizeHandles.Contains(resizeHandle))
+            return;
+
+        _resizeHandles.Add(resizeHandle);
+
+        _reattachResizeInteraction = true;
+    }
+
+    void IResizeable.UnregisterResizeHandle(IResizeHandle resizeHandle)
+    {
+        if (_resizeHandles.Remove(resizeHandle))
+            _reattachResizeInteraction = true;
+    }
+
+    async Task IResizeable.UpdatePositionAndSizeAsync(DomRect domRect)
+    {
+        _width = ClampToFluidWidthRange((int)Math.Round(domRect.Width));
 
         if (FluidWidthChanged.HasDelegate)
             await FluidWidthChanged.InvokeAsync(_width);
 
         FluidWidth = _width;
+
+        await InvokeAsync(StateHasChanged);
     }
 
-    private void OnMoverPointerDown(MouseEventArgs e)
+    private async Task RemoveResizeInteractionAsync()
     {
-        _changingWidth = true;
-        _lastGhostMoveX = e.ClientX;
+        if (_resizeInteractionAttachTask?.IsCompletedSuccessfully != true)
+            return;
+
+        await ResizeInteraction.RemoveAsync(this);
+
+        _resizeInteractionAttachTask = null;
     }
 
     private void EnsureFluidMinimumBelowOrEqualFluidMaximum()
@@ -146,20 +232,19 @@ public sealed partial class Sidebar : ComponentBase
 
     private void UpdateWidth()
     {
-        if (Mode == SidebarMode.Fluid)
-        {
-            if (FluidWidth.HasValue)
-                _width = FluidWidth.Value;
-
-            if (_width < _fluidMinimumWidth)
-                _width = _fluidMinimumWidth;
-
-            if (_width > _fluidMaximumWidth)
-                _width = _fluidMaximumWidth;
-        }
-        else
+        if (Mode != SidebarMode.Fluid)
         {
             _width = CompactWidth;
+
+            return;
         }
+
+        if (FluidWidth.HasValue)
+            _width = FluidWidth.Value;
+
+        _width = ClampToFluidWidthRange(_width);
     }
+
+    private int ClampToFluidWidthRange(int width)
+        => Math.Clamp(width, _fluidMinimumWidth, _fluidMaximumWidth);
 }

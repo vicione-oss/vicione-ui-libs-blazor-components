@@ -4,8 +4,13 @@ import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.
 export class SetPositionPointerCaptureBehavior implements PointerCaptureBehavior {
 
     public apply(context: PointerCaptureBehaviorContext, next: (context: PointerCaptureBehaviorContext) => void) {
-        context.captureTarget.element.style.left = `${context.captureTarget.rect.left}px`;
-        context.captureTarget.element.style.top = `${context.captureTarget.rect.top}px`;
+        const { element, rect, originalRect } = context.captureTarget;
+
+        if (rect.left !== originalRect.left)
+            element.style.left = `${rect.left}px`;
+
+        if (rect.top !== originalRect.top)
+            element.style.top = `${rect.top}px`;
 
         next(context);
     }

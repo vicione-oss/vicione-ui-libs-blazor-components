@@ -4,8 +4,13 @@ import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.
 export class SetSizePointerCaptureBehavior implements PointerCaptureBehavior {
 
     public apply(context: PointerCaptureBehaviorContext, next: (context: PointerCaptureBehaviorContext) => void) {
-        context.captureTarget.element.style.width = `${context.captureTarget.rect.width}px`;
-        context.captureTarget.element.style.height = `${context.captureTarget.rect.height}px`;
+        const { element, rect, originalRect } = context.captureTarget;
+
+        if (rect.width !== originalRect.width)
+            element.style.width = `${rect.width}px`;
+
+        if (rect.height !== originalRect.height)
+            element.style.height = `${rect.height}px`;
 
         next(context);
     }

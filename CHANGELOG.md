@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.21.0 - Unreleased
+## 6.0.0 - Unreleased
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
@@ -8,6 +8,8 @@
 - `PropertyGrid`, fixed possible `ObjectDisposedException` in state change handling
 - `SearchBox`, text input does not reach into clear button anymore
 - Fixed missing values for members in TypeScript enums
+- `Sidebar`
+  - Fixed the drag in fluid mode breaking off when the pointer left the mover
 
 ## 5.20.0 - 2026-08-13
 

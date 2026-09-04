@@ -1,10 +1,9 @@
-﻿.sidebar {
+.sidebar {
     position: relative;
     width: var(--width);
     height: 100%;
 
     $box-shadow-width: 5px;
-    $mover-width: 10px;
 
     .content {
         position: relative;
@@ -12,37 +11,56 @@
         overflow: hidden;
     }
 
-    .mover {
+    .resize-container {
         position: absolute;
-        width: $mover-width;
         top: 0;
         bottom: 0;
+        pointer-events: none;
+    }
+
+    $resize-handle-width: 10px;
+
+    ::deep .resize-handle {
+        width: $resize-handle-width;
+        height: auto;
+        top: 0;
+        bottom: 0;
+        transform: none;
+        background-color: transparent;
+        border: none;
         cursor: col-resize;
     }
 
-    .mover-ghost {
-        position: fixed;
-        width: unset;
-        height: unset;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
+    &.resizing-ongoing {
+        cursor: col-resize;
     }
 
     &.sidebar--left {
         box-shadow: $box-shadow-width 0 8px -2px rgb(0 0 0 / 40%);
 
-        .mover {
-            right: -$mover-width;
+        .resize-container {
+            left: 0;
+        }
+
+        ::deep .resize-handle {
+            right: -$resize-handle-width;
         }
     }
 
     &.sidebar--right {
+        // The surrounding layout anchors the right edge, so the width alone grows the sidebar to
+        // the left. Dragging the left handle moves the left edge of the resize interaction along
+        // with it, and that offset would pull the sidebar off the anchor.
+        left: 0 !important;
+
         box-shadow: -$box-shadow-width 0 8px -2px rgb(0 0 0 / 40%);
 
-        .mover {
-            left: -$mover-width;
+        .resize-container {
+            right: 0;
+        }
+
+        ::deep .resize-handle {
+            left: -$resize-handle-width;
         }
     }
 }

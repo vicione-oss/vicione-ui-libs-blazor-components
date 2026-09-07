@@ -42,6 +42,15 @@ const config = [
             '@stylistic/padded-blocks': 'off',
             '@stylistic/indent': ['error', indent],
             '@stylistic/indent-binary-ops': ['error', indent],
+            '@stylistic/max-len': [
+                'error',
+                {
+                    code: 140,
+                    ignoreComments: true,
+                    ignoreUrls: true,
+                    ignorePattern: '^import '
+                }
+            ],
             '@stylistic/comma-dangle': ['error', 'never'],
             '@stylistic/function-paren-newline': ['error', 'consistent'],
             '@stylistic/curly-newline': ['error', { minElements: 1 }],

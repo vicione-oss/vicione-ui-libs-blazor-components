@@ -72,7 +72,9 @@ class ResizeInteraction {
 
     }
 
-    * #getAllPointerCaptureBehaviors(resizeHandlePosition: ResizeHandlePosition, resizeContainerBoundingClientRect: DOMRect): IterableIterator<PointerCaptureBehavior> {
+    * #getAllPointerCaptureBehaviors(resizeHandlePosition: ResizeHandlePosition,
+        resizeContainerBoundingClientRect: DOMRect): IterableIterator<PointerCaptureBehavior> {
+
         yield this.#resetRectPointerCaptureBehavior;
 
         const initializeArgs: ResizePointerCaptureBehaviorInitializeArgs = {

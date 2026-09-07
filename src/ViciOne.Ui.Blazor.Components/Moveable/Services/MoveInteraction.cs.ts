@@ -48,8 +48,12 @@ class MoveInteraction {
     };
 
     readonly #handleMoveablePointerUp = async (captureTarget: CaptureTarget, wasPointerMoved: boolean) => {
-        if (wasPointerMoved)
-            await this.context.dotNetObject.invokeMethodAsync('MoveablePointerUpAsync', this.context.moveableId, captureTarget.rect.left, captureTarget.rect.top);
+        if (wasPointerMoved) {
+            await this.context.dotNetObject.invokeMethodAsync('MoveablePointerUpAsync',
+                this.context.moveableId,
+                captureTarget.rect.left,
+                captureTarget.rect.top);
+        }
     };
 
     // MoveContainer should not have any border / padding because PointerCapture is based on bounding client rects

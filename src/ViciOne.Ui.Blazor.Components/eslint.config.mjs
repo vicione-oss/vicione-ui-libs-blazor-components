@@ -1,7 +1,7 @@
-import generalConfig from '../../eslint.config.mjs';
+import rootConfig from '../../eslint.config.mjs';
 
 const config = [
-    ...generalConfig,
+    ...rootConfig,
 
     {
         ignores: [

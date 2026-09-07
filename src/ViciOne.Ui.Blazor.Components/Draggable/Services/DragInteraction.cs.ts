@@ -193,7 +193,9 @@ class DragInteraction {
             if (this.#targetDropzoneDescriptor) {
                 this.#dragGhost.dropzoneEnter?.();
 
-                await this.context.dotNetObject.invokeMethodAsync('DragEnterAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id);
+                await this.context.dotNetObject.invokeMethodAsync('DragEnterAsync',
+                    this.context.draggableId,
+                    this.#targetDropzoneDescriptor.id);
             }
         }
     };
@@ -222,7 +224,11 @@ class DragInteraction {
                 x -= dropzoneBoundingClientRect.x + window.scrollX;
                 y -= dropzoneBoundingClientRect.y + window.scrollY;
 
-                await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync', this.context.draggableId, this.#targetDropzoneDescriptor.id, x, y);
+                await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync',
+                    this.context.draggableId,
+                    this.#targetDropzoneDescriptor.id,
+                    x,
+                    y);
             }
         }
     };

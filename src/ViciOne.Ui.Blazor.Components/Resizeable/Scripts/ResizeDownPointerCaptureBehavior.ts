@@ -10,7 +10,8 @@ export class ResizeDownPointerCaptureBehavior implements ResizePointerCaptureBeh
     #minimumHeight = 0;
 
     public appliesTo(resizeHandlePosition: ResizeHandlePosition): boolean {
-        return [ResizeHandlePosition.BottomRight, ResizeHandlePosition.Bottom, ResizeHandlePosition.BottomLeft].includes(resizeHandlePosition);
+        return [ResizeHandlePosition.BottomRight, ResizeHandlePosition.Bottom, ResizeHandlePosition.BottomLeft]
+            .includes(resizeHandlePosition);
     }
 
     public initialize(args: ResizePointerCaptureBehaviorInitializeArgs) {

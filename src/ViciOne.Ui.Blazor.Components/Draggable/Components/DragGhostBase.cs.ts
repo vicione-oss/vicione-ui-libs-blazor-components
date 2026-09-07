@@ -24,7 +24,13 @@ import { type CreateDragGhostArgs } from '/_content/ViciOne.Ui.Blazor.Components
  when the deriving component did not implement the matching listener interface, the method is a no-op and makes
  no round-trip.
  */
-class DragGhostBase implements DragGhostContentSource, DragGhostContentChangedNotifier, DragStartListener, DragEndListener, DropzoneEnterListener, DropzoneLeaveListener {
+class DragGhostBase implements DragGhostContentSource,
+    DragGhostContentChangedNotifier,
+    DragStartListener,
+    DragEndListener,
+    DropzoneEnterListener,
+    DropzoneLeaveListener {
+
     #contentChanged?: () => void;
     #waitingForContentChanges = false;
 

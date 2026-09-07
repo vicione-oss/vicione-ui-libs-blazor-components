@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "npm --workspaces --if-present run build",
-    "lint": "npm --workspaces --if-present run lint",
-    "lint-with-fix": "npm --workspaces --if-present run lint-with-fix"
+    "lint-root-config": "eslint eslint.config.mjs",
+    "lint": "npm run lint-root-config && npm --workspaces --if-present run lint",
+    "lint-with-fix": "npm run lint-root-config -- --fix && npm --workspaces --if-present run lint-with-fix"
   }
 }

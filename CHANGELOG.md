@@ -4,12 +4,12 @@
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
+- Fixed missing values for members in TypeScript enums
 - `ContextMenu`, updated styling to use `ViciOne.Ui.Design`
 - `PropertyGrid`, fixed possible `ObjectDisposedException` in state change handling
 - `SearchBox`, text input does not reach into clear button anymore
-- Fixed missing values for members in TypeScript enums
-- `Sidebar`
-  - Fixed the drag in fluid mode breaking off when the pointer left the mover
+- `Sidebar`, fixed the drag in fluid mode breaking off when the pointer left the mover
+- `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.18.0`
 
 ## 5.20.0 - 2026-08-13
 

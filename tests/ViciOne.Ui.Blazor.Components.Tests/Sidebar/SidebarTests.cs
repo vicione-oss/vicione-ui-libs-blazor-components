@@ -7,6 +7,7 @@ using ViciOne.Ui.Blazor.Components.Resizeable.Components;
 using ViciOne.Ui.Blazor.Components.Resizeable.Services;
 using ViciOne.Ui.Blazor.Components.Sidebar.Enums;
 using ViciOne.Ui.Blazor.Components.Sidebar.Extensions;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.Sidebar.Extensions;
 using SidebarComponent = ViciOne.Ui.Blazor.Components.Sidebar.Sidebar;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Components;
@@ -17,15 +18,13 @@ public sealed class SidebarTests : IAsyncDisposable
         [.. TypeSafeEnumFactory<SidebarPlacement>.CreateAll().Select(placement => placement.GetName())];
 
     private readonly BunitContext _testContext;
-    private readonly IResizeInteraction _resizeInteraction;
 
     public SidebarTests()
     {
         _testContext = new BunitContext();
+        _testContext.Services.AddSidebar();
 
-        _resizeInteraction = Substitute.For<IResizeInteraction>();
-
-        _testContext.Services.AddSingleton(_resizeInteraction);
+        _testContext.JSInterop.SetupForSidebar();
     }
 
     public ValueTask DisposeAsync()
@@ -326,6 +325,9 @@ public sealed class SidebarTests : IAsyncDisposable
     [Fact]
     public async Task Should_attach_resize_interaction_in_fluid_mode()
     {
+        // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         // Act
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
@@ -333,20 +335,23 @@ public sealed class SidebarTests : IAsyncDisposable
             .Add(s => s.FluidMaximumWidth, 300));
 
         // Assert
-        await _resizeInteraction.Received(1).AttachAsync(renderedComponent.Instance,
+        await resizeInteraction.Received(1).AttachAsync(renderedComponent.Instance,
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
     }
 
     [Fact]
     public async Task Should_not_attach_resize_interaction_in_compact_mode()
     {
+        // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         // Act
         _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Compact)
             .Add(s => s.CompactWidth, 50));
 
         // Assert
-        await _resizeInteraction.DidNotReceive().AttachAsync(Arg.Any<IResizeable>(),
+        await resizeInteraction.DidNotReceive().AttachAsync(Arg.Any<IResizeable>(),
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
     }
 
@@ -354,6 +359,8 @@ public sealed class SidebarTests : IAsyncDisposable
     public async Task Should_attach_resize_interaction_only_once_across_re_renders()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, 200)
@@ -365,7 +372,7 @@ public sealed class SidebarTests : IAsyncDisposable
         renderedComponent.Render();
 
         // Assert
-        await _resizeInteraction.Received(1).AttachAsync(Arg.Any<IResizeable>(),
+        await resizeInteraction.Received(1).AttachAsync(Arg.Any<IResizeable>(),
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
     }
 
@@ -373,6 +380,8 @@ public sealed class SidebarTests : IAsyncDisposable
     public async Task Should_re_attach_resize_interaction_when_fluid_minimum_width_changed()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, 200)
@@ -382,8 +391,8 @@ public sealed class SidebarTests : IAsyncDisposable
         renderedComponent.Render(b => b.Add(s => s.FluidMinimumWidth, 250));
 
         // Assert
-        await _resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
-        await _resizeInteraction.Received(2).AttachAsync(Arg.Any<IResizeable>(),
+        await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
+        await resizeInteraction.Received(2).AttachAsync(Arg.Any<IResizeable>(),
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
     }
 
@@ -391,6 +400,8 @@ public sealed class SidebarTests : IAsyncDisposable
     public async Task Should_re_attach_resize_interaction_when_placement_changed()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Placement, SidebarPlacement.Left)
             .Add(s => s.Mode, SidebarMode.Fluid)
@@ -401,8 +412,8 @@ public sealed class SidebarTests : IAsyncDisposable
         renderedComponent.Render(b => b.Add(s => s.Placement, SidebarPlacement.Right));
 
         // Assert
-        await _resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
-        await _resizeInteraction.Received(2).AttachAsync(Arg.Any<IResizeable>(),
+        await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
+        await resizeInteraction.Received(2).AttachAsync(Arg.Any<IResizeable>(),
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
     }
 
@@ -410,6 +421,8 @@ public sealed class SidebarTests : IAsyncDisposable
     public async Task Should_not_re_attach_resize_interaction_when_fluid_maximum_width_changed()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, 200)
@@ -419,7 +432,7 @@ public sealed class SidebarTests : IAsyncDisposable
         renderedComponent.Render(b => b.Add(s => s.FluidMaximumWidth, 400));
 
         // Assert
-        await _resizeInteraction.Received(1).AttachAsync(Arg.Any<IResizeable>(),
+        await resizeInteraction.Received(1).AttachAsync(Arg.Any<IResizeable>(),
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
     }
 
@@ -427,6 +440,8 @@ public sealed class SidebarTests : IAsyncDisposable
     public async Task Should_remove_resize_interaction_when_mode_switched_to_compact()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, 200)
@@ -436,13 +451,15 @@ public sealed class SidebarTests : IAsyncDisposable
         renderedComponent.Render(b => b.Add(s => s.Mode, SidebarMode.Compact));
 
         // Assert
-        await _resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
+        await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
     }
 
     [Fact]
     public async Task Should_remove_resize_interaction_when_disposed()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Fluid)
             .Add(s => s.FluidMinimumWidth, 200)
@@ -452,13 +469,15 @@ public sealed class SidebarTests : IAsyncDisposable
         await renderedComponent.Instance.DisposeAsync();
 
         // Assert
-        await _resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
+        await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
     }
 
     [Fact]
     public async Task Should_not_attach_resize_interaction_when_disposed_before_switching_to_fluid_mode()
     {
         // Arrange
+        var resizeInteraction = AddResizeInteractionSubstitute();
+
         var renderedComponent = _testContext.Render<SidebarComponent>(b => b
             .Add(s => s.Mode, SidebarMode.Compact)
             .Add(s => s.CompactWidth, 50));
@@ -472,8 +491,16 @@ public sealed class SidebarTests : IAsyncDisposable
             .Add(s => s.FluidMaximumWidth, 300));
 
         // Assert
-        await _resizeInteraction.DidNotReceive().AttachAsync(Arg.Any<IResizeable>(),
+        await resizeInteraction.DidNotReceive().AttachAsync(Arg.Any<IResizeable>(),
             Arg.Any<IEnumerable<IPointerCaptureBehavior>?>());
+    }
+
+    private IResizeInteraction AddResizeInteractionSubstitute()
+    {
+        var resizeInteraction = Substitute.For<IResizeInteraction>();
+        _testContext.Services.AddSingleton(resizeInteraction);
+
+        return resizeInteraction;
     }
 
     private static Task UpdateWidthAsync(SidebarComponent sidebar, int width)

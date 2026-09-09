@@ -11,6 +11,11 @@
 - `Sidebar`, fixed the drag in fluid mode breaking off when the pointer left the mover
 - `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.18.0`
 
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `Sidebar`, added extension method `SetupForSidebar()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
+- `Resizeable`, added extension method `SetupForResizeInteraction()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
+
 ## 5.20.0 - 2026-08-13
 
 ### Package `ViciOne.Ui.Blazor.Components`

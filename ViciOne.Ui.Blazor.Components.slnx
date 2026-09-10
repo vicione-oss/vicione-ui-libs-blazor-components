@@ -29,8 +29,7 @@
     <File Path=".vscode/mcp.json" />
   </Folder>
   <Folder Name="/docs/">
-    <File Path="docs/csharp-coding-style.md" />
-    <File Path="docs/css-guide.md" />
+    <File Path="docs/csharp-code-style.md" />
     <File Path="docs/documentation-style.md" />
     <File Path="docs/scss-code-style.md" />
   </Folder>

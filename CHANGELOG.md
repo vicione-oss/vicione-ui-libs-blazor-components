@@ -10,6 +10,7 @@
 - `SearchBox`, text input does not reach into clear button anymore
 - `Sidebar`, fixed the drag in fluid mode breaking off when the pointer left the mover
 - `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.18.0`
+- `Popup`, set focus when it becomes visible
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

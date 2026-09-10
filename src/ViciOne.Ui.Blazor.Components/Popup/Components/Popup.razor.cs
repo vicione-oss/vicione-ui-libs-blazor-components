@@ -19,6 +19,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     private double? _x;
     private double? _y;
     private bool _requestRemoveMoveInteractionAfterRender;
+    private bool _focusAfterRender;
     private bool _visible;
     private bool _showing;
     private bool _closing;
@@ -144,11 +145,15 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
 
             if (_visible)
             {
+                _focusAfterRender = true;
+
                 if (OnShowing.HasDelegate)
                     await OnShowing.InvokeAsync();
             }
             else
             {
+                _focusAfterRender = false;
+
                 if (OnClosing.HasDelegate)
                     await OnClosing.InvokeAsync();
             }
@@ -173,6 +178,14 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
 
                 await _moveInteractionAttachTask;
             }
+        }
+
+        // We check the element reference first, because the modal dialog is handed to the SectionOutlet in PopupCell
+        // through SectionContent, so its element reference is only assigned once PopupCell has rendered.
+        if (!string.IsNullOrEmpty(_modalDialogElementReference.Id) &&
+            Interlocked.CompareExchange(ref _focusAfterRender, false, true))
+        {
+            await _modalDialogElementReference.FocusAsync();
         }
 
         if (Interlocked.CompareExchange(ref _showing, false, true))
@@ -225,6 +238,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
 
                 _visible = true;
                 _showing = true;
+                _focusAfterRender = true;
 
                 if (OnShowing.HasDelegate)
                     await OnShowing.InvokeAsync();
@@ -265,6 +279,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
                 _visible = false;
                 _closing = true;
                 _requestRemoveMoveInteractionAfterRender = true;
+                _focusAfterRender = false;
 
                 if (OnClosing.HasDelegate)
                     await OnClosing.InvokeAsync();

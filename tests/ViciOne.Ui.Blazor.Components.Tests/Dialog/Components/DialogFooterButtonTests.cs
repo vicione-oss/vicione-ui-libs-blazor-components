@@ -12,8 +12,8 @@ public sealed class DialogFooterButtonTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<DialogFooterButton>(b =>
-            b.Add(p => p.Text, "OK"));
+        var renderedComponent = testContext.Render<DialogFooterButton>(b => b
+            .Add(p => p.Text, "OK"));
 
         // Assert
         renderedComponent.Find(".dialog-footer-button-container");
@@ -26,8 +26,8 @@ public sealed class DialogFooterButtonTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<DialogFooterButton>(b =>
-            b.Add(p => p.Text, "OK"));
+        var renderedComponent = testContext.Render<DialogFooterButton>(b => b
+            .Add(p => p.Text, "OK"));
 
         var button = renderedComponent.Find("button");
 
@@ -94,8 +94,8 @@ public sealed class DialogFooterButtonTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<DialogFooterButton>(b =>
-            b.Add(p => p.Text, "Submit"));
+        var renderedComponent = testContext.Render<DialogFooterButton>(b => b
+            .Add(p => p.Text, "Submit"));
 
         var textElement = renderedComponent.Find("button .text");
 
@@ -153,8 +153,8 @@ public sealed class DialogFooterButtonTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<DialogFooterButton>(b =>
-            b.Add(p => p.Text, "OK"));
+        var renderedComponent = testContext.Render<DialogFooterButton>(b => b
+            .Add(p => p.Text, "OK"));
 
         var button = renderedComponent.Find("button");
 

@@ -21,7 +21,8 @@ public sealed partial class PopupTests
         public async Task Should_make_popup_visible()
         {
             // Arrange
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.CssClass, "test-popup"));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.CssClass, "test-popup"));
 
             // Act
             await popup.Instance.ShowAsync();
@@ -62,7 +63,8 @@ public sealed partial class PopupTests
 
             // Act
             popup.RenderSectionContent(_testContext);
-            popup.Render(b => b.Add(p => p.Visible, true));
+            popup.Render(b => b
+                .Add(p => p.Visible, true));
 
             // Assert
             var assert = () => _testContext.JSInterop.VerifyFocusAsyncInvoke();
@@ -76,7 +78,8 @@ public sealed partial class PopupTests
             // Arrange
             var onShowingInvoked = false;
 
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.OnShowing, () => onShowingInvoked = true));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.OnShowing, () => onShowingInvoked = true));
 
             // Act
             await popup.Instance.ShowAsync();
@@ -91,7 +94,8 @@ public sealed partial class PopupTests
             // Arrange
             bool? visibleChangedValue = null;
 
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.VisibleChanged, value => visibleChangedValue = value));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.VisibleChanged, value => visibleChangedValue = value));
 
             // Act
             await popup.Instance.ShowAsync();
@@ -106,7 +110,8 @@ public sealed partial class PopupTests
             // Arrange
             var onShowingCallCount = 0;
 
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.OnShowing, () => onShowingCallCount++));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.OnShowing, () => onShowingCallCount++));
 
             await popup.Instance.ShowAsync();
 
@@ -138,7 +143,8 @@ public sealed partial class PopupTests
             // Arrange
             var onShowingCallCount = 0;
 
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.OnShowing, () => onShowingCallCount++));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.OnShowing, () => onShowingCallCount++));
 
             // Act
             await Task.WhenAll(

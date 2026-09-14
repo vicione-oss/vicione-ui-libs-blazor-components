@@ -69,7 +69,9 @@ public sealed class HorizontalScrollContainerTests : IDisposable
 
         // Act
         SetContainerSizes(availableSpace, contentSize);
-        renderedComponent.Render(b => b.Add(p => p.LastShownPixel, contentSize));
+
+        renderedComponent.Render(b => b
+            .Add(p => p.LastShownPixel, contentSize));
 
         // Assert
         var hasScroll = renderedComponent.FindAll(".monochrome-icon-expander-light-left").Any();
@@ -90,8 +92,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
         SetContainerSizes(10, 100);
 
         renderedComponent.Render(parameters => parameters
-            .Add(p => p.LastShownPixel, 100)
-        );
+            .Add(p => p.LastShownPixel, 100));
 
         // simulate scroll appearing and taking some space
         SetContainerSizes(10, 90);
@@ -120,7 +121,8 @@ public sealed class HorizontalScrollContainerTests : IDisposable
         SetContainerSizes(10, 100);
 
         // Act & Assert
-        renderedComponent.Render(b => b.Add(p => p.LastShownPixel, 100));
+        renderedComponent.Render(b => b
+            .Add(p => p.LastShownPixel, 100));
 
         // simulate scroll appearing and taking some space
         SetContainerSizes(10, 99);
@@ -164,14 +166,16 @@ public sealed class HorizontalScrollContainerTests : IDisposable
     private static void ScrollLeft(IRenderedComponent<HorizontalScrollContainer> renderedComponent, int stepSizePixels = 10)
     {
         renderedComponent.Find(".monochrome-icon-expander-light-left.active").Click();
-        renderedComponent.Render(
-            b => b.Add(p => p.LastShownPixel, renderedComponent.Instance.LastShownPixel - stepSizePixels));
+
+        renderedComponent.Render(b => b
+            .Add(p => p.LastShownPixel, renderedComponent.Instance.LastShownPixel - stepSizePixels));
     }
 
     private static void ScrollRight(IRenderedComponent<HorizontalScrollContainer> renderedComponent, int stepSizePixels = 10)
     {
         renderedComponent.Find(".monochrome-icon-expander-light-right.active").Click();
-        renderedComponent.Render(
-            b => b.Add(p => p.LastShownPixel, renderedComponent.Instance.LastShownPixel + stepSizePixels));
+
+        renderedComponent.Render(b => b
+            .Add(p => p.LastShownPixel, renderedComponent.Instance.LastShownPixel + stepSizePixels));
     }
 }

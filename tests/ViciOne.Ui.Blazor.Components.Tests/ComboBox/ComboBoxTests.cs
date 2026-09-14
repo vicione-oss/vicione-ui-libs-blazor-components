@@ -346,8 +346,7 @@ public sealed class ComboBoxTests : IDisposable
         );
 
         renderedComponent.Render(builder => builder
-            .Add(p => p.Items, updatedItems)
-        );
+            .Add(p => p.Items, updatedItems));
 
         // Assert
         updatedItems.IterationCount.Should().Be(expectedEnumerations);

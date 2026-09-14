@@ -49,8 +49,8 @@ public sealed class SidebarTests : IAsyncDisposable
         var modifierCssClass = placementTyped.ToModifierCssClass();
 
         // Act
-        var renderedComponent = _testContext.Render<SidebarComponent>(
-            b => b.Add(s => s.Placement, placementTyped));
+        var renderedComponent = _testContext.Render<SidebarComponent>(b => b
+            .Add(s => s.Placement, placementTyped));
 
         var sidebar = renderedComponent.Find(".sidebar");
 
@@ -116,8 +116,8 @@ public sealed class SidebarTests : IAsyncDisposable
         const string ContentText = "Lorem ipsum";
 
         // Act
-        var renderedComponent = _testContext.Render<SidebarComponent>(
-            b => b.AddChildContent(ContentText));
+        var renderedComponent = _testContext.Render<SidebarComponent>(b => b
+            .AddChildContent(ContentText));
 
         var content = renderedComponent.Find(".content");
 
@@ -388,7 +388,8 @@ public sealed class SidebarTests : IAsyncDisposable
             .Add(s => s.FluidMaximumWidth, 300));
 
         // Act
-        renderedComponent.Render(b => b.Add(s => s.FluidMinimumWidth, 250));
+        renderedComponent.Render(b => b
+            .Add(s => s.FluidMinimumWidth, 250));
 
         // Assert
         await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
@@ -409,7 +410,8 @@ public sealed class SidebarTests : IAsyncDisposable
             .Add(s => s.FluidMaximumWidth, 300));
 
         // Act
-        renderedComponent.Render(b => b.Add(s => s.Placement, SidebarPlacement.Right));
+        renderedComponent.Render(b => b
+            .Add(s => s.Placement, SidebarPlacement.Right));
 
         // Assert
         await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);
@@ -429,7 +431,8 @@ public sealed class SidebarTests : IAsyncDisposable
             .Add(s => s.FluidMaximumWidth, 300));
 
         // Act
-        renderedComponent.Render(b => b.Add(s => s.FluidMaximumWidth, 400));
+        renderedComponent.Render(b => b
+            .Add(s => s.FluidMaximumWidth, 400));
 
         // Assert
         await resizeInteraction.Received(1).AttachAsync(Arg.Any<IResizeable>(),
@@ -448,7 +451,8 @@ public sealed class SidebarTests : IAsyncDisposable
             .Add(s => s.FluidMaximumWidth, 300));
 
         // Act
-        renderedComponent.Render(b => b.Add(s => s.Mode, SidebarMode.Compact));
+        renderedComponent.Render(b => b
+            .Add(s => s.Mode, SidebarMode.Compact));
 
         // Assert
         await resizeInteraction.Received(1).RemoveAsync(renderedComponent.Instance);

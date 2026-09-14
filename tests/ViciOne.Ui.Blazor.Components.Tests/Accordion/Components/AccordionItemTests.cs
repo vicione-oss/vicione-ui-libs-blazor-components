@@ -12,8 +12,8 @@ public sealed partial class AccordionItemTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-            b.Add(p => p.Text, "Item 1"));
+        var renderedComponent = testContext.Render<AccordionItem>(b => b
+            .Add(p => p.Text, "Item 1"));
 
         // Assert
         renderedComponent.Find(".accordion-item");
@@ -26,8 +26,8 @@ public sealed partial class AccordionItemTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-            b.Add(p => p.Text, "Network"));
+        var renderedComponent = testContext.Render<AccordionItem>(b => b
+            .Add(p => p.Text, "Network"));
 
         // Assert
         var text = renderedComponent.Find(".header .text");
@@ -44,8 +44,8 @@ public sealed partial class AccordionItemTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-            b.Add(p => p.Text, "Item"));
+        var renderedComponent = testContext.Render<AccordionItem>(b => b
+            .Add(p => p.Text, "Item"));
 
         var header = renderedComponent.Find("button.header");
 
@@ -288,8 +288,8 @@ public sealed partial class AccordionItemTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<AccordionItem>(b =>
-            b.Add(p => p.Text, "Item"));
+        var renderedComponent = testContext.Render<AccordionItem>(b => b
+            .Add(p => p.Text, "Item"));
 
         // Assert
         renderedComponent.FindAll(".icon").Should().BeEmpty();

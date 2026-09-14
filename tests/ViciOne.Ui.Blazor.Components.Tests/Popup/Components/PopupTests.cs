@@ -34,7 +34,8 @@ public sealed partial class PopupTests : IAsyncDisposable
     public async Task Dispose_async_should_cancel_pending_close_async()
     {
         // Arrange
-        var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.Visible, true));
+        var popup = _testContext.Render<PopupComponent>(b => b
+            .Add(p => p.Visible, true));
 
         var closeTask = popup.Instance.CloseAsync();
         var closeAction = async () => await closeTask;

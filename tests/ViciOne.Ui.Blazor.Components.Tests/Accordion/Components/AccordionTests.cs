@@ -12,8 +12,8 @@ public sealed class AccordionTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<AccordionComponent>(b =>
-            b.Add(p => p.ChildContent, _ => { }));
+        var renderedComponent = testContext.Render<AccordionComponent>(b => b
+            .Add(p => p.ChildContent, _ => { }));
 
         // Assert
         renderedComponent.Find(".accordion");
@@ -26,8 +26,8 @@ public sealed class AccordionTests
         using var testContext = new BunitContext();
 
         // Act
-        var renderedComponent = testContext.Render<AccordionComponent>(b =>
-            b.Add(p => p.ChildContent, "<div class=\"test-child\">Hello</div>"));
+        var renderedComponent = testContext.Render<AccordionComponent>(b => b
+            .Add(p => p.ChildContent, "<div class=\"test-child\">Hello</div>"));
 
         // Assert
         var child = renderedComponent.Find(".test-child");

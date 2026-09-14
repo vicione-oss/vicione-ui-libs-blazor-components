@@ -21,7 +21,8 @@ public sealed partial class PopupTests
         public async Task Should_not_throw_when_disposed()
         {
             // Arrange
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.Visible, true));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.Visible, true));
 
             await popup.Instance.DisposeAsync();
 
@@ -91,7 +92,8 @@ public sealed partial class PopupTests
             // Arrange
             var onClosingCallCount = 0;
 
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.OnClosing, () => onClosingCallCount++));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.OnClosing, () => onClosingCallCount++));
 
             // Act
             await popup.Instance.CloseAsync();

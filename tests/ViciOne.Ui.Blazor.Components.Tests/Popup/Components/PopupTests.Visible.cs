@@ -51,11 +51,14 @@ public sealed partial class PopupTests
         public void Should_focus_modal_dialog()
         {
             // Arrange
-            var popup = _testContext.Render<PopupComponent>(b => b.Add(p => p.Visible, true));
+            var popup = _testContext.Render<PopupComponent>(b => b
+                .Add(p => p.Visible, true));
 
             // Act
             popup.RenderSectionContent(_testContext);
-            popup.Render(b => b.Add(p => p.Visible, true));
+
+            popup.Render(b => b
+                .Add(p => p.Visible, true));
 
             // Assert
             var assert = () => _testContext.JSInterop.VerifyFocusAsyncInvoke();

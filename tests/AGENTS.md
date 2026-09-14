@@ -7,22 +7,26 @@
 
 ## Line breaks in bUnit parameter builders
 
-A **single** `.Add()` stays on the same line as the builder lambda. Break into one line per
-`.Add()` only when the builder sets **two or more** parameters.
+The builder lambda ends its line, and every `.Add()` or `.AddChildContent()` goes on its own line,
+indented one level below the builder it belongs to. This applies even when a builder sets only a
+single parameter, so the indentation always mirrors the rendered component tree.
 
 ``` csharp
 // correct
-popup.Render(b => b.Add(p => p.Visible, true));
-
-var popup = _testContext.Render<PopupComponent>(b => b
-    .Add(p => p.CssClass, "test-popup")
-    .Add(p => p.Visible, true));
-
-// incorrect
 popup.Render(b => b
     .Add(p => p.Visible, true));
-```
 
-The one exception is a single `.Add()` that would push the line past the 140 character limit
-(`roslynator_max_line_length` in [`.globalconfig`](/.globalconfig)) — break it like the
-multi-parameter form.
+var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+    .Add(p => p.ActiveTabIndex, 0)
+    .AddChildContent<Tab>(t => t
+        .Add(p => p.Text, "A"))
+    .AddChildContent<Tab>(t => t
+        .Add(p => p.Text, "B")));
+
+// incorrect
+popup.Render(b => b.Add(p => p.Visible, true));
+
+var renderedComponent = _testContext.Render<TabStripComponent>(b => b
+    .Add(p => p.ActiveTabIndex, 0)
+    .AddChildContent<Tab>(t => t.Add(p => p.Text, "A")));
+```

@@ -23,8 +23,8 @@ public sealed class BreadcrumbTests
             .AddScoped(_ => Substitute.For<IHtmlElementHelper>());
 
         // Act
-        var renderedComponent = testContext.Render<BreadcrumbComponent>(
-            b => b.Add(p => p.CurrentItem, item));
+        var renderedComponent = testContext.Render<BreadcrumbComponent>(b => b
+            .Add(p => p.CurrentItem, item));
 
         // Assert
         renderedComponent.FindComponents<BreadcrumbItemSeparator>().Should().HaveCount(0);
@@ -44,8 +44,8 @@ public sealed class BreadcrumbTests
             .AddScoped(_ => Substitute.For<IHtmlElementHelper>());
 
         // Act
-        var renderedComponent = testContext.Render<BreadcrumbComponent>(
-            b => b.Add(p => p.CurrentItem, item));
+        var renderedComponent = testContext.Render<BreadcrumbComponent>(b => b
+            .Add(p => p.CurrentItem, item));
 
         // Assert
         renderedComponent.FindComponents<BreadcrumbItemSeparator>().Should().HaveCount(1);

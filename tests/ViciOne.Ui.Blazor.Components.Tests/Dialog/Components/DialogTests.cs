@@ -216,7 +216,8 @@ public sealed class DialogTests
         var dialog = testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test dialog")
             .Add(p => p.Visible, true)
-            .Add<DialogFooterButton>(p => p.Footer, buttonParameters => buttonParameters.Add(button => button.Text, "Ok")));
+            .Add<DialogFooterButton>(p => p.Footer, buttonParameters => buttonParameters
+                .Add(button => button.Text, "Ok")));
 
         var sectionContent = dialog.RenderSectionContent(testContext);
 

@@ -62,7 +62,8 @@ public sealed class ToolbarTests : IDisposable
             .AddChildContent<ToolbarGroup>(b => b
                 .AddChildContent<ToolbarButton>())
             .AddChildContent<ToolbarGroup>(b => b
-                .AddChildContent<ToolbarButton>().AddChildContent<ToolbarButton>())
+                .AddChildContent<ToolbarButton>()
+                .AddChildContent<ToolbarButton>())
             .AddChildContent<ToolbarButton>()
         );
 
@@ -89,7 +90,8 @@ public sealed class ToolbarTests : IDisposable
     public void Should_hide_empty_group()
     {
         // Act
-        var renderedComponent = _testContext.Render<ToolbarComponent>(b => b.AddChildContent<ToolbarGroup>());
+        var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
+            .AddChildContent<ToolbarGroup>());
 
         SetContainerSize(_elementReferences[1], 0);
         SetContainerSize(_elementReferences[0], 10);
@@ -106,7 +108,8 @@ public sealed class ToolbarTests : IDisposable
     public void Should_hide_toolbar_item_when_not_enough_space()
     {
         // Act
-        var renderedComponent = _testContext.Render<ToolbarComponent>(b => b.AddChildContent<ToolbarButton>());
+        var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
+            .AddChildContent<ToolbarButton>());
 
         SetContainerSize(_elementReferences[1], 11);
         SetContainerSize(_elementReferences[0], 10);
@@ -241,7 +244,8 @@ public sealed class ToolbarTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
-            .AddChildContent<ToolbarButton>(b => b.Add(x => x.Visible, false)));
+            .AddChildContent<ToolbarButton>(b => b
+                .Add(x => x.Visible, false)));
 
         SetContainerSize(_elementReferences[1], 50);
         SetContainerSize(_elementReferences[0], 100);
@@ -257,7 +261,8 @@ public sealed class ToolbarTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
-            .AddChildContent<ToolbarButton>(b => b.Add(x => x.Visible, false)));
+            .AddChildContent<ToolbarButton>(b => b
+                .Add(x => x.Visible, false)));
 
         SetContainerSize(_elementReferences[1], 101);
         SetContainerSize(_elementReferences[0], 100);
@@ -274,14 +279,16 @@ public sealed class ToolbarTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
-            .AddChildContent<ToolbarButton>(b => b.Add(x => x.Visible, false)));
+            .AddChildContent<ToolbarButton>(b => b
+                .Add(x => x.Visible, false)));
 
         var itemRef = renderedComponent.FindComponent<ToolbarButton>();
 
         SetContainerSize(_elementReferences[1], 101);
         SetContainerSize(_elementReferences[0], 100);
 
-        itemRef.Render(p => p.Add(x => x.Visible, true));
+        itemRef.Render(p => p
+            .Add(x => x.Visible, true));
 
         renderedComponent.WaitForState(() => renderedComponent.FindAll(".menu-container").Any());
 

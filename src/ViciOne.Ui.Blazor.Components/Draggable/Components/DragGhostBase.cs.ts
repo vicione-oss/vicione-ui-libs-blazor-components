@@ -1,10 +1,10 @@
-import { type DragGhostContentSource } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-content-source.js';
-import { type DragGhostContentChangedNotifier } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-content-changed-notifier.js';
-import { type DragStartListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-start-listener.js';
-import { type DragEndListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-end-listener.js';
-import { type DropzoneEnterListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-enter-listener.js';
-import { type DropzoneLeaveListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-leave-listener.js';
-import { type CreateDragGhostArgs } from '/_content/ViciOne.Ui.Blazor.Components/draggable/models/create-drag-ghost-args.js';
+import { type DragGhostContentSource } from '../Scripts/DragGhostContentSource.ts';
+import { type DragGhostContentChangedNotifier } from '../Scripts/DragGhostContentChangedNotifier.ts';
+import { type DragStartListener } from '../Scripts/DragStartListener.ts';
+import { type DragEndListener } from '../Scripts/DragEndListener.ts';
+import { type DropzoneEnterListener } from '../Scripts/DropzoneEnterListener.ts';
+import { type DropzoneLeaveListener } from '../Scripts/DropzoneLeaveListener.ts';
+import { type CreateDragGhostArgs } from '../Models/CreateDragGhostArgs.cs.ts';
 
 /**
  The single stateful drag ghost backing a `DragGhostBase` subclass.

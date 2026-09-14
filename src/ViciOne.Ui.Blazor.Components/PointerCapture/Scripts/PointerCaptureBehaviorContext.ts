@@ -1,4 +1,4 @@
-import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
+import { type CaptureTarget } from './CaptureTarget.ts';
 
 /**
  The readonly view of the behavior context handed to behaviors.

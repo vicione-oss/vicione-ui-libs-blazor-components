@@ -1,11 +1,11 @@
-import { type DragGhostContentSource } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-content-source.js';
-import { type DragGhostDraggableLink } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-draggable-link.js';
-import { type DragGhostContentChangedNotifier } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-content-changed-notifier.js';
-import { type DragImminentListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-imminent-listener.js';
-import { type DragStartListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-start-listener.js';
-import { type DragEndListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-end-listener.js';
-import { type DropzoneEnterListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-enter-listener.js';
-import { type DropzoneLeaveListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-leave-listener.js';
+import { type DragGhostContentSource } from './DragGhostContentSource.ts';
+import { type DragGhostDraggableLink } from './DragGhostDraggableLink.ts';
+import { type DragGhostContentChangedNotifier } from './DragGhostContentChangedNotifier.ts';
+import { type DragImminentListener } from './DragImminentListener.ts';
+import { type DragStartListener } from './DragStartListener.ts';
+import { type DragEndListener } from './DragEndListener.ts';
+import { type DropzoneEnterListener } from './DropzoneEnterListener.ts';
+import { type DropzoneLeaveListener } from './DropzoneLeaveListener.ts';
 
 /**
  A drag ghost as resolved by the central `createDragGhost` factory and consumed by

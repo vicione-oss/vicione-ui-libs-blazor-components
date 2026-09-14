@@ -14,6 +14,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="StronglyTypedId" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="ViciOne.MSBuild.Extensions.JavaScriptImportRewriting" PrivateAssets="all" />
     <PackageReference Include="ViciOne.Ui.Design">
       <PrivateAssets>all</PrivateAssets>
       <ExcludeAssets>runtime</ExcludeAssets>
@@ -34,7 +35,6 @@
 
   <PropertyGroup>
     <GeneratedStaticWebAssetDestinationFolder>dist</GeneratedStaticWebAssetDestinationFolder>
-    <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedStaticWebAsset;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,6 +42,10 @@
       <DestinationFile>js\computed-background-color-page.js</DestinationFile>
     </GeneratedStaticWebAsset>
   </ItemGroup>
+
+  <PropertyGroup>
+    <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedStaticWebAsset;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>
+  </PropertyGroup>
 
   <Target Name="IncludeGeneratedStaticWebAsset" Outputs="%(GeneratedStaticWebAsset.DestinationFile)" BeforeTargets="ResolveJSModuleStaticWebAssets;ResolveJsInitializerModuleStaticWebAssets" DependsOnTargets="MoveGeneratedStaticWebAssets" Condition="'@(GeneratedStaticWebAsset)' != ''">
     <!-- Skeleton adopted from https://github.com/dotnet/aspnetcore/blob/61e60dcf9436709a63e61da35417e2c4d30466ed/src/Components/CustomElements/src/Microsoft.AspNetCore.Components.CustomElements.csproj#L21 -->
@@ -71,7 +75,12 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="MoveGeneratedStaticWebAssets" AfterTargets="RunTscCompile">
+  <!-- Configuration for target "RewriteJavaScriptImports" -->
+  <PropertyGroup>
+    <JavaScriptAssetItemName>GeneratedStaticWebAsset</JavaScriptAssetItemName>
+  </PropertyGroup>
+
+  <Target Name="MoveGeneratedStaticWebAssets" AfterTargets="RunTscCompile" DependsOnTargets="RewriteJavaScriptImports">
     <Move SourceFiles="%(GeneratedStaticWebAsset.Identity)" DestinationFiles="$(GeneratedStaticWebAssetDestinationFolder)\%(GeneratedStaticWebAsset.DestinationFile)" Condition="Exists(%(GeneratedStaticWebAsset.Identity))" />
   </Target>
 

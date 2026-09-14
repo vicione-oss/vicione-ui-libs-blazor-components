@@ -1,6 +1,6 @@
-import { ComputedBackgroundColor } from '/_content/ViciOne.Ui.Blazor.Components/js/computed-background-color.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/html-element-mixins.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/string-mixins.js';
+import { ComputedBackgroundColor } from '../../Scripts/ComputedBackgroundColor.ts';
+import '../../Scripts/HtmlElementMixins.ts';
+import '../../Scripts/StringMixins.ts';
 
 class TabStrip {
     readonly #dotNetObject: DotNet.DotNetObject;

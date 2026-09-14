@@ -1,5 +1,5 @@
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
+import { type PointerCaptureBehavior } from './PointerCaptureBehavior.ts';
+import { type PointerCaptureBehaviorContext } from './PointerCaptureBehaviorContext.ts';
 
 export class SetPositionPointerCaptureBehavior implements PointerCaptureBehavior {
 

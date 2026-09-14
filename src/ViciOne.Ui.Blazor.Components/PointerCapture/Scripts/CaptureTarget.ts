@@ -1,4 +1,4 @@
-import { type CaptureTargetRect } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target-rect.js';
+import { type CaptureTargetRect } from './CaptureTargetRect.ts';
 
 /**
  Describes the pointer capture target in its current state.

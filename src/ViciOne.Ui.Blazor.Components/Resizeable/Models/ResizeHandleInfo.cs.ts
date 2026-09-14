@@ -1,5 +1,5 @@
 // Auto-generated code
-import { type ResizeHandlePosition } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/enums/resize-handle-position.js';
+import { type ResizeHandlePosition } from '../Enums/ResizeHandlePosition.cs.js';
 
 export class ResizeHandleInfo {
     constructor(readonly element: HTMLElement,

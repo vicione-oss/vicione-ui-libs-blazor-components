@@ -1,7 +1,7 @@
-import { type DragGhostContentSource } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-content-source.js';
-import { type DragGhostDraggableLink } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-draggable-link.js';
-import { type DragImminentListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-imminent-listener.js';
-import { type DragEndListener } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-end-listener.js';
+import { type DragGhostContentSource } from '../Scripts/DragGhostContentSource.ts';
+import { type DragGhostDraggableLink } from '../Scripts/DragGhostDraggableLink.ts';
+import { type DragImminentListener } from '../Scripts/DragImminentListener.ts';
+import { type DragEndListener } from '../Scripts/DragEndListener.ts';
 
 /**
  A drag ghost for table rows. Cloning a <tr> on its own drops the surrounding <table> that sized its

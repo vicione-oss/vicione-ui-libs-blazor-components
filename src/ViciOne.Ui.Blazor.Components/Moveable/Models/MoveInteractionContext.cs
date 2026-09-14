@@ -6,7 +6,7 @@ using ViciOne.Ui.Blazor.Components.Moveable.Services;
 namespace ViciOne.Ui.Blazor.Components.Moveable.Models;
 
 [GenerateTypeScriptImport(Type = "PointerCaptureBehavior",
-    ModulePath = "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js")]
+    ModulePath = "../../PointerCapture/Scripts/PointerCaptureBehavior.js")]
 [GenerateTypeScriptClass]
 internal sealed class MoveInteractionContext
 {

@@ -1,8 +1,8 @@
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { MutablePointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/mutable-pointer-capture-behavior-context.js';
-import { PointerCaptureBehaviorPipeline } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-pipeline.js';
-import { CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
-import { CaptureTargetRect } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target-rect.js';
+import { type PointerCaptureBehavior } from './PointerCaptureBehavior.ts';
+import { MutablePointerCaptureBehaviorContext } from './MutablePointerCaptureBehaviorContext.ts';
+import { PointerCaptureBehaviorPipeline } from './PointerCaptureBehaviorPipeline.ts';
+import { CaptureTarget } from './CaptureTarget.ts';
+import { CaptureTargetRect } from './CaptureTargetRect.ts';
 
 const hasCssClass = (value?: string): value is string => value !== undefined && value !== '';
 

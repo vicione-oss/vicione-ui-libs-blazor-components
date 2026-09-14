@@ -1,6 +1,6 @@
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/number-mixins.js';
+import '../../Scripts/NumberMixins.ts';
+import { type PointerCaptureBehavior } from './PointerCaptureBehavior.ts';
+import { type PointerCaptureBehaviorContext } from './PointerCaptureBehaviorContext.ts';
 
 // Re-baselines the capture origin and size mid-gesture without mutating the intentionally readonly
 // originalRect. When a clone element changes size mid-drag, the consumer records the grab-fraction shift

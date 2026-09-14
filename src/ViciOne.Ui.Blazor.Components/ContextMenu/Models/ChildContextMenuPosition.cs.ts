@@ -1,5 +1,5 @@
 // Auto-generated code
-import { type MouseLeaveDirection } from '/_content/ViciOne.Ui.Blazor.Components/context-menu/enums/mouse-leave-direction.js';
+import { type MouseLeaveDirection } from '../Enums/MouseLeaveDirection.cs.js';
 
 export class ChildContextMenuPosition {
     constructor(readonly x: number,

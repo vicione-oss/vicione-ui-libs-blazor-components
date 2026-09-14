@@ -6,9 +6,9 @@ using ViciOne.Ui.Blazor.Components.Resizeable.Services;
 namespace ViciOne.Ui.Blazor.Components.Resizeable.Models;
 
 [GenerateTypeScriptImport(Type = "PointerCaptureBehavior",
-    ModulePath = "/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js")]
+    ModulePath = "../../PointerCapture/Scripts/PointerCaptureBehavior.js")]
 [GenerateTypeScriptImport(Type = "ResizeHandleInfo",
-    ModulePath = "/_content/ViciOne.Ui.Blazor.Components/resizeable/models/resize-handle-info.js")]
+    ModulePath = "./ResizeHandleInfo.cs.js")]
 [GenerateTypeScriptClass]
 internal sealed class ResizeInteractionContext
 {

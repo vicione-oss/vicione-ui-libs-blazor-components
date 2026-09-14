@@ -1,5 +1,5 @@
-import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
-import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
+import { type CaptureTarget } from './CaptureTarget.ts';
+import { type PointerCaptureBehaviorContext } from './PointerCaptureBehaviorContext.ts';
 
 /**
  The mutable behavior context owned by the pointer capture. It is passed to behaviors as the readonly

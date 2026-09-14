@@ -1,19 +1,19 @@
-import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js';
-import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type ResizeInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/resize-interaction-context.js';
-import { AggregatePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/aggregate-pointer-capture-behavior.js';
-import { ResetRectPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/reset-rect-pointer-capture-behavior.js';
-import { ResizeLeftPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/scripts/resize-left-pointer-capture-behavior.js';
-import { ResizeRightPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/scripts/resize-right-pointer-capture-behavior.js';
-import { ResizeUpPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/scripts/resize-up-pointer-capture-behavior.js';
-import { ResizeDownPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/scripts/resize-down-pointer-capture-behavior.js';
-import { SetPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/set-position-pointer-capture-behavior.js';
-import { SetSizePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/set-size-pointer-capture-behavior.js';
-import { type ResizePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/scripts/resize-pointer-capture-behavior.js';
-import { type ResizePointerCaptureBehaviorInitializeArgs } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/scripts/resize-pointer-capture-behavior-initialize-args.js';
-import { type ResizeHandlePosition } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/enums/resize-handle-position.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js';
+import { PointerCapture } from '../../PointerCapture/Scripts/PointerCapture.ts';
+import { type CaptureTarget } from '../../PointerCapture/Scripts/CaptureTarget.ts';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
+import { type ResizeInteractionContext } from '../Models/ResizeInteractionContext.cs.ts';
+import { AggregatePointerCaptureBehavior } from '../../PointerCapture/Scripts/AggregatePointerCaptureBehavior.ts';
+import { ResetRectPointerCaptureBehavior } from '../../PointerCapture/Scripts/ResetRectPointerCaptureBehavior.ts';
+import { ResizeLeftPointerCaptureBehavior } from '../Scripts/ResizeLeftPointerCaptureBehavior.ts';
+import { ResizeRightPointerCaptureBehavior } from '../Scripts/ResizeRightPointerCaptureBehavior.ts';
+import { ResizeUpPointerCaptureBehavior } from '../Scripts/ResizeUpPointerCaptureBehavior.ts';
+import { ResizeDownPointerCaptureBehavior } from '../Scripts/ResizeDownPointerCaptureBehavior.ts';
+import { SetPositionPointerCaptureBehavior } from '../../PointerCapture/Scripts/SetPositionPointerCaptureBehavior.ts';
+import { SetSizePointerCaptureBehavior } from '../../PointerCapture/Scripts/SetSizePointerCaptureBehavior.ts';
+import { type ResizePointerCaptureBehavior } from '../Scripts/ResizePointerCaptureBehavior.ts';
+import { type ResizePointerCaptureBehaviorInitializeArgs } from '../Scripts/ResizePointerCaptureBehaviorInitializeArgs.ts';
+import { type ResizeHandlePosition } from '../Enums/ResizeHandlePosition.cs.ts';
+import '../../Scripts/PointerEventMixins.ts';
 
 class ResizeInteraction {
     readonly #resetRectPointerCaptureBehavior = new ResetRectPointerCaptureBehavior();

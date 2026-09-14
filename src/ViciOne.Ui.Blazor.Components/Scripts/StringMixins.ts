@@ -1,6 +1,6 @@
 // https://www.typescriptlang.org/docs/handbook/mixins.html#alternative-pattern
 
-import type { RgbaColor } from '/_content/ViciOne.Ui.Blazor.Components/js/rgba-color.js';
+import type { RgbaColor } from './RgbaColor.ts';
 
 class StringMixins {
     // True when this string is a CSS pixel value (e.g. "12px").

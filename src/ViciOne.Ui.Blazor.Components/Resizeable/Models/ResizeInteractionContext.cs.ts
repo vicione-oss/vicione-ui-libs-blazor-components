@@ -1,6 +1,6 @@
 // Auto-generated code
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type ResizeHandleInfo } from '/_content/ViciOne.Ui.Blazor.Components/resizeable/models/resize-handle-info.js';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.js';
+import { type ResizeHandleInfo } from './ResizeHandleInfo.cs.js';
 
 export class ResizeInteractionContext {
     // eslint-disable-next-line max-params

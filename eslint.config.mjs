@@ -58,7 +58,7 @@ const config = [
             '@stylistic/operator-linebreak': ['error', 'after'],
             '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
             'import-x/no-absolute-path': 'off',
-            'import-x/no-unassigned-import': ['error', { allow: ['**/*-mixins.js'] }],
+            'import-x/no-unassigned-import': ['error', { allow: ['**/*Mixins.ts', '**/*Mixins.js'] }],
             'unicorn/prefer-number-coercion': 'off',
             'unicorn/filename-case': 'off',
             'unicorn/no-non-function-verb-prefix': 'off',

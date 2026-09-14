@@ -1,5 +1,5 @@
-import { MouseLeaveDirection } from '/_content/ViciOne.Ui.Blazor.Components/context-menu/enums/mouse-leave-direction.js';
-import { ChildContextMenuPosition } from '/_content/ViciOne.Ui.Blazor.Components/context-menu/models/child-context-menu-position.js';
+import { MouseLeaveDirection } from '../Enums/MouseLeaveDirection.cs.ts';
+import { ChildContextMenuPosition } from '../Models/ChildContextMenuPosition.cs.ts';
 
 class ContextMenuItem {
     readonly #dotNetObject: DotNet.DotNetObject;

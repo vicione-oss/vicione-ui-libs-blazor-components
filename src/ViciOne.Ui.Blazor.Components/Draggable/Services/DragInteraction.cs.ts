@@ -1,19 +1,19 @@
-import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js';
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
-import { AggregatePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/aggregate-pointer-capture-behavior.js';
-import { MovePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/move-pointer-capture-behavior.js';
-import { ReanchorPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/reanchor-pointer-capture-behavior.js';
-import { AdjustForScrollPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/adjust-for-scroll-position-pointer-capture-behavior.js';
-import { SetPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/set-position-pointer-capture-behavior.js';
-import { ModifierKey } from '/_content/ViciOne.Ui.Blazor.Components/enums/modifier-key.js';
-import { type DragInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-interaction-context.js';
-import { type DropzoneDescriptor } from '/_content/ViciOne.Ui.Blazor.Components/draggable/dropzone-descriptor.js';
-import { type DragGhostJsModuleDescriptor } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-js-module-descriptor.js';
-import { type ResolvedDragGhost } from '/_content/ViciOne.Ui.Blazor.Components/draggable/resolved-drag-ghost.js';
-import { DefaultDragGhost } from '/_content/ViciOne.Ui.Blazor.Components/draggable/default-drag-ghost.js';
-import { DragGhostHost } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-host.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js';
+import { PointerCapture } from '../../PointerCapture/Scripts/PointerCapture.ts';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
+import { type CaptureTarget } from '../../PointerCapture/Scripts/CaptureTarget.ts';
+import { AggregatePointerCaptureBehavior } from '../../PointerCapture/Scripts/AggregatePointerCaptureBehavior.ts';
+import { MovePointerCaptureBehavior } from '../../PointerCapture/Scripts/MovePointerCaptureBehavior.ts';
+import { ReanchorPointerCaptureBehavior } from '../../PointerCapture/Scripts/ReanchorPointerCaptureBehavior.ts';
+import { AdjustForScrollPositionPointerCaptureBehavior } from '../../PointerCapture/Scripts/AdjustForScrollPositionPointerCaptureBehavior.ts';
+import { SetPositionPointerCaptureBehavior } from '../../PointerCapture/Scripts/SetPositionPointerCaptureBehavior.ts';
+import { ModifierKey } from '../../Enums/ModifierKey.cs.ts';
+import { type DragInteractionContext } from '../Models/DragInteractionContext.cs.ts';
+import { type DropzoneDescriptor } from '../Models/DropzoneDescriptor.cs.ts';
+import { type DragGhostJsModuleDescriptor } from '../Models/DragGhostJsModuleDescriptor.cs.ts';
+import { type ResolvedDragGhost } from '../Scripts/ResolvedDragGhost.ts';
+import { DefaultDragGhost } from '../Scripts/DefaultDragGhost.ts';
+import { DragGhostHost } from '../Scripts/DragGhostHost.ts';
+import '../../Scripts/PointerEventMixins.ts';
 
 class DragInteraction {
     readonly #movePointerCaptureBehavior = new MovePointerCaptureBehavior();

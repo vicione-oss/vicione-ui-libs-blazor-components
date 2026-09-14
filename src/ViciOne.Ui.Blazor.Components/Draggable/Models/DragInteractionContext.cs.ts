@@ -1,7 +1,7 @@
 // Auto-generated code
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type ModifierKey } from '/_content/ViciOne.Ui.Blazor.Components/enums/modifier-key.js';
-import { type DragGhostJsModuleDescriptor } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-js-module-descriptor.js';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.js';
+import { type ModifierKey } from '../../Enums/ModifierKey.cs.js';
+import { type DragGhostJsModuleDescriptor } from './DragGhostJsModuleDescriptor.cs.js';
 
 export class DragInteractionContext {
     // eslint-disable-next-line max-params

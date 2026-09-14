@@ -29,6 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="ViciOne.MSBuild.Extensions.JavaScriptImportRewriting" PrivateAssets="all" />
     <PackageReference Include="ViciOne.Ui.Design">
       <PrivateAssets>all</PrivateAssets>
       <ExcludeAssets>runtime</ExcludeAssets>
@@ -371,7 +372,12 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="MoveGeneratedStaticWebAssets" AfterTargets="RunTscCompile">
+  <!-- Configuration for target "RewriteJavaScriptImports" -->
+  <PropertyGroup>
+    <JavaScriptAssetItemName>GeneratedStaticWebAsset</JavaScriptAssetItemName>
+  </PropertyGroup>
+
+  <Target Name="MoveGeneratedStaticWebAssets" AfterTargets="RunTscCompile" DependsOnTargets="RewriteJavaScriptImports">
     <!--
       Move generated static web asset to destination file in the content root.
 
@@ -409,6 +415,16 @@
     <ItemGroup>
       <Content Remove="$(DestinationFile)" Condition="@(Content-&gt;AnyHaveMetadataValue('Identity', $(DestinationFile)))" />
     </ItemGroup>
+  </Target>
+
+  <!--
+    'Clean' only deletes files the build recorded, and the TypeScript compile records none of what it writes below "obj",
+    so we need to clean the build info file the TypeScript compile did not record, otherwise subsequent rebuilds fail.
+
+    The folder has to match "tsBuildInfoFile" in tsconfig.json.
+  -->
+  <Target Name="CleanTypeScriptBuildInfo" BeforeTargets="Clean">
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\obj\types" />
   </Target>
 
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">

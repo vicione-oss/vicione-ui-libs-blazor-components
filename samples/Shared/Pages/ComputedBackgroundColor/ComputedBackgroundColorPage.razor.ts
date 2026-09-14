@@ -1,5 +1,5 @@
-import { ComputedBackgroundColor } from '/_content/ViciOne.Ui.Blazor.Components/js/computed-background-color.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/html-element-mixins.js';
+import { ComputedBackgroundColor } from '../../../../src/ViciOne.Ui.Blazor.Components/Scripts/ComputedBackgroundColor.js';
+import '../../../../src/ViciOne.Ui.Blazor.Components/Scripts/HtmlElementMixins.js';
 
 const computedBackgroundColor = new ComputedBackgroundColor();
 

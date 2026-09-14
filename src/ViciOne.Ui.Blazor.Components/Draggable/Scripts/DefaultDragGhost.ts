@@ -1,5 +1,5 @@
-import { type DragGhostContentSource } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-content-source.js';
-import { type DragGhostDraggableLink } from '/_content/ViciOne.Ui.Blazor.Components/draggable/drag-ghost-draggable-link.js';
+import { type DragGhostContentSource } from './DragGhostContentSource.ts';
+import { type DragGhostDraggableLink } from './DragGhostDraggableLink.ts';
 
 /**
  The default drag ghost used when no custom drag ghost module is configured or when resolving a

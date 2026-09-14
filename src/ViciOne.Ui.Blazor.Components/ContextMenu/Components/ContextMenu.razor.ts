@@ -1,4 +1,4 @@
-import { ContextMenuPosition } from '/_content/ViciOne.Ui.Blazor.Components/context-menu/models/context-menu-position.js';
+import { ContextMenuPosition } from '../Models/ContextMenuPosition.cs.ts';
 
 class ContextMenu {
     readonly #dotNetObject: DotNet.DotNetObject;

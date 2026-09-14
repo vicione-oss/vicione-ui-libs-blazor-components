@@ -1,11 +1,11 @@
-import { PointerCapture } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture.js';
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type CaptureTarget } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target.js';
-import { AggregatePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/aggregate-pointer-capture-behavior.js';
-import { MovePointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/move-pointer-capture-behavior.js';
-import { SetPositionPointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/set-position-pointer-capture-behavior.js';
-import { type MoveInteractionContext } from '/_content/ViciOne.Ui.Blazor.Components/moveable/move-interaction-context.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/pointer-event-mixins.js';
+import { PointerCapture } from '../../PointerCapture/Scripts/PointerCapture.ts';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
+import { type CaptureTarget } from '../../PointerCapture/Scripts/CaptureTarget.ts';
+import { AggregatePointerCaptureBehavior } from '../../PointerCapture/Scripts/AggregatePointerCaptureBehavior.ts';
+import { MovePointerCaptureBehavior } from '../../PointerCapture/Scripts/MovePointerCaptureBehavior.ts';
+import { SetPositionPointerCaptureBehavior } from '../../PointerCapture/Scripts/SetPositionPointerCaptureBehavior.ts';
+import { type MoveInteractionContext } from '../Models/MoveInteractionContext.cs.ts';
+import '../../Scripts/PointerEventMixins.ts';
 
 class MoveInteraction {
     readonly #movePointerCaptureBehavior = new MovePointerCaptureBehavior();

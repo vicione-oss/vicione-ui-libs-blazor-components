@@ -1,8 +1,8 @@
-import '/_content/ViciOne.Ui.Blazor.Components/js/string-mixins.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/number-mixins.js';
-import '/_content/ViciOne.Ui.Blazor.Components/js/dom-rect-mixins.js';
-import { RgbColor } from '/_content/ViciOne.Ui.Blazor.Components/js/rgb-color.js';
-import type { RgbaColor } from '/_content/ViciOne.Ui.Blazor.Components/js/rgba-color.js';
+import './StringMixins.ts';
+import './NumberMixins.ts';
+import './DomRectMixins.ts';
+import { RgbColor } from './RgbColor.ts';
+import type { RgbaColor } from './RgbaColor.ts';
 
 /**
  Finds the real background color behind an element, even when several see-through layers overlap.

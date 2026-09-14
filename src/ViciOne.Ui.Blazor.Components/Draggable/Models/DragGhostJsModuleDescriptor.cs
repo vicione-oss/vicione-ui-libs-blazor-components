@@ -13,7 +13,7 @@ namespace ViciOne.Ui.Blazor.Components.Draggable.Models;
 /// unimplemented callback is simply not exposed and makes no round-trip.
 /// </remarks>
 [GenerateTypeScriptImport(Type = "JsFunctionDescriptor",
-    ModulePath = "/_content/ViciOne.Ui.Blazor.Components/js/js-function-descriptor.js")]
+    ModulePath = "../../Models/JsFunctionDescriptor.cs.js")]
 [GenerateTypeScriptClass]
 public sealed record DragGhostJsModuleDescriptor
 {

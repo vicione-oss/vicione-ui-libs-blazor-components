@@ -1,6 +1,6 @@
-import { type PointerCaptureBehavior } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior.js';
-import { type PointerCaptureBehaviorContext } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/pointer-capture-behavior-context.js';
-import { type CaptureTargetRect } from '/_content/ViciOne.Ui.Blazor.Components/pointer-capture/capture-target-rect.js';
+import { type PointerCaptureBehavior } from '../../Scripts/PointerCaptureBehavior.ts';
+import { type PointerCaptureBehaviorContext } from '../../Scripts/PointerCaptureBehaviorContext.ts';
+import { type CaptureTargetRect } from '../../Scripts/CaptureTargetRect.ts';
 
 class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
     #gridSize = 10;

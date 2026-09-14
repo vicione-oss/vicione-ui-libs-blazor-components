@@ -20,7 +20,7 @@ public sealed class CheckBoxTests : IDisposable
     public void Should_render_checked_icon()
     {
         // Act
-        var renderedComponent = _testContext.Render<BoolCheckBox>(parameters => parameters
+        var renderedComponent = _testContext.Render<BoolCheckBox>(b => b
             .Add(p => p.Value, true));
 
         // Assert

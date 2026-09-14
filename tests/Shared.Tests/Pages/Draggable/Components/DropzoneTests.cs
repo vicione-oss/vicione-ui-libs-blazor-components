@@ -15,8 +15,8 @@ public class DropzoneTests
     private static void ConfigureServices(IServiceCollection services)
         => services.AddScoped(_ => Substitute.For<ISnapToGridPointerCaptureBehavior>());
 
-    private static void ConfigureComponentParameters(ComponentParameterCollectionBuilder<Dropzone> p)
-        => p.Add(c => c.Label, "test");
+    private static void ConfigureComponentParameters(ComponentParameterCollectionBuilder<Dropzone> b)
+        => b.Add(p => p.Label, "test");
 
     [Fact]
     public void Assert_event_handler_for_drag_start_assigned()

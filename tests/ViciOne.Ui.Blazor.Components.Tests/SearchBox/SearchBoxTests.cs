@@ -36,7 +36,7 @@ public sealed class SearchBoxTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Placeholder, Placeholder));
+            .Add(p => p.Placeholder, Placeholder));
 
         // Assert
         var input = renderedComponent.Find("input");
@@ -48,7 +48,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.CssClass, "my-custom-class"));
+            .Add(p => p.CssClass, "my-custom-class"));
 
         // Assert
         var container = renderedComponent.Find(".search-box");
@@ -71,7 +71,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Enabled, false));
+            .Add(p => p.Enabled, false));
 
         // Assert
         var input = renderedComponent.Find("input");
@@ -94,7 +94,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello"));
+            .Add(p => p.Text, "hello"));
 
         // Assert
         var clearButton = renderedComponent.Find("button");
@@ -106,8 +106,8 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello")
-            .Add(s => s.Enabled, false));
+            .Add(p => p.Text, "hello")
+            .Add(p => p.Enabled, false));
 
         // Assert
         var clearButton = renderedComponent.Find("button");
@@ -119,7 +119,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello"));
+            .Add(p => p.Text, "hello"));
 
         // Assert
         var iconContainer = renderedComponent.Find(".icon-container");
@@ -142,7 +142,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Enabled, false));
+            .Add(p => p.Enabled, false));
 
         // Assert
         var iconContainer = renderedComponent.Find(".icon-container");
@@ -155,7 +155,7 @@ public sealed class SearchBoxTests : IDisposable
         // Arrange
         string? receivedValue = null;
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.TextChanging, v => receivedValue = v));
+            .Add(p => p.TextChanging, v => receivedValue = v));
 
         // Act
         var input = renderedComponent.Find("input");
@@ -171,7 +171,7 @@ public sealed class SearchBoxTests : IDisposable
         // Arrange
         string? receivedValue = null;
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.TextChanged, v => receivedValue = v));
+            .Add(p => p.TextChanged, v => receivedValue = v));
 
         // Act
         var input = renderedComponent.Find("input");
@@ -189,9 +189,9 @@ public sealed class SearchBoxTests : IDisposable
         var changingValue = (string?)"initial";
         var changedValue = (string?)"initial";
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello")
-            .Add(s => s.TextChanging, v => changingValue = v)
-            .Add(s => s.TextChanged, v => changedValue = v));
+            .Add(p => p.Text, "hello")
+            .Add(p => p.TextChanging, v => changingValue = v)
+            .Add(p => p.TextChanged, v => changedValue = v));
 
         // Act
         var clearButton = renderedComponent.Find("button");
@@ -207,7 +207,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Arrange
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello"));
+            .Add(p => p.Text, "hello"));
 
         // Precondition
         renderedComponent.Find("button").GetAttribute("class").Should().NotContain("hidden");
@@ -224,7 +224,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Arrange
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello"));
+            .Add(p => p.Text, "hello"));
 
         // Precondition
         renderedComponent.Find(".icon-container").GetAttribute("class").Should().Contain("hidden");
@@ -269,7 +269,7 @@ public sealed class SearchBoxTests : IDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.Text, "hello"));
+            .Add(p => p.Text, "hello"));
 
         // Assert
         var clearButton = renderedComponent.Find("button");
@@ -295,7 +295,7 @@ public sealed class SearchBoxTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
-            .Add(s => s.IconCssClass, CustomIconCss));
+            .Add(p => p.IconCssClass, CustomIconCss));
 
         // Assert
         var iconContainer = renderedComponent.Find(".icon-container");

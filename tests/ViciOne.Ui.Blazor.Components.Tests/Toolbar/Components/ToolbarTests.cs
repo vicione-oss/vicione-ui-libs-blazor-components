@@ -245,7 +245,7 @@ public sealed class ToolbarTests : IDisposable
         // Act
         var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
             .AddChildContent<ToolbarButton>(b => b
-                .Add(x => x.Visible, false)));
+                .Add(p => p.Visible, false)));
 
         SetContainerSize(_elementReferences[1], 50);
         SetContainerSize(_elementReferences[0], 100);
@@ -262,7 +262,7 @@ public sealed class ToolbarTests : IDisposable
         // Act
         var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
             .AddChildContent<ToolbarButton>(b => b
-                .Add(x => x.Visible, false)));
+                .Add(p => p.Visible, false)));
 
         SetContainerSize(_elementReferences[1], 101);
         SetContainerSize(_elementReferences[0], 100);
@@ -280,15 +280,15 @@ public sealed class ToolbarTests : IDisposable
         // Act
         var renderedComponent = _testContext.Render<ToolbarComponent>(b => b
             .AddChildContent<ToolbarButton>(b => b
-                .Add(x => x.Visible, false)));
+                .Add(p => p.Visible, false)));
 
         var itemRef = renderedComponent.FindComponent<ToolbarButton>();
 
         SetContainerSize(_elementReferences[1], 101);
         SetContainerSize(_elementReferences[0], 100);
 
-        itemRef.Render(p => p
-            .Add(x => x.Visible, true));
+        itemRef.Render(b => b
+            .Add(p => p.Visible, true));
 
         renderedComponent.WaitForState(() => renderedComponent.FindAll(".menu-container").Any());
 

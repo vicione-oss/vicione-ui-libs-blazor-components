@@ -91,7 +91,7 @@ public sealed class HorizontalScrollContainerTests : IDisposable
 
         SetContainerSizes(10, 100);
 
-        renderedComponent.Render(parameters => parameters
+        renderedComponent.Render(b => b
             .Add(p => p.LastShownPixel, 100));
 
         // simulate scroll appearing and taking some space

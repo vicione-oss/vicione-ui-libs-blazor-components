@@ -91,11 +91,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "First"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "Second"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "Third")));
 
         // Assert
@@ -237,11 +237,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         var tabs = renderedComponent.FindAll(".tab");
@@ -258,11 +258,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -285,9 +285,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
             .Add(p => p.ActiveTabIndexChanged, index => receivedIndex = index)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -306,9 +306,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
             .Add(p => p.ActiveTabIndexChanged, _ => callbackInvocationCount++)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -326,9 +326,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
 
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Bind(p => p.ActiveTabIndex, 0, value => receivedIndex = value)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -362,9 +362,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -380,11 +380,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -404,11 +404,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -429,11 +429,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
             .Add(p => p.ActiveTabIndexChanged, _ => callbackInvocationCount++)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -451,11 +451,11 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -480,9 +480,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
             .Add(p => p.ActiveTabIndexChanged, index => receivedIndex = index)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -498,9 +498,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -519,9 +519,9 @@ public sealed partial class TabStripTests : IAsyncDisposable
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
             .Add(p => p.ActiveTabIndexChanged, _ => callbackInvocationCount++)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act

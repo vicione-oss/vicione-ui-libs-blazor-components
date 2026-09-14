@@ -38,7 +38,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
-            .Add(x => x.HandleAddChild, HandleAddChild)
+            .Add(p => p.HandleAddChild, HandleAddChild)
             .AddChildContent<ToolbarButton>());
 
         renderedComponent.WaitForState(() => child is not null);
@@ -58,8 +58,8 @@ public sealed class ToolbarItemBaseTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
-            .Add(x => x.HandleAddChild, HandleAddChild)
-            .Add(x => x.HandleRemoveChild, HandleRemoveChild)
+            .Add(p => p.HandleAddChild, HandleAddChild)
+            .Add(p => p.HandleRemoveChild, HandleRemoveChild)
             .AddChildContent<ToolbarButton>());
 
         renderedComponent.WaitForState(() => child is not null);
@@ -82,7 +82,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
-            .Add(x => x.HandleChildChanged, HandleChildChanged)
+            .Add(p => p.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarButton>());
 
         SetContainerSize(_elementReferences[0], marginX: 10);
@@ -107,8 +107,8 @@ public sealed class ToolbarItemBaseTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
-            .Add(x => x.HandleAddChild, HandleAddChild)
-            .Add(x => x.HandleChildChanged, HandleChildChanged)
+            .Add(p => p.HandleAddChild, HandleAddChild)
+            .Add(p => p.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarButton>());
 
         SetContainerSize(_elementReferences[0], marginX: 10);
@@ -132,7 +132,7 @@ public sealed class ToolbarItemBaseTests : IDisposable
 
         // Act
         var renderedComponent = _testContext.Render<ToolbarFakeParent>(b => b
-            .Add(x => x.HandleChildChanged, HandleChildChanged)
+            .Add(p => p.HandleChildChanged, HandleChildChanged)
             .AddChildContent<ToolbarButton>());
 
         SetContainerSize(_elementReferences[0], marginX: 10);

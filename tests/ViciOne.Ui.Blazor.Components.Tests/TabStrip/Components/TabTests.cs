@@ -42,7 +42,7 @@ public sealed class TabTests : IAsyncDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "Item")));
 
         // Assert
@@ -54,7 +54,7 @@ public sealed class TabTests : IAsyncDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "General")));
 
         // Assert
@@ -68,7 +68,7 @@ public sealed class TabTests : IAsyncDisposable
     {
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, text)));
 
         // Assert
@@ -81,9 +81,9 @@ public sealed class TabTests : IAsyncDisposable
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         var activeTab = renderedComponent.FindAll(".tab")[1];
@@ -98,9 +98,9 @@ public sealed class TabTests : IAsyncDisposable
         // Act
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         var inactiveTab = renderedComponent.FindAll(".tab")[1];
@@ -117,9 +117,9 @@ public sealed class TabTests : IAsyncDisposable
 
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")
                 .Add(p => p.OnSelected, _ => onClickInvoked = true)));
 
@@ -138,12 +138,12 @@ public sealed class TabTests : IAsyncDisposable
 
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")
                 .Add(p => p.OnSelected, args => receivedArgs = args))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -162,10 +162,10 @@ public sealed class TabTests : IAsyncDisposable
 
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A")
                 .Add(p => p.OnSelected, _ => onClickInvocationCount++))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -181,11 +181,11 @@ public sealed class TabTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -204,11 +204,11 @@ public sealed class TabTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 1)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -231,9 +231,9 @@ public sealed class TabTests : IAsyncDisposable
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
             .Add(p => p.ActiveTabIndexChanged, _ => activeIndexChangedStep = ++sequence)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")
                 .Add(p => p.OnSelected, _ => onClickStep = ++sequence)));
 
@@ -293,11 +293,11 @@ public sealed class TabTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "C")));
 
         // Act
@@ -319,9 +319,9 @@ public sealed class TabTests : IAsyncDisposable
 
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")
                 .Add(p => p.OnSelected, args => receivedArgs = args)));
 
@@ -341,10 +341,10 @@ public sealed class TabTests : IAsyncDisposable
 
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A")
                 .Add(p => p.OnSelected, _ => onClickInvocationCount++))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act
@@ -360,9 +360,9 @@ public sealed class TabTests : IAsyncDisposable
         // Arrange
         var renderedComponent = _testContext.Render<TabStripComponent>(b => b
             .Add(p => p.ActiveTabIndex, 0)
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "A"))
-            .AddChildContent<Tab>(t => t
+            .AddChildContent<Tab>(b => b
                 .Add(p => p.Text, "B")));
 
         // Act

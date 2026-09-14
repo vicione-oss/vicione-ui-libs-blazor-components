@@ -43,10 +43,10 @@ public sealed class ToolbarButtonTests : IDisposable
             b.AddCascadingValue(toolbarItemParent);
 
             if (tooltip is not null)
-                b.Add(x => x.Tooltip, tooltip);
+                b.Add(p => p.Tooltip, tooltip);
 
             if (text is not null)
-                b.Add(x => x.Text, text);
+                b.Add(p => p.Text, text);
         });
 
         var element = renderedComponent.Find(".toolbar-button");

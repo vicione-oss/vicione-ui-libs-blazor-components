@@ -18,10 +18,10 @@ public class ShapeTests
         => _draggableTests.AssertDragInteractionAttachAfterFirstRender(draggable, modifierKey,
             configureServices: services =>
                 services.AddScoped(_ => Substitute.For<ISnapToGridPointerCaptureBehavior>()),
-            configureComponentParameters: p => p
-                .Add(c => c.Label, "test")
-                .Add(c => c.Draggable, draggable)
-                .Add(c => c.ModifierKey, modifierKey));
+            configureComponentParameters: b => b
+                .Add(p => p.Label, "test")
+                .Add(p => p.Draggable, draggable)
+                .Add(p => p.ModifierKey, modifierKey));
 
     [Theory]
     [InlineData(true)]
@@ -30,7 +30,7 @@ public class ShapeTests
         => await _draggableTests.AssertDragInteractionRemoveOnDisposeAsync(draggable,
             configureServices: services =>
                 services.AddScoped(_ => Substitute.For<ISnapToGridPointerCaptureBehavior>()),
-            configureComponentParameters: p => p
-                .Add(c => c.Label, "test")
-                .Add(c => c.Draggable, draggable));
+            configureComponentParameters: b => b
+                .Add(p => p.Label, "test")
+                .Add(p => p.Draggable, draggable));
 }

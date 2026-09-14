@@ -31,7 +31,7 @@ internal sealed class ToolbarItemTests<T>
         // Act
         var renderedComponent = testContext.Render<T>(b => b
             .AddCascadingValue(toolbarItemParent)
-            .Add(x => x.CssClass, cssClass));
+            .Add(p => p.CssClass, cssClass));
 
         var toolbarItem = renderedComponent.Find($".{cssClass}:first-child");
 

@@ -16,8 +16,8 @@ public sealed class DragGhostBaseTests
         using var testContext = new BunitContext();
 
         // Act
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span class=\"payload-marker\">x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span class=\"payload-marker\">x</span>"));
 
         // Assert — content renders with the host, no gesture required
         cut.Markup.Should().Contain("drag-ghost");
@@ -30,8 +30,8 @@ public sealed class DragGhostBaseTests
         // Arrange
         await using var testContext = new BunitContext();
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span class=\"payload-marker\">x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span class=\"payload-marker\">x</span>"));
 
         // Act
         await cut.Instance.RenderContentForTestAsync();
@@ -49,15 +49,15 @@ public sealed class DragGhostBaseTests
 
         // The markup reads a mutable value, so re-evaluating it yields whatever is current — proving the
         // content is evaluated per gesture, not captured at attach.
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span class=\"val\">first</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span class=\"val\">first</span>"));
 
         await cut.Instance.RenderContentForTestAsync();
         cut.Markup.Should().Contain("first");
 
         // Act
-        cut.Render(ps => ps
-            .Add(c => c.ContentMarkup, "<span class=\"val\">second</span>"));
+        cut.Render(b => b
+            .Add(p => p.ContentMarkup, "<span class=\"val\">second</span>"));
         await cut.Instance.RenderContentForTestAsync();
 
         // Assert — the ghost element shows the latest content, not a merge of both
@@ -70,8 +70,8 @@ public sealed class DragGhostBaseTests
     {
         // Arrange
         using var testContext = new BunitContext();
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // Act
         var jsModuleDescriptor = cut.Instance.GetJsModule();
@@ -91,8 +91,8 @@ public sealed class DragGhostBaseTests
     {
         // Arrange
         using var testContext = new BunitContext();
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // Act
         var jsModuleDescriptor = cut.Instance.GetJsModule();
@@ -108,8 +108,8 @@ public sealed class DragGhostBaseTests
     {
         // Arrange
         using var testContext = new BunitContext();
-        var cut = testContext.Render<TestLifecycleDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var cut = testContext.Render<TestLifecycleDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // Act
         var jsModuleDescriptor = cut.Instance.GetJsModule();
@@ -125,10 +125,10 @@ public sealed class DragGhostBaseTests
     {
         // Arrange
         await using var testContext = new BunitContext();
-        var implemented = testContext.Render<TestLifecycleDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
-        var notImplemented = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var implemented = testContext.Render<TestLifecycleDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
+        var notImplemented = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // Act
         await implemented.Instance.ForwardDragStartAsync();
@@ -148,8 +148,8 @@ public sealed class DragGhostBaseTests
         await using var testContext = new BunitContext();
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
-        var rendering = testContext.Render<RenderingLifecycleDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var rendering = testContext.Render<RenderingLifecycleDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // The JS ghost keeps a wait pending for the duration of the drag.
         var wait = rendering.Instance.WaitForContentChangeAsync();
@@ -169,8 +169,8 @@ public sealed class DragGhostBaseTests
         await using var testContext = new BunitContext();
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
-        var notRendering = testContext.Render<TestLifecycleDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var notRendering = testContext.Render<TestLifecycleDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         var wait = notRendering.Instance.WaitForContentChangeAsync();
 
@@ -188,8 +188,8 @@ public sealed class DragGhostBaseTests
         await using var testContext = new BunitContext();
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // The JS ghost keeps a wait pending for the duration of the drag.
         var wait = cut.Instance.WaitForContentChangeAsync();
@@ -209,8 +209,8 @@ public sealed class DragGhostBaseTests
         await using var testContext = new BunitContext();
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         // Act — a render happens before the JS ghost is waiting, so the change is recorded as pending
         await cut.Instance.RenderContentForTestAsync();
@@ -226,8 +226,8 @@ public sealed class DragGhostBaseTests
         await using var testContext = new BunitContext();
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span>x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span>x</span>"));
 
         var wait = cut.Instance.WaitForContentChangeAsync();
 
@@ -243,8 +243,8 @@ public sealed class DragGhostBaseTests
     {
         // Arrange
         await using var testContext = new BunitContext();
-        var cut = testContext.Render<TestDragGhost>(ps => ps
-            .Add(c => c.ContentMarkup, "<span class=\"payload-marker\">x</span>"));
+        var cut = testContext.Render<TestDragGhost>(b => b
+            .Add(p => p.ContentMarkup, "<span class=\"payload-marker\">x</span>"));
 
         cut.Instance.Dispose();
 

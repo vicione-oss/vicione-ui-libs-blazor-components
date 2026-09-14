@@ -22,7 +22,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_render()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
         );
@@ -35,7 +35,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_render_without_items()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, [])
             .Add(p => p.Value, "")
         );
@@ -48,7 +48,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_preselect_item_if_set()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, GetItems().First().Value)
             .Add(p => p.ValueSelector, x => x.Value)
@@ -65,7 +65,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_show_no_selection_if_value_not_matching()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "missing")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -82,7 +82,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_show_no_selection_if_no_selection_configured()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "1")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -101,7 +101,7 @@ public sealed class ComboBoxTests : IDisposable
         // Arrange
         string? changedValue = null;
 
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -120,7 +120,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_render_editable_input_when_allow_user_input()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.AllowUserInput, true)
@@ -134,7 +134,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_filter_drop_down()
     {
         // Arrange
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -153,7 +153,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_show_empty_state_when_input_matches_no_item()
     {
         // Arrange
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -174,7 +174,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_filter_drop_down_without_user_input()
     {
         // Arrange
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -195,7 +195,7 @@ public sealed class ComboBoxTests : IDisposable
         // Arrange
         string? changedValue = null;
 
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -220,7 +220,7 @@ public sealed class ComboBoxTests : IDisposable
         // Arrange
         string? changedValue = null;
 
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -240,7 +240,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_open_drop_down_on_input()
     {
         // Arrange
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -260,7 +260,7 @@ public sealed class ComboBoxTests : IDisposable
         // Arrange
         string? changedValue = null;
 
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -284,7 +284,7 @@ public sealed class ComboBoxTests : IDisposable
         // Arrange
         var changed = false;
 
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<int, string>, int>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<int, string>, int>>(b => b
             .Add(p => p.Items, GetNumericItems())
             .Add(p => p.Value, 0)
             .Add(p => p.ValueSelector, x => x.Value)
@@ -309,7 +309,7 @@ public sealed class ComboBoxTests : IDisposable
         SampleValue? changedValue = null;
         var items = GetSampleValueItems();
 
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<SampleValue, string>, SampleValue>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<SampleValue, string>, SampleValue>>(b => b
             .Add(p => p.Items, items)
             .Add(p => p.Value, items[0].Value)
             .Add(p => p.ValueSelector, x => x.Value)
@@ -338,14 +338,14 @@ public sealed class ComboBoxTests : IDisposable
                 : new TestEnumerable<ComboBoxItem<string, string>>([.. GetItems().Skip(1)]);
 
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, GetItems().First().Value)
             .Add(p => p.ValueSelector, x => x.Value)
             .Add(p => p.TextSelector, x => x.Text)
         );
 
-        renderedComponent.Render(builder => builder
+        renderedComponent.Render(b => b
             .Add(p => p.Items, updatedItems));
 
         // Assert
@@ -356,7 +356,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_render_title_on_drop_down_items()
     {
         // Act
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -373,7 +373,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_open_drop_down_on_icon_click()
     {
         // Arrange
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)
@@ -392,7 +392,7 @@ public sealed class ComboBoxTests : IDisposable
     public void Should_toggle_drop_down_on_icon_click()
     {
         // Arrange
-        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(builder => builder
+        var renderedComponent = _testContext.Render<ComboBox<ComboBoxItem<string, string>, string>>(b => b
             .Add(p => p.Items, GetItems())
             .Add(p => p.Value, "")
             .Add(p => p.ValueSelector, x => x.Value)

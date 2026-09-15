@@ -11,6 +11,8 @@ public sealed class ExampleFooInstance : IHasName
     public string? Brief { get; set; } = "Dolor sit amet";
     public string? Description { get; set; } = "Foo instance";
     public string Abstract { get; set; } = "Lorem ipsum";
+    public string? LongTitle { get; set; } = "Consetetur sadipscing";
+    public string? LongDescription { get; set; } = "Sed diam nonumy";
     public bool BooleanValue { get; set; } = BooleanValueDefaultValue;
     public bool BooleanValueReversed { get; set; } = BooleanValueReversedDefaultValue;
     public bool BooleanValuesResettable { get; set; }

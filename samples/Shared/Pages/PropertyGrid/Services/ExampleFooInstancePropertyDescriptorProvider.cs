@@ -59,6 +59,32 @@ internal sealed class ExampleFooInstancePropertyDescriptorProvider
             InformationTooltip = "Read-only property"
         };
 
+        yield return new PropertyDescriptor<ExampleFooInstance, string?>()
+        {
+            Category = "String properties",
+            DisplayName = "Property with a very long title that does not fit into a single line " +
+                "and therefore has to wrap over several lines in the tooltip",
+            Description = "A string property showing how a long title and a long description are displayed in the tooltip. " +
+                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt " +
+                "ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+            Name = nameof(ExampleFooInstance.LongTitle),
+            GetValue = (instance) => instance.LongTitle,
+            SetValue = (instance, value) => instance.LongTitle = value
+        };
+
+        yield return new PropertyDescriptor<ExampleFooInstance, string?>()
+        {
+            Category = "String properties",
+            DisplayName = "Long description",
+            Description = "A string property showing how a normal title and a long description are displayed in the tooltip. " +
+                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt " +
+                "ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo " +
+                "dolores et ea rebum.",
+            Name = nameof(ExampleFooInstance.LongDescription),
+            GetValue = (instance) => instance.LongDescription,
+            SetValue = (instance, value) => instance.LongDescription = value
+        };
+
         var booleanValueResettablePropertyDescriptor = new PropertyDescriptor<ExampleFooInstance, bool>
         {
             Category = "Boolean properties",

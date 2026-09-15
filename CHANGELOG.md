@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.12`
+- `PropertyGrid`, fixed tooltip title being cut off by allowing text to wrap to the next line
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

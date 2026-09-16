@@ -1,8 +1,20 @@
-﻿@using ViciOne.Ui.Blazor.Components.Button.Extensions
+@using ViciOne.Ui.Blazor.Components.Button.Extensions
 @using ViciOne.Ui.Blazor.Components.Shared
 
 @{
     var cssClasses = new List<string> { "button", Size.ToModifierCssClass() };
+
+    // The following condition checks for Enabled because a button that is not enabled
+    // cannot start its action, so showing it as busy would be misleading.
+    // A disabled button also comes with half-transparent styling, which would make
+    // the busy indication hard to see.
+    var busy = Busy && Enabled;
+
+    if (busy)
+    {
+        cssClasses.Add("button--busy");
+        cssClasses.AddRange(BusyIndication.ToModifierCssClasses());
+    }
 
     if (!string.IsNullOrWhiteSpace(CssClass))
         cssClasses.AddRange(CssClass.Split(" "));
@@ -20,9 +32,22 @@
 
     if (!Enabled)
         additionalAttributes.Add("disabled", "disabled");
+
+    if (busy)
+    {
+        additionalAttributes.Add("aria-busy", "true");
+
+        // Keeps the button focusable, which the disabled attribute would not.
+        additionalAttributes.Add("aria-disabled", "true");
+    }
+    else
+    {
+        // A busy button gets no click handler at all, so a click is not dispatched in the first place
+        additionalAttributes.Add("onclick", EventCallback.Factory.Create<MouseEventArgs>(this, ButtonClickAsync));
+    }
 }
 
-<button type="button" class="@string.Join(" ", cssClasses)" @onclick="@ButtonClickAsync" @attributes="@additionalAttributes">
+<button type="button" class="@string.Join(" ", cssClasses)" @attributes="@additionalAttributes">
     @RenderFragments.Icon(this)
 
     @if (!string.IsNullOrWhiteSpace(Text))

@@ -45,3 +45,40 @@
         <Button Size="buttonSizeName" IconCssClass="@iconCssClass" />
     }
 </div>
+
+<h3>Busy</h3>
+
+<div class="inline-grid">
+    @foreach (var buttonSize in TypeSafeEnumFactory<ButtonSize>.CreateAll().Reverse())
+    {
+        <Button Busy="true" Size="buttonSize" Text="@buttonSize.GetName()" />
+    }
+</div>
+
+<h3>Busy with icon</h3>
+
+<div class="inline-grid">
+    @foreach (var buttonSize in TypeSafeEnumFactory<ButtonSize>.CreateAll().Reverse())
+    {
+        var iconCssClass = MonochromeIconName.Refresh.GetCssClasses(buttonSize.ToMonochromeIconSize()).ToSpaceSeparated();
+
+        <Button Busy="true" Size="buttonSize" IconCssClass="@iconCssClass" Text="@buttonSize.GetName()" />
+    }
+</div>
+
+<h3>Busy indication</h3>
+
+<div class="inline-grid">
+    @foreach (var busyIndication in TypeSafeEnumFactory<ButtonBusyIndication>.CreateAll())
+    {
+        var iconCssClass = MonochromeIconName.Refresh.GetCssClasses(ButtonSize.Medium.ToMonochromeIconSize()).ToSpaceSeparated();
+
+        <Button Busy="true" BusyIndication="busyIndication" IconCssClass="@iconCssClass" Text="@busyIndication.GetName()" />
+    }
+</div>
+
+<h3>Busy while running an action</h3>
+
+<div class="inline-grid">
+    <Button Busy="@_busy" Text="@(_busy ? "Testing" : "Test")" OnClick="@RunActionAsync" />
+</div>

@@ -2,10 +2,17 @@
 @use "../Styles/design/colors";
 @use "../Styles/design/typography";
 @use "../Styles/design/animations/mixins" as animations;
+@use "../Styles/animations/spinning-icon" as spinning-icon-animation;
+@use "../Styles/animations/sweep" as sweep-animation;
 @use "../Styles/buttons/mixins" as buttons;
 @use "../Styles/inputs/mixins" as inputs;
 
 @use "sass:color";
+
+@include spinning-icon-animation.keyframes();
+
+@include sweep-animation.properties();
+@include sweep-animation.keyframes();
 
 .button {
     // general resets
@@ -69,12 +76,28 @@
     @include size-modifier($size: "medium", $height: 32px, $icon-margin-left: 8px, $icon-size: 24px, $font-size: 14px, $text-padding-left-right: 10px);
     @include size-modifier($size: "large", $height: 36px, $icon-margin-left: 10px, $icon-size: 32px, $font-size: 16px, $text-padding-left-right: 13px);
 
+    // state
+    &.button--busy-sweep {
+        @include sweep-animation.declarations();
+
+        // The focus border already has the accent color, which would hide the arc.
+        &:focus {
+            &::before {
+                @include sweep-animation.gradient(colors.$theme-inverted);
+            }
+        }
+    }
+
+    &.button--busy-spinning-icon {
+        @include spinning-icon-animation.declarations();
+    }
+
     // interaction
     @include inputs.disabled-style();
 
     @include buttons.no-outline-on-focus();
 
-    &:not(:disabled) {
+    &:not(:disabled):not(.button--busy) {
          &:hover {
             background-color: color.change(colors.$font-light, $alpha: 0.03);
         }

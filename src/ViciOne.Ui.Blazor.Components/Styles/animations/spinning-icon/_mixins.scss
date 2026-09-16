@@ -1,0 +1,15 @@
+@use "variables";
+
+@mixin keyframes() {
+    @keyframes spinning-icon {
+        to {
+            transform: rotate(1turn);
+        }
+    }
+}
+
+@mixin declarations($duration: variables.$duration) {
+    ::deep .icon {
+        animation: spinning-icon $duration linear infinite;
+    }
+}

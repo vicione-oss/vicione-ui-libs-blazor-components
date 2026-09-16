@@ -1,12 +1,14 @@
 # Changelog
 
-## 6.1.0 - Unreleased
+## 6.1.0 - 2026-09-16
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.12`
 - `PropertyGrid`, fixed tooltip title being cut off by allowing text to wrap to the next line
 - `ComboBox` and `TagBox`, fixed drop-down not scrolling to the selected item when opened
+- `Button`, added `Busy` to show that the action behind the button runs, and `BusyIndication` to choose between a light arc sweeping around the border, a rotating icon, or both
+- `DialogFooterButton`, added `Busy` and `BusyIndication` forwarding the state to the underlying `Button`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

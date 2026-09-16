@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Components;
+using ViciOne.Ui.Blazor.Components.Button.Enums;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using ButtonComponent = ViciOne.Ui.Blazor.Components.Button.Button;
 
@@ -27,6 +28,12 @@ public sealed partial class DialogFooterButton : ComponentBase
 
     /// <inheritdoc cref="ButtonComponent.Enabled"/>
     [Parameter] public bool Enabled { get; set; } = true;
+
+    /// <inheritdoc cref="ButtonComponent.Busy"/>
+    [Parameter] public bool Busy { get; set; }
+
+    /// <inheritdoc cref="ButtonComponent.BusyIndication"/>
+    [Parameter] public ButtonBusyIndication BusyIndication { get; set; } = ButtonBusyIndication.Sweep;
 
     /// <inheritdoc cref="ButtonComponent.OnClick"/>
     [Parameter] public EventCallback OnClick { get; set; }

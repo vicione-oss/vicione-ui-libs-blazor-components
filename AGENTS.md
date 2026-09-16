@@ -7,6 +7,9 @@
 ## Documentation style
 - Refer to `docs/documentation-style.md` for comment and documentation conventions, including consistent terminology
 
+## Commit messages
+- Refer to `docs/commit-message-style.md` for commit message conventions
+
 ## Skills
 
 Reusable skill definitions located in `.claude/skills/` following the [Agent Skills](https://agentskills.io/) open standard.

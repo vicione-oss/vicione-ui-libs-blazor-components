@@ -11,6 +11,23 @@ namespace ViciOne.Ui.Blazor.Components.Button;
 public sealed partial class Button : ComponentBase, IHasIcon
 {
     /// <summary>
+    /// True while the action behind the button is running, otherwise false
+    /// </summary>
+    /// <remarks>
+    /// A busy button keeps its place, size and text and stays focusable, and reports itself as busy and disabled to assistive technology.
+    /// It ignores clicks, so <see cref="OnClick"/> is not raised. Use <see cref="Enabled"/> for a button that is permanently unavailable,
+    /// which takes precedence: a button that is not enabled shows no busy state.
+    /// </remarks>
+    [Parameter]
+    public bool Busy { get; set; }
+
+    /// <summary>
+    /// Way the button shows that it is <see cref="Busy">busy</see>
+    /// </summary>
+    [Parameter]
+    public ButtonBusyIndication BusyIndication { get; set; } = ButtonBusyIndication.Sweep;
+
+    /// <summary>
     /// Text rendered into <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
     /// </summary>
     [Parameter]
@@ -75,6 +92,9 @@ public sealed partial class Button : ComponentBase, IHasIcon
 
     private async Task ButtonClickAsync(MouseEventArgs _)
     {
+        if (Busy)
+            return;
+
         if (OnClick.HasDelegate)
             await OnClick.InvokeAsync();
     }

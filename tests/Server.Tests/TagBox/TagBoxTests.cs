@@ -1,3 +1,4 @@
+using Microsoft.Playwright;
 using Server.Tests.Infrastructure;
 using ViciOne.Ui.Testing.Playwright.Infrastructure;
 
@@ -446,6 +447,88 @@ public class TagBoxTests(ServerFixture fixture)
             // At least one drop-down-item has content larger than the tag-box (but is still clipped to its width)
             Assert.True(hasOverflowingItem,
                 "Expected at least one drop-down-item to have content larger than the tag-box");
+        });
+    }
+
+    [Fact]
+    public async Task Should_start_arrow_key_navigation_at_most_recently_selected_item_without_highlight_when_drop_down_reopens()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tag-box");
+
+            var tagBox = page.Locator(".tag-box").Last;
+            var tagInput = tagBox.Locator(".tag-input");
+            var dropDown = tagBox.Locator(".drop-down-container");
+            var placedDropDown = tagBox.Locator(".drop-down-container.placed");
+            var highlightedItems = dropDown.Locator(".drop-down-item.highlighted");
+
+            await tagInput.ClickAsync();
+            await dropDown.Locator(".drop-down-item", new() { HasText = "Tag 12" }).ClickAsync();
+            await tagInput.PressAsync("ArrowUp");
+
+            await tagInput.BlurAsync();
+            await placedDropDown.WaitForAsync(new() { State = WaitForSelectorState.Hidden });
+
+            await tagInput.ClickAsync();
+            await placedDropDown.WaitForAsync();
+
+            // Assert - reopened without highlight
+            Assert.Equal(0, await highlightedItems.CountAsync());
+
+            // Act - navigate from the most recently selected item
+            await tagInput.PressAsync("ArrowUp");
+
+            // Assert - the item above the most recently selected item is highlighted
+            Assert.Equal("Tag 11", (await highlightedItems.TextContentAsync())?.Trim());
+        });
+    }
+
+    [Fact]
+    public async Task Should_scroll_most_recently_selected_item_to_top_when_drop_down_opens()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tag-box");
+
+            // The last TagBox holds more available tags than the drop-down shows at once
+            var tagBox = page.Locator(".tag-box").Last;
+            var tagInput = tagBox.Locator(".tag-input");
+            var dropDown = tagBox.Locator(".drop-down-container");
+            var placedDropDown = tagBox.Locator(".drop-down-container.placed");
+
+            await tagInput.ClickAsync();
+            await dropDown.Locator(".drop-down-item", new() { HasText = "Tag 30" }).ClickAsync();
+            await dropDown.Locator(".drop-down-item", new() { HasText = "Tag 15" }).ClickAsync();
+
+            await tagInput.BlurAsync();
+            await placedDropDown.WaitForAsync(new() { State = WaitForSelectorState.Hidden });
+
+            await tagInput.ClickAsync();
+            await placedDropDown.WaitForAsync();
+
+            // Assert
+            var mostRecentlySelectedItem = dropDown.Locator(".drop-down-item.most-recently-selected");
+            Assert.Equal("Tag 15", (await mostRecentlySelectedItem.TextContentAsync())?.Trim());
+
+            var dropDownBoundingBox = await dropDown.BoundingBoxAsync();
+            Assert.NotNull(dropDownBoundingBox);
+
+            var mostRecentlySelectedItemBoundingBox = await mostRecentlySelectedItem.BoundingBoxAsync();
+            Assert.NotNull(mostRecentlySelectedItemBoundingBox);
+
+            Assert.True(Math.Abs(mostRecentlySelectedItemBoundingBox.Y - dropDownBoundingBox.Y) < 2,
+                $"Expected the most recently selected drop-down-item (Y={mostRecentlySelectedItemBoundingBox.Y}) to be at the top of the drop-down (Y={dropDownBoundingBox.Y})");
         });
     }
 }

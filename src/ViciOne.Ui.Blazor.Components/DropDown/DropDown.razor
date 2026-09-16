@@ -25,6 +25,9 @@
                     if (IsSelected(item))
                         itemCssClasses.Add("selected");
 
+                    if (IsMostRecentlySelected(item))
+                        itemCssClasses.Add("most-recently-selected");
+
                     <div class="@string.Join(" ", itemCssClasses)"
                          role="option"
                          title="@TitleSelector?.Invoke(item)"

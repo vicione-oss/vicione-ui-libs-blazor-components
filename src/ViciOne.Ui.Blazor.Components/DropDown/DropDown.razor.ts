@@ -11,21 +11,6 @@ class DropDown {
 
     #inputElement: HTMLElement | undefined = undefined;
     #highlightedIndex = -1;
-    #lastSelectedIndex = -1;
-
-    readonly #click = (event: MouseEvent) => {
-        if (!(event.target instanceof Element))
-            return;
-
-        const item = event.target.closest<HTMLElement>('.drop-down-item');
-
-        if (!item)
-            return;
-
-        this.#lastSelectedIndex = item.classList.contains('selected') ?
-            -1 :
-            this.#getItemElements().indexOf(item);
-    };
 
     readonly #keyDown = (event: KeyboardEvent) => {
         if (!this.#isVisible())
@@ -39,7 +24,7 @@ class DropDown {
         if ((isArrowDown || event.key === 'ArrowUp') && count > 0) {
             let currentIndex = this.#highlightedIndex >= 0 ?
                 this.#highlightedIndex :
-                this.#getLastSelectedIndex();
+                this.#getMostRecentlySelectedIndex();
 
             if (currentIndex >= count)
                 currentIndex = -1;
@@ -67,7 +52,6 @@ class DropDown {
 
     constructor(containerElement: HTMLElement) {
         this.#containerElement = containerElement;
-        this.#containerElement.addEventListener('click', this.#click);
     }
 
     #getItemElements(): HTMLElement[] {
@@ -120,25 +104,15 @@ class DropDown {
         return this.#containerElement.classList.contains('visible');
     }
 
-    #getLastSelectedIndex(): number {
-        if (this.#lastSelectedIndex >= 0)
-            return this.#lastSelectedIndex;
-
-        const items = this.#getItemElements();
-
-        for (let index = items.length - 1; index >= 0; index--) {
-            if (items[index].classList.contains('selected'))
-                return index;
-        }
-
-        return -1;
+    #getMostRecentlySelectedIndex(): number {
+        return this.#getItemElements().findIndex(item => item.classList.contains('most-recently-selected'));
     }
 
     #setHighlight(index: number) {
         const items = this.#getItemElements();
 
-        if (this.#highlightedIndex >= 0 && this.#highlightedIndex < items.length)
-            items[this.#highlightedIndex].classList.remove('highlighted');
+        for (const item of items)
+            item.classList.remove('highlighted');
 
         this.#highlightedIndex = index;
 
@@ -195,6 +169,7 @@ class DropDown {
             return;
 
         const container = this.#containerElement;
+        const wasPlaced = container.classList.contains('placed');
 
         // Reset any previous placement so the direction is recomputed from scratch
         // and the menu stays hidden (not 'placed') until we reveal it below.
@@ -269,6 +244,11 @@ class DropDown {
 
         this.#setMaxHeight(metrics, visibleItemCount);
 
+        const mostRecentlySelectedItem = items.find(item => item.classList.contains('most-recently-selected'));
+
+        if (!wasPlaced && mostRecentlySelectedItem)
+            container.scrollTop = mostRecentlySelectedItem.offsetTop;
+
         if (shouldDropUp) {
             const wrapper = container.parentElement;
 
@@ -288,6 +268,8 @@ class DropDown {
     }
 
     public resetPlacement() {
+        this.#setHighlight(-1);
+
         this.#containerElement.classList.remove('placed');
         this.#containerElement.style.top = '';
         this.#containerElement.style.bottom = '';
@@ -296,7 +278,6 @@ class DropDown {
 
     public dispose() {
         this.detachInputElement();
-        this.#containerElement.removeEventListener('click', this.#click);
     }
 }
 

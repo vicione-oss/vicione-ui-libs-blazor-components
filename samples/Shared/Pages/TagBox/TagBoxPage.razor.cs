@@ -8,6 +8,7 @@ public partial class TagBoxPage
         .. s_availableTags,
         "internal ClusterEditor MQTT-DataPort connection"
     ];
+    private static readonly IEnumerable<string> s_manyAvailableTags = [.. Enumerable.Range(1, 30).Select(i => $"Tag {i}")];
 
     private IEnumerable<string> _tags1 = [];
     private IEnumerable<string> _tags2 = [];
@@ -17,4 +18,5 @@ public partial class TagBoxPage
     private IEnumerable<string> _tags6 = ["SystemDefault"];
     private IEnumerable<string> _tags7 = ["Database"];
     private IEnumerable<string> _tags8 = [];
+    private IEnumerable<string> _tags9 = [];
 }

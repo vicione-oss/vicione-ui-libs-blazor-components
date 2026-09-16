@@ -138,6 +138,40 @@ public class ComboBoxTests(ServerFixture fixture)
         });
     }
 
+    [Fact]
+    public async Task Should_scroll_selected_item_to_top_when_drop_down_opens()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/combo-box");
+
+            // The last ComboBox holds 100 items, more than the drop-down shows at once
+            var comboBox = page.Locator(".combo-box").Last;
+            var input = comboBox.Locator(".combo-box-input");
+
+            await input.FillAsync("Sample Object 50");
+            await comboBox.Locator(".drop-down-item", new() { HasText = "Sample Object 50" }).ClickAsync();
+
+            await input.ClickAsync();
+            await comboBox.Locator(".drop-down-container.placed").WaitForAsync();
+
+            // Assert
+            var containerBoundingBox = await comboBox.Locator(".drop-down-container").BoundingBoxAsync();
+            Assert.NotNull(containerBoundingBox);
+
+            var selectedItemBoundingBox = await comboBox.Locator(".drop-down-item.selected").BoundingBoxAsync();
+            Assert.NotNull(selectedItemBoundingBox);
+
+            Assert.True(Math.Abs(selectedItemBoundingBox.Y - containerBoundingBox.Y) < 2,
+                $"Expected the selected drop-down-item (Y={selectedItemBoundingBox.Y}) to be at the top of the drop-down (Y={containerBoundingBox.Y})");
+        });
+    }
+
     private static Task<string> GetComputedStylePropertyAsync(ILocator locator, string propertyName) => locator.EvaluateAsync<string>(
         "(element, propertyName) => getComputedStyle(element).getPropertyValue(propertyName)",
         propertyName);

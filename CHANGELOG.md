@@ -6,6 +6,7 @@
 
 - `.NET` packages, updated to version `10.0.12`
 - `PropertyGrid`, fixed tooltip title being cut off by allowing text to wrap to the next line
+- `ComboBox` and `TagBox`, fixed drop-down not scrolling to the selected item when opened
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

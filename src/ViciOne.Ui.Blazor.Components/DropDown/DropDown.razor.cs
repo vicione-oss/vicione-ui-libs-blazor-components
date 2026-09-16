@@ -146,17 +146,16 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
 
     private async Task SelectItemAsync(TItem item)
     {
-        var selectedItems = new HashSet<TItem>(SelectedItems);
+        List<TItem> selectedItems = [.. SelectedItems];
 
         if (MultiSelection)
         {
-            if (!selectedItems.Add(item))
-                selectedItems.Remove(item);
+            if (!selectedItems.Remove(item))
+                selectedItems.Add(item);
         }
         else
         {
-            selectedItems.Clear();
-            selectedItems.Add(item);
+            selectedItems = [item];
         }
 
         if (SelectedItemsChanged.HasDelegate)
@@ -165,6 +164,9 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
 
     private bool IsSelected(TItem item)
         => SelectedItems.Contains(item);
+
+    private bool IsMostRecentlySelected(TItem item)
+        => SelectedItems.TakeLast(1).Contains(item);
 
     private async Task DisposeJsAttachResultAsync()
     {

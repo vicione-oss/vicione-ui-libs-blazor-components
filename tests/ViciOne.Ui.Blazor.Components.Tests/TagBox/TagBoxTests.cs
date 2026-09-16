@@ -177,6 +177,66 @@ public sealed class TagBoxTests : IDisposable
     }
 
     [Fact]
+    public void Should_mark_most_recently_selected_tag_in_drop_down()
+    {
+        // Arrange
+        string[] tags = ["Tag3", "Tag1"];
+        string[] availableTags = ["Tag1", "Tag2", "Tag3"];
+
+        // Act
+        var renderedComponent = _testContext.Render<TagBoxComponent>(b => b
+            .Add(p => p.Tags, tags)
+            .Add(p => p.AvailableTags, availableTags));
+
+        // Assert
+        renderedComponent.FindAll(".drop-down-item.most-recently-selected").Should().ContainSingle()
+            .Which.TextContent.Trim().Should().Be("Tag1");
+    }
+
+    [Fact]
+    public void Should_append_tag_selected_from_drop_down_and_mark_it_as_most_recently_selected()
+    {
+        // Arrange
+        string[] tags = ["Tag3"];
+        string[] availableTags = ["Tag1", "Tag2", "Tag3"];
+        IEnumerable<string>? updatedTags = null;
+
+        var renderedComponent = _testContext.Render<TagBoxComponent>(b => b
+            .Add(p => p.Tags, tags)
+            .Add(p => p.AvailableTags, availableTags)
+            .Add(p => p.TagsChanged, t => updatedTags = t));
+
+        // Act
+        renderedComponent.FindAll(".drop-down-item")[0].Click();
+
+        // Assert
+        updatedTags.Should().Equal("Tag3", "Tag1");
+
+        renderedComponent.FindAll(".drop-down-item.most-recently-selected").Should().ContainSingle()
+            .Which.TextContent.Trim().Should().Be("Tag1");
+    }
+
+    [Fact]
+    public void Should_move_reselected_tag_to_the_end()
+    {
+        // Arrange
+        string[] tags = ["Tag1", "Tag2", "Tag3"];
+        IEnumerable<string>? updatedTags = null;
+
+        var renderedComponent = _testContext.Render<TagBoxComponent>(b => b
+            .Add(p => p.Tags, tags)
+            .Add(p => p.AvailableTags, tags)
+            .Add(p => p.TagsChanged, t => updatedTags = t));
+
+        // Act
+        renderedComponent.FindAll(".drop-down-item")[0].Click();
+        renderedComponent.FindAll(".drop-down-item")[0].Click();
+
+        // Assert
+        updatedTags.Should().Equal("Tag2", "Tag3", "Tag1");
+    }
+
+    [Fact]
     public void Should_hide_selected_items_in_drop_down_when_hide_selected_items_is_true()
     {
         // Arrange

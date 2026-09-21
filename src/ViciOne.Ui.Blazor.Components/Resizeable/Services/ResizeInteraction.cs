@@ -18,7 +18,7 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
     private string? _assemblyName;
     private readonly Dictionary<IResizeable, Guid> _resizeableIds = [];
     private readonly Dictionary<Guid, IResizeable> _resizeables = [];
-    private readonly Dictionary<IResizeable, IJSObjectReference> _jsAttachResults = [];
+    private readonly Dictionary<IResizeable, IJSObjectReference> _jsInstances = [];
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<ResizeInteraction>? _dotNetObjectReference;
 
@@ -38,7 +38,7 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
             await _semaphore.WaitAsync(cancellationToken);
             try
             {
-                if (_jsAttachResults.ContainsKey(resizeable))
+                if (_jsInstances.ContainsKey(resizeable))
                     return;
 
                 _assemblyName ??= typeof(ResizeInteraction).Assembly.GetName().Name;
@@ -75,12 +75,16 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
                     resizeInteractionContext.PointerCaptureBehaviors = [.. pointerCaptureBehaviorJsObjects.OfType<IJSObjectReference>()];
                 }
 
-                var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", cancellationToken, resizeInteractionContext);
+                var jsInstance = await _jsModule.InvokeConstructorAsync("ResizeInteraction", logger,
+                    cancellationToken, resizeInteractionContext);
+
+                if (jsInstance is null)
+                    return;
 
                 _resizeableIds.Add(resizeable, resizeableId);
                 _resizeables.Add(resizeableId, resizeable);
 
-                _jsAttachResults.Add(resizeable, jsAttachResult);
+                _jsInstances.Add(resizeable, jsInstance);
             }
             finally
             {
@@ -115,12 +119,12 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
                     _resizeableIds.Remove(resizeable);
                 }
 
-                if (_jsAttachResults.TryGetValue(resizeable, out var jsAttachResult))
+                if (_jsInstances.TryGetValue(resizeable, out var jsInstance))
                 {
-                    await jsAttachResult.InvokeVoidAsync("dispose", logger, cancellationToken);
-                    await jsAttachResult.DisposeAsync(logger);
+                    await jsInstance.InvokeVoidAsync("dispose", logger, cancellationToken);
+                    await jsInstance.DisposeAsync(logger);
 
-                    _jsAttachResults.Remove(resizeable);
+                    _jsInstances.Remove(resizeable);
                 }
             }
             finally
@@ -153,8 +157,8 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
                 if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
                     return;
 
-                if (_jsAttachResults.TryGetValue(resizeable, out var jsAttachResult))
-                    await jsAttachResult.InvokeVoidAsync("addPointerCaptureBehavior", logger, cancellationToken, jsObject);
+                if (_jsInstances.TryGetValue(resizeable, out var jsInstance))
+                    await jsInstance.InvokeVoidAsync("addPointerCaptureBehavior", logger, cancellationToken, jsObject);
             }
             finally
             {
@@ -186,8 +190,8 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
                 if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
                     return;
 
-                if (_jsAttachResults.TryGetValue(resizeable, out var jsAttachResult))
-                    await jsAttachResult.InvokeVoidAsync("removePointerCaptureBehavior", logger, cancellationToken, jsObject);
+                if (_jsInstances.TryGetValue(resizeable, out var jsInstance))
+                    await jsInstance.InvokeVoidAsync("removePointerCaptureBehavior", logger, cancellationToken, jsObject);
             }
             finally
             {
@@ -218,13 +222,13 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
             _resizeables.Clear();
             _resizeableIds.Clear();
 
-            var jsDisposeTasks = _jsAttachResults.Values.Select(jsAttachResult => jsAttachResult.InvokeVoidAsync("dispose", logger));
+            var jsDisposeTasks = _jsInstances.Values.Select(jsInstance => jsInstance.InvokeVoidAsync("dispose", logger));
             await Task.WhenAll(jsDisposeTasks);
 
-            foreach (var jsAttachResult in _jsAttachResults.Values)
-                await jsAttachResult.DisposeAsync(logger);
+            foreach (var jsInstance in _jsInstances.Values)
+                await jsInstance.DisposeAsync(logger);
 
-            _jsAttachResults.Clear();
+            _jsInstances.Clear();
 
             _dotNetObjectReference?.Dispose();
 

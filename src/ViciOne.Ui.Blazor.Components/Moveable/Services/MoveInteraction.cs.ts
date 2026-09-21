@@ -7,7 +7,7 @@ import { SetPositionPointerCaptureBehavior } from '../../PointerCapture/Scripts/
 import { type MoveInteractionContext } from '../Models/MoveInteractionContext.cs.ts';
 import '../../Scripts/PointerEventMixins.ts';
 
-class MoveInteraction {
+export class MoveInteraction {
     readonly #movePointerCaptureBehavior = new MovePointerCaptureBehavior();
     readonly #setPositionPointerCaptureBehavior = new SetPositionPointerCaptureBehavior();
     readonly #additionalPointerCaptureBehaviors = new Set<PointerCaptureBehavior>();
@@ -91,10 +91,4 @@ class MoveInteraction {
     public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
         this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
     }
-}
-
-export async function attach(context: MoveInteractionContext) {
-    const moveInteraction = new MoveInteraction(context);
-
-    return moveInteraction;
 }

@@ -1,4 +1,4 @@
-class TagBox {
+export class TagBox {
     readonly #tagBoxElement: HTMLDivElement;
     readonly #tagInputElement: HTMLInputElement;
 
@@ -55,10 +55,4 @@ class TagBox {
         this.#tagBoxElement.removeEventListener('click', this.#tagBoxClick);
         this.#tagInputElement.removeEventListener('input', this.#inputChanged);
     }
-}
-
-export async function attach(tagBoxElement: HTMLDivElement, tagInputElement: HTMLInputElement) {
-    const tagBox = new TagBox(tagBoxElement, tagInputElement);
-
-    return tagBox;
 }

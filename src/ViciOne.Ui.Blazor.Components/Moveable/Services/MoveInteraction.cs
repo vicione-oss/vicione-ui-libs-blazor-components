@@ -17,7 +17,7 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
     private string? _assemblyName;
     private readonly Dictionary<IMoveable, Guid> _moveableIds = [];
     private readonly Dictionary<Guid, IMoveable> _moveables = [];
-    private readonly Dictionary<IMoveable, IJSObjectReference> _jsAttachResults = [];
+    private readonly Dictionary<IMoveable, IJSObjectReference> _jsInstances = [];
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<MoveInteraction>? _dotNetObjectReference;
 
@@ -37,7 +37,7 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
             await _semaphore.WaitAsync(cancellationToken);
             try
             {
-                if (_jsAttachResults.ContainsKey(moveable))
+                if (_jsInstances.ContainsKey(moveable))
                     return;
 
                 _assemblyName ??= typeof(MoveInteraction).Assembly.GetName().Name;
@@ -68,12 +68,16 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
                     moveInteractionContext.PointerCaptureBehaviors = [.. pointerCaptureBehaviorJsObjects.OfType<IJSObjectReference>()];
                 }
 
-                var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", cancellationToken, moveInteractionContext);
+                var jsInstance = await _jsModule.InvokeConstructorAsync("MoveInteraction", logger,
+                    cancellationToken, moveInteractionContext);
+
+                if (jsInstance is null)
+                    return;
 
                 _moveableIds.Add(moveable, moveableId);
                 _moveables.Add(moveableId, moveable);
 
-                _jsAttachResults.Add(moveable, jsAttachResult);
+                _jsInstances.Add(moveable, jsInstance);
             }
             finally
             {
@@ -108,12 +112,12 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
                     _moveableIds.Remove(moveable);
                 }
 
-                if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
+                if (_jsInstances.TryGetValue(moveable, out var jsInstance))
                 {
-                    await jsAttachResult.InvokeVoidAsync("dispose", logger, cancellationToken);
-                    await jsAttachResult.DisposeAsync(logger);
+                    await jsInstance.InvokeVoidAsync("dispose", logger, cancellationToken);
+                    await jsInstance.DisposeAsync(logger);
 
-                    _jsAttachResults.Remove(moveable);
+                    _jsInstances.Remove(moveable);
                 }
             }
             finally
@@ -146,8 +150,8 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
                 if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
                     return;
 
-                if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
-                    await jsAttachResult.InvokeVoidAsync("addPointerCaptureBehavior", logger, cancellationToken, jsObject);
+                if (_jsInstances.TryGetValue(moveable, out var jsInstance))
+                    await jsInstance.InvokeVoidAsync("addPointerCaptureBehavior", logger, cancellationToken, jsObject);
             }
             finally
             {
@@ -179,8 +183,8 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
                 if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
                     return;
 
-                if (_jsAttachResults.TryGetValue(moveable, out var jsAttachResult))
-                    await jsAttachResult.InvokeVoidAsync("removePointerCaptureBehavior", logger, cancellationToken, jsObject);
+                if (_jsInstances.TryGetValue(moveable, out var jsInstance))
+                    await jsInstance.InvokeVoidAsync("removePointerCaptureBehavior", logger, cancellationToken, jsObject);
             }
             finally
             {
@@ -211,13 +215,13 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
             _moveables.Clear();
             _moveableIds.Clear();
 
-            var jsDisposeTasks = _jsAttachResults.Values.Select(jsAttachResult => jsAttachResult.InvokeVoidAsync("dispose", logger));
+            var jsDisposeTasks = _jsInstances.Values.Select(jsInstance => jsInstance.InvokeVoidAsync("dispose", logger));
             await Task.WhenAll(jsDisposeTasks);
 
-            foreach (var jsAttachResult in _jsAttachResults.Values)
-                await jsAttachResult.DisposeAsync(logger);
+            foreach (var jsInstance in _jsInstances.Values)
+                await jsInstance.DisposeAsync(logger);
 
-            _jsAttachResults.Clear();
+            _jsInstances.Clear();
 
             _dotNetObjectReference?.Dispose();
 

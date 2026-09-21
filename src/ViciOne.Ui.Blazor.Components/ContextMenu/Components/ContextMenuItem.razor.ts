@@ -1,7 +1,7 @@
 import { MouseLeaveDirection } from '../Enums/MouseLeaveDirection.cs.ts';
 import { ChildContextMenuPosition } from '../Models/ChildContextMenuPosition.cs.ts';
 
-class ContextMenuItem {
+export class ContextMenuItem {
     readonly #dotNetObject: DotNet.DotNetObject;
     #htmlElementObservedForMouseLeave: HTMLElement | undefined = undefined;
 
@@ -160,10 +160,4 @@ class ContextMenuItem {
         if (this.#htmlElementObservedForMouseLeave !== undefined)
             this.endObserveMouseLeave();
     }
-}
-
-export async function attach(dotNetObject: DotNet.DotNetObject) {
-    const contextMenuItem = new ContextMenuItem(dotNetObject);
-
-    return contextMenuItem;
 }

@@ -66,14 +66,14 @@ public sealed class DragInteractionTests
     [Theory]
     [InlineData(null)]
     [InlineData(ModifierKey.Alt)]
-    public async Task Should_invoke_js_attach_on_attach(ModifierKey? modifierKey)
+    public async Task Should_invoke_js_constructor_on_attach(ModifierKey? modifierKey)
     {
         // Arrange
         await using var testContext = new BunitContext();
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -82,19 +82,19 @@ public sealed class DragInteractionTests
         await dragInteraction.AttachAsync(draggable, modifierKey);
 
         // Assert
-        Expression<Func<JSRuntimeInvocation, bool>> matcher = i => i.Identifier == "attach";
+        Expression<Func<JSRuntimeInvocation, bool>> matcher = i => i.Identifier == "DragInteraction";
         jsModule.Invocations.Should().Contain(matcher);
     }
 
     [Fact]
-    public async Task Should_pass_null_behaviors_to_js_attach_when_not_provided()
+    public async Task Should_pass_null_behaviors_to_js_constructor_when_not_provided()
     {
         // Arrange
         await using var testContext = new BunitContext();
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -103,19 +103,19 @@ public sealed class DragInteractionTests
         await dragInteraction.AttachAsync(draggable);
 
         // Assert
-        var invocation = jsModule.Invocations.First(i => i.Identifier == "attach");
+        var invocation = jsModule.Invocations.First(i => i.Identifier == "DragInteraction");
         ((DragInteractionContext)invocation.Arguments[0]!).PointerCaptureBehaviors.Should().BeNull();
     }
 
     [Fact]
-    public async Task Should_pass_behavior_js_objects_to_js_attach()
+    public async Task Should_pass_behavior_js_objects_to_js_constructor()
     {
         // Arrange
         await using var testContext = new BunitContext();
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var behaviorJsObject = Substitute.For<IJSObjectReference>();
         var behavior = Substitute.For<IPointerCaptureBehavior>();
@@ -128,7 +128,7 @@ public sealed class DragInteractionTests
         await dragInteraction.AttachAsync(draggable, pointerCaptureBehaviors: [behavior]);
 
         // Assert
-        var invocation = jsModule.Invocations.First(i => i.Identifier == "attach");
+        var invocation = jsModule.Invocations.First(i => i.Identifier == "DragInteraction");
         ((DragInteractionContext)invocation.Arguments[0]!).PointerCaptureBehaviors.Should().BeEquivalentTo([behaviorJsObject]);
     }
 
@@ -140,7 +140,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var behavior = Substitute.For<IPointerCaptureBehavior>();
         behavior.GetJsObjectAsync().Returns(Task.FromResult<IJSObjectReference?>(null));
@@ -152,32 +152,32 @@ public sealed class DragInteractionTests
         await dragInteraction.AttachAsync(draggable, pointerCaptureBehaviors: [behavior]);
 
         // Assert
-        var invocation = jsModule.Invocations.First(i => i.Identifier == "attach");
+        var invocation = jsModule.Invocations.First(i => i.Identifier == "DragInteraction");
         ((DragInteractionContext)invocation.Arguments[0]!).PointerCaptureBehaviors.Should().BeEmpty();
     }
 
     [Fact]
-    public async Task Should_not_reinvoke_js_attach_when_already_attached()
+    public async Task Should_not_reinvoke_js_constructor_when_already_attached()
     {
         // Arrange
         await using var testContext = new BunitContext();
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
 
         await dragInteraction.AttachAsync(draggable);
-        var attachCountAfterFirst = jsModule.Invocations.Count(i => i.Identifier == "attach");
+        var constructorInvocationCountAfterFirst = jsModule.Invocations.Count(i => i.Identifier == "DragInteraction");
 
         // Act — attach same draggable again
         await dragInteraction.AttachAsync(draggable);
 
         // Assert
-        jsModule.Invocations.Count(i => i.Identifier == "attach")
-            .Should().Be(attachCountAfterFirst);
+        jsModule.Invocations.Count(i => i.Identifier == "DragInteraction")
+            .Should().Be(constructorInvocationCountAfterFirst);
     }
 
     [Fact]
@@ -197,14 +197,14 @@ public sealed class DragInteractionTests
     }
 
     [Fact]
-    public async Task Should_invoke_dispose_on_js_attach_result_on_remove()
+    public async Task Should_invoke_dispose_on_js_instance_on_remove()
     {
         // Arrange
         await using var testContext = new BunitContext();
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
         var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
@@ -221,14 +221,14 @@ public sealed class DragInteractionTests
     }
 
     [Fact]
-    public async Task Should_invoke_dispose_on_js_attach_result_on_dispose_async()
+    public async Task Should_invoke_dispose_on_js_instance_on_dispose_async()
     {
         // Arrange
         await using var testContext = new BunitContext();
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
         var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
@@ -252,7 +252,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = (DragInteraction)testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -262,7 +262,8 @@ public sealed class DragInteractionTests
 
         await dragInteraction.AttachAsync(draggable);
 
-        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!).DraggableId;
+        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction")
+            .Arguments[0]!).DraggableId;
 
         dragInteraction.DragStart += (_, args) => args.Dropzones.Add(dropzone);
 
@@ -285,7 +286,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = (DragInteraction)testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -293,7 +294,8 @@ public sealed class DragInteractionTests
 
         await dragInteraction.AttachAsync(draggable);
 
-        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!).DraggableId;
+        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction")
+            .Arguments[0]!).DraggableId;
 
         dragInteraction.DragStart += (_, args) => args.Dropzones.Add(dropzone);
 
@@ -315,7 +317,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = (DragInteraction)testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -323,7 +325,8 @@ public sealed class DragInteractionTests
 
         await dragInteraction.AttachAsync(draggable);
 
-        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!).DraggableId;
+        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction")
+            .Arguments[0]!).DraggableId;
 
         dragInteraction.DragStart += (_, args) => args.Dropzones.Add(dropzone);
 
@@ -345,7 +348,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = (DragInteraction)testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -356,7 +359,8 @@ public sealed class DragInteractionTests
 
         await dragInteraction.AttachAsync(draggable);
 
-        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!).DraggableId;
+        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction")
+            .Arguments[0]!).DraggableId;
 
         dragInteraction.DragStart += (_, args) =>
         {
@@ -382,7 +386,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = (DragInteraction)testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -393,7 +397,8 @@ public sealed class DragInteractionTests
 
         await dragInteraction.AttachAsync(draggable);
 
-        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!).DraggableId;
+        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction")
+            .Arguments[0]!).DraggableId;
 
         dragInteraction.DragStart += (_, args) =>
         {
@@ -420,7 +425,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
         var dragInteraction = (DragInteraction)testContext.Services.GetRequiredService<IDragInteraction>();
@@ -434,7 +439,8 @@ public sealed class DragInteractionTests
 
         await dragInteraction.AttachAsync(draggable);
 
-        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!).DraggableId;
+        var draggableId = ((DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction")
+            .Arguments[0]!).DraggableId;
 
         dragInteraction.DragStart += (_, args) => args.Dropzones.Add(dropzone);
 
@@ -454,7 +460,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragInteraction = testContext.Services.GetRequiredService<IDragInteraction>();
         var draggable = new TestDraggable();
@@ -463,7 +469,7 @@ public sealed class DragInteractionTests
         await dragInteraction.AttachAsync(draggable);
 
         // Assert — no drag ghost → JS falls back to the default ghost element
-        var context = (DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!;
+        var context = (DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction").Arguments[0]!;
         context.DragGhostJsModule.Should().BeNull();
     }
 
@@ -475,7 +481,7 @@ public sealed class DragInteractionTests
         testContext.Services.MockServicesForDragInteraction().AddDraggable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("DragInteraction", _ => true);
 
         var dragGhostJsModuleDescriptor = new DragGhostJsModuleDescriptor
         {
@@ -492,7 +498,7 @@ public sealed class DragInteractionTests
         // Act
         await dragInteraction.AttachAsync(draggable, dragGhost: dragGhost);
 
-        var context = (DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "attach").Arguments[0]!;
+        var context = (DragInteractionContext)jsModule.Invocations.First(i => i.Identifier == "DragInteraction").Arguments[0]!;
         context.DragGhostJsModule.Should().BeSameAs(dragGhostJsModuleDescriptor);
         context.DragGhostJsModule!.ModuleName.Should().Be("./module.js");
         context.DragGhostJsModule.CreateFunction.Name.Should().Be("the-function");

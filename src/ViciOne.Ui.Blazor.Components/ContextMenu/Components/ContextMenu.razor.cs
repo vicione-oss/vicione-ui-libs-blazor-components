@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Models;
+using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Popup.Components;
 using ViciOne.Ui.Blazor.Components.Popup.Services;
 
@@ -32,7 +33,7 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
 
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<ContextMenu>? _dotNetObjectReference;
-    private IJSObjectReference? _jsAttachResult;
+    private IJSObjectReference? _jsInstance;
     private Task? _attachJsTask;
 
     private bool _disposed;
@@ -111,10 +112,10 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
                 await _attachJsTask;
             }
 
-            if (_jsAttachResult is null || state.MouseEventArgs is null || _elementReference.Equals(default))
+            if (_jsInstance is null || state.MouseEventArgs is null || _elementReference.Equals(default))
                 return;
 
-            _position = await _jsAttachResult.InvokeAsync<ContextMenuPosition>("calculatePosition",
+            _position = await _jsInstance.InvokeAsync<ContextMenuPosition>("calculatePosition",
                 _elementReference, state.MouseEventArgs);
 
             _itemFilter = state.ItemFilter;
@@ -304,33 +305,33 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
 
     private async Task AttachJsAsync()
     {
-        if (_jsAttachResult is null)
+        if (_jsInstance is null)
         {
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(ContextMenu).Assembly.GetName().Name}/context-menu/components/context-menu.js");
 
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
-            _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _dotNetObjectReference);
+            _jsInstance = await _jsModule.InvokeConstructorAsync("ContextMenu", Logger, _dotNetObjectReference);
         }
     }
 
     private async Task RemoveJsAsync()
-        => await DisposeJsAttachResultAsync();
+        => await DisposeJsInstanceAsync();
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsAttachResult.dispose() failed")]
-    private static partial void InvokingJsAttachResultDisposeFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    private static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
 
-    private async Task DisposeJsAttachResultAsync()
+    private async Task DisposeJsInstanceAsync()
     {
-        if (_jsAttachResult is not null)
+        if (_jsInstance is not null)
         {
             try
             {
-                await _jsAttachResult.InvokeVoidAsync("dispose");
+                await _jsInstance.InvokeVoidAsync("dispose");
             }
             catch (JSDisconnectedException)
             {
@@ -338,12 +339,12 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
             }
             catch (Exception ex)
             {
-                InvokingJsAttachResultDisposeFailed(Logger, ex);
+                InvokingJsInstanceDisposeFailed(Logger, ex);
             }
 
             try
             {
-                await _jsAttachResult.DisposeAsync();
+                await _jsInstance.DisposeAsync();
             }
             catch (JSDisconnectedException)
             {
@@ -351,10 +352,10 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
             }
             catch (Exception ex)
             {
-                DisposingJsAttachResultFailed(Logger, ex);
+                DisposingJsInstanceFailed(Logger, ex);
             }
 
-            _jsAttachResult = null;
+            _jsInstance = null;
         }
     }
 
@@ -363,11 +364,11 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
         if (_isChildContextMenu)
             return;
 
-        if (_jsAttachResult is null)
+        if (_jsInstance is null)
             return;
 
         if (Interlocked.Exchange(ref _isObservingWindowPointerDown, 1) == 0)
-            await _jsAttachResult.InvokeVoidAsync("startObserveWindowPointerDown");
+            await _jsInstance.InvokeVoidAsync("startObserveWindowPointerDown");
     }
 
     private async Task EndObserveWindowPointerDownAsync()
@@ -375,11 +376,11 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
         if (_isChildContextMenu)
             return;
 
-        if (_jsAttachResult is null)
+        if (_jsInstance is null)
             return;
 
         if (Interlocked.Exchange(ref _isObservingWindowPointerDown, 0) == 1)
-            await _jsAttachResult.InvokeVoidAsync("endObserveWindowPointerDown");
+            await _jsInstance.InvokeVoidAsync("endObserveWindowPointerDown");
     }
 
     void IContextMenu.RegisterContextMenuItem(IContextMenuItem contextMenuItem)

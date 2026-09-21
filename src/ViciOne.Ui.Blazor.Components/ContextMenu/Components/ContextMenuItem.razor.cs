@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Enums;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Models;
+using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 
 namespace ViciOne.Ui.Blazor.Components.ContextMenu.Components;
@@ -18,7 +19,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<ContextMenuItem>? _dotNetObjectReference;
-    private IJSObjectReference? _jsAttachResult;
+    private IJSObjectReference? _jsInstance;
     private Task? _attachJsTask;
 
     private bool _disposedAsync;
@@ -137,33 +138,33 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private async Task AttachJsAsync()
     {
-        if (_jsAttachResult is null)
+        if (_jsInstance is null)
         {
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(ContextMenu).Assembly.GetName().Name}/context-menu/components/context-menu-item.js");
 
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
-            _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _dotNetObjectReference);
+            _jsInstance = await _jsModule.InvokeConstructorAsync("ContextMenuItem", Logger, _dotNetObjectReference);
         }
     }
 
     private async Task RemoveJsAsync()
-        => await DisposeJsAttachResultAsync();
+        => await DisposeJsInstanceAsync();
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsAttachResult.dispose() failed")]
-    private static partial void InvokingJsAttachResultDisposeFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    private static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
 
-    private async Task DisposeJsAttachResultAsync()
+    private async Task DisposeJsInstanceAsync()
     {
-        if (_jsAttachResult is not null)
+        if (_jsInstance is not null)
         {
             try
             {
-                await _jsAttachResult.InvokeVoidAsync("dispose");
+                await _jsInstance.InvokeVoidAsync("dispose");
             }
             catch (JSDisconnectedException)
             {
@@ -171,12 +172,12 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             }
             catch (Exception ex)
             {
-                InvokingJsAttachResultDisposeFailed(Logger, ex);
+                InvokingJsInstanceDisposeFailed(Logger, ex);
             }
 
             try
             {
-                await _jsAttachResult.DisposeAsync();
+                await _jsInstance.DisposeAsync();
             }
             catch (JSDisconnectedException)
             {
@@ -184,10 +185,10 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             }
             catch (Exception ex)
             {
-                DisposingJsAttachResultFailed(Logger, ex);
+                DisposingJsInstanceFailed(Logger, ex);
             }
 
-            _jsAttachResult = null;
+            _jsInstance = null;
         }
     }
 
@@ -227,10 +228,10 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
     {
         if (Interlocked.Exchange(ref _observingMouseLeave, 1) == 0)
         {
-            if (_jsAttachResult is null || _htmlElementReference is null)
+            if (_jsInstance is null || _htmlElementReference is null)
                 return;
 
-            await _jsAttachResult.InvokeVoidAsync("startObserveMouseLeave", _htmlElementReference.Value);
+            await _jsInstance.InvokeVoidAsync("startObserveMouseLeave", _htmlElementReference.Value);
         }
     }
 
@@ -238,10 +239,10 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
     {
         if (Interlocked.Exchange(ref _observingMouseLeave, 0) == 1)
         {
-            if (_jsAttachResult is null)
+            if (_jsInstance is null)
                 return;
 
-            await _jsAttachResult.InvokeVoidAsync("endObserveMouseLeave");
+            await _jsInstance.InvokeVoidAsync("endObserveMouseLeave");
         }
     }
 
@@ -295,7 +296,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private async void ShowChildContentMenuTimerElapsedAsync(object? sender, ElapsedEventArgs e)
     {
-        if (_jsAttachResult is null ||
+        if (_jsInstance is null ||
             _htmlElementReference is null ||
             _childContextMenu is null ||
             _childContextMenuMouseEventArgs is null)
@@ -303,7 +304,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             return;
         }
 
-        var childContextMenuPosition = await _jsAttachResult.InvokeAsync<ChildContextMenuPosition>("calculateChildContextMenuPosition",
+        var childContextMenuPosition = await _jsInstance.InvokeAsync<ChildContextMenuPosition>("calculateChildContextMenuPosition",
             _htmlElementReference, _childContextMenu.ElementReference);
 
         if (childContextMenuPosition is null)

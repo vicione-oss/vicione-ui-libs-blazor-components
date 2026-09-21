@@ -19,7 +19,7 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
 
     private readonly Dictionary<IDraggable, Guid> _draggableIds = [];
     private readonly Dictionary<Guid, IDraggable> _draggables = [];
-    private readonly Dictionary<IDraggable, IJSObjectReference> _jsAttachResults = [];
+    private readonly Dictionary<IDraggable, IJSObjectReference> _jsInstances = [];
     private readonly Dictionary<Guid, IDropzone> _dropzones = [];
 
     private string? _assemblyName;
@@ -37,7 +37,7 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
         IDragGhost? dragGhost = null)
         => ExecuteGuardedAsync(async () =>
         {
-            if (_jsAttachResults.ContainsKey(draggable))
+            if (_jsInstances.ContainsKey(draggable))
                 return;
 
             _assemblyName ??= typeof(DragInteraction).Assembly.GetName().Name;
@@ -68,13 +68,16 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
                 dragInteractionContext.PointerCaptureBehaviors = [.. pointerCaptureBehaviorJsObjects.OfType<IJSObjectReference>()];
             }
 
-            var jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _cancellationTokenSource.Token,
-                dragInteractionContext);
+            var jsInstance = await _jsModule.InvokeConstructorAsync("DragInteraction", logger,
+                _cancellationTokenSource.Token, dragInteractionContext);
+
+            if (jsInstance is null)
+                return;
 
             _draggableIds.Add(draggable, draggableId);
             _draggables.Add(draggableId, draggable);
 
-            _jsAttachResults.Add(draggable, jsAttachResult);
+            _jsInstances.Add(draggable, jsInstance);
         });
 
     public Task RemoveAsync(IDraggable draggable)
@@ -86,12 +89,12 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
                 _draggableIds.Remove(draggable);
             }
 
-            if (_jsAttachResults.TryGetValue(draggable, out var jsAttachResult))
+            if (_jsInstances.TryGetValue(draggable, out var jsInstance))
             {
-                await jsAttachResult.InvokeVoidAsync("dispose", logger, _cancellationTokenSource.Token);
-                await jsAttachResult.DisposeAsync(logger);
+                await jsInstance.InvokeVoidAsync("dispose", logger, _cancellationTokenSource.Token);
+                await jsInstance.DisposeAsync(logger);
 
-                _jsAttachResults.Remove(draggable);
+                _jsInstances.Remove(draggable);
             }
         });
 
@@ -101,8 +104,8 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
             if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
                 return;
 
-            if (_jsAttachResults.TryGetValue(draggable, out var jsAttachResult))
-                await jsAttachResult.InvokeVoidAsync("addPointerCaptureBehavior", logger, _cancellationTokenSource.Token, jsObject);
+            if (_jsInstances.TryGetValue(draggable, out var jsInstance))
+                await jsInstance.InvokeVoidAsync("addPointerCaptureBehavior", logger, _cancellationTokenSource.Token, jsObject);
         });
 
     public Task RemovePointerCaptureBehaviorAsync(IDraggable draggable, IPointerCaptureBehavior pointerCaptureBehavior)
@@ -111,8 +114,8 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
             if (await pointerCaptureBehavior.GetJsObjectAsync() is not IJSObjectReference jsObject)
                 return;
 
-            if (_jsAttachResults.TryGetValue(draggable, out var jsAttachResult))
-                await jsAttachResult.InvokeVoidAsync("removePointerCaptureBehavior", logger, _cancellationTokenSource.Token, jsObject);
+            if (_jsInstances.TryGetValue(draggable, out var jsInstance))
+                await jsInstance.InvokeVoidAsync("removePointerCaptureBehavior", logger, _cancellationTokenSource.Token, jsObject);
         });
 
     public async ValueTask DisposeAsync()
@@ -136,13 +139,13 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
             _draggableIds.Clear();
             _dropzones.Clear();
 
-            var jsDisposeTasks = _jsAttachResults.Values.Select(jsAttachResult => jsAttachResult.InvokeVoidAsync("dispose", logger));
+            var jsDisposeTasks = _jsInstances.Values.Select(jsInstance => jsInstance.InvokeVoidAsync("dispose", logger));
             await Task.WhenAll(jsDisposeTasks);
 
-            foreach (var jsAttachResult in _jsAttachResults.Values)
-                await jsAttachResult.DisposeAsync(logger);
+            foreach (var jsInstance in _jsInstances.Values)
+                await jsInstance.DisposeAsync(logger);
 
-            _jsAttachResults.Clear();
+            _jsInstances.Clear();
 
             _dotNetObjectReference?.Dispose();
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using ViciOne.Ui.Blazor.Components.Extensions;
 using DropDownLocalization = ViciOne.Ui.Blazor.Components.Resources.DropDown.Localization.DropDown;
 
 namespace ViciOne.Ui.Blazor.Components.DropDown;
@@ -16,7 +17,7 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
 {
     private ElementReference _containerElement;
     private IJSObjectReference? _jsModule;
-    private IJSObjectReference? _jsAttachResult;
+    private IJSObjectReference? _jsInstance;
     private bool _visible;
     private bool _placementApplied;
     private bool _disposedAsync;
@@ -84,12 +85,12 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
                 $"./_content/{typeof(DropDown<TItem>).Assembly.GetName().Name}/drop-down/drop-down.js");
         }
 
-        if (!_disposedAsync && _jsModule is not null && _jsAttachResult is null)
+        if (!_disposedAsync && _jsModule is not null && _jsInstance is null)
         {
-            _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _containerElement);
+            _jsInstance = await _jsModule.InvokeConstructorAsync("DropDown", Logger, _containerElement);
 
-            if (!_disposedAsync && _jsAttachResult is not null)
-                await _jsAttachResult.InvokeVoidAsync("setMinimumWidth");
+            if (!_disposedAsync && _jsInstance is not null)
+                await _jsInstance.InvokeVoidAsync("setMinimumWidth");
         }
 
         await AttachInputElementIfNeededAsync();
@@ -98,15 +99,15 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
 
     private async Task AttachInputElementIfNeededAsync()
     {
-        if (_disposedAsync || _jsAttachResult is null || InputElementReference is not { } inputElement)
+        if (_disposedAsync || _jsInstance is null || InputElementReference is not { } inputElement)
             return;
 
-        await _jsAttachResult.InvokeVoidAsync("attachInputElement", inputElement);
+        await _jsInstance.InvokeVoidAsync("attachInputElement", inputElement);
     }
 
     private async Task UpdatePlacementIfNeededAsync()
     {
-        if (_disposedAsync || _jsAttachResult is null)
+        if (_disposedAsync || _jsInstance is null)
             return;
 
         if (!_visible)
@@ -114,13 +115,13 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
             if (_placementApplied)
             {
                 _placementApplied = false;
-                await _jsAttachResult.InvokeVoidAsync("resetPlacement");
+                await _jsInstance.InvokeVoidAsync("resetPlacement");
             }
 
             return;
         }
 
-        await _jsAttachResult.InvokeVoidAsync("updatePlacement");
+        await _jsInstance.InvokeVoidAsync("updatePlacement");
         _placementApplied = true;
     }
 
@@ -168,13 +169,13 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
     private bool IsMostRecentlySelected(TItem item)
         => SelectedItems.TakeLast(1).Contains(item);
 
-    private async Task DisposeJsAttachResultAsync()
+    private async Task DisposeJsInstanceAsync()
     {
-        if (_jsAttachResult is not null)
+        if (_jsInstance is not null)
         {
             try
             {
-                await _jsAttachResult.InvokeVoidAsync("dispose");
+                await _jsInstance.InvokeVoidAsync("dispose");
             }
             catch (JSDisconnectedException)
             {
@@ -182,12 +183,12 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
             }
             catch (Exception ex)
             {
-                InvokingJsAttachResultDisposeFailed(Logger, ex);
+                InvokingJsInstanceDisposeFailed(Logger, ex);
             }
 
             try
             {
-                await _jsAttachResult.DisposeAsync();
+                await _jsInstance.DisposeAsync();
             }
             catch (JSDisconnectedException)
             {
@@ -195,10 +196,10 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
             }
             catch (Exception ex)
             {
-                DisposingJsAttachResultFailed(Logger, ex);
+                DisposingJsInstanceFailed(Logger, ex);
             }
 
-            _jsAttachResult = null;
+            _jsInstance = null;
         }
     }
 
@@ -208,7 +209,7 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
         if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
 
-        await DisposeJsAttachResultAsync();
+        await DisposeJsInstanceAsync();
 
         if (_jsModule is not null)
         {
@@ -226,9 +227,9 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
         _disposedAsync = true;
     }
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsAttachResult.dispose() failed")]
-    private static partial void InvokingJsAttachResultDisposeFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    private static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
 }

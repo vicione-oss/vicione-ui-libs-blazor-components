@@ -2,7 +2,7 @@ import { ComputedBackgroundColor } from '../../Scripts/ComputedBackgroundColor.t
 import '../../Scripts/HtmlElementMixins.ts';
 import '../../Scripts/StringMixins.ts';
 
-class TabStrip {
+export class TabStrip {
     readonly #dotNetObject: DotNet.DotNetObject;
     readonly #scrollContainer: HTMLElement;
     readonly #tabsViewport: HTMLElement | undefined;
@@ -246,8 +246,4 @@ class TabStrip {
         this.#scrollContainer.removeEventListener('focusin', this.#onFocusIn);
         this.#scrollContainer.removeEventListener('keydown', this.#onKeyDown);
     }
-}
-
-export function attach(dotNetObject: DotNet.DotNetObject, scrollContainer: HTMLElement) {
-    return new TabStrip(dotNetObject, scrollContainer);
 }

@@ -14,8 +14,8 @@ public sealed partial class TabStripTests
             _testContext = new BunitContext();
 
             var jsModule = _testContext.JSInterop.SetupModule(s_jsModuleIdentifier);
-            var jsAttachResult = jsModule.SetupModule("attach", _ => true);
-            jsAttachResult.Mode = JSRuntimeMode.Loose;
+            var jsInstance = jsModule.SetupModule("TabStrip", _ => true);
+            jsInstance.Mode = JSRuntimeMode.Loose;
         }
 
         public ValueTask DisposeAsync()

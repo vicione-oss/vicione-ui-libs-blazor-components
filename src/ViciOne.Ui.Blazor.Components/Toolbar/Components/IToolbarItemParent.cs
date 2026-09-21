@@ -7,4 +7,5 @@ internal interface IToolbarItemParent
     void AddChild(IToolbarChild child);
     void RemoveChild(IToolbarChild child);
     void ChildSizeChanged();
+    void MenuChildrenChanged();
 }

@@ -14,80 +14,12 @@
             <MonochromeIcon Name="MonochromeIconName.KebabMenu" Size="MonochromeIconSize.SmallMedium"/>
 
             <div @ref="_menu" class="menu" tabindex="-1" @onclick:stopPropagation>
-                <CascadingValue Name="InMenu" Value="true" IsFixed="true">
-                    @RenderMenuItems(_children)
+                <CascadingValue Value="this" IsFixed="true">
+                    <CascadingValue Name="InMenu" Value="true" IsFixed="true">
+                        @ChildContent
+                    </CascadingValue>
                 </CascadingValue>
             </div>
         </div>
     }
 </div>
-
-@code {
-    private RenderFragment RenderMenuItems(IReadOnlyList<IToolbarChild> children) =>
-        @<text>
-            <CascadingValue Value="this" IsFixed="true">
-                @foreach (var child in children)
-                {
-                    // Skip all items that are not hidden in the main toolbar to prevent duplicates
-                    if (child is ToolbarItemBase && !child.IsHidden())
-                        continue;
-
-                    if (child is ToolbarButton button)
-                    {
-                        <ToolbarButton @key="child"
-                                       CssClass="@button.CssClass"
-                                       IconName="@button.IconName"
-                                       OnClick="button.OnClick"
-                                       Text="@button.Text"
-                                       TextVisibility="@button.TextVisibility"
-                                       Tooltip="@button.Tooltip"
-                                       Enabled="@button.Enabled"
-                                       Visible="@button.Visible"
-                                       Active="@button.Active" />
-                    }
-                    else if (child is ToolbarContent content)
-                    {
-                        <ToolbarContent @key="child"
-                                        CssClass="@content.CssClass"
-                                        OnClick="@content.OnClick"
-                                        Tooltip="@content.Tooltip"
-                                        Enabled="@content.Enabled"
-                                        Visible="@content.Visible"
-                                        ChildContent="@content.ChildContent" />
-                    }
-                    else if (child is ToolbarGroup group)
-                    {
-                        // Attention:
-                        // Never attempt to optimize away the rendering of groups, as this is necessary
-                        // to ensure the same rendering order as in "ChildContent", otherwise "child"
-                        // is not updated when its parameters are used to initialize menu items.
-                        //
-                        // Here is an example. The render order is indicated by *.
-                        //
-                        // *1 @ChildContent
-                        // *2     <ToolbarGroup>
-                        // *3       <ToolbarButton Text="Button 1" OnClick="... _active = !active " /> <!-- this one toggles the active state
-                        // *3       <ToolbarButton Text="Button 1" Active="@_active" /> (2)
-                        //        </ToolbarGroup>
-                        //
-                        // *1 @RenderMenuItems(...)
-                        // *2   <ToolbarGroup> <-- If we omitted groups, element (1) would be rendered on *2,
-                        //                         while buttonItem2 would not be updated yet, as it is rendered on * 3.
-                        //                         This would cause the "Active" parameter to receive the value from the
-                        //                         previous render cycle.
-                        // *3       <ToolbarButton ... />
-                        // *3       <ToolbarButton Active="@buttonItem2.Active" /> (1)
-                        //      </ToolbarGroup>
-
-                        // Only show a group if at least one of its children is actually in the menu
-                        if (child.Children.Any(c => c.IsHidden()))
-                        {
-                            <ToolbarGroup AlignRight="group.AlignRight">
-                                @RenderMenuItems(child.Children)
-                            </ToolbarGroup>
-                        }
-                    }
-                }
-            </CascadingValue>
-        </text>;
-}

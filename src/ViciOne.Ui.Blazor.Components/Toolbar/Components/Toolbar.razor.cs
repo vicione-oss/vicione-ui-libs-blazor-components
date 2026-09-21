@@ -20,6 +20,7 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
     private int _itemsInMenuCount;
 
     private readonly List<IToolbarChild> _children = [];
+    private readonly List<IToolbarChild> _menuChildren = [];
 
     private bool _sizeChanged;
 
@@ -39,6 +40,11 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
     /// <remarks>
     /// Use component <see cref="ToolbarGroup"/>, <see cref="ToolbarButton"/> and / or
     /// <see cref="ToolbarContent"/> to render well-defined sections of content.
+    /// <para>
+    /// When at least one item does not fit into the toolbar, the content is rendered a second time inside the menu,
+    /// so every component inside it exists twice. Inside a <see cref="ToolbarContent"/>, use
+    /// <see cref="IToolbarContent.IsInMenu"/> on the context of <see cref="ToolbarContent.ChildContent"/> to tell them apart.
+    /// </para>
     /// </remarks>
     [Parameter]
     public RenderFragment? ChildContent { get; init; }
@@ -50,7 +56,7 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
     {
         if (firstRender)
         {
-            _resizeRateLimitTimer.Elapsed += ResizeRateLimitTimerElapsed;
+            _resizeRateLimitTimer.Elapsed += ResizeRateLimitTimerElapsedAsync;
 
             ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
             await ResizeObserver.ObserveAsync(_container);
@@ -60,7 +66,7 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        _resizeRateLimitTimer.Elapsed -= ResizeRateLimitTimerElapsed;
+        _resizeRateLimitTimer.Elapsed -= ResizeRateLimitTimerElapsedAsync;
         _resizeRateLimitTimer.Stop();
         _resizeRateLimitTimer.Dispose();
 
@@ -68,25 +74,54 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
         await ResizeObserver.UnobserveAsync(_container);
     }
 
-    private void ResizeRateLimitTimerElapsed(object? sender, ElapsedEventArgs e)
+    private async void ResizeRateLimitTimerElapsedAsync(object? sender, ElapsedEventArgs e)
     {
         // Sufficient to exchange value here (before handling) without an race condition guard.
         // Worst possible case is a parallel reset to true before we did the handling,
         // which will cause another loop with identical data once again after (= one useless handling call).
-        if (Interlocked.CompareExchange(ref _sizeChanged, false, true))
-            HandleSizeChanged();
+        if (!Interlocked.CompareExchange(ref _sizeChanged, false, true))
+            return;
+
+        try
+        {
+            // Timer callbacks run on a thread pool thread, but component re-render and state changes need to be
+            // synchronized with the renderer's synchronization context, using InvokeAsync().
+            await InvokeAsync(HandleSizeChanged);
+        }
+        catch (Exception exception)
+        {
+            await DispatchExceptionAsync(exception);
+        }
     }
 
     void IToolbarItemParent.AddChild(IToolbarChild child)
     {
-        if (_children.Any(x => x == child))
+        var children = child.IsInMenu() ? _menuChildren : _children;
+
+        if (children.Any(x => x == child))
             return;
 
-        _children.Add(child);
+        children.Add(child);
+
+        if (child.IsInMenu())
+            SynchronizeMenuChildren();
     }
 
     void IToolbarItemParent.RemoveChild(IToolbarChild child)
-        => _children.Remove(child);
+    {
+        if (!child.IsInMenu())
+        {
+            _children.Remove(child);
+            return;
+        }
+
+        _menuChildren.Remove(child);
+
+        SynchronizeMenuChildren();
+    }
+
+    void IToolbarItemParent.MenuChildrenChanged()
+        => SynchronizeMenuChildren();
 
     private void OnElementSizeChanged(ElementSizeChangedEventArgs args)
     {
@@ -115,8 +150,10 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
 
         HandleSizeChangedRecursive(_children, availableWidth);
 
+        SynchronizeMenuChildren();
+
         if (_itemsInMenuCount != oldItemsInMenuCount)
-            InvokeAsync(StateHasChanged);
+            StateHasChanged();
     }
 
     private double HandleSizeChangedRecursive(IEnumerable<IToolbarChild> children, double availableWidth)
@@ -208,6 +245,53 @@ public sealed partial class Toolbar : ComponentBase, IAsyncDisposable, IToolbarI
         }
 
         return child.DomRect.Width + style.MarginLeft + style.MarginRight;
+    }
+
+    private void SynchronizeMenuChildren()
+    {
+        List<IToolbarChild> changedMenuChildren = [];
+
+        SynchronizeMenuChildren(_children, _menuChildren, changedMenuChildren);
+
+        foreach (var menuChild in changedMenuChildren)
+            menuChild.Refresh();
+    }
+
+    private static void SynchronizeMenuChildren(
+        IReadOnlyList<IToolbarChild> children,
+        IReadOnlyList<IToolbarChild> menuChildren,
+        List<IToolbarChild> changedMenuChildren)
+    {
+        foreach (var (child, menuChild) in children.Zip(menuChildren))
+            SynchronizeMenuChild(child, menuChild, changedMenuChildren);
+
+        foreach (var menuChild in menuChildren.Skip(children.Count))
+            SynchronizeMenuChild(null, menuChild, changedMenuChildren);
+    }
+
+    private static void SynchronizeMenuChild(IToolbarChild? child, IToolbarChild menuChild, List<IToolbarChild> changedMenuChildren)
+    {
+        var counterpart = child?.GetType() == menuChild.GetType() ? child : null;
+
+        SynchronizeMenuChildren(counterpart?.Children ?? [], menuChild.Children, changedMenuChildren);
+
+        var hidden = IsHiddenInMenu(counterpart, menuChild);
+        if (menuChild.IsHidden() == hidden)
+            return;
+
+        menuChild.SetHidden(hidden);
+        changedMenuChildren.Add(menuChild);
+    }
+
+    private static bool IsHiddenInMenu(IToolbarChild? counterpart, IToolbarChild menuChild)
+    {
+        if (menuChild is ToolbarGroup)
+            return menuChild.Children.All(c => c.IsHidden());
+
+        if (counterpart is null)
+            return true;
+
+        return !counterpart.IsHidden();
     }
 
     private async Task ShowMenuAsync()

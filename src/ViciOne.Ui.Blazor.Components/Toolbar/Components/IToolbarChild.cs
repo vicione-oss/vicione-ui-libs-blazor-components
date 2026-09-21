@@ -8,6 +8,7 @@ internal interface IToolbarChild
     CssStyleDeclaration? Style { get; }
     IReadOnlyList<IToolbarChild> Children { get; }
     bool IsHidden();
+    bool IsInMenu();
     void SetHidden(bool hidden);
     void Refresh();
 }

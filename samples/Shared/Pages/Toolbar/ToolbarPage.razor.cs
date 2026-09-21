@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Shared.Pages.ComboBox.Models;
+using Shared.Pages.Toolbar.Models;
 
 namespace Shared.Pages.Toolbar;
 
@@ -16,6 +17,7 @@ public sealed partial class ToolbarPage : ComponentBase
         })
     ];
 
+    private readonly SampleNumber _number = new();
 
     private void ToggleActive()
         => _active = !_active;

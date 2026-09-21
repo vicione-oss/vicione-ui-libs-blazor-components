@@ -1,0 +1,26 @@
+@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.Toolbar.Components
+@using ViciOne.Ui.Blazor.Components.Toolbar.Enums
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<ToolbarGroup>
+    <ToolbarButton IconName="@MonochromeIconName.MinusSlim"
+                   OnClick="@Decrement"
+                   Text="Decrement"
+                   TextVisibility="TextVisibility.MenuOnly"
+                   Tooltip="Decrement" />
+
+    <ToolbarContent>
+        <ComboBox TItem="int"
+                  TValue="int"
+                  Items="_values"
+                  Value="@Number.Value"
+                  ValueChanged="@Number.SetValue" />
+    </ToolbarContent>
+
+    <ToolbarButton IconName="@MonochromeIconName.PlusSlim"
+                   OnClick="@Increment"
+                   Text="Increment"
+                   TextVisibility="TextVisibility.MenuOnly"
+                   Tooltip="Increment" />
+</ToolbarGroup>

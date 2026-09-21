@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.1.1 - 2026-09-21
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `Toolbar`, fixed items in the menu not being updated when their values change
+
 ## 6.1.0 - 2026-09-16
 
 ### Package `ViciOne.Ui.Blazor.Components`

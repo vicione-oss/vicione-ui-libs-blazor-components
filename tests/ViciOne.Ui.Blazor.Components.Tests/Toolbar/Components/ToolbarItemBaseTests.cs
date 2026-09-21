@@ -188,6 +188,10 @@ public sealed class ToolbarItemBaseTests : IDisposable
         public void ChildSizeChanged()
             => HandleChildChanged?.Invoke();
 
+        public void MenuChildrenChanged()
+        {
+        }
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<IToolbarItemParent>>(0);

@@ -86,6 +86,32 @@
       }
     },
     {
+      "description": "NuGet: test tooling",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchPackageNames": [
+        "AwesomeAssertions",
+        "Bogus",
+        "bunit",
+        "coverlet.collector",
+        "Microsoft.Playwright.Xunit.v3",
+        "Microsoft.Testing.Extensions.CodeCoverage",
+        "NSubstitute",
+        "NSubstitute.Analyzers.CSharp",
+        "ViciOne.Ui.Testing.Playwright",
+        "xunit.v3.mtp-v2"
+      ],
+      "enabled": true,
+      "groupName": "test tooling",
+      "groupSlug": "test-tooling",
+      "separateMajorMinor": false,
+      "separateMultipleMajor": false,
+      "separateMultipleMinor": false,
+      "separateMinorPatch": false,
+      "addLabels": [ "Renovate::Frozen" ],
+      "stopUpdatingLabel": "Renovate::Frozen"
+    },
+    {
       "description": "npm: bump the range in package.json instead of only moving package-lock.json, so both files always state the same version",
       "matchManagers": [ "npm" ],
       "rangeStrategy": "bump"

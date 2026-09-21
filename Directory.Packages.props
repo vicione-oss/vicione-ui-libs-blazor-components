@@ -4,40 +4,58 @@
     <ViciOneUiMonochromeIconsVersion>4.18.0</ViciOneUiMonochromeIconsVersion>
     <DotNetVersion>10.0.12</DotNetVersion>
   </PropertyGroup>
+
+  <!-- Analyzer packages -->
   <ItemGroup>
-    <GlobalPackageReference Include="ViciOne.CodeAnalysis" Version="1.7.0" />
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
     <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
-    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.80.6" />
-    <PackageVersion Include="AwesomeAssertions" Version="9.3.0" />
-    <PackageVersion Include="Bogus" Version="35.6.4" />
-    <PackageVersion Include="bunit" Version="2.6.2" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <GlobalPackageReference Include="ViciOne.CodeAnalysis" Version="1.7.0" />
+  </ItemGroup>
+
+  <!-- .NET packages managed by renovate.json -->
+  <ItemGroup>
     <PackageVersion Include="Microsoft.AspNetCore.Components.QuickGrid" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="$(DotNetVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(DotNetVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(DotNetVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(DotNetVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="$(DotNetVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Localization" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.59.0" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.3.1" />
-    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="7.0.1" />
-    <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
-    <PackageVersion Include="NTypewriter.CodeModel" Version="0.5.9" />
-    <PackageVersion Include="NTypewriter.SourceGenerator" Version="0.5.9" />
-    <PackageVersion Include="StronglyTypedId" Version="0.2.1" />
-    <PackageVersion Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage" Version="2.0.0" />
+  </ItemGroup>
+
+  <!-- ViciOne packages -->
+  <ItemGroup>
     <PackageVersion Include="ViciOne.MSBuild.Extensions.JavaScriptImportRewriting" Version="1.0.0" />
     <PackageVersion Include="ViciOne.Ui.Design" Version="2.5.0" />
     <PackageVersion Include="ViciOne.Ui.Localization" Version="3.0.1" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Core" Version="$(ViciOneUiMonochromeIconsVersion)" />
+  </ItemGroup>
+
+  <!-- Other packages -->
+  <ItemGroup>
+    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.80.6" />
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="7.0.1" />
+    <PackageVersion Include="NTypewriter.CodeModel" Version="0.5.9" />
+    <PackageVersion Include="NTypewriter.SourceGenerator" Version="0.5.9" />
+    <PackageVersion Include="StronglyTypedId" Version="0.2.1" />
+    <PackageVersion Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage" Version="2.0.0" />
+  </ItemGroup>
+
+  <!-- Test tooling packages managed by renovate.json -->
+  <ItemGroup>
+    <PackageVersion Include="AwesomeAssertions" Version="9.3.0" />
+    <PackageVersion Include="Bogus" Version="35.6.4" />
+    <PackageVersion Include="bunit" Version="2.6.2" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.59.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.3.1" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="ViciOne.Ui.Testing.Playwright" Version="1.0.0" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
   </ItemGroup>

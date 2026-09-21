@@ -19,8 +19,8 @@ public sealed class TabTests : IAsyncDisposable
         _testContext = new BunitContext();
 
         var module = _testContext.JSInterop.SetupModule(s_jsModuleIdentifier);
-        var attachResult = module.SetupModule("attach", _ => true);
-        attachResult.Mode = JSRuntimeMode.Loose;
+        var jsInstance = module.SetupModule("TabStrip", _ => true);
+        jsInstance.Mode = JSRuntimeMode.Loose;
     }
 
     public ValueTask DisposeAsync()

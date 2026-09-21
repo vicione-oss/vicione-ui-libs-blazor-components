@@ -66,8 +66,8 @@ public sealed class ResizeableInteractionTests
     [InlineData(true, false, false)]
     [InlineData(false, true, true)]
     [InlineData(true, true, false)]
-    public async Task Should_invoke_js_attach_method_on_attach_async(bool isAlreadyAttached, bool withPointerCaptureBehaviors,
-        bool shouldInvokeJsAttach)
+    public async Task Should_invoke_js_constructor_on_attach_async(bool isAlreadyAttached, bool withPointerCaptureBehaviors,
+        bool shouldInvokeJsConstructor)
     {
         // Arrange
         await using var testContext = new BunitContext();
@@ -76,7 +76,7 @@ public sealed class ResizeableInteractionTests
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
 
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         var resizeInteraction = testContext.Services.GetRequiredService<IResizeInteraction>();
         var resizeable = new TestResizeable();
@@ -102,13 +102,13 @@ public sealed class ResizeableInteractionTests
         await resizeInteraction.AttachAsync(resizeable, pointerCaptureBehaviors);
 
         // Assert
-        Expression<Func<JSRuntimeInvocation, bool>> invocationMatcher = i => i.Identifier == "attach";
+        Expression<Func<JSRuntimeInvocation, bool>> invocationMatcher = i => i.Identifier == "ResizeInteraction";
 
         var invocations = jsModule.Invocations.ToList();
         if (isAlreadyAttached)
             invocations = [.. invocations.Skip(skipInvocationCount)];
 
-        if (shouldInvokeJsAttach)
+        if (shouldInvokeJsConstructor)
         {
             var invocation = jsModule.Invocations.First(invocationMatcher.Compile());
             var argument = invocation.Arguments.OfType<ResizeInteractionContext>().First();
@@ -194,7 +194,7 @@ public sealed class ResizeableInteractionTests
     }
 
     [Fact]
-    public async Task Should_invoke_dispose_on_js_attach_result_on_dispose()
+    public async Task Should_invoke_dispose_on_js_instance_on_dispose()
     {
         // Arrange
         await using var testContext = new BunitContext();
@@ -202,7 +202,7 @@ public sealed class ResizeableInteractionTests
             .AddResizeable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -220,7 +220,7 @@ public sealed class ResizeableInteractionTests
     }
 
     [Fact]
-    public async Task Should_invoke_dispose_on_js_attach_result_when_remove_async()
+    public async Task Should_invoke_dispose_on_js_instance_when_remove_async()
     {
         // Arrange
         await using var testContext = new BunitContext();
@@ -228,7 +228,7 @@ public sealed class ResizeableInteractionTests
             .AddResizeable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -254,7 +254,7 @@ public sealed class ResizeableInteractionTests
             .AddResizeable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -263,7 +263,7 @@ public sealed class ResizeableInteractionTests
 
         await resizeInteraction.AttachAsync(resizeable);
 
-        var invocation = jsModule.Invocations.First(i => i.Identifier == "attach");
+        var invocation = jsModule.Invocations.First(i => i.Identifier == "ResizeInteraction");
         var context = invocation.Arguments.OfType<ResizeInteractionContext>().First();
 
         // Act
@@ -296,7 +296,7 @@ public sealed class ResizeableInteractionTests
     }
 
     [Fact]
-    public async Task Should_invoke_add_pointer_capture_behavior_on_js_attach_result()
+    public async Task Should_invoke_add_pointer_capture_behavior_on_js_instance()
     {
         // Arrange
         await using var testContext = new BunitContext();
@@ -304,7 +304,7 @@ public sealed class ResizeableInteractionTests
             .AddResizeable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -327,7 +327,7 @@ public sealed class ResizeableInteractionTests
     }
 
     [Fact]
-    public async Task Should_invoke_remove_pointer_capture_behavior_on_js_attach_result()
+    public async Task Should_invoke_remove_pointer_capture_behavior_on_js_instance()
     {
         // Arrange
         await using var testContext = new BunitContext();
@@ -335,7 +335,7 @@ public sealed class ResizeableInteractionTests
             .AddResizeable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -410,7 +410,7 @@ public sealed class ResizeableInteractionTests
             .AddResizeable();
 
         var jsModule = testContext.JSInterop.SetupModule(_jsModuleIdentifier);
-        jsModule.SetupModule("attach", _ => true);
+        jsModule.SetupModule("ResizeInteraction", _ => true);
 
         testContext.JSInterop.Mode = JSRuntimeMode.Loose;
 

@@ -15,7 +15,7 @@ import { type ResizePointerCaptureBehaviorInitializeArgs } from '../Scripts/Resi
 import { type ResizeHandlePosition } from '../Enums/ResizeHandlePosition.cs.ts';
 import '../../Scripts/PointerEventMixins.ts';
 
-class ResizeInteraction {
+export class ResizeInteraction {
     readonly #resetRectPointerCaptureBehavior = new ResetRectPointerCaptureBehavior();
     readonly #setPositionPointerCaptureBehavior = new SetPositionPointerCaptureBehavior();
     readonly #setSizePointerCaptureBehavior = new SetSizePointerCaptureBehavior();
@@ -113,10 +113,4 @@ class ResizeInteraction {
     public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
         this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
     }
-}
-
-export async function attach(context: ResizeInteractionContext) {
-    const resizeInteraction = new ResizeInteraction(context);
-
-    return resizeInteraction;
 }

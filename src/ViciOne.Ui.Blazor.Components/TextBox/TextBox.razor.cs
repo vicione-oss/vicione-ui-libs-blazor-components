@@ -15,7 +15,7 @@ public sealed partial class TextBox
     : ComponentBase, IFocusable, IHasSelectableContent, IHasValidFlag, IHasUpdateKey, IAsyncDisposable
 {
     private IJSObjectReference? _jsModule;
-    private IJSObjectReference? _jsAttachResult;
+    private IJSObjectReference? _jsInstance;
 
     private bool _disposedAsync;
 
@@ -194,30 +194,30 @@ public sealed partial class TextBox
 
     private async Task<IJSObjectReference?> AttachJsAsync()
     {
-        if (_jsAttachResult is null)
+        if (_jsInstance is null)
         {
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(TextBox).Assembly.GetName().Name}/text-box/text-box.js");
 
-            _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach");
+            _jsInstance = await _jsModule.InvokeConstructorAsync("TextBox", Logger);
         }
 
-        return _jsAttachResult;
+        return _jsInstance;
     }
 
     private async Task RemoveJsAsync()
-        => await DisposeJsAttachResultAsync();
+        => await DisposeJsInstanceAsync();
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    private static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
 
-    private async Task DisposeJsAttachResultAsync()
+    private async Task DisposeJsInstanceAsync()
     {
-        if (_jsAttachResult is not null)
+        if (_jsInstance is not null)
         {
             try
             {
-                await _jsAttachResult.DisposeAsync();
+                await _jsInstance.DisposeAsync();
             }
             catch (JSDisconnectedException)
             {
@@ -225,10 +225,10 @@ public sealed partial class TextBox
             }
             catch (Exception ex)
             {
-                DisposingJsAttachResultFailed(Logger, ex);
+                DisposingJsInstanceFailed(Logger, ex);
             }
 
-            _jsAttachResult = null;
+            _jsInstance = null;
         }
     }
 
@@ -241,12 +241,12 @@ public sealed partial class TextBox
     /// </summary>
     public async Task SelectContentAsync()
     {
-        var jsAttachResult = await AttachJsAsync();
+        var jsInstance = await AttachJsAsync();
 
-        if (jsAttachResult is null)
+        if (jsInstance is null)
             return;
 
-        await jsAttachResult.InvokeVoidAsync("selectContent", _inputElementReference);
+        await jsInstance.InvokeVoidAsync("selectContent", _inputElementReference);
     }
 
     /// <inheritdoc/>

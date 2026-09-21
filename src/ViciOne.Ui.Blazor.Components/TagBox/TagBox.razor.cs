@@ -16,7 +16,7 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
     private ElementReference? _inputElement;
     private DropDown<string>? _dropDown;
     private IJSObjectReference? _jsModule;
-    private IJSObjectReference? _jsAttachResult;
+    private IJSObjectReference? _jsInstance;
     private bool _disposedAsync;
     private string _inputValue = string.Empty;
     private bool _alignInputElement;
@@ -80,15 +80,15 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(TagBox).Assembly.GetName().Name}/tag-box/tag-box.js");
 
-            _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach", _tagBox, _inputElement);
+            _jsInstance = await _jsModule.InvokeConstructorAsync("TagBox", Logger, _tagBox, _inputElement);
 
             // The compiled TypeScript runs after the first render, so the width and height values are not set yet. Re-rendering here applies
             // those values and prevents jumping effect of the TagBox.
             StateHasChanged();
         }
-        else if (_jsAttachResult is not null && _alignInputElement)
+        else if (_jsInstance is not null && _alignInputElement)
         {
-            await _jsAttachResult.InvokeVoidAsync("alignInputElement");
+            await _jsInstance.InvokeVoidAsync("alignInputElement");
 
             _alignInputElement = false;
         }
@@ -164,13 +164,13 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
         return filtered;
     }
 
-    private async Task DisposeJsAttachResultAsync()
+    private async Task DisposeJsInstanceAsync()
     {
-        if (_jsAttachResult is not null)
+        if (_jsInstance is not null)
         {
             try
             {
-                await _jsAttachResult.InvokeVoidAsync("dispose");
+                await _jsInstance.InvokeVoidAsync("dispose");
             }
             catch (JSDisconnectedException)
             {
@@ -178,12 +178,12 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
             }
             catch (Exception ex)
             {
-                InvokingJsAttachResultDisposeFailed(Logger, ex);
+                InvokingJsInstanceDisposeFailed(Logger, ex);
             }
 
             try
             {
-                await _jsAttachResult.DisposeAsync();
+                await _jsInstance.DisposeAsync();
             }
             catch (JSDisconnectedException)
             {
@@ -191,10 +191,10 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
             }
             catch (Exception ex)
             {
-                DisposingJsAttachResultFailed(Logger, ex);
+                DisposingJsInstanceFailed(Logger, ex);
             }
 
-            _jsAttachResult = null;
+            _jsInstance = null;
         }
     }
 
@@ -204,7 +204,7 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
         if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
 
-        await DisposeJsAttachResultAsync();
+        await DisposeJsInstanceAsync();
 
         if (_jsModule is not null)
         {
@@ -222,9 +222,9 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
         _disposedAsync = true;
     }
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsAttachResult.dispose() failed")]
-    private static partial void InvokingJsAttachResultDisposeFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    private static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
 }

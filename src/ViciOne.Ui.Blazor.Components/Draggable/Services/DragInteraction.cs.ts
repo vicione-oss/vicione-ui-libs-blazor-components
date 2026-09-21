@@ -15,14 +15,17 @@ import { DefaultDragGhost } from '../Scripts/DefaultDragGhost.ts';
 import { DragGhostHost } from '../Scripts/DragGhostHost.ts';
 import '../../Scripts/PointerEventMixins.ts';
 
-class DragInteraction {
+export class DragInteraction {
     readonly #movePointerCaptureBehavior = new MovePointerCaptureBehavior();
     readonly #reanchorPointerCaptureBehavior = new ReanchorPointerCaptureBehavior();
     readonly #adjustForScrollPositionPointerCaptureBehavior = new AdjustForScrollPositionPointerCaptureBehavior();
     readonly #setPositionPointerCaptureBehavior = new SetPositionPointerCaptureBehavior();
     readonly #additionalPointerCaptureBehaviors: Set<PointerCaptureBehavior> = new Set<PointerCaptureBehavior>();
 
-    readonly #dragGhost: ResolvedDragGhost;
+    // Placeholder until the configured drag ghost is resolved. No pointer listener is registered before
+    // then, so no drag can start with it.
+    #dragGhost: ResolvedDragGhost = new DefaultDragGhost();
+    #isDisposed = false;
 
     #dropzoneDescriptors: DropzoneDescriptor[] | undefined;
     #targetDropzoneDescriptor: DropzoneDescriptor | undefined;
@@ -233,15 +236,26 @@ class DragInteraction {
         }
     };
 
-    constructor(readonly context: DragInteractionContext, dragGhost: ResolvedDragGhost) {
-        this.#dragGhost = dragGhost;
-        this.#dragGhost.setDraggable?.(context.draggable);
-
+    constructor(readonly context: DragInteractionContext) {
         for (const behavior of context.pointerCaptureBehaviors ?? [])
             this.#additionalPointerCaptureBehaviors.add(behavior);
 
-        context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
-        context.draggable.addEventListener('pointerup', this.#pointerUpEventListener);
+        void this.#initialize();
+    }
+
+    // A custom drag ghost lives in its own JS module that has to be imported first, which a constructor
+    // cannot await. The draggable therefore only reacts to the pointer once its drag ghost is known.
+    async #initialize() {
+        const dragGhost = await resolveDragGhost(this.context.dragGhostJsModule ?? undefined);
+
+        if (this.#isDisposed)
+            return;
+
+        this.#dragGhost = dragGhost;
+        this.#dragGhost.setDraggable?.(this.context.draggable);
+
+        this.context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
+        this.context.draggable.addEventListener('pointerup', this.#pointerUpEventListener);
     }
 
     #hasRequiredKeyState(event: PointerEvent) {
@@ -321,6 +335,8 @@ class DragInteraction {
     }
 
     public dispose() {
+        this.#isDisposed = true;
+
         this.context.draggable.removeEventListener('pointerdown', this.#pointerDownEventListener);
         this.context.draggable.removeEventListener('pointerup', this.#pointerUpEventListener);
         this.context.draggable.removeEventListener('pointermove', this.#pointerMoveEventListener);
@@ -357,10 +373,4 @@ async function resolveDragGhost(jsModule: DragGhostJsModuleDescriptor | undefine
 
         return new DefaultDragGhost();
     }
-}
-
-export async function attach(context: DragInteractionContext) {
-    const dragGhost = await resolveDragGhost(context.dragGhostJsModule ?? undefined);
-
-    return new DragInteraction(context, dragGhost);
 }

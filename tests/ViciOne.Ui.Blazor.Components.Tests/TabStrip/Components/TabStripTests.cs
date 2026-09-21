@@ -19,15 +19,15 @@ public sealed partial class TabStripTests : IAsyncDisposable
 
     private readonly BunitContext _testContext;
     private readonly BunitJSModuleInterop _jsModule;
-    private readonly BunitJSModuleInterop _jsAttachResult;
+    private readonly BunitJSModuleInterop _jsInstance;
 
     public TabStripTests()
     {
         _testContext = new BunitContext();
 
         _jsModule = _testContext.JSInterop.SetupModule(s_jsModuleIdentifier);
-        _jsAttachResult = _jsModule.SetupModule("attach", _ => true);
-        _jsAttachResult.Mode = JSRuntimeMode.Loose;
+        _jsInstance = _jsModule.SetupModule("TabStrip", _ => true);
+        _jsInstance.Mode = JSRuntimeMode.Loose;
     }
 
     public ValueTask DisposeAsync()
@@ -180,7 +180,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         await renderedComponent.Find(".tab-strip-scroll-button").ClickAsync();
 
         // Assert
-        _jsAttachResult.VerifyInvoke("scrollLeft");
+        _jsInstance.VerifyInvoke("scrollLeft");
     }
 
     [Fact]
@@ -196,7 +196,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         await renderedComponent.FindAll(".tab-strip-scroll-button")[1].ClickAsync();
 
         // Assert
-        _jsAttachResult.VerifyInvoke("scrollRight");
+        _jsInstance.VerifyInvoke("scrollRight");
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         await renderedComponent.FindAll(".tab-strip-scroll-button")[0].ClickAsync();
 
         // Assert
-        _jsAttachResult.VerifyNotInvoke("scrollLeft");
+        _jsInstance.VerifyNotInvoke("scrollLeft");
     }
 
     [Fact]
@@ -228,7 +228,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         await renderedComponent.FindAll(".tab-strip-scroll-button")[1].ClickAsync();
 
         // Assert
-        _jsAttachResult.VerifyNotInvoke("scrollRight");
+        _jsInstance.VerifyNotInvoke("scrollRight");
     }
 
     [Fact]
@@ -371,7 +371,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         renderedComponent.FindAll(".tab")[1].Click();
 
         // Assert
-        _jsAttachResult.VerifyInvoke("scrollToActiveTab");
+        _jsInstance.VerifyInvoke("scrollToActiveTab");
     }
 
     [Fact]
@@ -393,7 +393,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         // Assert
         renderedComponent.Instance.ActiveTabIndex.Should().Be(2);
         renderedComponent.FindAll(".tab")[2].ClassList.Should().Contain("active");
-        _jsAttachResult.VerifyInvoke("scrollToActiveTab");
+        _jsInstance.VerifyInvoke("scrollToActiveTab");
     }
 
     [Theory]
@@ -507,7 +507,7 @@ public sealed partial class TabStripTests : IAsyncDisposable
         renderedComponent.FindAll(".tab")[1].KeyDown(new KeyboardEventArgs { Key = "Enter" });
 
         // Assert
-        _jsAttachResult.VerifyInvoke("scrollToActiveTab");
+        _jsInstance.VerifyInvoke("scrollToActiveTab");
     }
 
     [Fact]

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.TabStrip.Enums;
 using ViciOne.Ui.Blazor.Components.TabStrip.Models;
 
@@ -16,7 +17,7 @@ public sealed partial class TabStrip : ComponentBase, ITabStrip, IAsyncDisposabl
     private ElementReference _scrollContainer;
 
     private IJSObjectReference? _jsModule;
-    private IJSObjectReference? _jsAttachResult;
+    private IJSObjectReference? _jsInstance;
     private DotNetObjectReference<TabStrip>? _dotNetObjectReference;
     private bool _disposedAsync;
 
@@ -146,7 +147,7 @@ public sealed partial class TabStrip : ComponentBase, ITabStrip, IAsyncDisposabl
         if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
 
-        await DisposeJsAttachResultAsync();
+        await DisposeJsInstanceAsync();
 
         if (_jsModule is not null)
         {
@@ -167,30 +168,30 @@ public sealed partial class TabStrip : ComponentBase, ITabStrip, IAsyncDisposabl
 
     private async Task ScrollLeftAsync()
     {
-        if (!_canScrollLeft || _jsAttachResult is null)
+        if (!_canScrollLeft || _jsInstance is null)
             return;
 
-        await _jsAttachResult.InvokeVoidAsync("scrollLeft");
+        await _jsInstance.InvokeVoidAsync("scrollLeft");
     }
 
     private async Task ScrollRightAsync()
     {
-        if (!_canScrollRight || _jsAttachResult is null)
+        if (!_canScrollRight || _jsInstance is null)
             return;
 
-        await _jsAttachResult.InvokeVoidAsync("scrollRight");
+        await _jsInstance.InvokeVoidAsync("scrollRight");
     }
 
     private async Task ScrollToActiveTabAsync(string scrollBehavior = "smooth")
     {
-        if (!IsValidTabIndex(ActiveTabIndex) || _jsAttachResult is null)
+        if (!IsValidTabIndex(ActiveTabIndex) || _jsInstance is null)
             return;
 
         var tabElement = _tabContexts[ActiveTabIndex].ElementReference;
         if (tabElement is null)
             return;
 
-        await _jsAttachResult.InvokeVoidAsync("scrollToActiveTab", tabElement, scrollBehavior);
+        await _jsInstance.InvokeVoidAsync("scrollToActiveTab", tabElement, scrollBehavior);
     }
 
     private bool IsValidTabIndex(int index)
@@ -201,25 +202,25 @@ public sealed partial class TabStrip : ComponentBase, ITabStrip, IAsyncDisposabl
         if (_disposedAsync)
             return;
 
-        if (_jsAttachResult is null)
+        if (_jsInstance is null)
         {
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(TabStrip).Assembly.GetName().Name}/tab-strip/components/tab-strip.js");
 
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
-            _jsAttachResult = await _jsModule.InvokeAsync<IJSObjectReference>("attach",
+            _jsInstance = await _jsModule.InvokeConstructorAsync("TabStrip", Logger,
                 _dotNetObjectReference, _scrollContainer);
         }
     }
 
-    private async Task DisposeJsAttachResultAsync()
+    private async Task DisposeJsInstanceAsync()
     {
-        if (_jsAttachResult is not null)
+        if (_jsInstance is not null)
         {
             try
             {
-                await _jsAttachResult.InvokeVoidAsync("dispose");
+                await _jsInstance.InvokeVoidAsync("dispose");
             }
             catch (JSDisconnectedException)
             {
@@ -227,12 +228,12 @@ public sealed partial class TabStrip : ComponentBase, ITabStrip, IAsyncDisposabl
             }
             catch (Exception ex)
             {
-                InvokingJsAttachResultDisposeFailed(Logger, ex);
+                InvokingJsInstanceDisposeFailed(Logger, ex);
             }
 
             try
             {
-                await _jsAttachResult.DisposeAsync();
+                await _jsInstance.DisposeAsync();
             }
             catch (JSDisconnectedException)
             {
@@ -240,16 +241,16 @@ public sealed partial class TabStrip : ComponentBase, ITabStrip, IAsyncDisposabl
             }
             catch (Exception ex)
             {
-                DisposingJsAttachResultFailed(Logger, ex);
+                DisposingJsInstanceFailed(Logger, ex);
             }
 
-            _jsAttachResult = null;
+            _jsInstance = null;
         }
     }
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsAttachResult.dispose() failed")]
-    private static partial void InvokingJsAttachResultDisposeFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
 
-    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsAttachResult failed")]
-    private static partial void DisposingJsAttachResultFailed(ILogger logger, Exception ex);
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
 }

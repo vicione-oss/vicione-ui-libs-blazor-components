@@ -1,4 +1,4 @@
-class DropDown {
+export class DropDown {
     static get #maxVisibleItemCount() {
         return 10;
     }
@@ -279,13 +279,4 @@ class DropDown {
     public dispose() {
         this.detachInputElement();
     }
-}
-
-export async function attach(containerElement: HTMLElement | undefined) {
-    if (containerElement === undefined)
-        return undefined;
-
-    const dropDown = new DropDown(containerElement);
-
-    return dropDown;
 }

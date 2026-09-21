@@ -1,6 +1,6 @@
 import { ContextMenuPosition } from '../Models/ContextMenuPosition.cs.ts';
 
-class ContextMenu {
+export class ContextMenu {
     readonly #dotNetObject: DotNet.DotNetObject;
 
     readonly #windowPointerDownEventListener = (event: PointerEvent): void => {
@@ -93,10 +93,4 @@ class ContextMenu {
     public dispose() {
         this.endObserveWindowPointerDown();
     }
-}
-
-export async function attach(dotNetObject: DotNet.DotNetObject) {
-    const contextMenu = new ContextMenu(dotNetObject);
-
-    return contextMenu;
 }

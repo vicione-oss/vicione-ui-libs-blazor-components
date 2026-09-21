@@ -2,6 +2,14 @@
 
 ## 6.2.0 - Unreleased
 
+### Package `ViciOne.Ui.Blazor.Components`
+
+- Improved error handling of JavaScript interop, errors are now logged instead of thrown
+
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `bunit` package, updated to version `2.7.2`
+
 ## 6.1.1 - 2026-09-21
 
 ### Package `ViciOne.Ui.Blazor.Components`

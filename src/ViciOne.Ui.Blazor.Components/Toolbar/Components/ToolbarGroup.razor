@@ -4,7 +4,7 @@
     if (_hidden)
         groupCssClasses.Add("hidden");
 
-    if (!_initialized)
+    if (_awaitingMeasurement)
         groupCssClasses.Add("invisible");
 
     if (InMenu)

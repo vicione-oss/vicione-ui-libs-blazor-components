@@ -231,6 +231,10 @@ public sealed class ToolbarGroupTests : IDisposable
         public void ChildSizeChanged()
             => HandleChildChanged?.Invoke();
 
+        public void MenuChildrenChanged()
+        {
+        }
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<IToolbarItemParent>>(0);

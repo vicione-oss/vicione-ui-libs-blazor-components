@@ -18,7 +18,7 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
     private ElementReference _container;
 
     private bool _hidden;
-    private bool _initialized;
+    private bool _awaitingMeasurement = true;
     private bool _withSeparator;
 
     // needs to be a distinct variable from AlignRight since on rerender, the value will get overwritten
@@ -59,15 +59,24 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
     /// <inheritdoc/>
     protected override void OnInitialized()
     {
-        if (InMenu)
-            return;
-
-        ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
-
         if (Parent is null)
             throw new InvalidOperationException($"{GetType().FullName} must be placed inside a {typeof(Toolbar).FullName}.");
 
-        _withSeparator = Parent.Children.Count > 0;
+        if (InMenu)
+        {
+            // This instance is rendering into the menu but at this stage it is not decided
+            // whether it should be shown in the menu, therefore it starts hidden until
+            // one of its children lands in the menu and it gets revealed via SetHidden().
+            _hidden = true;
+
+            _awaitingMeasurement = false;
+        }
+        else
+        {
+            ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
+
+            _withSeparator = Parent.Children.Count > 0;
+        }
 
         Parent.AddChild(this);
     }
@@ -75,12 +84,12 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender)
+        if (!firstRender || InMenu)
             return;
 
-        await ResizeObserver.ObserveAsync(_container, true);
+        await ResizeObserver.ObserveAsync(_container, true); // triggers an initial OnElementSizeChanged() with the current size
 
-        _initialized = true;
+        _awaitingMeasurement = false;
     }
 
     /// <inheritdoc/>
@@ -123,10 +132,18 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
             return;
 
         _children.Add(child);
+
+        if (InMenu)
+            Parent.MenuChildrenChanged();
     }
 
     void IToolbarItemParent.RemoveChild(IToolbarChild child)
-        => _children.Remove(child);
+    {
+        _children.Remove(child);
+
+        if (InMenu)
+            Parent.MenuChildrenChanged();
+    }
 
     void IToolbarChild.Refresh()
         => InvokeAsync(StateHasChanged);
@@ -134,8 +151,14 @@ public sealed partial class ToolbarGroup : ComponentBase, IToolbarItemParent, IT
     void IToolbarItemParent.ChildSizeChanged()
         => Parent.ChildSizeChanged();
 
+    void IToolbarItemParent.MenuChildrenChanged()
+        => Parent.MenuChildrenChanged();
+
     bool IToolbarChild.IsHidden()
         => _hidden;
+
+    bool IToolbarChild.IsInMenu()
+        => InMenu;
 
     void IToolbarChild.SetHidden(bool hidden)
         => _hidden = hidden;

@@ -1,6 +1,7 @@
 @page "/toolbar"
 
 @using Shared.Pages.ComboBox.Models
+@using Shared.Pages.Toolbar.Components
 @using ViciOne.Ui.Blazor.Components.ComboBox
 @using ViciOne.Ui.Blazor.Components.SearchBox
 @using ViciOne.Ui.Blazor.Components.Toolbar.Components
@@ -86,6 +87,20 @@
             <ToolbarButton IconName="MonochromeIconName.GearSolid" Text="Click to hide sibling" OnClick="ToggleVisible" />
             <ToolbarButton IconName="MonochromeIconName.Show" Text="Visible" Visible="_visible" />
         </ToolbarGroup>
+    </Toolbar>
+</div>
+
+<h3>Nested component re-rendering itself</h3>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ToolbarGroup>
+            <ToolbarButton IconName="@MonochromeIconName.AlignTop" Tooltip="Align top" />
+            <ToolbarButton IconName="@MonochromeIconName.AlignBottom" Tooltip="Align bottom" />
+            <ToolbarButton IconName="@MonochromeIconName.AlignLeft" Tooltip="Align left" />
+            <ToolbarButton IconName="@MonochromeIconName.AlignRight" Tooltip="Align right" />
+        </ToolbarGroup>
+        <NumberToolbarGroup Number="_number" />
     </Toolbar>
 </div>
 

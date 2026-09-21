@@ -85,6 +85,14 @@ before writing it.
   single clause is the normal outcome. Watch the shapes that smuggle a
   restatement in behind a real reason: "*X, not Y*", "*done before Z*", "*this
   is a K*" — each names the construct directly below it.
+- **One name survives: the one that says what the reason is about.** Where the
+  line below holds several constructs, the reader has to be told which of them
+  the reason belongs to, and only the name can tell them — that is precision,
+  not restatement. "*…, using `InvokeAsync()`*" keeps a reason about the
+  synchronization context from being read onto the `await` next to it or the
+  method it wraps. Keep the name only where dropping it leaves the subject in
+  doubt, and keep it inside the reason — "*…, hence we use `InvokeAsync()`
+  here*" is a conclusion of its own and falls back under the check above.
 - **No history.** State what the code does and why, never what it used to do or
   what a change replaced. "Used to be translucent", "no longer reports this",
   "moved here from X" — git carries all of it, and the comment is wrong the

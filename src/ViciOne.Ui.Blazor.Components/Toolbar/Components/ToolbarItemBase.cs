@@ -16,13 +16,10 @@ namespace ViciOne.Ui.Blazor.Components.Toolbar.Components;
 public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisposable
 {
     private bool _hidden;
-    private bool _initialized;
+    private bool _awaitingMeasurement = true;
     private bool? _previousVisible;
     private ElementSizeChangedEventArgs? _previousElementSizeChangedEventArgs;
 
-    /// <summary>
-    /// This parameter is set only when <see cref="InMenu"/> is <see langword="true" />, otherwise it is <see langword="null" />.
-    /// </summary>
     [CascadingParameter]
     private IToolbarItemParent Parent { get; set; } = default!;
 
@@ -82,19 +79,31 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
     bool IToolbarChild.IsHidden()
         => _hidden;
 
+    bool IToolbarChild.IsInMenu()
+        => InMenu;
+
     void IToolbarChild.SetHidden(bool hidden)
         => _hidden = hidden;
 
     /// <inheritdoc/>
     protected override void OnInitialized()
     {
-        if (InMenu)
-            return;
-
-        ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
-
         if (Parent is null)
             throw new InvalidOperationException($"{GetType().FullName} must be placed inside a {typeof(Toolbar).FullName}.");
+
+        if (InMenu)
+        {
+            // This instance is rendering into the menu, but at this stage it is not decided
+            // whether it should be shown in the menu, therefore it starts hidden until
+            // the toolbar reports an overflow and it gets revealed via SetHidden().
+            _hidden = true;
+
+            _awaitingMeasurement = false;
+        }
+        else
+        {
+            ResizeObserver.ElementSizeChanged += OnElementSizeChanged;
+        }
 
         Parent.AddChild(this);
     }
@@ -119,9 +128,9 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
         if (!firstRender || InMenu)
             return;
 
-        await ResizeObserver.ObserveAsync(Container, true);
+        await ResizeObserver.ObserveAsync(Container, true); // triggers an initial OnElementSizeChanged() with the current size
 
-        _initialized = true;
+        _awaitingMeasurement = false;
     }
 
     /// <inheritdoc/>
@@ -184,7 +193,7 @@ public abstract class ToolbarItemBase : ComponentBase, IToolbarChild, IAsyncDisp
         if (!Visible || _hidden)
             yield return "hidden";
 
-        if (!_initialized && !InMenu)
+        if (_awaitingMeasurement)
             yield return "invisible";
 
         if (InMenu)

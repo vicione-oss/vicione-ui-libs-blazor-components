@@ -1,6 +1,4 @@
-﻿using ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization;
-
-namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Validators;
+﻿namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Validators;
 
 /// <summary>
 /// Validates a given string for not being <see langword="null"/> or whitespace.
@@ -11,7 +9,7 @@ public sealed class StringMustNotBeEmptyPropertyValueValidator : IPropertyValueV
     public string? Validate(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return ValidationMessages.StringMustNotBeEmpty;
+            return Localization.ValidationMessages.StringMustNotBeEmpty;
 
         return null;
     }

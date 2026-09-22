@@ -1,9 +1,7 @@
 @using ViciOne.Ui.Blazor.Components.Extensions
-@using ViciOne.Ui.Blazor.Components.Resources.SpinEdit
 @using ViciOne.Ui.Blazor.Components.TextBox
 @using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
-@using SpinButtonLocalization = ViciOne.Ui.Blazor.Components.Resources.SpinEdit.Localization.SpinButton
 
 @typeparam TValue
 @typeparam TInterval
@@ -30,8 +28,8 @@
     if (ReadOnly || !Enabled)
         spinButtonAttributes.Add("disabled", "disabled");
 
-    var incrementByText = string.Format(SpinButtonLocalization.IncrementBy, Interval);
-    var decrementByText = string.Format(SpinButtonLocalization.DecrementBy, Interval);
+    var incrementByText = string.Format(Localization.SpinButton.IncrementBy, Interval);
+    var decrementByText = string.Format(Localization.SpinButton.DecrementBy, Interval);
 }
 
 <div class="@string.Join(" ", cssClasses)"

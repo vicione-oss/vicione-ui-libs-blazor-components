@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localization {
+namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localizat
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Content {
+    public class PropertyGridItem {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Content() {
+        internal PropertyGridItem() {
         }
         
         /// <summary>
@@ -39,8 +39,7 @@ namespace ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localizat
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localization.Content" +
-                            "", typeof(Content).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.PropertyGrid.Localization.PropertyGridItem", typeof(PropertyGridItem).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,29 +61,11 @@ namespace ViciOne.Ui.Blazor.Components.Resources.AdvancedErrorBoundary.Localizat
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unexpected error has occured. See logs to get further details..
+        ///   Looks up a localized string similar to The last value used has been restored..
         /// </summary>
-        public static string Details {
+        public static string TheLastValueUsedHasBeenRestored {
             get {
-                return ResourceManager.GetString("Details", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Oh snap! Something went wrong :(.
-        /// </summary>
-        public static string Heading {
-            get {
-                return ResourceManager.GetString("Heading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Try again.
-        /// </summary>
-        public static string TryAgain {
-            get {
-                return ResourceManager.GetString("TryAgain", resourceCulture);
+                return ResourceManager.GetString("TheLastValueUsedHasBeenRestored", resourceCulture);
             }
         }
     }

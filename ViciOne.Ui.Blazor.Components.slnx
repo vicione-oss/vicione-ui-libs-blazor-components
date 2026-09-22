@@ -32,6 +32,7 @@
     <File Path="docs/commit-message-style.md" />
     <File Path="docs/csharp-code-style.md" />
     <File Path="docs/documentation-style.md" />
+    <File Path="docs/localization-guide.md" />
     <File Path="docs/scss-code-style.md" />
   </Folder>
   <Folder Name="/samples/">
@@ -66,7 +67,6 @@
   </Folder>
   <Folder Name="/src/">
     <File Path="src/.editorconfig" />
-    <Project Path="src/ViciOne.Ui.Blazor.Components.Resources/ViciOne.Ui.Blazor.Components.Resources.csproj" />
     <Project Path="src/ViciOne.Ui.Blazor.Components.TestingHelpers/ViciOne.Ui.Blazor.Components.TestingHelpers.csproj" />
     <Project Path="src/ViciOne.Ui.Blazor.Components/ViciOne.Ui.Blazor.Components.csproj" />
   </Folder>

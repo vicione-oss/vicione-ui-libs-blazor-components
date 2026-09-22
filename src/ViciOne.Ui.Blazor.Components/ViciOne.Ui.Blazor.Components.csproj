@@ -39,7 +39,83 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ViciOne.Ui.Blazor.Components.Resources\ViciOne.Ui.Blazor.Components.Resources.csproj" PrivateAssets="all" />
+    <Compile Update="AdvancedErrorBoundary\Localization\Content.Designer.cs">
+      <DependentUpon>Content.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="ComboBox\Localization\ComboBox.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComboBox.resx</DependentUpon>
+    </Compile>
+    <Compile Update="DropDown\Localization\Dropdown.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DropDown.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\PropertyEntryContextMenu.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyEntryContextMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\PropertyGridItem.Designer.cs">
+      <DependentUpon>PropertyGridItem.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\PropertyEntry.Designer.cs">
+      <DependentUpon>PropertyEntry.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="PropertyGrid\Localization\ValidationMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ValidationMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="SpinEdit\Localization\SpinButton.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SpinButton.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="AdvancedErrorBoundary\Localization\Content.resx">
+      <LastGenOutput>Content.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ComboBox\Localization\ComboBox.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComboBox.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DropDown\Localization\DropDown.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dropdown.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\PropertyEntryContextMenu.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PropertyEntryContextMenu.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\PropertyGridItem.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>PropertyGridItem.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\PropertyEntry.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>PropertyEntry.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PropertyGrid\Localization\ValidationMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ValidationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="SpinEdit\Localization\SpinButton.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SpinButton.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <!-- https://github.com/tenekon/Tenekon.MSBuild.Packaging.ProjectBuildInPackage/issues/6#issuecomment-3969741425 -->

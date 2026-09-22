@@ -7,7 +7,6 @@
 @using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors
 @using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items
 @using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Messages
-@using ViciOne.Ui.Blazor.Components.Resources.PropertyGrid
 @using ViciOne.Ui.Blazor.Components.TextBox
 @using ViciOne.Ui.Blazor.Components.Tooltip.Components
 @using ViciOne.Ui.MonochromeIcons.Components
@@ -47,7 +46,7 @@
         if (selectableValues is null)
         {
             infomationVisible = true;
-            informationToolTipText = Resources.PropertyGrid.Localization.PropertyEntry
+            informationToolTipText = Localization.PropertyEntry
                 .TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyExclusive;
 
             editorEnabled = false;
@@ -56,7 +55,7 @@
         else if (selectableValues.Count == 0)
         {
             infomationVisible = true;
-            informationToolTipText = Resources.PropertyGrid.Localization.PropertyEntry
+            informationToolTipText = Localization.PropertyEntry
                 .TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound;
 
             editorEnabled = false;

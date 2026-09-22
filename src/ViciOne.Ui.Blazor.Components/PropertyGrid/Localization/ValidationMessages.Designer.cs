@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization {
+namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ComboBox {
+    public class ValidationMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ComboBox() {
+        internal ValidationMessages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization.ComboBox", typeof(ComboBox).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.PropertyGrid.Localization.ValidationMessages", typeof(ValidationMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,20 @@ namespace ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No matching item found..
+        ///   Looks up a localized string similar to {0} does not have a nullable value type although value is null..
         /// </summary>
-        public static string NoMatchingItemFound {
+        public static string PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull {
             get {
-                return ResourceManager.GetString("NoMatchingItemFound", resourceCulture);
+                return ResourceManager.GetString("PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press Enter or leave the field to apply your input..
+        ///   Looks up a localized string similar to The text entered must not be null or empty..
         /// </summary>
-        public static string PressEnterOrLeaveTheFieldToApplyYourInput {
+        public static string StringMustNotBeEmpty {
             get {
-                return ResourceManager.GetString("PressEnterOrLeaveTheFieldToApplyYourInput", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pressing Enter or leaving the field will revert your input..
-        /// </summary>
-        public static string PressingEnterOrLeavingTheFieldWillRevertYourInput {
-            get {
-                return ResourceManager.GetString("PressingEnterOrLeavingTheFieldWillRevertYourInput", resourceCulture);
+                return ResourceManager.GetString("StringMustNotBeEmpty", resourceCulture);
             }
         }
     }

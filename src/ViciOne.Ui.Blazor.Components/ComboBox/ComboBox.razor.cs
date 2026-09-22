@@ -5,7 +5,6 @@ using ViciOne.Ui.Blazor.Components.DropDown;
 using ViciOne.Ui.Blazor.Components.Helpers;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
-using ComboBoxLocalization = ViciOne.Ui.Blazor.Components.Resources.ComboBox.Localization.ComboBox;
 
 namespace ViciOne.Ui.Blazor.Components.ComboBox;
 
@@ -235,10 +234,10 @@ public sealed partial class ComboBox<TItem, TValue> : ComponentBase, IFocusable,
     private string GetDropDownIconTooltipText()
     {
         var appendix = AllowUserInput
-            ? ComboBoxLocalization.PressEnterOrLeaveTheFieldToApplyYourInput
-            : ComboBoxLocalization.PressingEnterOrLeavingTheFieldWillRevertYourInput;
+            ? Localization.ComboBox.PressEnterOrLeaveTheFieldToApplyYourInput
+            : Localization.ComboBox.PressingEnterOrLeavingTheFieldWillRevertYourInput;
 
-        return $"{ComboBoxLocalization.NoMatchingItemFound}\n{appendix}";
+        return $"{Localization.ComboBox.NoMatchingItemFound}\n{appendix}";
     }
 
     private async Task OpenDropdownAsync()

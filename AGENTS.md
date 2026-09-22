@@ -32,6 +32,25 @@ When you **add, remove, or rename** any skill, slash command, or custom prompt
 file, update the solution file (`ViciOne.Ui.Blazor.Components.slnx`) accordingly
 so these files stay listed as solution items.
 
+## Rebasing
+
+A rebase leaves every commit building, not only the last one. A conflict
+resolved wrongly part-way through is masked when a later commit overwrites the
+same lines, and the damage surfaces later, in a `git bisect` or an intermediate
+checkout.
+
+Replay with a build after each commit: `git rebase --exec "<build>" <upstream>`
+stops at the first commit that fails, where it is fixed with `git commit
+--amend` before continuing. Clear orphaned scoped CSS inside that command
+rather than once beforehand: every checkout strands more of it, and those
+errors bury the ones that matter.
+
+This is worth its cost after conflicts were resolved by hand, or before
+force-pushing a rewritten branch. It is not worth it where the upstream delta
+touches no code at all: a docs, skill or tooling merge cannot break a build that
+already passed, so rebase plainly. Confirm that rather than assuming it, with
+`git diff --stat <old-base> <upstream>`.
+
 ## Working on `.ts` files
 
 When working on `.ts` files living in a folder of a `.csproj`, you need to keep attention to the following files to get the orchestration of the folder / file structure for generated `.js` files right.

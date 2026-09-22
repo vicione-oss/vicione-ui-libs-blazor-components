@@ -12,11 +12,26 @@ description: >-
 
 Guidance for removing Blazor scoped CSS files that no longer have a matching
 component. A scoped CSS file `Foo.razor.css` is expected to sit next to a
-`Foo.razor` component. When the `.razor` file is renamed or deleted but the
-`.razor.css` is left behind, the build emits **BLAZOR102**:
+`Foo.razor` component. When it has none, the build emits **BLAZOR102**:
 
 > The scoped css file '...' was defined but no associated razor component or
 > view was found for it.
+
+## How orphans arise
+
+- **A component was renamed or deleted** and its `.razor.css` was left behind.
+  The orphan sits in the working tree and every build reports it until the file
+  is removed.
+- **A checkout stranded generated CSS.** Scoped CSS is compiled from a
+  `.razor.scss` sibling and is gitignored, so it outlives the commit it was
+  built for. Moving to a commit where that component does not exist — a branch
+  switch, a rebase, a bisect — leaves its CSS behind, and the build fails on a
+  file the new commit never had.
+
+Both raise the same error and take the same fix. The second is worth
+recognizing while rebasing or bisecting: the error names components the commit
+under test never touched, which reads as if that commit were broken. Run the
+scan below before trusting a build that follows a checkout.
 
 ## Why not rely on the build output alone
 

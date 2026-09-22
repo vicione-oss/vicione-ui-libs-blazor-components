@@ -18,10 +18,12 @@
 Reusable skill definitions located in `.claude/skills/` following the [Agent Skills](https://agentskills.io/) open standard.
 Supported by GitHub Copilot and Claude Code.
 
-| Skill                                                                      | Description                                              |
-|----------------------------------------------------------------------------|---------------------------------------------------------|
-| [delete-orphaned-css](.claude/skills/delete-orphaned-css/SKILL.md)         | Delete orphaned Blazor scoped CSS files (`*.razor.css`) |
-| [improve-comment-clarity](.claude/skills/improve-comment-clarity/SKILL.md) | Improve the clarity of code comments                    |
+| Skill                                                                      | Description                                             | Diagnostic  |
+|----------------------------------------------------------------------------|---------------------------------------------------------|-------------|
+| [delete-orphaned-css](.claude/skills/delete-orphaned-css/SKILL.md)         | Delete orphaned Blazor scoped CSS files (`*.razor.css`) | `BLAZOR102` |
+| [improve-comment-clarity](.claude/skills/improve-comment-clarity/SKILL.md) | Improve the clarity of code comments                    |             |
+
+When a build reports a diagnostic listed above, apply the matching skill.
 
 Each skill can have an associated slash command (`.claude/commands/`) and custom
 prompt (`.github/prompts/`) that delegate to it as the single source of truth.

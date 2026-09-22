@@ -1,7 +1,7 @@
 // Auto-generated code
-import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.js';
-import { type ModifierKey } from '../../Enums/ModifierKey.cs.js';
-import { type DragGhostJsModuleDescriptor } from './DragGhostJsModuleDescriptor.cs.js';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
+import { type ModifierKey } from '../../Enums/ModifierKey.cs.ts';
+import { type DragGhostJsModuleDescriptor } from './DragGhostJsModuleDescriptor.cs.ts';
 
 export class DragInteractionContext {
     // eslint-disable-next-line max-params

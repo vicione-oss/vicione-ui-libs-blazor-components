@@ -57,8 +57,12 @@ const config = [
             '@stylistic/object-curly-spacing': ['error', 'always'],
             '@stylistic/operator-linebreak': ['error', 'after'],
             '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
+
+            // Enforce .ts imports
+            'import-x/extensions': ['error', 'ignorePackages', { checkTypeImports: true }],
+
             'import-x/no-absolute-path': 'off',
-            'import-x/no-unassigned-import': ['error', { allow: ['**/*Mixins.ts', '**/*Mixins.js'] }],
+            'import-x/no-unassigned-import': ['error', { allow: ['**/*Mixins.ts'] }],
             'unicorn/prefer-number-coercion': 'off',
             'unicorn/filename-case': 'off',
             'unicorn/no-non-function-verb-prefix': 'off',

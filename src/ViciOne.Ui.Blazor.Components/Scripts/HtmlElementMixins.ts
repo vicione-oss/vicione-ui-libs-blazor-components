@@ -31,10 +31,10 @@ class HtmlElementMixins {
 
         // ToPixels() is a String mixin.
         //
-        // No import of 'string-mixins.js' on purpose: it would make this file
+        // No import of 'StringMixins.ts' on purpose: it would make this file
         // a module and break the global `interface HTMLElement` merge.
         //
-        // Consumers need to import 'string-mixins.js' to load the prototype patch.
+        // Consumers need to import 'StringMixins.ts' to load the prototype patch.
         const left = originLeft + (style.left.toPixels() ?? 0);
         const top = originTop + (style.top.toPixels() ?? 0);
         const width = style.width.toPixels() ?? fallbackWidth;

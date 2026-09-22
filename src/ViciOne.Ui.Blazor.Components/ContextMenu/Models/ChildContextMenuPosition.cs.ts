@@ -1,5 +1,5 @@
 // Auto-generated code
-import { type MouseLeaveDirection } from '../Enums/MouseLeaveDirection.cs.js';
+import { type MouseLeaveDirection } from '../Enums/MouseLeaveDirection.cs.ts';
 
 export class ChildContextMenuPosition {
     constructor(readonly x: number,

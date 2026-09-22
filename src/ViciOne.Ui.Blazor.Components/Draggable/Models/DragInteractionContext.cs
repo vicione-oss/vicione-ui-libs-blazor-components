@@ -6,12 +6,9 @@ using ViciOne.Ui.Blazor.Components.Enums;
 
 namespace ViciOne.Ui.Blazor.Components.Draggable.Models;
 
-[GenerateTypeScriptImport(Type = "PointerCaptureBehavior",
-    ModulePath = "../../PointerCapture/Scripts/PointerCaptureBehavior.js")]
-[GenerateTypeScriptImport(Type = "ModifierKey",
-    ModulePath = "../../Enums/ModifierKey.cs.js")]
-[GenerateTypeScriptImport(Type = "DragGhostJsModuleDescriptor",
-    ModulePath = "./DragGhostJsModuleDescriptor.cs.js")]
+[GenerateTypeScriptImport(Type = "PointerCaptureBehavior", ModulePath = "../../PointerCapture/Scripts/PointerCaptureBehavior.ts")]
+[GenerateTypeScriptImport(Type = "ModifierKey", ModulePath = "../../Enums/ModifierKey.cs.ts")]
+[GenerateTypeScriptImport(Type = "DragGhostJsModuleDescriptor", ModulePath = "./DragGhostJsModuleDescriptor.cs.ts")]
 [GenerateTypeScriptClass]
 internal sealed class DragInteractionContext
 {

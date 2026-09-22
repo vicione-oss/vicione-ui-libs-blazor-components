@@ -1,5 +1,5 @@
 // Auto-generated code
-import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.js';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
 
 export class MoveInteractionContext {
     // eslint-disable-next-line max-params

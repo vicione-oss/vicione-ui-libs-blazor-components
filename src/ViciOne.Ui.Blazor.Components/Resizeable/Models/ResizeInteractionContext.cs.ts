@@ -1,6 +1,6 @@
 // Auto-generated code
-import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.js';
-import { type ResizeHandleInfo } from './ResizeHandleInfo.cs.js';
+import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
+import { type ResizeHandleInfo } from './ResizeHandleInfo.cs.ts';
 
 export class ResizeInteractionContext {
     // eslint-disable-next-line max-params

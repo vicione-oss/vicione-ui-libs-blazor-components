@@ -12,8 +12,7 @@ namespace ViciOne.Ui.Blazor.Components.Draggable.Models;
 /// JavaScript side feature-detects the opt-in callbacks on the instance rather than relying on flags here. An
 /// unimplemented callback is simply not exposed and makes no round-trip.
 /// </remarks>
-[GenerateTypeScriptImport(Type = "JsFunctionDescriptor",
-    ModulePath = "../../Models/JsFunctionDescriptor.cs.js")]
+[GenerateTypeScriptImport(Type = "JsFunctionDescriptor", ModulePath = "../../Models/JsFunctionDescriptor.cs.ts")]
 [GenerateTypeScriptClass]
 public sealed record DragGhostJsModuleDescriptor
 {

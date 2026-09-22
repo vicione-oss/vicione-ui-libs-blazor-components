@@ -4,8 +4,7 @@ using ViciOne.Ui.Blazor.Components.Resizeable.Enums;
 
 namespace ViciOne.Ui.Blazor.Components.Resizeable.Models;
 
-[GenerateTypeScriptImport(Type = "ResizeHandlePosition",
-    ModulePath = "../Enums/ResizeHandlePosition.cs.js")]
+[GenerateTypeScriptImport(Type = "ResizeHandlePosition", ModulePath = "../Enums/ResizeHandlePosition.cs.ts")]
 [GenerateTypeScriptClass]
 internal sealed class ResizeHandleInfo
 {

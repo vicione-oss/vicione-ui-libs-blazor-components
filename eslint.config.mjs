@@ -63,6 +63,21 @@ const config = [
 
             'import-x/no-absolute-path': 'off',
             'import-x/no-unassigned-import': ['error', { allow: ['**/*Mixins.ts'] }],
+
+            // A guard and the return after it read better as two statements than as
+            // one long ternary, hence this rule is off
+            'unicorn/prefer-ternary': 'off',
+
+            // Each guard carries its own reason, and merging them leaves a trailing
+            // comment describing the whole condition or rendering the whole
+            // condition unreadable, hence this rule is off
+            'unicorn/prefer-combined-guards': 'off',
+
+            // Enforcing early returns more than often results in unreadable code
+            // because code flow cannot be analyzed at the first glance, hence this
+            // rule is off
+            'unicorn/prefer-early-return': 'off',
+
             'unicorn/prefer-number-coercion': 'off',
             'unicorn/filename-case': 'off',
             'unicorn/no-non-function-verb-prefix': 'off',

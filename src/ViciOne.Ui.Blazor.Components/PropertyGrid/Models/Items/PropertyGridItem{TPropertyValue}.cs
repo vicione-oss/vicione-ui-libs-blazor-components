@@ -5,7 +5,6 @@ using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Descriptors;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Messages;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
-using ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization;
 
 namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items;
 
@@ -17,7 +16,7 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
     private static readonly Type s_valueType = typeof(TPropertyValue);
 
     private static readonly CompositeFormat s_propertyDoesNotHaveNullableValueTypeAlthoughValueIsNull =
-        CompositeFormat.Parse(ValidationMessages.PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull);
+        CompositeFormat.Parse(Localization.ValidationMessages.PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull);
 
     private readonly IPropertyDescriptor _firstPropertyDescriptor = propertyDescriptors.First();
 
@@ -138,7 +137,7 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
 
         var infoMessage = new ValueRestoredInfoMessage
         {
-            Text = PropertyGridItem.TheLastValueUsedHasBeenRestored,
+            Text = Localization.PropertyGridItem.TheLastValueUsedHasBeenRestored,
             Reasons = innerMessages
         };
 

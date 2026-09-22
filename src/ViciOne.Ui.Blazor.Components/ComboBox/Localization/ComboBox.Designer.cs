@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
+namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ValidationMessages {
+    public class ComboBox {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ValidationMessages() {
+        internal ComboBox() {
         }
         
         /// <summary>
@@ -39,8 +39,7 @@ namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization.ValidationMessag" +
-                            "es", typeof(ValidationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.ComboBox.Localization.ComboBox", typeof(ComboBox).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,20 +61,29 @@ namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} does not have a nullable value type although value is null..
+        ///   Looks up a localized string similar to No matching item found..
         /// </summary>
-        public static string PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull {
+        public static string NoMatchingItemFound {
             get {
-                return ResourceManager.GetString("PropertyDoesNotHaveNullableValueTypeAlthoughValueIsNull", resourceCulture);
+                return ResourceManager.GetString("NoMatchingItemFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The text entered must not be null or empty..
+        ///   Looks up a localized string similar to Press Enter or leave the field to apply your input..
         /// </summary>
-        public static string StringMustNotBeEmpty {
+        public static string PressEnterOrLeaveTheFieldToApplyYourInput {
             get {
-                return ResourceManager.GetString("StringMustNotBeEmpty", resourceCulture);
+                return ResourceManager.GetString("PressEnterOrLeaveTheFieldToApplyYourInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pressing Enter or leaving the field will revert your input..
+        /// </summary>
+        public static string PressingEnterOrLeavingTheFieldWillRevertYourInput {
+            get {
+                return ResourceManager.GetString("PressingEnterOrLeavingTheFieldWillRevertYourInput", resourceCulture);
             }
         }
     }

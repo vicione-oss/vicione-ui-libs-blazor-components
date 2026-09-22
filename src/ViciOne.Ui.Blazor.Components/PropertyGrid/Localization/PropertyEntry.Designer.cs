@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
+namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PropertyGridItem {
+    public class PropertyEntry {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PropertyGridItem() {
+        internal PropertyEntry() {
         }
         
         /// <summary>
@@ -39,8 +39,7 @@ namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization.PropertyGridItem" +
-                            "", typeof(PropertyGridItem).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.PropertyGrid.Localization.PropertyEntry", typeof(PropertyEntry).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,11 +61,21 @@ namespace ViciOne.Ui.Blazor.Components.Resources.PropertyGrid.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The last value used has been restored..
+        ///   Looks up a localized string similar to The selection is disabled because no selectable values could be found..
         /// </summary>
-        public static string TheLastValueUsedHasBeenRestored {
+        public static string TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound {
             get {
-                return ResourceManager.GetString("TheLastValueUsedHasBeenRestored", resourceCulture);
+                return ResourceManager.GetString("TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selection is disabled because the selected items have selectable values that are mutually exclusive..
+        /// </summary>
+        public static string TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyExclusive {
+            get {
+                return ResourceManager.GetString("TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyE" +
+                        "xclusive", resourceCulture);
             }
         }
     }

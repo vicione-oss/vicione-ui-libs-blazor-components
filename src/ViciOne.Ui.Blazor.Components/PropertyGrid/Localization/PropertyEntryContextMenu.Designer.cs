@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ViciOne.Ui.Blazor.Components.Resources.SpinEdit.Localization {
+namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace ViciOne.Ui.Blazor.Components.Resources.SpinEdit.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SpinButton {
+    public class PropertyEntryContextMenu {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SpinButton() {
+        internal PropertyEntryContextMenu() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ViciOne.Ui.Blazor.Components.Resources.SpinEdit.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.Resources.SpinEdit.Localization.SpinButton", typeof(SpinButton).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.PropertyGrid.Localization.PropertyEntryContextMenu", typeof(PropertyEntryContextMenu).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,11 @@ namespace ViciOne.Ui.Blazor.Components.Resources.SpinEdit.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Decrement by {0}.
+        ///   Looks up a localized string similar to Set to null.
         /// </summary>
-        public static string DecrementBy {
+        public static string SetToNull {
             get {
-                return ResourceManager.GetString("DecrementBy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Increment by {0}.
-        /// </summary>
-        public static string IncrementBy {
-            get {
-                return ResourceManager.GetString("IncrementBy", resourceCulture);
+                return ResourceManager.GetString("SetToNull", resourceCulture);
             }
         }
     }

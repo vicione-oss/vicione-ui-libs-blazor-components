@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ViciOne.Ui.Blazor.Components.Resources.DropDown.Localization {
+namespace ViciOne.Ui.Blazor.Components.DropDown.Localization {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ViciOne.Ui.Blazor.Components.Resources.DropDown.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.Resources.DropDown.Localization.DropDown", typeof(DropDown).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.DropDown.Localization.DropDown", typeof(DropDown).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

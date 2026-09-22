@@ -6,6 +6,10 @@
 
 - Improved error handling of JavaScript interop, errors are now logged instead of thrown
 
+### Package `ViciOne.Ui.Blazor.Components.Resources`
+
+- Removed, resources are now part of package `ViciOne.Ui.Blazor.Components` again
+
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 
 - `bunit` package, updated to version `2.7.2`

@@ -7,6 +7,9 @@
 ## Documentation style
 - Refer to `docs/documentation-style.md` for comment and documentation conventions, including consistent terminology
 
+## Localization
+- Refer to `docs/localization-guide.md` for localized text and resource file conventions
+
 ## Commit messages
 - Refer to `docs/commit-message-style.md` for commit message conventions
 

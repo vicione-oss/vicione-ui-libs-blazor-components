@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Extensions;
-using DropDownLocalization = ViciOne.Ui.Blazor.Components.Resources.DropDown.Localization.DropDown;
 
 namespace ViciOne.Ui.Blazor.Components.DropDown;
 
@@ -67,7 +66,7 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
     [Inject] private ILogger<DropDown<TItem>> Logger { get; set; } = default!;
 
-    private static string NoMatchText => DropDownLocalization.NoMatch;
+    private static string NoMatchText => Localization.DropDown.NoMatch;
 
     /// <inheritdoc/>
     protected override async Task OnParametersSetAsync()

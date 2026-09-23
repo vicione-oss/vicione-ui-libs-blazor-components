@@ -84,36 +84,36 @@
   <ItemGroup>
     <EmbeddedResource Update="AdvancedErrorBoundary\Localization\Content.resx">
       <LastGenOutput>Content.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ComboBox\Localization\ComboBox.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ComboBox.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="DropDown\Localization\DropDown.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Dropdown.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="PropertyGrid\Localization\PropertyEntryContextMenu.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PropertyEntryContextMenu.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="PropertyGrid\Localization\PropertyGridItem.resx">
       <SubType>Designer</SubType>
       <LastGenOutput>PropertyGridItem.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="PropertyGrid\Localization\PropertyEntry.resx">
       <SubType>Designer</SubType>
       <LastGenOutput>PropertyEntry.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="PropertyGrid\Localization\ValidationMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ValidationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="SpinEdit\Localization\SpinButton.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SpinButton.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

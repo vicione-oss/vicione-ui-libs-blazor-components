@@ -22,7 +22,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PropertyEntry {
+    internal class PropertyEntry {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.PropertyGrid.Localization.PropertyEntry", typeof(PropertyEntry).Assembly);
@@ -51,7 +51,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         /// <summary>
         ///   Looks up a localized string similar to The selection is disabled because no selectable values could be found..
         /// </summary>
-        public static string TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound {
+        internal static string TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound {
             get {
                 return ResourceManager.GetString("TheSelectionIsDisabledBecauseNoSelectableValuesCouldBeFound", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         /// <summary>
         ///   Looks up a localized string similar to The selection is disabled because the selected items have selectable values that are mutually exclusive..
         /// </summary>
-        public static string TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyExclusive {
+        internal static string TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyExclusive {
             get {
                 return ResourceManager.GetString("TheSelectionIsDisabledBecauseTheSelectedItemsHaveSelectableValuesThatAreMutuallyE" +
                         "xclusive", resourceCulture);

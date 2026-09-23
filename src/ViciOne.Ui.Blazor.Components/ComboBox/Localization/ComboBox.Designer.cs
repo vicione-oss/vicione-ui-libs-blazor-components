@@ -22,7 +22,7 @@ namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ComboBox {
+    internal class ComboBox {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.ComboBox.Localization.ComboBox", typeof(ComboBox).Assembly);
@@ -51,7 +51,7 @@ namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
         /// <summary>
         ///   Looks up a localized string similar to No matching item found..
         /// </summary>
-        public static string NoMatchingItemFound {
+        internal static string NoMatchingItemFound {
             get {
                 return ResourceManager.GetString("NoMatchingItemFound", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Press Enter or leave the field to apply your input..
         /// </summary>
-        public static string PressEnterOrLeaveTheFieldToApplyYourInput {
+        internal static string PressEnterOrLeaveTheFieldToApplyYourInput {
             get {
                 return ResourceManager.GetString("PressEnterOrLeaveTheFieldToApplyYourInput", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace ViciOne.Ui.Blazor.Components.ComboBox.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Pressing Enter or leaving the field will revert your input..
         /// </summary>
-        public static string PressingEnterOrLeavingTheFieldWillRevertYourInput {
+        internal static string PressingEnterOrLeavingTheFieldWillRevertYourInput {
             get {
                 return ResourceManager.GetString("PressingEnterOrLeavingTheFieldWillRevertYourInput", resourceCulture);
             }

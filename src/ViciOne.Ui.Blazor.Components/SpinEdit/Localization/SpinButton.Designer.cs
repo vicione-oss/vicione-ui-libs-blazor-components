@@ -22,7 +22,7 @@ namespace ViciOne.Ui.Blazor.Components.SpinEdit.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SpinButton {
+    internal class SpinButton {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ViciOne.Ui.Blazor.Components.SpinEdit.Localization {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.SpinEdit.Localization.SpinButton", typeof(SpinButton).Assembly);
@@ -51,7 +51,7 @@ namespace ViciOne.Ui.Blazor.Components.SpinEdit.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ViciOne.Ui.Blazor.Components.SpinEdit.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Decrement by {0}.
         /// </summary>
-        public static string DecrementBy {
+        internal static string DecrementBy {
             get {
                 return ResourceManager.GetString("DecrementBy", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ViciOne.Ui.Blazor.Components.SpinEdit.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Increment by {0}.
         /// </summary>
-        public static string IncrementBy {
+        internal static string IncrementBy {
             get {
                 return ResourceManager.GetString("IncrementBy", resourceCulture);
             }

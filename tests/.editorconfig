@@ -8,6 +8,7 @@ dotnet_diagnostic.CA1822.severity = warning # Mark members as static
 dotnet_diagnostic.CA1826.severity = warning # Use property instead of Linq Enumerable method
 dotnet_diagnostic.CA1848.severity = warning # Use the LoggerMessage delegates
 dotnet_diagnostic.CA1849.severity = warning # Call async methods when in an async method
+dotnet_diagnostic.CA1851.severity = warning # Possible multiple enumerations of `IEnumerable` collection
 dotnet_diagnostic.CA1859.severity = warning # Use concrete types when possible for improved performance
 dotnet_diagnostic.CA2251.severity = warning # Use 'string.Equals' instead of comparing the result of 'string.Compare' to 0
 

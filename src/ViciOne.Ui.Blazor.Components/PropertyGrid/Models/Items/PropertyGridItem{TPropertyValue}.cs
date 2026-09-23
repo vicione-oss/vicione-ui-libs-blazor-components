@@ -150,10 +150,9 @@ internal class PropertyGridItem<TPropertyValue>(ILookup<Type, object> instancesB
     private static string? ReadUnified(IEnumerable<IPropertyDescriptor> propertyDescriptors,
         Func<IPropertyDescriptor, string?> propertySelector)
     {
-        if (propertyDescriptors.Select(propertySelector).Distinct().Count() != 1)
-            return null;
+        var distinctValues = propertyDescriptors.Select(propertySelector).Distinct().ToList();
 
-        return propertySelector(propertyDescriptors.First());
+        return distinctValues.Count == 1 ? distinctValues[0] : null;
     }
 
     private static List<PropertyOperationIteration> CreatePropertyOperationIterations(ILookup<Type, object> instancesByType,

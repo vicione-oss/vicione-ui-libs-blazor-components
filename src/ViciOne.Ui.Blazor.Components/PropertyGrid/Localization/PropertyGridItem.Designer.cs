@@ -22,7 +22,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PropertyGridItem {
+    internal class PropertyGridItem {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.PropertyGrid.Localization.PropertyGridItem", typeof(PropertyGridItem).Assembly);
@@ -51,7 +51,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ViciOne.Ui.Blazor.Components.PropertyGrid.Localization {
         /// <summary>
         ///   Looks up a localized string similar to The last value used has been restored..
         /// </summary>
-        public static string TheLastValueUsedHasBeenRestored {
+        internal static string TheLastValueUsedHasBeenRestored {
             get {
                 return ResourceManager.GetString("TheLastValueUsedHasBeenRestored", resourceCulture);
             }

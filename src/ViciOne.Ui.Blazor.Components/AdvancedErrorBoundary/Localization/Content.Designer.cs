@@ -22,7 +22,7 @@ namespace ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Content {
+    internal class Content {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization.Content", typeof(Content).Assembly);
@@ -51,7 +51,7 @@ namespace ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization {
         /// <summary>
         ///   Looks up a localized string similar to An unexpected error has occured. See logs to get further details..
         /// </summary>
-        public static string Details {
+        internal static string Details {
             get {
                 return ResourceManager.GetString("Details", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Oh snap! Something went wrong :(.
         /// </summary>
-        public static string Heading {
+        internal static string Heading {
             get {
                 return ResourceManager.GetString("Heading", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace ViciOne.Ui.Blazor.Components.AdvancedErrorBoundary.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Try again.
         /// </summary>
-        public static string TryAgain {
+        internal static string TryAgain {
             get {
                 return ResourceManager.GetString("TryAgain", resourceCulture);
             }

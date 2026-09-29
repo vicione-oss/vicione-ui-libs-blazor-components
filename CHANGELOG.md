@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - Improved error handling of JavaScript interop, errors are now logged instead of thrown
+- Rename the company to `ViciOne open automation gmbh` in the license and the package metadata
 
 ### Package `ViciOne.Ui.Blazor.Components.Resources`
 
@@ -13,6 +14,7 @@
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 
 - `bunit` package, updated to version `2.7.2`
+- Rename the company to `ViciOne open automation gmbh` in the license and the package metadata
 
 ## 6.1.1 - 2026-09-21
 

@@ -9,7 +9,7 @@
   <ItemGroup>
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
     <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
-    <GlobalPackageReference Include="ViciOne.CodeAnalysis" Version="1.7.0" />
+    <GlobalPackageReference Include="ViciOne.CodeAnalysis" Version="1.8.0" />
   </ItemGroup>
 
   <!-- .NET packages managed by renovate.json -->

@@ -53,9 +53,9 @@
       },
       "ViciOne.CodeAnalysis": {
         "type": "Direct",
-        "requested": "[1.7.0, )",
-        "resolved": "1.7.0",
-        "contentHash": "rxY6ZdH/V0n/va0T6Kcbq0XCmhCnueA1iCj2gu1i6+gxVsAw+mk0HsYMoCiGB0aVRVplMc2fBRW4deJt0U3HsA=="
+        "requested": "[1.8.0, )",
+        "resolved": "1.8.0",
+        "contentHash": "jadyfMWCUd2XQhUNScG9T2igMgb6tFN+6XlmGr2Oi2FLNtNwxgcD7mhxvbYAigj4rcWKrYE7x3b3x+UPpR2VLA=="
       },
       "Microsoft.AspNetCore.Authorization": {
         "type": "Transitive",

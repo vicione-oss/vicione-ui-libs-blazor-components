@@ -39,12 +39,21 @@
     // grid-template-columns is set in modifier classes
     align-items: center;
 
+    position: relative;
+
     ::deep .icon {
         grid-area: icon;
     }
 
     .text {
         grid-area: text;
+    }
+
+    md-ripple {
+        --md-ripple-pressed-color: #{colors.$font-light};
+        --md-ripple-pressed-opacity: 0.1;
+
+        --md-ripple-hover-opacity: 0;
     }
 
     // size

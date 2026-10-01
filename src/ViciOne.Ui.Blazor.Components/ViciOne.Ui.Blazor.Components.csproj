@@ -414,7 +414,20 @@
     <GeneratedStaticWebAsset Include="TextBox\TextBox.razor.js">
       <DestinationFile>text-box\text-box.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <!-- Emitted by target 'BundleMaterialWebRipple' rather than by the TypeScript compile -->
+    <GeneratedStaticWebAsset Include="obj\material-web\ripple.js">
+      <DestinationFile>material-web\ripple.js</DestinationFile>
+    </GeneratedStaticWebAsset>
   </ItemGroup>
+
+  <!--
+    The ripple of "@material/web" imports Lit by package name, which browsers can't resolve, so it is bundled with
+    everything it imports into a single module. Like the output of the TypeScript compile, it has to exist before
+    'RewriteJavaScriptImports' and 'MoveGeneratedStaticWebAssets' process the generated static web assets.
+  -->
+  <Target Name="BundleMaterialWebRipple" BeforeTargets="RewriteJavaScriptImports" Condition="'$(BuildingProject)' != 'false' AND '$(DesignTimeBuild)' != 'true'">
+    <Exec Command="npm run bundle-material-web-ripple" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
 
   <PropertyGroup>
     <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedStaticWebAsset;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>

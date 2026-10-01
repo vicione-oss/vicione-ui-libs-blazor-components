@@ -1,8 +1,10 @@
 {
   "devDependencies": {
+    "@material/web": "^2.5.0",
     "@types/blazor__javascript-interop": "^3.1.7"
   },
   "scripts": {
+    "bundle-material-web-ripple": "esbuild @material/web/ripple/ripple.js --bundle --format=esm --minify --log-level=warning --outfile=obj/material-web/ripple.js",
     "lint": "eslint .",
     "lint-with-fix": "eslint . --fix"
   }

@@ -4,6 +4,7 @@
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
+- `Button`, added ripple effect when pressed
 - Improved error handling of JavaScript interop, errors are now logged instead of thrown
 - Rename the company to `ViciOne open automation gmbh` in the license and the package metadata
 

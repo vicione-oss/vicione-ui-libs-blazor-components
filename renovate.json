@@ -155,6 +155,16 @@
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "three-dots" ],
       "enabled": true
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "@material/web" ],
+      "enabled": true
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "esbuild" ],
+      "enabled": true
     }
   ]
 }

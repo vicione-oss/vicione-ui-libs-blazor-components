@@ -1,6 +1,6 @@
 # PropertyGrid (experimental)
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 

@@ -1,0 +1,33 @@
+// Markdown style rules, see https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+{
+    "config": {
+        "default": true,
+
+        // The rules below would otherwise only require a style to be consistent within a single
+        // file, so each one is pinned to the style that is consistent across all files
+        "MD003": { "style": "atx" },
+        "MD004": { "style": "dash" },
+        "MD035": { "style": "---" },
+        "MD046": { "style": "fenced" },
+        "MD048": { "style": "backtick" },
+        "MD049": { "style": "asterisk" },
+        "MD050": { "style": "asterisk" },
+        "MD055": { "style": "leading_and_trailing" },
+
+        // Whether a paragraph is wrapped is left to its author, and tables and links cannot be
+        // wrapped at all
+        "MD013": false,
+
+        // Keys to press read better rendered as keys than as code
+        "MD033": { "allowed_elements": ["kbd"] },
+
+        // The changelog repeats the same headings, such as "Added", under every version
+        "MD024": { "siblings_only": true },
+
+        // Prompt and command files for agents start with their instructions, not with a title
+        "MD041": false
+    },
+    "globs": ["**/*.md"],
+    "gitignore": true,
+    "noProgress": true
+}

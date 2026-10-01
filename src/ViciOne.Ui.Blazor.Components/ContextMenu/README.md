@@ -1,6 +1,6 @@
 # ContextMenu
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 

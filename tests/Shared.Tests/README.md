@@ -1,6 +1,6 @@
 # Tests for `Shared` project
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 

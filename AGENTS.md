@@ -1,19 +1,25 @@
 # AGENTS.md
 
 ## General conventions
+
 - Refer to `docs/general-conventions.md` for rules that apply to everything written in this repository, such as American English spelling
 
 ## Code style
+
 - Refer to `docs/csharp-code-style.md` for C# coding conventions
 - Refer to `docs/scss-code-style.md` for SCSS coding conventions
 
 ## Documentation style
+
 - Refer to `docs/documentation-style.md` for comment and documentation conventions, including consistent terminology
+- After changing `.md` files, run `npm run lint-with-fix` from the solution root. ESLint checks their structure, such as broken links, and markdownlint checks their style as configured in `.markdownlint-cli2.jsonc`
 
 ## Localization
+
 - Refer to `docs/localization-guide.md` for localized text and resource file conventions
 
 ## Commit messages
+
 - Refer to `docs/commit-message-style.md` for commit message conventions
 
 ## Skills
@@ -60,9 +66,9 @@ When working on `.ts` files living in a folder of a `.csproj`, you need to keep 
 
 Only touch these files when you **add, rename, remove, or re-target** a `.ts` file or an import specifier. A pure in-file logic change requires no updates here.
 
-File | What to do
--|-
-`.csproj` | Maintain MSBuild items named `GeneratedStaticWebAsset` to ensure generated `.js` files are included as static web assets in the Blazor project.
+| File | What to do |
+| - | - |
+| `.csproj` | Maintain MSBuild items named `GeneratedStaticWebAsset` to ensure generated `.js` files are included as static web assets in the Blazor project. |
 
 After making changes to the `.ts` files, make sure the code style is consistent by running the following command from solution root:
 

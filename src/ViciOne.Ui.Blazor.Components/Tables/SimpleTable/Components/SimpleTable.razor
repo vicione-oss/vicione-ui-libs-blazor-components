@@ -1,0 +1,29 @@
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+
+@typeparam TItem
+
+<CascadingValue Value="this" IsFixed="true">
+    <AdvancedTable @ref="_advancedTable"
+                   ItemsProvider="ItemProvider"
+                   Header="Header"
+                   Columns="Columns"
+                   Footer="Footer"
+                   LeftOutlet="LeftOutlet"
+                   ColumnChooserToggleId="ColumnChooserToggleId"
+                   Mode="Mode"
+                   CssClass="@CssClass"
+                   MaximumHeight="@MaximumHeight"
+                   RowsDraggable="RowsDraggable"
+                   RowDoubleClick="RowDoubleClick"
+                   RowContextMenuRequested="RowContextMenuRequested"
+                   SelectionMode="SelectionMode"
+                   RowClickSelectionEnabled="RowClickSelectionEnabled"
+                   @bind-SelectedItems:get="SelectedItems"
+                   @bind-SelectedItems:set="AdvancedTableSelectedItemsChangedAsync"
+                   ItemSelectionAllowed="ItemSelectionAllowed"
+                   DragPayloadProvider="DragPayloadProvider"
+                   FilterState="FilterState"
+                   FilterStateChanged="AdvancedTableFilterStateChangedAsync"
+                   SortingState="SortingState"
+                   SortingStateChanged="AdvancedTableSortingStateChangedAsync" />
+</CascadingValue>

@@ -9,7 +9,7 @@ using ViciOne.Ui.Blazor.Components.PointerCapture.Services.Behaviors;
 
 namespace ViciOne.Ui.Blazor.Components.Draggable.Services;
 
-internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntime jsRuntime)
+internal sealed partial class DragInteraction(ILogger<DragInteraction> logger, IJSRuntime jsRuntime)
     : IDragInteraction, IAsyncDisposable
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -68,7 +68,9 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
                 dragInteractionContext.PointerCaptureBehaviors = [.. pointerCaptureBehaviorJsObjects.OfType<IJSObjectReference>()];
             }
 
-            var jsInstance = await _jsModule.InvokeConstructorAsync("DragInteraction", logger,
+            // Not InvokeConstructorAsync: the constructor could not await a custom drag ghost's module import,
+            // so attach resolves it and returns the instance, or null for a draggable already gone from the DOM.
+            var jsInstance = await _jsModule.InvokeAsync<IJSObjectReference?>("attach", logger,
                 _cancellationTokenSource.Token, dragInteractionContext);
 
             if (jsInstance is null)
@@ -166,11 +168,15 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
         {
             _dropzones.Clear();
 
-            var dragStartEvent = DragStart;
-            if (dragStartEvent is null)
+            if (!_draggables.TryGetValue(draggableId, out var draggable))
                 return [];
 
-            if (!_draggables.TryGetValue(draggableId, out var draggable))
+            // A dropzone decides from what the draggable carries, so the draggable has to have settled it before
+            // any dropzone is asked. Prepared even with nobody listening, as preparing may also commit state.
+            await PrepareDragStartAsync(draggable);
+
+            var dragStartEvent = DragStart;
+            if (dragStartEvent is null)
                 return [];
 
             var args = new DragStartEventArgs { Draggable = draggable };
@@ -231,6 +237,23 @@ internal sealed class DragInteraction(ILogger<DragInteraction> logger, IJSRuntim
                 await dropzone.DragDroppedAsync(draggable, x, y);
             }
         });
+
+    private async Task PrepareDragStartAsync(IDraggable draggable)
+    {
+        // Nothing above this catches, so a failing preparation would leave the drag live with no dropzones resolved.
+        try
+        {
+            await draggable.PrepareDragStartAsync();
+        }
+        catch (Exception exception)
+        {
+            DragStartPreparationFailed(logger, exception);
+        }
+    }
+
+    [LoggerMessage(Level = LogLevel.Error,
+        Message = "Preparing the drag start failed; the dropzones are resolved against the unprepared draggable.")]
+    private static partial void DragStartPreparationFailed(ILogger logger, Exception exception);
 
     private async Task ExecuteGuardedAsync(Func<Task> action)
     {

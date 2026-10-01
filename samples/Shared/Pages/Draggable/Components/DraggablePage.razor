@@ -55,10 +55,13 @@
                 <DraggableRow Name="Bob Brown" Status="Away" Draggable="@_draggable" DragGhost="TableRowDragGhost" />
             </tbody>
         </table>
+
+        <p>Ticket dispenser handing out the next ticket as a drag starts; only the dropzone serving that ticket accepts it:</p>
+        <TicketDispenser Draggable="@_draggable" />
     </div>
     <div class="dropzones">
-        <Dropzone Label="Dropzone 1" GridSize="@_gridSize" />
-        <Dropzone Label="Dropzone 2" GridSize="@_gridSize" />
+        <Dropzone Label="Dropzone 1" GridSize="@_gridSize" ServedTickets="TicketParity.Odd" />
+        <Dropzone Label="Dropzone 2" GridSize="@_gridSize" ServedTickets="TicketParity.Even" />
     </div>
 </div>
 

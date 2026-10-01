@@ -1,0 +1,22 @@
+@use "../../../../../../Styles/design/colors";
+@use "../../../../../../Styles/mixins";
+
+.dropzone {
+    width: 400px;
+    height: 160px;
+
+    display: grid;
+    align-content: center;
+    justify-items: center;
+
+    @include mixins.dotted-border();
+    @include mixins.dotted-grid();
+
+    &.highlighted {
+        border-color: colors.$font-light;
+    }
+
+    &.drag-entered {
+        border-color: colors.$accent;
+    }
+}

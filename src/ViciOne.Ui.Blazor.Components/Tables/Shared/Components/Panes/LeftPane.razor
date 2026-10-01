@@ -1,0 +1,13 @@
+@{
+    var cssClasses = new List<string> { "left-pane" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+}
+
+<div class="@string.Join(" ", cssClasses)">
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+</div>

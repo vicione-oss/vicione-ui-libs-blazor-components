@@ -1,0 +1,51 @@
+@page "/tables/simple-table/global-filter"
+
+@using ViciOne.Ui.Blazor.Components.SearchBox
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Models
+@using ViciOne.Ui.Localization.Extensions
+
+<h3>External global filter</h3>
+
+<DescriptionBanner>
+    A <em>global filter</em> is driven from a control <strong>outside</strong> the table — here a search box —
+    and matches the whole item, not a single column. The consumer authors an
+    <code>ISimpleTableFilter&lt;TItem&gt;</code> with no column id (an OR across <code>Key</code> and
+    <code>Value</code> below) and pushes it in with <code>SetFilterStateAsync</code>, composing it onto whatever
+    column filters the headers currently hold — <code>FilterStateChanged</code> keeps the page in step so nothing is
+    lost either way. The table applies it inside its pipeline, so it combines (AND) with the built-in
+    <code>Value</code> column filter and the full item set stays available for selection.
+</DescriptionBanner>
+
+<div class="global-filter-search">
+    <SearchBox Text="@_searchText"
+               TextChanging="SearchTextChangingAsync"
+               Placeholder="Search key or value..." />
+</div>
+
+<SimpleTable @ref="_table"
+             Items="s_items"
+             RowClickSelectionEnabled="false"
+             FilterStateChanged="AppliedFilterStateChanged"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable="false">
+            <CellContent>
+                @context.Timestamp.LocalizeShortDate() @context.Timestamp.LocalizeShortTime()
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

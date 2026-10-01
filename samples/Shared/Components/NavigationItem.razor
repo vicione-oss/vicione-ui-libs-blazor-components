@@ -3,25 +3,22 @@
 
 <li>
     <div class="navigation-item">
-        @{
-            if (ChildContent is not null)
-            {
-                <button class="expand-collapse-button" @onclick="ExpandCollapseButtonClick">
-                    <MonochromeIcon Name="@(_expanded ? MonochromeIconName.ExpanderLightDown : MonochromeIconName.ExpanderLightRight)"
-                                    Size="MonochromeIconSize.Small"/>
-                </button>
-            }
-            else
-            {
-                <MonochromeIcon CssClass="icon" Name="@(MonochromeIconName.PermissionNone)" Size="MonochromeIconSize.Tiny" />
-            }
+        @if (ChildContent is not null)
+        {
+            <button class="expand-collapse-button" @onclick="ExpandCollapseButtonClick">
+                <MonochromeIcon Name="@(_expanded ? MonochromeIconName.ExpanderLightDown : MonochromeIconName.ExpanderLightRight)"
+                                Size="MonochromeIconSize.Small"/>
+            </button>
 
-            var linkCssClasses = new List<string> { "link" };
-
-            if (_isCurrent)
-                linkCssClasses.Add("current");
+            @* Parent nodes only group their children; they own no page, so activating the text toggles expansion. *@
+            <button class="link group" @onclick="ExpandCollapseButtonClick">@Text</button>
         }
-        <a class="@string.Join(" ", linkCssClasses)" href="@Href">@Text</a>
+        else
+        {
+            <MonochromeIcon CssClass="icon" Name="@(MonochromeIconName.PermissionNone)" Size="MonochromeIconSize.Tiny" />
+
+            <a class="@(_isCurrent ? "link current" : "link")" href="@Href">@Text</a>
+        }
     </div>
 
     @if (ChildContent is not null && _expanded)

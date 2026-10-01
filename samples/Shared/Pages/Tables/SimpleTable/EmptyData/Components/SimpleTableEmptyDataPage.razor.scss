@@ -1,0 +1,5 @@
+@use "../../../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}

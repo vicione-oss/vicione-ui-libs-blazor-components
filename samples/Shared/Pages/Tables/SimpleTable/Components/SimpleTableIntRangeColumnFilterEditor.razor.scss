@@ -1,0 +1,17 @@
+// The bounds stack so the panel stays narrow, and each input spans the body instead of falling back to its
+// intrinsic width.
+.int-range-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    input {
+        width: 100%;
+    }
+}

@@ -35,6 +35,35 @@ public int GetValue() => Value;
 ~Foo() => Cleanup();
 ```
 
+## Blank line before `return` after preceding statements
+
+When a `return` statement is preceded by other statements within the same block, separate it with a blank line. This visually sets the returned result apart from the logic that produces it.
+
+``` csharp
+// correct
+public ExampleTableItem Create()
+{
+    var faker = new Faker();
+
+    return new ExampleTableItem
+    {
+        Key = faker.Random.String2(3)
+    };
+}
+
+// incorrect
+public ExampleTableItem Create()
+{
+    var faker = new Faker();
+    return new ExampleTableItem
+    {
+        Key = faker.Random.String2(3)
+    };
+}
+```
+
+This does not apply when the `return` is the only statement in the block.
+
 ## Is it allowed to initialize a non-nullable field with `default!`?
 
 Using `default!` should be **avoided whenever possible** because it assigns `null` to a member that should never be null.
@@ -124,3 +153,34 @@ var label = isEnabled ? "On" : "Off";
 - Test method names should use [snake case](https://en.wikipedia.org/wiki/Snake_case) pattern.
 
   > The Test Explorer replaces underlines with spaces because of [`our configuration`](https://gitlab.i40.ifm-datalink.net/acx/vo-ui/vo-blazor-components/-/blob/master/xunit.runner.json#L4) of [`methodDisplayOptions`](https://xunit.net/docs/runsettings#MethodDisplayOptions). As a result, test names like `Should_return_access_level_requirement` are displayed as formulated sentences like `Should return access level requirement`.
+
+### Event handler naming — no `On` prefix for domain/service events and Razor handlers
+
+The `On` prefix is reserved for Blazor lifecycle overrides (`OnInitialized`, `OnParametersSet`, …) and `EventCallback` component parameters (`OnClick`, `OnValueChanged`). Do **not** use it for:
+
+**Handlers subscribed to .NET domain/service events** — name after the event, optionally prefixed with the source:
+
+```csharp
+// DO
+_state.PropertiesChanged += StatePropertiesChangedAsync;
+Controller.UpdatePropertyRequested += UpdatePropertyRequestedAsync;
+MenuService.CompactChanged += MenuServiceCompactChangedAsync;
+DragInteraction.DragStart += DragStart;
+
+// DON'T
+_state.PropertiesChanged += OnStatePropertiesChanged;
+DragInteraction.DragStart += OnDragStart;
+```
+
+**Internal Razor `@onclick` / `@onchange` handlers** — name after the action or the element that triggers it:
+
+```csharp
+// DO
+private void ResetClick() { }
+private async Task CloseButtonClickAsync() { }
+private async Task CollapseButtonClickAsync() { }
+
+// DON'T
+private void OnResetClick() { }
+private async Task OnCloseButtonClickAsync() { }
+```

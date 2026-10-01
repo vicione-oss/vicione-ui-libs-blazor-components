@@ -1,0 +1,46 @@
+@page "/tables/simple-table/selection/conditional"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+
+<h3>Conditional Selection</h3>
+
+<DescriptionBanner>
+    @_conditionalSelectedItems.Count selected.
+
+    <code>ItemSelectionAllowed</code> vetoes individual items: only those whose Key starts before 'N' (alphabetically) are selectable.
+
+    The checkbox is disabled on non-selectable rows, and "select all" is disabled because it has no coherent meaning
+    under a per-item constraint (the order of selection would be relevant and is ill-defined).
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             ItemSelectionAllowed="ConditionalCanSelect"
+             @bind-SelectedItems="_conditionalSelectedItems"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_conditionalSelectedItems.Count" />
+    </Footer>
+</SimpleTable>

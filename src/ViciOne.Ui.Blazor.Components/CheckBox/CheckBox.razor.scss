@@ -1,5 +1,6 @@
 @use "../Styles/design/colors";
 @use "../Styles/design/animations/mixins" as animations;
+@use "Styles/variables";
 @use "../Styles/inputs";
 
 @use "sass:color";
@@ -34,10 +35,10 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 1.25rem;
-    min-width: 1.25rem;
-    height: 1.25rem;
-    min-height: 1.25rem;
+    width: variables.$size;
+    min-width: variables.$size;
+    height: variables.$size;
+    min-height: variables.$size;
     border-radius: 0.1875rem;
     color: colors.$font-light;
 
@@ -104,6 +105,14 @@
 
     .checked-icon-container {
         display: none;
+    }
+
+    // The icons are larger than the box. Their overhang is transparent, but it still counts as scrollable overflow,
+    // so a scroll container ending in a CheckBox, like the column chooser's list, showed a scrollbar for nothing.
+    .checked-icon-container, .indeterminate-icon-container {
+        position: absolute;
+        inset: 0;
+        overflow: clip;
     }
 
     ::deep {

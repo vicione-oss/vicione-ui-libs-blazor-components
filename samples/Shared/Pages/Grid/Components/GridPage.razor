@@ -20,7 +20,7 @@
     </div>
 
     <div class="grid-example">
-        <Grid Items="_itemsQueryable" CssClass="sample-grid" Virtualize="_virtualize">
+        <Grid TGridItem="ExampleGridItem" Items="_itemsQueryable" CssClass="sample-grid" Virtualize="_virtualize">
             <ActionButtons>
                 <AddGridActionButton OnClick="AddGridItem" />
                 <EditGridActionButton Enabled="false" />
@@ -50,9 +50,9 @@
                     </LeftPane>
                 }
 
-                <ItemSelectColumn KeySelector="@(item => item.Id)" Selection="@ItemSelection" />
+                <ItemSelectColumn TGridItem="ExampleGridItem" TGridItemKey="Guid" KeySelector="@(item => item.Id)" Selection="@ItemSelection" />
 
-                <TemplateColumn Title="Key" Sort="GridSort<ExampleGridItem>.ByAscending(i => i.Key)">
+                <TemplateColumn TGridItem="ExampleGridItem" Title="Key" Sort="GridSort<ExampleGridItem>.ByAscending(i => i.Key)">
                     @{
                         var key = new MarkupString(context.Key);
 
@@ -66,7 +66,7 @@
                     }
                 </TemplateColumn>
 
-                <TemplateColumn Title="Value" Sort="GridSort<ExampleGridItem>.ByAscending(i => i.Value)">
+                <TemplateColumn TGridItem="ExampleGridItem" Title="Value" Sort="GridSort<ExampleGridItem>.ByAscending(i => i.Value)">
                     @{
                         var value = new MarkupString(context.Value);
 
@@ -80,13 +80,13 @@
                     }
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(item => item.Timestamp)" Sortable="true"/>
+                <PropertyColumn TGridItem="ExampleGridItem" TProp="DateTime" Property="@(item => item.Timestamp)" Sortable="true"/>
 
-                <NavigationColumn NavigationButtonTitle="Show details" Navigate="@((ExampleGridItem item) => ShowDetails(item))" />
+                <NavigationColumn TGridItem="ExampleGridItem" NavigationButtonTitle="Show details" Navigate="@((ExampleGridItem item) => ShowDetails(item))" />
             </ChildContent>
 
             <Footer>
-                <SelectionFooter GridSelection="ItemSelection" />
+                <SelectionFooter TGridItemKey="Guid" GridSelection="ItemSelection" />
             </Footer>
         </Grid>
 

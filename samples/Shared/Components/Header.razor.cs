@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
@@ -21,9 +21,10 @@ public sealed partial class Header : ComponentBase, IDisposable
     private string GetHeaderText()
     {
         var path = new Uri(NavigationManager.Uri, UriKind.Absolute).AbsolutePath[1..];
-        var headerText = DashCaseToPascalCase(path);
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var lastSegment = segments.Length > 0 ? segments[^1] : path;
 
-        return headerText;
+        return DashCaseToPascalCase(lastSegment);
     }
 
     /// <summary>

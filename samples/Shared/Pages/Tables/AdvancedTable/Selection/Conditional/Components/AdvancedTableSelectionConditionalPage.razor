@@ -1,0 +1,38 @@
+@page "/tables/advanced-table/selection/conditional"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns.AdvancedTableSelectColumn
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+<h3>Conditional Selection</h3>
+
+<DescriptionBanner>
+    @_conditionalSelectedItems.Count selected. <code>ItemSelectionAllowed</code> vetoes individual items: only those
+    whose Key starts before 'N' (alphabetically) are selectable. The veto is orthogonal to the channels — it applies
+    to both row click and the checkbox column, so non-selectable rows render a disabled checkbox and ignore a row
+    click.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               ItemSelectionAllowed="ConditionalItemSelectionAllowed"
+               @bind-SelectedItems="_conditionalSelectedItems"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_conditionalSelectedItems.Count" />
+    </Footer>
+</AdvancedTable>

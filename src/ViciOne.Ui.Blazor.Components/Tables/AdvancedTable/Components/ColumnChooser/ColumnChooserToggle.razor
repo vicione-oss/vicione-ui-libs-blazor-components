@@ -1,0 +1,26 @@
+@using Microsoft.AspNetCore.Components.Sections
+@using ViciOne.Ui.Blazor.Components.Popup.Components
+
+<div class="column-chooser-toggle">
+    @Button(new ColumnChooserButtonContext(_popupVisible, PopupTitle, EventCallback.Factory.Create(this, TogglePopup)))
+
+    @if (_popupVisible)
+    {
+        var popupCssClasses = new List<string> { "column-chooser-popup" };
+
+        if (OpenPopupToLeft)
+            popupCssClasses.Add("open-to-left");
+
+        <div class="@string.Join(" ", popupCssClasses)"
+             style="--column-chooser-maximum-visible-row-count: @EffectiveMaximumVisibleRowCount"
+             @onclick:stopPropagation>
+            <CascadingValue TValue="IPopup" Value="this" IsFixed="true">
+                <PopupHeaderBodyLayout HeaderText="@PopupTitle">
+                    <Body>
+                        <SectionOutlet SectionId="@Id" />
+                    </Body>
+                </PopupHeaderBodyLayout>
+            </CascadingValue>
+        </div>
+    }
+</div>

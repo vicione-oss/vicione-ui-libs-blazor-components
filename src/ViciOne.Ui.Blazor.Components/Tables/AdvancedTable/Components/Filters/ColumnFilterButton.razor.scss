@@ -1,0 +1,27 @@
+@use "../../../../Styles/design/button";
+@use "../../../../Styles/design/colors";
+@use "../../../../Styles/design/animations/mixins" as animations;
+
+.column-filter-button {
+    display: flex;
+    align-items: center;
+
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 4px;
+
+    color: colors.$font-light;
+    background: none;
+    @include animations.multiple($color: true, $background-color: true);
+
+    border: none;
+    border-radius: button.$border-radius;
+
+    &:hover {
+        background-color: colors.$background-dark-hover;
+    }
+
+    &.active {
+        color: colors.$accent;
+    }
+}

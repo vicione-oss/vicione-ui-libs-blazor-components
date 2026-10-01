@@ -92,9 +92,9 @@
       },
       "ViciOne.Ui.Localization": {
         "type": "Direct",
-        "requested": "[3.0.1, )",
-        "resolved": "3.0.1",
-        "contentHash": "8B3ssYUJ38bxV2bGUQUPSekmK2YQ9pwXptmdXsBHOsqIku0G22kXef57Wu0zo13g9Lsf6C7KTSdi5ouCW36z+g=="
+        "requested": "[3.6.0, )",
+        "resolved": "3.6.0",
+        "contentHash": "Aj9SeQbYtCybiS4/zK1cw7EV90wtRXb1UHxdnyGWinLJmuvN7gg0I5K5gQVCtEDpKwe5duLmMLMWEOeHYARi9g=="
       },
       "ViciOne.Ui.MonochromeIcons.Components": {
         "type": "Direct",

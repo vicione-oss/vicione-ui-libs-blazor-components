@@ -102,3 +102,8 @@
         }
     }
 }
+
+@mixin toolbar-container-styles() {
+    border: 1px solid colors.$border;
+    padding: 8px;
+}

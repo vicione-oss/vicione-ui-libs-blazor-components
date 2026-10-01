@@ -11,7 +11,7 @@
         <Year>$([System.DateTime]::Now.Year)</Year>
         <Copyright>Copyright © $(Company) $(Year)</Copyright>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <SatelliteResourceLanguages>en-US;de-DE</SatelliteResourceLanguages>
+        <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
 
         <!-- Compilation -->
         <ImplicitUsings>enable</ImplicitUsings>

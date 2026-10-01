@@ -1,0 +1,31 @@
+@use "../../../../Styles/design/colors";
+
+$panel-padding: 8px;
+
+.filter-editor-frame {
+    .header-container {
+        padding: $panel-padding;
+
+        border-bottom: 1px solid colors.$border;
+    }
+
+    .body-container {
+        padding: $panel-padding;
+
+        border-bottom: 1px solid colors.$border;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: $panel-padding;
+
+        padding: $panel-padding;
+
+        // Labels are translated, so their width is not known here. Refusing to shrink keeps a long label inside its
+        // button and makes this row the panel's practical minimum width, whatever the body asks for.
+        ::deep button {
+            flex-shrink: 0;
+        }
+    }
+}

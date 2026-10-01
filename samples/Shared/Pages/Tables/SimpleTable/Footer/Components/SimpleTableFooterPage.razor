@@ -1,0 +1,97 @@
+@page "/tables/simple-table/footer"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+
+<DescriptionBanner>
+    The footer is an optional render fragment, and a table has no footer until one is supplied — leaving
+    <code>Footer</code> unset emits no footer element and reserves no space for one.
+
+    <code>TableFooter</code> is the built-in footer, and both of its counts are optional: leave
+    <code>ItemCount</code> unset and the table's own item count is displayed, leave
+    <code>SelectedItemCount</code> unset and no selection count is displayed.
+</DescriptionBanner>
+
+<h3>Neither count supplied</h3>
+
+<DescriptionBanner>
+    Placed without parameters, <code>TableFooter</code> displays the number of items the table currently holds
+    and keeps it current as the table reloads. The item type is cascaded, so it needs no explicit type argument.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter/>
+    </Footer>
+</SimpleTable>
+
+<h3>Selection count supplied</h3>
+
+<DescriptionBanner>
+    Supply <code>SelectedItemCount</code> to display the number of selected items beside the item count.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" @bind-SelectedItems="_selectedItems" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_selectedItems.Count" />
+    </Footer>
+</SimpleTable>
+
+<h3>Both counts supplied</h3>
+
+<DescriptionBanner>
+    Supply <code>ItemCount</code> as well and the footer displays exactly the two numbers it was given instead
+    of reading one of them from the table — the form in which the two numbers cannot disagree for a frame.
+    The number passed here is the one this page already holds, the size of its own item source.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" @bind-SelectedItems="_bothCountsSelectedItems" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter ItemCount="s_items.Count" SelectedItemCount="_bothCountsSelectedItems.Count" />
+    </Footer>
+</SimpleTable>

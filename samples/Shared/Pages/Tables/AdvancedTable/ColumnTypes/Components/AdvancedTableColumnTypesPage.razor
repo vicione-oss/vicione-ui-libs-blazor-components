@@ -1,0 +1,54 @@
+@page "/tables/advanced-table/column-customization"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<DescriptionBanner>
+    Header and cell content are each independently customizable: header accepts a plain title string or a fully custom template;
+    cells always render the <code>CellContent</code> fragment, which holds either the plain value or custom markup.
+    The first four columns below cover each combination.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Cell content is not limited to the default row height either — the last column is 50px tall, so every row grows to fit
+    it. Hover a grown row or select it and follow its bottom edge across the full width: the row color has to reach that
+    edge, with no hairline of the darker page background left between one row and the next. Repeat at 110%, 125% and 150%
+    browser zoom, where a grown row lands on a fractional height and its cells paint a slightly smaller box than the row.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="DefaultPlain" Title="Default header, plain content">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="CustomPlain">
+            <HeaderContent>
+                <Button Text="Custom header, plain content" />
+            </HeaderContent>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="DefaultCustom" Title="Default header, custom content">
+            <CellContent>
+                <code>@context.Value</code>
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="CustomCustom">
+            <HeaderContent>
+                <Button Text="Custom header, custom content" />
+            </HeaderContent>
+            <CellContent>
+                <code>@context.Value</code>
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="TallCustom" Title="Content taller than the row">
+            <CellContent>
+                <div style="height: 50px">@context.Value</div>
+            </CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

@@ -11,6 +11,12 @@ public sealed partial class CheckBoxPage : ComponentBase
     private CheckBox<bool>? _unboundCheckbox;
     private bool? _unboundCheckboxValue;
 
+    private bool _cardCheckboxValue;
+    private int _cardClicks;
+
     private void GetUnboundCheckBoxValueClick()
         => _unboundCheckboxValue = _unboundCheckbox?.Value;
+
+    private void CardClick()
+        => _cardClicks++;
 }

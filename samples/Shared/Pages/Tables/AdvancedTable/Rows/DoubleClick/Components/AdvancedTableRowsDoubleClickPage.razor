@@ -1,0 +1,30 @@
+@page "/tables/advanced-table/rows/double-click"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<h3>Row Double Click</h3>
+
+@if (_doubleClickedItem is not null)
+{
+    <DescriptionBanner>
+        Double clicked: <code>@_doubleClickedItem.Key</code> / <code>@_doubleClickedItem.Value</code>
+    </DescriptionBanner>
+}
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               RowClickSelectionEnabled="false"
+               RowDoubleClick="@((ExampleTableItem item) => _doubleClickedItem = item)"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

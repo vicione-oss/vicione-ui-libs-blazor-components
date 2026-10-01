@@ -1,0 +1,77 @@
+@page "/tables/advanced-table/column-chooser"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.ColumnChooser
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Toolbar.Components
+@using ViciOne.Ui.Localization.Resources
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<h3>Column Chooser</h3>
+
+<DescriptionBanner>
+    The column chooser toggles column visibility on an <code>AdvancedTable</code>. Give the table a
+    <code>ColumnChooserToggleId</code> and place a <code>ColumnChooserToggle</code> with the matching
+    <code>Id</code> wherever the menu should appear — here inside a <code>Toolbar</code>. The menu lists every column whose
+    <code>ShowInColumnChooser</code> is <code>true</code>; set it to <code>false</code> to keep a column always
+    visible and out of the menu.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <code>ColumnChooserToggle</code> renders no button of its own — <code>Button</code> supplies it, here a
+    <code>ToolbarButton</code>, so it looks and behaves like the rest of the <code>Toolbar</code> it lives in
+    and takes part in its overflow menu like any other button. The fragment receives whether the menu is
+    currently open and a callback to toggle it. The toggle renders this button directly, wherever it itself is
+    placed, rather than through the table's section outlet — a <code>ToolbarButton</code> only finds its
+    surrounding <code>Toolbar</code> when it is part of the normal render tree, not content teleported in from
+    elsewhere.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Hiding a column also clears any filter active on it: the header is the only place that filter can be edited,
+    so keeping it would leave the data constrained by an unreachable filter. Filter the <code>Value</code>
+    column below, then hide it from the menu — the rows return and re-showing the column starts filterless.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <code>MaximumVisibleRowCount</code> limits how many columns the menu lists at once, 10 by default; any
+    further ones are reached by scrolling the list, so a table with many columns cannot stretch the menu past the
+    dialog or page it opens in. Here it is set to 2, one less than the columns in the menu.
+</DescriptionBanner>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ColumnChooserToggle Id="_columnChooserToggleId" MaximumVisibleRowCount="2">
+            <Button>
+                <ToolbarButton IconName="MonochromeIconName.ColumnChooserMenu"
+                               Tooltip="@string.Format(UserActions.OpenSomething, context.PopupTitle)"
+                               Active="context.PopupVisible"
+                               OnClick="context.Toggle" />
+            </Button>
+        </ColumnChooserToggle>
+    </Toolbar>
+</div>
+
+<AdvancedTable ItemsProvider="_itemsProvider" ColumnChooserToggleId="_columnChooserToggleId" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <StartsWithColumnFilterEditor />
+            </FilterEditor>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Id" Title="Id" ShowInColumnChooser="false">
+            <CellContent>@context.Id</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter />
+    </Footer>
+</AdvancedTable>

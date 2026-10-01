@@ -8,6 +8,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Footers;
 ///  Represents a <see cref="Grid{TGridItem}"/> footer, which contains the total number of elements and the selection.
 /// </summary>
 /// <typeparam name="TGridItemKey">The type of selection key.</typeparam>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class SelectionFooter<TGridItemKey> : IDisposable
 {
     private IGridItemSelection<TGridItemKey>? _attachedSelection;

@@ -1,0 +1,14 @@
+@{
+    var cssClasses = new List<string> { "ticket-dispenser" };
+
+    if (Draggable)
+        cssClasses.Add("draggable");
+}
+
+<div class="@string.Join(" ", cssClasses)" @ref="_elementReference">
+    <div class="bg"></div>
+
+    <div class="content">
+        @Label
+    </div>
+</div>

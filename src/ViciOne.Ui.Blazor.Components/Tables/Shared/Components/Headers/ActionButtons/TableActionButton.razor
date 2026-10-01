@@ -1,0 +1,24 @@
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Button.Extensions
+@using ViciOne.Ui.Blazor.Components.Shared
+
+@{
+    var cssClasses = new List<string> { "table-action-button", ButtonSize.Small.ToModifierCssClass() };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    var additionalAttributes = new Dictionary<string, object>();
+
+    if (!string.IsNullOrWhiteSpace(Title))
+        additionalAttributes.Add("title", Title);
+
+    if (!Enabled)
+        additionalAttributes.Add("disabled", "disabled");
+}
+
+<button type="button" class="@string.Join(" ", cssClasses)" @onclick="@ButtonClickAsync" @attributes="@additionalAttributes">
+    @RenderFragments.Icon(this)
+
+    <div class="text">@Text</div>
+</button>

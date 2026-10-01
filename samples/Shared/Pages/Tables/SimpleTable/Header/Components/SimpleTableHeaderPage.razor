@@ -1,0 +1,67 @@
+@page "/tables/simple-table/header"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns.TableNavigationColumn
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Components.Headers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Components.Headers.ActionButtons
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Components.Panes
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>TableHeader</h3>
+
+<DescriptionBanner>
+    The header is an optional render fragment.
+    It supports <strong>action buttons</strong> (add, edit, delete, or fully custom) and a <strong>filter box</strong> that filters rows by text.
+    A <strong>left pane</strong> can be toggled via a custom action button — it renders beside the table and can hold any content such as details or a form.
+</DescriptionBanner>
+
+<SimpleTable Items="_filteredItems" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Header>
+        <TableHeader>
+            <ActionButtons>
+                <TableAddActionButton OnClick="AddItemAsync" />
+                <TableEditActionButton Enabled="false" />
+                <TableDeleteActionButton />
+                <TableActionButton IconCssClass="@_toggleLeftPaneGridActionButtonIconCssClass" Text="Left pane" OnClick="@ToggleLeftPane" />
+            </ActionButtons>
+            <Filter>
+                <TableFilterBox @bind-Text:get="@_filterText" @bind-Text:set="@ApplyFilter" />
+            </Filter>
+        </TableHeader>
+    </Header>
+
+    <LeftOutlet>
+        @if (_hasLeftPane)
+        {
+            <LeftPane>
+                <p>@_lorem1</p>
+                <p>@_lorem2</p>
+            </LeftPane>
+        }
+    </LeftOutlet>
+
+    <Columns>
+        <SimpleTableTemplateColumn Title="Key" Id="Key" SortExpression="x => x.Key">
+            <CellContent>
+                @GetCellContent(context.Key)
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Title="Value" Id="Value" SortExpression="x => x.Value">
+            <CellContent>
+                @GetCellContent(context.Value)
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Title="Timestamp" Id="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <TableNavigationColumn Tooltip="Show details" Navigate="@((ExampleTableItem item) => ShowDetails(item))" />
+    </Columns>
+</SimpleTable>
+
+@if (_showDetailSource is not null)
+{
+    <h4>Details</h4>
+    <p><code>Id</code> is <code>@_showDetailSource.Id</code></p>
+}

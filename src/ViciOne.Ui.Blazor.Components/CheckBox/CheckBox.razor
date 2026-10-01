@@ -47,6 +47,7 @@
            value="@_inputValue"
            @attributes="@inputAttributes"
            @oninput="@InputChangeAsync"
+           @onclick:stopPropagation
            @ref="_inputElementReference" />
 
     <div class="checked-icon-container">
@@ -55,6 +56,8 @@
 
     @if (isIndeterminate)
     {
-        <MonochromeIcon CssClass="indeterminate-icon" Name="MonochromeIconName.MinusSlim" Size="MonochromeIconSize.SmallMedium" />
+        <div class="indeterminate-icon-container">
+            <MonochromeIcon CssClass="indeterminate-icon" Name="MonochromeIconName.MinusSlim" Size="MonochromeIconSize.SmallMedium" />
+        </div>
     }
 </div>

@@ -1,0 +1,73 @@
+@page "/tables/advanced-table/selection/row-click"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+<h3>Row-Click Selection</h3>
+
+<DescriptionBanner>
+    The row-click channel drives selection and there is no select column. This is the default: set a
+    <code>SelectionMode</code> and clicking a row just works.
+</DescriptionBanner>
+
+<h4>Single</h4>
+
+@if (_singleSelectedItems.Count > 0)
+{
+    <DescriptionBanner>
+        Selected: <code>@_singleSelectedItems[0].Key</code> / <code>@_singleSelectedItems[0].Value</code>
+    </DescriptionBanner>
+}
+
+<DescriptionBanner>
+    <code>ItemIdSelector</code> keys selection by a stable id, so it survives a data reload that returns fresh instances.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Single"
+               ItemIdSelector="item => item.Id"
+               @bind-SelectedItems="_singleSelectedItems"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_singleSelectedItems.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h4>Multiple</h4>
+
+<DescriptionBanner>
+    @_multiSelectedItems.Count selected. <kbd>Ctrl</kbd>+click to toggle, <kbd>Shift</kbd>+click for range.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               @bind-SelectedItems="_multiSelectedItems"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_multiSelectedItems.Count" />
+    </Footer>
+</AdvancedTable>

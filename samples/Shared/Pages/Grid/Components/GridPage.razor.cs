@@ -6,6 +6,7 @@ using ViciOne.Ui.MonochromeIcons.Core.Extensions;
 
 namespace Shared.Pages.Grid.Components;
 
+[Obsolete("Demonstrates the obsolete Grid")]
 public sealed partial class GridPage
 {
     private static readonly IList<ExampleGridItem> s_items =

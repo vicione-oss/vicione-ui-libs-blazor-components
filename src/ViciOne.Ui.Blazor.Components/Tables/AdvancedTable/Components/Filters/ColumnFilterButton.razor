@@ -1,0 +1,31 @@
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@{
+    var buttonCssClasses = new List<string> { "column-filter-button" };
+
+    if (Filter is not null)
+        buttonCssClasses.Add("active");
+}
+
+<button @ref="_buttonElement"
+        class="@string.Join(" ", buttonCssClasses)"
+        @onclick="ToggleAsync"
+        @onclick:stopPropagation="true"
+        @onkeyup:stopPropagation="true">
+
+    <MonochromeIcon Name="MonochromeIconName.FilterLight" Size="MonochromeIconSize.Small" />
+</button>
+
+@if (_open && _panelContext is { } filterContext)
+{
+    <ColumnFilterPanel AnchorElement="_buttonElement" OnCloseRequested="CloseAsync">
+
+        @* Unnamed cascade so an editor component reaches the context without every call site passing it.
+           Fixed because the context is built once when the panel opens and never replaced while it is
+           open — nothing downstream has a newer instance to pick up. *@
+        <CascadingValue Value="filterContext" IsFixed="true">
+            @FilterEditor
+        </CascadingValue>
+    </ColumnFilterPanel>
+}

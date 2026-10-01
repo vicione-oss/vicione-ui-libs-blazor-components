@@ -283,12 +283,12 @@ public sealed class ToolbarTests : IDisposable
             .AddChildContent<ToolbarButton>(b => b
                 .Add(p => p.Visible, false)));
 
-        var itemRef = renderedComponent.FindComponent<ToolbarButton>();
+        var toolbarButton = renderedComponent.FindComponent<ToolbarButton>();
 
         SetContainerSize(_elementReferences[1], 101);
         SetContainerSize(_elementReferences[0], 100);
 
-        itemRef.Render(b => b
+        toolbarButton.Render(b => b
             .Add(p => p.Visible, true));
 
         renderedComponent.WaitForState(() => renderedComponent.FindAll(".menu-container").Any());

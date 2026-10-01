@@ -1,0 +1,75 @@
+@page "/tables/advanced-table/loading-mode"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<DescriptionBanner>
+    The table supports two loading modes:
+    <strong>Virtualize</strong> renders only visible rows (efficient for large datasets),
+    while <strong>Load All</strong> renders every row at once.
+
+    Virtualization only has an effect when the table's height is limited — by <code>MaximumHeight</code>, by a rule
+    for <code>CssClass</code>, or by the parent layout. Otherwise every row is laid out and there is nothing to
+    virtualize. Toggle below to switch.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Virtualize table</label>
+        <Switch @bind-Value="_virtualize" />
+    </div>
+</div>
+
+<h3>Limited by <code>MaximumHeight</code></h3>
+
+<DescriptionBanner>
+    The table grows with its rows up to <code>300px</code>, then scrolls internally. A percentage only takes effect
+    when the table's parent has a definite height.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" Mode="@LoadingMode" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Id" Title="Id">
+            <CellContent>@context.Id</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Sized by the parent layout through <code>CssClass</code></h3>
+
+<DescriptionBanner>
+    The table fills the space a flex column leaves below a fixed-height block. <code>flex: 1</code> makes it take that
+    space, and <code>min-height: 0</code> lets it shrink below the height of its rows — without it, a flex item never
+    becomes smaller than its content. The rule reaches the table with <code>::deep</code> from the page's own markup.
+</DescriptionBanner>
+
+<div class="flex-column">
+    <div class="above-table">Fixed-height content above the table</div>
+
+    <AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" Mode="@LoadingMode" CssClass="filling-table">
+        <Columns>
+            <AdvancedTableColumn Id="Id" Title="Id">
+                <CellContent>@context.Id</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Key" Title="Key">
+                <CellContent>@context.Key</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Value" Title="Value">
+                <CellContent>@context.Value</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+                <CellContent>@context.Timestamp</CellContent>
+            </AdvancedTableColumn>
+        </Columns>
+    </AdvancedTable>
+</div>

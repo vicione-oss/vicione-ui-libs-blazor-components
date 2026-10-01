@@ -1,0 +1,239 @@
+@page "/tables/simple-table/selection/column"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+
+<h3>Column Selection</h3>
+
+<DescriptionBanner>
+    A <code>SimpleTableSelectColumn</code> adds a per-row checkbox plus an optional "select all" header.
+
+    Leaving the row-click channel on gives <strong>both channels</strong>; switching it off with
+    <code>RowClickSelectionEnabled="false"</code> gives <strong>column-only selection</strong>.
+
+    The select-all header is a Multiple-cardinality affordance — it is disabled under <code>Single</code>.
+</DescriptionBanner>
+
+<h4>Both channels — Single</h4>
+
+<DescriptionBanner>
+    @_bothChannelsSingleSelection.Count selected.
+
+    Click a row or its checkbox; either replaces the previous selection.
+
+    The header is disabled under single selection.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Single"
+             @bind-SelectedItems="_bothChannelsSingleSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_bothChannelsSingleSelection.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Both channels — Multiple (with "select all")</h4>
+
+<DescriptionBanner>
+    @_bothChannelsMultipleSelection.Count selected.
+
+    Row click and checkbox both accumulate rows; the header checkbox selects or deselects every visible row and its tri-state reflects the current selection.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_bothChannelsMultipleSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_bothChannelsMultipleSelection.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Bulk selection acts on filtered items</h4>
+
+<DescriptionBanner>
+    @_filteredBulkSelection.Count selected.
+
+    The select-all header acts on the rows the filter leaves: filter the Value column, "select all", then clear
+    the filter — only the rows the filter had shown are selected. Rows a filter hides are never touched by
+    the header (in either direction), and its tri-state likewise reflects only the rows the filter leaves,
+    so the footer count can exceed what a "deselect all" under a filter clears.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_filteredBulkSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_filteredBulkSelection.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Column-only — Single</h4>
+
+<DescriptionBanner>
+    @_columnOnlySingleSelection.Count selected.
+
+    <code>RowClickSelectionEnabled="false"</code> with <code>SelectionMode.Single</code> gives
+    single-cardinality selection driven solely by the checkbox — a combination not reachable from <code>SelectionMode</code> alone.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Single"
+             RowClickSelectionEnabled="false"
+             @bind-SelectedItems="_columnOnlySingleSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnOnlySingleSelection.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Column-only — Multiple</h4>
+
+<DescriptionBanner>
+    @_columnOnlyMultipleSelection.Count selected.
+
+    The checkbox and its select-all header drive selection; clicking the row itself does nothing.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             RowClickSelectionEnabled="false"
+             @bind-SelectedItems="_columnOnlyMultipleSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnOnlyMultipleSelection.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Column-only without a "select all" header</h4>
+
+<DescriptionBanner>
+    @_columnOnlyNoHeaderSelection.Count selected.
+
+    <code>HasSelectAllHeader="false"</code> hides the header checkbox while per-row selection keeps working.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             RowClickSelectionEnabled="false"
+             @bind-SelectedItems="_columnOnlyNoHeaderSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn HasSelectAllHeader="false" />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnOnlyNoHeaderSelection.Count" />
+    </Footer>
+</SimpleTable>

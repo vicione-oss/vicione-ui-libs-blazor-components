@@ -87,16 +87,16 @@
 
 <Accordion>
     <AccordionItem Text="Item A"
-                   Expanded="@(_expandedCancellableItem == "Item A")"
-                   OnBeforeExpand="OnBeforeExpandCancellable"
-                   OnBeforeCollapse="OnBeforeCollapseCancellable">
+                   Expanded="@(_expandedCancelableItem == "Item A")"
+                   OnBeforeExpand="OnBeforeExpandCancelable"
+                   OnBeforeCollapse="OnBeforeCollapseCancelable">
         <p>Content A — collapsing this item is always allowed.</p>
     </AccordionItem>
 
     <AccordionItem Text="Item B"
-                   Expanded="@(_expandedCancellableItem == "Item B")"
-                   OnBeforeExpand="OnBeforeExpandCancellable"
-                   OnBeforeCollapse="OnBeforeCollapseCancellable">
+                   Expanded="@(_expandedCancelableItem == "Item B")"
+                   OnBeforeExpand="OnBeforeExpandCancelable"
+                   OnBeforeCollapse="OnBeforeCollapseCancelable">
         <p>Content B</p>
     </AccordionItem>
 </Accordion>

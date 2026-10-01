@@ -1,0 +1,235 @@
+@page "/tables/simple-table/filter/interaction"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Models
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Models
+
+<h3>Filter interaction</h3>
+
+<DescriptionBanner>
+    The table owns the filter it applies — no parent holds it, so no parent re-render can disturb it. These are the four
+    channels that move it: a starting value it adopts once, an observation of every change, a two-way binding, and a
+    call that commands a change from outside. Every table below uses the pre-made contains filter, so nothing here
+    depends on writing a filter of your own.
+</DescriptionBanner>
+
+<h3>Start with a filter — an unchanging <code>FilterState</code></h3>
+
+<DescriptionBanner>
+    Pass <code>FilterState</code> from a field that is never reassigned to give the table the filter it starts
+    with. <code>SimpleTable</code> forwards it to the wrapped <code>AdvancedTable</code>, which applies it once
+    the columns have registered and owns it from then on, because handing over the same instance again is not a
+    new command. The filter this table starts with:
+</DescriptionBanner>
+
+<ul>
+    @foreach (var activeFilter in _seedFilterState.Filters.OfType<IColumnFilter>())
+    {
+        <li>
+            <code>@activeFilter.ColumnId</code>
+            @if (activeFilter is SimpleTableContainsColumnFilter<ExampleTableItem> containsFilter)
+            {
+                <text> — contains "@containsFilter.Value"</text>
+            }
+        </li>
+    }
+</ul>
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" FilterState="_seedFilterState" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Observe changes — <code>FilterStateChanged</code></h3>
+
+<DescriptionBanner>
+    Handle <code>FilterStateChanged</code> without passing <code>FilterState</code> to watch the applied filter
+    without driving it. It reports the applied filter after every change, whatever caused it. The list below
+    reports what was last raised.
+</DescriptionBanner>
+
+@if (_observedFilterState.Filters.Count > 0)
+{
+    <ul>
+        @foreach (var activeFilter in _observedFilterState.Filters.OfType<IColumnFilter>())
+        {
+            <li>
+                <code>@activeFilter.ColumnId</code>
+                @if (activeFilter is SimpleTableContainsColumnFilter<ExampleTableItem> containsFilter)
+                {
+                    <text> — contains "@containsFilter.Value"</text>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>Nothing observed yet — open a column filter and apply.</em></p>
+}
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" FilterStateChanged="ObservedFilterStateChanged" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Drive the filter from markup — <code>@("@bind-FilterState")</code></h3>
+
+<DescriptionBanner>
+    Bind <code>FilterState</code> to drive the table from a field and have every change written back into it,
+    whoever made it — the buttons below or a column header. A new instance in the field is a command; the same
+    instance again is not, which is what lets the table's own value flow back without starting over.
+
+    <strong>Note:</strong> build the value in a field and only replace it when it really changes. A parent that
+    produces a fresh, content-equal instance on every render makes the table re-apply on every render, and under
+    a binding that never terminates — each apply reports back, each report renders the parent, each render
+    builds another instance.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Key filter</label>
+        <Button Text="Keys containing b" OnClick="FilterBoundTableByKey" Size="ButtonSize.Small" />
+    </div>
+    <div class="option">
+        <label>All column filters</label>
+        <Button Text="Clear filters" OnClick="ClearBoundFilter" Size="ButtonSize.Small" />
+    </div>
+</div>
+
+@if (_boundFilterState.Filters.Count > 0)
+{
+    <ul>
+        @foreach (var activeFilter in _boundFilterState.Filters.OfType<IColumnFilter>())
+        {
+            <li>
+                <code>@activeFilter.ColumnId</code>
+                @if (activeFilter is SimpleTableContainsColumnFilter<ExampleTableItem> containsFilter)
+                {
+                    <text> — contains "@containsFilter.Value"</text>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No active filter.</em></p>
+}
+
+<SimpleTable Items="s_items"
+             RowClickSelectionEnabled="false"
+             @bind-FilterState="_boundFilterState"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Change the filter from outside — <code>SetFilterStateAsync</code></h3>
+
+<DescriptionBanner>
+    Hold the table in an <code>@("@ref")</code> and call <code>SetFilterStateAsync</code> for the changes a binding
+    expresses badly — a "clear all" button, a reset to a preset — and for callers that are not in a render at all.
+    Unlike the parameter the method has no memory of what it was handed before, so clearing works here even though the
+    empty filter is a value the table has seen before.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>All column filters</label>
+        <Button Text="Clear filters" OnClick="ClearFiltersAsync" Size="ButtonSize.Small" />
+    </div>
+</div>
+
+@if (_pushedFilterState.Filters.Count > 0)
+{
+    <ul>
+        @foreach (var activeFilter in _pushedFilterState.Filters.OfType<IColumnFilter>())
+        {
+            <li>
+                <code>@activeFilter.ColumnId</code>
+                @if (activeFilter is SimpleTableContainsColumnFilter<ExampleTableItem> containsFilter)
+                {
+                    <text> — contains "@containsFilter.Value"</text>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No active filter.</em></p>
+}
+
+<SimpleTable @ref="_pushTargetTable"
+             Items="s_items"
+             RowClickSelectionEnabled="false"
+             FilterStateChanged="PushedFilterStateChanged"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

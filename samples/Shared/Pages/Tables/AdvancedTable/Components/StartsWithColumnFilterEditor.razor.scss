@@ -1,0 +1,6 @@
+// The search box spans the body instead of falling back to its intrinsic width.
+.starts-with-filter {
+    ::deep .search-box {
+        width: 100%;
+    }
+}

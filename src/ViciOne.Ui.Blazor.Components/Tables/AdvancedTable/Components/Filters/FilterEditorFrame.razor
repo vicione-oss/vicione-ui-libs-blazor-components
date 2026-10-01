@@ -1,0 +1,16 @@
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Localization.Resources
+
+<div class="filter-editor-frame" @onclick:stopPropagation="true">
+
+    <div class="header-container">@Title</div>
+
+    <div class="body-container">@ChildContent</div>
+
+    <div class="button-container">
+        <Button Text="@CommonVocabulary.Apply" OnClick="ApplyAsync" Size="ButtonSize.Small"/>
+        <Button Text="@CommonVocabulary.Cancel" OnClick="CancelAsync" Size="ButtonSize.Small"/>
+    </div>
+
+</div>

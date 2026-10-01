@@ -1,0 +1,42 @@
+@page "/tables/simple-table/empty-data"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+@using ViciOne.Ui.Localization.Extensions
+
+<h3>Empty data placeholder</h3>
+
+<DescriptionBanner>
+    With no rows left to show, the table renders a placeholder in its body instead of leaving the area between
+    header and footer blank. It is built-in chrome localized by the library, so there is no parameter to set and
+    no content to supply. Turn the data off below to see it, or filter the <code>Value</code> column down to
+    nothing — a filter that matches no row shows the same placeholder.
+</DescriptionBanner>
+
+<div class="options">
+    <div>Provide data</div>
+    <Switch @bind-Value="_dataProvided" />
+</div>
+
+<SimpleTable Items="Items" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable="false">
+            <CellContent>
+                @context.Timestamp.LocalizeShortDate() @context.Timestamp.LocalizeShortTime()
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

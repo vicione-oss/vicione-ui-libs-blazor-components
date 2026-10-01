@@ -42,3 +42,16 @@ contains @(_nullableValue is null ? "null" : _nullableValue.ToString())
 <div class="custom-theme">
     <CheckBox TValue="bool?" Value="true" />
 </div>
+
+<h3>Click isolation</h3>
+
+<p>
+    The checkbox stops its click from bubbling, so a checkbox inside a clickable container (a table row, card, or menu
+    item) does not also trigger the container's click. Click the card to increment the counter; clicking the checkbox
+    inside it does not.
+</p>
+
+<div class="clickable-card" @onclick="CardClick">
+    <CheckBox @bind-Value="_cardCheckboxValue" />
+    <span>Card clicked @_cardClicks time(s)</span>
+</div>

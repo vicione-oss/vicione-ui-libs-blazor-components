@@ -4,6 +4,7 @@ using ViciOne.Ui.Blazor.Components.Grid.Components;
 
 namespace ViciOne.Ui.Blazor.Components.Grid.Extensions;
 
+[Obsolete(Constants.ObsoleteMessage)]
 internal static class ColumnBaseExtensions
 {
     public static void BeforeCellContent<TGridItem>(this ColumnBase<TGridItem> _,

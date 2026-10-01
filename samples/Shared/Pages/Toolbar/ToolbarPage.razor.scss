@@ -1,8 +1,8 @@
 @use "../../Styles/design/colors";
+@use "../../Styles/mixins";
 
 .toolbar-container {
-    border: 1px solid colors.$border;
-    padding: 8px;
+    @include mixins.toolbar-container-styles();
 
     ::deep .error {
         color: colors.$error;

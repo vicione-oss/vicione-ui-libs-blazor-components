@@ -46,7 +46,7 @@ public sealed partial class NavigationItem : ComponentBase, IDisposable
 
         var path = NavigationManager.ToAbsoluteUri(NavigationManager.Uri).AbsolutePath;
 
-        // Match whole path segments, so /advanced-table does not also match /advanced-table-foo.
+        // Match whole path segments, so /foo does not also match /foo-bar.
         if (path == Href || path.StartsWith($"{Href}/", StringComparison.Ordinal))
             _expanded = true;
     }

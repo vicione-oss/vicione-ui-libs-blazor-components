@@ -1,0 +1,39 @@
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Filters
+
+@typeparam TItem where TItem : class
+
+@inherits ColumnFilterEditorBase
+
+<FilterEditorFrame Title="Custom Filter - Range" OnApply="ApplyAsync" OnCancel="CancelAsync">
+
+    <div class="int-range-filter">
+        <label>
+            From
+
+            <SpinEdit TValue="int?"
+                      TLimit="int"
+                      TInterval="int"
+                      @bind-Value:get="_from"
+                      @bind-Value:set="FromChanged"
+                      Interval="1"
+                      Minimum="@int.MinValue"
+                      Maximum="@int.MaxValue"
+                      EnterPressed="ApplyAsync" />
+        </label>
+        <label>
+            To
+
+            <SpinEdit TValue="int?"
+                      TLimit="int"
+                      TInterval="int"
+                      @bind-Value:get="_to"
+                      @bind-Value:set="ToChanged"
+                      Interval="1"
+                      Minimum="@int.MinValue"
+                      Maximum="@int.MaxValue"
+                      EnterPressed="ApplyAsync" />
+        </label>
+    </div>
+
+</FilterEditorFrame>

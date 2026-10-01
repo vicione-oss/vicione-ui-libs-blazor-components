@@ -1,0 +1,17 @@
+.reflow-container {
+    max-width: 900px;
+    margin-bottom: 2rem;
+
+    // No transition: the columns are recomputed from the container's width, so animating it would leave the
+    // table mid-reflow for the length of the animation.
+    &.narrow {
+        // Under the 400px the mixed sample's fixed and minimum widths add up to, so it really does stop
+        // shrinking and scroll horizontally here.
+        max-width: 320px;
+    }
+
+    // Uncapped on purpose: a window resize then really does change the space available.
+    &.full-width {
+        max-width: none;
+    }
+}

@@ -6,6 +6,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.ActionButtons;
 /// <summary>
 /// Component for rendering a button in render fragment <see cref="Grid{TGridItem}.ActionButtons"/>
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class GridActionButton : ComponentBase, IHasIcon
 {
     /// <summary>

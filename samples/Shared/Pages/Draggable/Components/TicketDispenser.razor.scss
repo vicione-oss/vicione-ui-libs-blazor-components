@@ -1,0 +1,12 @@
+@use "../../../Styles/mixins";
+
+.ticket-dispenser {
+    width: 120px;
+    height: 80px;
+
+    &.draggable {
+        cursor: grab;
+    }
+
+    @include mixins.shape-styles($feature-css-class: "draggable", $started-css-class: "dragging", $ongoing-css-class: "dragging-ongoing");
+}

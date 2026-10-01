@@ -4,6 +4,7 @@ using QuickGrid = Microsoft.AspNetCore.Components.QuickGrid;
 namespace ViciOne.Ui.Blazor.Components.Grid.Models;
 
 /// <inheritdoc cref="QuickGrid.GridSort{TGridItem}"/>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed class GridSort<TGridItem>
 {
     private readonly QuickGrid.GridSort<TGridItem>? _gridSort;

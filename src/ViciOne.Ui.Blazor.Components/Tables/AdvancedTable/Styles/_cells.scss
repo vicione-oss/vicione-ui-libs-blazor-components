@@ -1,0 +1,16 @@
+@use "../../../Styles/design/colors";
+
+// The indicator on the focused cell. Applied through `:focus-visible` and never `:focus`, so the browser's
+// own rule decides when it shows: it matches a cell the keyboard reached and not one a pointer press landed
+// on, which is what keeps a user who only ever reaches for the mouse from being shown a keyboard indicator.
+// An inset shadow rather than a border, which would grow the cell's box and pull the columns out of line with
+// their headers, and rather than an outline, which every body cell's `contain: strict` clips away. Each cell
+// paints its own, so a pinned cell scrolling over an unpinned one cannot smear it.
+//
+// Shared because a header cell and a body cell are styled by different components and have to point at focus
+// the same way.
+@mixin focused-cell-indicator {
+    outline: 0;
+
+    box-shadow: inset 0 0 0 2px colors.$accent;
+}

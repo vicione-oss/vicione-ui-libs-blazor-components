@@ -1,0 +1,83 @@
+@page "/tables/advanced-table/filter/custom-filters"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<h3>Write your own filter</h3>
+
+<DescriptionBanner>
+    A filter is two parts. The <strong>filter</strong> is a record implementing <code>IColumnFilter</code> — data only,
+    carrying its <code>ColumnId</code> and whatever the criterion needs. The <strong>editor</strong> is a component
+    deriving from <code>ColumnFilterEditorBase</code>, placed in a column's <code>&lt;FilterEditor&gt;</code> slot,
+    which produces that record on apply. Nothing else is required to show a filter icon in the header.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    The editor picks up a <code>ColumnFilterEditorContext</code> — the column id, the current filter, and callbacks to
+    apply or close — as a cascading value, so nothing is passed at the call site. Markup written inline in the slot has
+    no component to receive that cascade, which is why even a one-off filter is written as a component.
+    <code>AdvancedTable</code> never applies a filter itself: both filters below are matched by
+    <code>ExampleTableItemsProvider</code>.
+</DescriptionBanner>
+
+<h3>One value — <code>StartsWithColumnFilter</code></h3>
+
+<DescriptionBanner>
+    The editor keeps one <code>string</code> draft, seeds it from the column's current filter when the panel opens, and
+    returns <code>null</code> from <code>BuildFilter</code> when the text is empty — which is how a column's filter is
+    cleared. The Timestamp column shows that a filter need not compare the column's raw value: it matches the
+    <em>rendered</em> text, so what the user filters on is what the user sees.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <StartsWithColumnFilterEditor />
+            </FilterEditor>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <StartsWithColumnFilterEditor />
+            </FilterEditor>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable="false">
+            <CellContent>
+                @FormatTimestamp(context)
+            </CellContent>
+            <FilterEditor>
+                <StartsWithColumnFilterEditor />
+            </FilterEditor>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Two values — <code>IntRangeColumnFilter</code></h3>
+
+<DescriptionBanner>
+    A draft is whatever shape the filter needs, so a range editor keeps a lower and an upper bound and neither is
+    "the" value. <code>ColumnFilterEditorBase</code> holds no draft of its own for exactly this reason — it carries
+    only the context and the apply/cancel plumbing, and the editor decides what its own fields mean. Here both bounds
+    are inclusive, a bound left empty is unbounded on that side, and both left empty clears the filter.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+            <FilterEditor>
+                <IntRangeColumnFilterEditor />
+            </FilterEditor>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable="false">
+            <CellContent>
+                @FormatTimestamp(context)
+            </CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

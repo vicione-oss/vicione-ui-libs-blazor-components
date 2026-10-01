@@ -1,0 +1,185 @@
+@page "/tables/simple-table/keyboard"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+
+@{
+    var cellActivatedPropertyName = nameof(AdvancedTableColumnBase<>.CellActivated);
+    var rowClickSelectionPropertyName = nameof(SimpleTable<>.RowClickSelectionEnabled);
+    var itemSelectionAllowedPropertyName = nameof(SimpleTable<>.ItemSelectionAllowed);
+}
+
+<h3>Keyboard navigation</h3>
+
+<DescriptionBanner>
+    <strong>The whole table body is one Tab stop.</strong> <kbd>Tab</kbd> reaches the table once and lands on the
+    <em>focused cell</em> — the cell with the accented outline, and the browser's own focus. The <kbd>arrow</kbd> keys
+    move it one cell at a time and stop at every edge, <kbd>Up</kbd> from the first data row reaching that column's
+    header cell. <strong><kbd>Space</kbd></strong> selects the focused cell's row, <strong><kbd>Ctrl</kbd>+<kbd>Space</kbd></strong> toggles it
+    and <strong><kbd>Shift</kbd>+<kbd>Space</kbd></strong> selects the range from the last selected row.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <strong><kbd>Enter</kbd> enters a cell</strong>: it raises <code>@cellActivatedPropertyName</code> on the cell's
+    column and moves the focus into the cell's first focusable content. <kbd>Tab</kbd> then walks that cell's controls
+    and returns to the cell from the last of them, and <strong><kbd>Escape</kbd></strong> returns to it at any point.
+    Clicking a control in a cell enters it too, but no amount of <kbd>Tab</kbd> will get you there.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    The indicator is <code>:focus-visible</code> and nothing else, so a <kbd>Tab</kbd> arrival or an <kbd>arrow</kbd> press paints it
+    and a mouse click never does. <code>SimpleTable</code> wraps <code>AdvancedTable</code>, so every gesture
+    here is the one that page shows, inherited rather than repeated.
+</DescriptionBanner>
+
+<h3>Multiple selection</h3>
+
+<DescriptionBanner>
+    The full gesture set over a table with pinned columns on both edges. The focused cell moves through the
+    pinned groups in the order they are shown, and an unpinned cell scrolled behind a pinned one is brought out
+    from under it.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <strong>This table refuses to select its third row.</strong> That is a rule of this sample and not of the
+    table component: <code>@itemSelectionAllowedPropertyName</code> rejects that one row, so no gesture ever
+    selects it and its checkbox renders disabled. The keyboard still moves through it like any other row —
+    moving and selecting are different things.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <strong>The select checkboxes are not Tab stops.</strong> Press <kbd>Enter</kbd> on a select cell to enter it and
+    <kbd>Space</kbd> to toggle the checkbox. The select-all checkbox in the header has no keyboard route at all —
+    select-all is a mouse action for now.
+</DescriptionBanner>
+
+<div class="keyboard-container multi">
+    <SimpleTable Items="s_items"
+                 SelectionMode="SelectionMode.Multiple"
+                 ItemSelectionAllowed="ThirdRowVetoed"
+                 @bind-SelectedItems="_multipleSelectedItems"
+                 MaximumHeight="300px">
+        <Columns>
+            <SimpleTableSelectColumn PinSide="PinSide.Left" ShowInColumnChooser="false" />
+            <SimpleTableTemplateColumn Id="Key" Title="Key" Width="140">
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Value" Title="Value" Width="155">
+                <CellContent>@context.Value</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Width="220">
+                <CellContent>@context.Timestamp</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Width="120" PinSide="PinSide.Right">
+                <CellContent>@context.Quantity</CellContent>
+            </SimpleTableTemplateColumn>
+        </Columns>
+        <Footer>
+            <TableFooter SelectedItemCount="_multipleSelectedItems.Count" />
+        </Footer>
+    </SimpleTable>
+</div>
+
+<h3>Single selection</h3>
+
+<DescriptionBanner>
+    Under <code>SelectionMode.Single</code> both modifiers are ignored, exactly as they are for a click: every
+    <kbd>Space</kbd> variant replaces the selection with the focused cell's row.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    The two buttons around this table are ordinary page content, there to make the table's own tab order
+    visible. <kbd>Tab</kbd> moves from the first button onto one cell of the table and leaves for the second button on the
+    next press, however many rows and columns are on screen.
+</DescriptionBanner>
+
+<Button Id="before-single-table" Text="Before the table" Size="ButtonSize.Small" />
+
+<div class="keyboard-container single">
+    <SimpleTable Items="s_items"
+                 SelectionMode="SelectionMode.Single"
+                 @bind-SelectedItems="_singleSelectedItems"
+                 MaximumHeight="300px">
+        <Columns>
+            <SimpleTableTemplateColumn Id="Key" Title="Key">
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Value" Title="Value">
+                <CellContent>@context.Value</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Quantity" Title="Quantity">
+                <CellContent>@context.Quantity</CellContent>
+            </SimpleTableTemplateColumn>
+        </Columns>
+    </SimpleTable>
+</div>
+
+<Button Id="after-single-table" Text="After the table" Size="ButtonSize.Small" />
+
+<h3>Activating a cell</h3>
+
+<DescriptionBanner>
+    <code>@cellActivatedPropertyName</code> is declared per column, so the handler already knows which cell
+    was entered. <em>Value</em> wires it and renders a button; <em>Key</em> deliberately does not, so <kbd>Enter</kbd> on
+    a <em>Key</em> cell moves nothing and raises nothing — a table where <kbd>Enter</kbd> should act everywhere wires
+    every column. <kbd>Enter</kbd> on a <em>Value</em> cell raises the handler and lands the focus on the button, and <kbd>Tab</kbd>
+    or <kbd>Escape</kbd> returns to the cell. Movement and activation do not depend on the selection: this table sets
+    <code>@rowClickSelectionPropertyName</code> to <code>false</code>, so <kbd>Space</kbd> selects nothing while the
+    <kbd>arrows</kbd> and <kbd>Enter</kbd> keep working.
+</DescriptionBanner>
+
+<p>Last activated: @(_lastActivatedKey ?? "nothing yet")</p>
+
+<div class="keyboard-container activation">
+    <SimpleTable Items="s_items" RowClickSelectionEnabled="false" MaximumHeight="300px">
+        <Columns>
+            <SimpleTableTemplateColumn Id="Key" Title="Key (not wired)">
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Value" Title="Value" CellActivated="@((ExampleTableItem item) => ActivateAsync(item))">
+                <CellContent>
+                    <Button Text="@context.Value" Size="ButtonSize.Small" OnClick="() => ActivateAsync(context)" />
+                </CellContent>
+            </SimpleTableTemplateColumn>
+        </Columns>
+    </SimpleTable>
+</div>
+
+<h3>Virtualized rows</h3>
+
+<DescriptionBanner>
+    Nine hundred rows under <code>TableLoadingMode.Virtualize</code>. Movement costs no round trip at all
+    while it stays inside the rendered window, and holding an <kbd>arrow</kbd> travels at the keyboard's own repeat rate.
+    Scroll the focused row out of the window with the wheel and press an <kbd>arrow</kbd>: the table scrolls back to
+    where the keyboard was left and the focus returns with the row, rather than starting over somewhere
+    else.
+</DescriptionBanner>
+
+<div class="keyboard-container virtualized">
+    <SimpleTable Items="s_manyItems"
+                 Mode="TableLoadingMode.Virtualize"
+                 SelectionMode="SelectionMode.Multiple"
+                 @bind-SelectedItems="_virtualizedSelectedItems"
+                 MaximumHeight="300px">
+        <Columns>
+            <SimpleTableTemplateColumn Id="Key" Title="Key">
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Value" Title="Value">
+                <CellContent>@context.Value</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Quantity" Title="Quantity">
+                <CellContent>@context.Quantity</CellContent>
+            </SimpleTableTemplateColumn>
+        </Columns>
+        <Footer>
+            <TableFooter SelectedItemCount="_virtualizedSelectedItems.Count" />
+        </Footer>
+    </SimpleTable>
+</div>

@@ -1,0 +1,133 @@
+@page "/tables/advanced-table/reflow"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+@{
+    var widthPropertyName = nameof(AdvancedTableColumn<>.Width);
+    var minimumWidthPropertyName = nameof(AdvancedTableColumn<>.MinimumWidth);
+}
+
+<h3>Column re-flow</h3>
+
+<DescriptionBanner>
+    Flex columns — those without a <code>@widthPropertyName</code> — share out whatever space the table has,
+    and they share it out again every time that space changes: a window resize, a dialog growing, a sidebar
+    opening, a zoom step. Narrow the container below to watch it happen. Most of the containers here are capped
+    at 900px, so they only follow the browser window once it goes under that; the <em>Always full width</em>
+    sample is uncapped and follows it at every size.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Narrow container</label>
+        <Switch @bind-Value="_narrow"/>
+    </div>
+</div>
+
+<h3>All columns flex</h3>
+
+<DescriptionBanner>
+    Three flex columns split the space equally and fill the container exactly, whatever width it has. The split
+    is made at the same sub-pixel precision the browser lays the table out with rather than in whole pixels, so
+    the columns land where they were already drawn and nothing shifts once the table has been sized.
+</DescriptionBanner>
+
+<div class="@GetContainerCssClass("all-flex")">
+    <AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+        <Columns>
+            <AdvancedTableColumn Id="Key" Title="Key" Resizeable>
+                <CellContent>@context.Key</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Value" Title="Value" Resizeable>
+                <CellContent>@context.Value</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+                <CellContent>@context.Timestamp</CellContent>
+            </AdvancedTableColumn>
+        </Columns>
+    </AdvancedTable>
+</div>
+
+<h3>Always full width</h3>
+
+<DescriptionBanner>
+    This container is not capped, so it tracks the browser window at every size. Drag the window edge and the
+    columns follow it continuously — they are recomputed in the browser, so nothing waits on a round trip to
+    the server. The switch above does not touch this one; the window is what sizes it.
+</DescriptionBanner>
+
+<div class="reflow-container full-width">
+    <AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+        <Columns>
+            <AdvancedTableColumn Id="Key" Title="Key" Resizeable>
+                <CellContent>@context.Key</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Value" Title="Value" Resizeable>
+                <CellContent>@context.Value</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Quantity" Title="Quantity" Resizeable>
+                <CellContent>@context.Quantity</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+                <CellContent>@context.Timestamp</CellContent>
+            </AdvancedTableColumn>
+        </Columns>
+    </AdvancedTable>
+</div>
+
+<h3>What re-flow leaves alone</h3>
+
+<DescriptionBanner>
+    A column is only re-flowed while nobody has pinned it. <code>Id</code> declares
+    <code>@widthPropertyName</code> and keeps that width for good. Drag any other column's right edge and it
+    keeps the width you gave it too — from then on it is yours, and only the columns beside it go on sharing
+    what is left. <code>Key</code> floors at a <code>@minimumWidthPropertyName</code> of <code>200</code>:
+    narrow the container and it stops shrinking there. Its minimum plus <code>Id</code>'s declared width and the
+    other two floors add up to more than the narrowed container, so the table outgrows it and scrolls
+    horizontally.
+</DescriptionBanner>
+
+<div class="@GetContainerCssClass("mixed")">
+    <AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+        <Columns>
+            <AdvancedTableColumn Id="Id" Title="Id (Width 100)" Width="100" Resizeable>
+                <CellContent>@context.Id</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Key" Title="Key (min 200)" MinimumWidth="200" Resizeable>
+                <CellContent>@context.Key</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Value" Title="Value" Resizeable>
+                <CellContent>@context.Value</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+                <CellContent>@context.Timestamp</CellContent>
+            </AdvancedTableColumn>
+        </Columns>
+    </AdvancedTable>
+</div>
+
+<h3>Every column pinned</h3>
+
+<DescriptionBanner>
+    With a <code>@widthPropertyName</code> on every column there is nothing left to re-flow, so the table
+    keeps its own width and shows the container's background to the right of its last column. It does not
+    stretch to the edge, and there is no filler column.
+</DescriptionBanner>
+
+<div class="@GetContainerCssClass("all-fixed")">
+    <AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+        <Columns>
+            <AdvancedTableColumn Id="Id" Title="Id" Width="100" Resizeable>
+                <CellContent>@context.Id</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Key" Title="Key" Width="160" Resizeable>
+                <CellContent>@context.Key</CellContent>
+            </AdvancedTableColumn>
+            <AdvancedTableColumn Id="Value" Title="Value" Width="160" Resizeable>
+                <CellContent>@context.Value</CellContent>
+            </AdvancedTableColumn>
+        </Columns>
+    </AdvancedTable>
+</div>

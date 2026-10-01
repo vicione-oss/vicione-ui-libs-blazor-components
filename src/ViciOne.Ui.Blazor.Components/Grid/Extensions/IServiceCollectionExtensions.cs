@@ -9,6 +9,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Extensions;
 /// <summary>
 /// Extension methods for <see cref="IServiceCollection"/>
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public static class IServiceCollectionExtensions
 {
     /// <summary>

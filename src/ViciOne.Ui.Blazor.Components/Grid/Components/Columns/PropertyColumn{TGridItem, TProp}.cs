@@ -11,6 +11,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 /// <typeparam name="TProp">The type of the value being displayed in the column's cells.</typeparam>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed class PropertyColumn<TGridItem, TProp> : QuickGrid.PropertyColumn<TGridItem, TProp>
 {
     private static readonly RenderFragment<QuickGrid.ColumnBase<TGridItem>> s_ownHeaderTemplate = column => builder =>

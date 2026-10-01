@@ -57,37 +57,37 @@ export class HtmlElementResizeObserver {
     Adds an element to the list of observer elements.
     Beware: Each HTML Element can only have a single watcher at a time as of now.
     If more are needed, code needs to be refactored.
-    @param elementReference The reference to the element which should be observed
+    @param element The element which should be observed
     @param id The id which will be used to report back changes to the element
     @param dotNetObject The reference to the caller which should be notified on a resize of the element
     @param includeStyle When set to true, computed style changes are also be reported
     */
     public observe = (
-        elementReference: HTMLElement | undefined,
+        element: HTMLElement | undefined,
         id: string | undefined,
         dotNetObject: DotNet.DotNetObject,
         includeStyle: boolean
     ): void => {
-        if (id === undefined || id === '' || elementReference?.dataset === undefined)
+        if (id === undefined || id === '' || element?.dataset === undefined)
             return;
 
-        elementReference.dataset.observerId = id;
+        element.dataset.observerId = id;
         this.#observers.set(id, new ObserverDetails(dotNetObject, includeStyle));
 
-        this.#resizeObserver.observe(elementReference);
+        this.#resizeObserver.observe(element);
     };
 
     /**
      Removes an element from the list of observed elements via it's reference.
-     @param elementRef The reference to the element which should no be observed
+     @param element The element which should no be observed
      */
-    public unobserve(elementRef: HTMLElement | undefined): void {
-        if (!elementRef)
+    public unobserve(element: HTMLElement | undefined): void {
+        if (!element)
             return;
 
-        this.#resizeObserver.unobserve(elementRef);
+        this.#resizeObserver.unobserve(element);
 
-        const id = elementRef.dataset.observerId ?? '';
+        const id = element.dataset.observerId ?? '';
         this.#observers.delete(id);
     }
 }

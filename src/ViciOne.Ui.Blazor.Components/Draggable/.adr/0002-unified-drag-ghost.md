@@ -123,7 +123,7 @@ The markup-authored ghost is **one drag ghost like any other** — a library `.t
 - DOM shape under the drag lives inside the `DragGhostHost` (positioning + state classes on the host, content nested inside). Existing styles that assumed a different ghost DOM shape may break; accepted, no pre-audit.
 - Module paths become a runtime contract (`/_content/{assembly}/…`): a wrong path fails at attach with a console error + default ghost, not at compile time. Static descriptor factories keep the strings library-owned.
 - Build-time verification: revival of `ElementReference` + `DotNetObjectReference` nested in typed `CreateFunction.Args` (argument direction).
-- `pointercancel` is **out of scope**: the shared `PointerCapture` module ends a drag only on `pointerup`, so a cancelled touch gesture leaves the host orphaned — a pre-existing shared-module leak, deferred.
+- `pointercancel` is **out of scope**: the shared `PointerCapture` module ends a drag only on `pointerup`, so a canceled touch gesture leaves the host orphaned — a pre-existing shared-module leak, deferred.
 
 ## Alternatives considered
 

@@ -13,7 +13,7 @@ public sealed partial class AccordionPage : ComponentBase
     private string? _expandedItem;
     private string? _expandedIconItem;
     private string? _expandedStyledItem;
-    private string? _expandedCancellableItem;
+    private string? _expandedCancelableItem;
     private bool _blockExpand;
     private string _lastEvent = "(none)";
 
@@ -41,23 +41,23 @@ public sealed partial class AccordionPage : ComponentBase
     private void OnBeforeCollapseStyled(AccordionItemCancelEventArgs _)
         => _expandedStyledItem = null;
 
-    private void OnBeforeExpandCancellable(AccordionItemCancelEventArgs args)
+    private void OnBeforeExpandCancelable(AccordionItemCancelEventArgs args)
     {
         if (_blockExpand)
         {
             args.Cancel = true;
-            _lastEvent = $"Expand cancelled: {args.Sender.Text}";
+            _lastEvent = $"Expand canceled: {args.Sender.Text}";
         }
         else
         {
-            _expandedCancellableItem = args.Sender.Text;
-            _lastEvent = $"Expanded: {args.Sender.Text} (cancellable section)";
+            _expandedCancelableItem = args.Sender.Text;
+            _lastEvent = $"Expanded: {args.Sender.Text} (cancelable section)";
         }
     }
 
-    private void OnBeforeCollapseCancellable(AccordionItemCancelEventArgs args)
+    private void OnBeforeCollapseCancelable(AccordionItemCancelEventArgs args)
     {
-        _expandedCancellableItem = null;
-        _lastEvent = $"Collapsed: {args.Sender.Text} (cancellable section)";
+        _expandedCancelableItem = null;
+        _lastEvent = $"Collapsed: {args.Sender.Text} (cancelable section)";
     }
 }

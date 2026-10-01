@@ -1,6 +1,5 @@
 @use "../design/colors";
 @use "../design/animations/mixins" as animations;
-@use "../user-interaction";
 
 // applies a lucent appearance with a transparent background, no borders and
 // accent coloring on hover / focus for text / icons displayed in the button
@@ -31,5 +30,31 @@
 @mixin no-outline-on-focus() {
     &:focus {
         outline: none;
+    }
+}
+
+// sizes the button and its icon / text for one size modifier class.
+// $icon-margin-left is optional so buttons that space their icon purely through
+// the grid column can leave the margin off entirely.
+@mixin size-modifier($size, $height, $icon-margin-right, $icon-size, $font-size, $text-padding-left-right, $icon-margin-left: null) {
+    &.button--#{$size} {
+        height: $height;
+        grid-template-columns: auto minmax($icon-margin-right, 1fr); // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+
+        ::deep .icon {
+            width: $icon-size;
+            height: $icon-size;
+
+            @if ($icon-margin-left != null) {
+                margin-left: $icon-margin-left;
+            }
+        }
+
+        .text {
+            font-size: $font-size;
+            line-height: $font-size;
+            padding-right: $text-padding-left-right;
+            padding-left: $text-padding-left-right;
+        }
     }
 }

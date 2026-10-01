@@ -1,12 +1,23 @@
 # Changelog
 
-## 6.2.0 - Unreleased
+## 6.2.0 - 2026-10-01
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `Button`, added ripple effect when pressed
 - Improved error handling of JavaScript interop, errors are now logged instead of thrown
 - Rename the company to `ViciOne open automation gmbh` in the license and the package metadata
+- Added `AdvancedTable`
+- Added `SimpleTable`
+- `CheckBox`
+  - Prevent clicks from bubbling up to parent component
+  - Fixed the check mark and indeterminate icons overflowing the box, which caused a needless scrollbar in a scroll container ending with a `CheckBox`
+- `Draggable`, fixed dropzones not being notified of the drag end when the pointer is released before the drag ghost moves
+- `DragGhostBase`, the `cursor` of the drag ghost content is now shown during the drag
+- `Grid`, marked obsolete together with its columns, action buttons, footers, panes, filter control, selection and service registrations, use `AdvancedTable` or `SimpleTable` instead
+- `SearchBox`, added `EnterPressed` to react to `Enter` being pressed in the input
+- `SpinEdit`, added `EnterPressed` to react to `Enter` being pressed in the input
+- `ViciOne.Ui.Localization` package, updated to version `3.6.0`
 
 ### Package `ViciOne.Ui.Blazor.Components.Resources`
 
@@ -448,7 +459,7 @@
 
 ## 3.2.1 - 2025-02-21
 
-- Fixed `LoadingSpinner` background colour alpha and message text alignment
+- Fixed `LoadingSpinner` background color alpha and message text alignment
 
 ## 3.2.0 - 2025-02-19
 

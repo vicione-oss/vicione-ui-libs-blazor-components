@@ -1,0 +1,102 @@
+@page "/tables/advanced-table/selection/display-only"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns.AdvancedTableSelectColumn
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+<h3>Display-Only Selection</h3>
+
+<DescriptionBanner>
+    A display-only channel still <strong>renders</strong> the current selection but cannot <strong>change</strong> it.
+    Each channel locks independently: the row-click channel with <code>RowClickSelectionEnabled="false"</code>, the
+    column channel with <code>DisplayOnly="true"</code>. The host still drives the selection through the
+    <code>SelectedItems</code> binding — display-only locks out the user, not the host. All three tables below start
+    with a host-supplied selection.
+</DescriptionBanner>
+
+<h4>Row-click display-only</h4>
+
+<DescriptionBanner>
+    Row clicks do not select, but the supplied rows stay highlighted and the <code>.selectable</code> hover affordance
+    is withdrawn. No select column is present.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               RowClickSelectionEnabled="false"
+               @bind-SelectedItems="_rowDisplayOnly"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_rowDisplayOnly.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h4>Column display-only (row-click still live)</h4>
+
+<DescriptionBanner>
+    <code>DisplayOnly="true"</code> disables the checkboxes but they still show the selection. The row-click channel
+    stays live and independent, so clicking a row still selects it while the checkbox remains a read-only indicator.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               @bind-SelectedItems="_columnDisplayOnly"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn DisplayOnly="true" />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnDisplayOnly.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h4>Whole-table display-only</h4>
+
+<DescriptionBanner>
+    Both channels are display-only (<code>RowClickSelectionEnabled="false"</code> and <code>DisplayOnly="true"</code>):
+    the entire selection renders but no user action can change it. Used to show an externally-supplied,
+    user-immutable selection.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               RowClickSelectionEnabled="false"
+               @bind-SelectedItems="_wholeTableDisplayOnly"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn DisplayOnly="true" />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_wholeTableDisplayOnly.Count" />
+    </Footer>
+</AdvancedTable>

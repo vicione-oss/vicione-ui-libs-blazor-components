@@ -3,6 +3,7 @@
 /// <summary>
 /// Arguments for <see cref="IGridItemSelection{TSelectable}.Changed"/> event
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed class GridItemSelectionChangedEventArgs<TGridItemKey> : EventArgs
 {
     /// <summary>

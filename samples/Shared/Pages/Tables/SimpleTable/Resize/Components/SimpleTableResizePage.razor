@@ -1,0 +1,139 @@
+@page "/tables/simple-table/resize"
+
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+
+@{
+    var widthPropertyName = nameof(SimpleTableTemplateColumn<>.Width);
+    var minimumWidthPropertyName = nameof(SimpleTableTemplateColumn<>.MinimumWidth);
+}
+
+<h3>Column resize</h3>
+
+<DescriptionBanner>
+    Drag the right edge of a column header to resize it. Only the grabbed column changes — the table
+    grows or shrinks with it (no width is transferred to neighbors). Every resizeable column has a
+    handle, including the last one. When the columns are wider than the container the table scrolls
+    horizontally; when they are narrower the table ends early and the space to the right stays empty.
+    The effect on the total is temporary: the next change in available space re-splits it among the columns
+    still flexing, and the dragged one holds the width you gave it.
+</DescriptionBanner>
+
+<h3>Flex columns sharing space</h3>
+
+<DescriptionBanner>
+    Columns without a <code>@widthPropertyName</code> are flex columns: they split the leftover container space
+    equally, floored at their <code>@minimumWidthPropertyName</code>, and split it again whenever that space changes.
+    All three columns below are flex — expect three equal widths that fill the container exactly. Dragging one
+    pins it, and only that one; see the <a href="/tables/simple-table/reflow">re-flow page</a> for the space-change side.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable>
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Mixed: fixed starting width + flex</h3>
+
+<DescriptionBanner>
+    <code>@widthPropertyName</code> (pixels) pins a column's width — here <code>Value</code> holds
+    <code>200</code> while the others are flex and share what is left, re-splitting it whenever the space changes.
+    <code>@widthPropertyName</code> is one-way: it only sets the width the column starts at, and a value below
+    <code>@minimumWidthPropertyName</code> is clamped up to it. Dragging afterwards overrides it; a change in
+    available space never does.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key (flex)" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value (Width 200)" Width="200" Resizeable>
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp (flex)" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Non-resizeable columns stay put</h3>
+
+<DescriptionBanner>
+    <code>@nameof(SimpleTableTemplateColumn<>.Resizeable)="false"</code> removes a column's drag handle but not its sizing —
+    <code>Value</code> below is still a flex column (it re-flows and honors its min), it just cannot
+    be dragged. The select column is a fixed column type (56px) and never resizes. Under the push
+    model, resizing any neighbor leaves both untouched.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn/>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value (locked)">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>MinimumWidth, empty-on-right and overflow</h3>
+
+<DescriptionBanner>
+    <code>@minimumWidthPropertyName</code> (pixels, default <code>50</code>) floors a column, both when dragging
+    and when it re-flows — <code>Key</code> below cannot shrink past <code>150</code>. Drag columns narrower
+    and the table ends early, showing empty background on the right; drag one past the container and a
+    horizontal scrollbar appears.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key (min 150)" MinimumWidth="150" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

@@ -1,0 +1,35 @@
+@page "/tables/advanced-table/rows/drag-and-drop"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+<h3>Draggable Rows</h3>
+
+<DescriptionBanner>
+    When <code>RowsDraggable</code> is set, rows can be dragged to any registered dropzone.
+
+    Dragging a row that is part of the current selection carries the whole selection;
+    dragging an unselected row selects it first, just like a click.
+
+    Select one or more rows, then drag — the dropzone reports how many rows landed.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_draggableItemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               @bind-SelectedItems="_selectedItems"
+               RowsDraggable="true"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+<RowDropzone />

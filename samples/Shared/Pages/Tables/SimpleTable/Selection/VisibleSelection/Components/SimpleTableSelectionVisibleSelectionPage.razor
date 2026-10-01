@@ -1,0 +1,56 @@
+@page "/tables/simple-table/selection/visible-selection"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+
+<h3>Visible Selection</h3>
+
+<DescriptionBanner>
+    Filtering never removes anything from <code>SelectedItems</code>, so a selected row hidden by a filter stays
+    selected. An action on the selection should nevertheless only touch what the filter leaves — the
+    <em>visible selection</em>. <code>VisibleSelectionChanged</code> reports it, and
+    <code>FilteredItemsChanged</code> reports the rows to select <em>from</em>, which is what a bulk-select
+    button needs. Filter the Key or Value column, then watch the two counts diverge.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    The visible selection ignores virtualization: this table loads a window at a time, and scrolling a selected
+    row out of view neither changes the count below nor raises either callback.
+</DescriptionBanner>
+
+<p>@_selectedItems.Count selected, @_visibleSelection.Count of them visible, @_filteredItems.Count rows left by the filter.</p>
+
+@* TItem stated explicitly: the two callbacks below are method groups, which carry no type to infer it
+   from. *@
+<SimpleTable TItem="ExampleTableItem"
+             Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             Mode="TableLoadingMode.Virtualize"
+             @bind-SelectedItems="_selectedItems"
+             FilteredItemsChanged="StoreFilteredItems"
+             VisibleSelectionChanged="StoreVisibleSelection"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        @* The visible selection, not SelectedItems.Count: the footer has to agree with what an action does. *@
+        <TableFooter SelectedItemCount="_visibleSelection.Count" />
+    </Footer>
+</SimpleTable>

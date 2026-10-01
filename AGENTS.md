@@ -1,5 +1,8 @@
 # AGENTS.md
 
+## General conventions
+- Refer to `docs/general-conventions.md` for rules that apply to everything written in this repository, such as American English spelling
+
 ## Code style
 - Refer to `docs/csharp-code-style.md` for C# coding conventions
 - Refer to `docs/scss-code-style.md` for SCSS coding conventions

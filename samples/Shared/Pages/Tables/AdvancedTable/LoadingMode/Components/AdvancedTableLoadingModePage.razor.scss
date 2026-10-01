@@ -1,0 +1,20 @@
+@use "../../../../../Styles/mixins";
+
+.options {
+    @include mixins.options-styling();
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+
+    .above-table {
+        height: 60px;
+    }
+
+    > ::deep .filling-table {
+        flex: 1;
+        min-height: 0;
+    }
+}

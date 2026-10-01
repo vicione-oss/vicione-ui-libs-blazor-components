@@ -20,7 +20,7 @@ did not offer it. There was no <kbd>Escape</kbd> handling.
 ### The tab order
 
 | Gesture | Result |
-|---|---|
+| --- | --- |
 | <kbd>Tab</kbd> from before the table | The header region's own controls, each a natural tab stop (they are real `<button>`s) |
 | <kbd>Tab</kbd> again | The table body, on the cell the position was last on, else the default cell. The marker shows, because the arrival is by keyboard |
 | <kbd>Tab</kbd> again | Out of the table |
@@ -74,7 +74,7 @@ next <kbd>Tab</kbd> leaves the table — the same place a cell with controls end
 past.
 
 | Gesture | Result |
-|---|---|
+| --- | --- |
 | <kbd>Enter</kbd> | Activates the cell, then enters it if it holds focusable content |
 | <kbd>Tab</kbd> inside an entered cell | Walks that cell's controls; leaving the last one returns to the cell, and <kbd>Shift</kbd>+<kbd>Tab</kbd> off the first does the same |
 | <kbd>Escape</kbd> inside an entered cell | Returns to the cell |

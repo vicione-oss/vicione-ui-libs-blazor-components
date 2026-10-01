@@ -1,5 +1,7 @@
 # Changelog
 
+## 6.3.0 - Unreleased
+
 ## 6.2.0 - 2026-10-01
 
 ### Package `ViciOne.Ui.Blazor.Components`
@@ -71,7 +73,7 @@
 
 - `.NET` packages, updated to version `10.0.11`
 - `Button`, adjusted hover and focus effect
-- `SectionRail`, buttons to navigate to sections use <button> instead of <a>
+- `SectionRail`, buttons to navigate to sections use `<button>` instead of `<a>`
 - Removed `cursor: pointer` styling applied to all `<button>` tags implemented in components as we expect this to be applied by baseline styling in the consumer project
 
 ## 5.19.0 - 2026-07-31
@@ -86,7 +88,7 @@
   - Fixed clicking a partially-visible tab so it is selected instead of only scrolled into view
   - Adjusted overflow effect
 - `Tooltip`, `PropertyGrid`
-    - Updated tooltip styling to use `ViciOne.Ui.Design`
+  - Updated tooltip styling to use `ViciOne.Ui.Design`
 - `ComboBox`, `TagBox`
   - Added tooltip to drop-down items
   - Improved cursor display
@@ -158,7 +160,7 @@
 - `AdvancedErrorBoundary`, changed recovery action text to `Try again`
 - `ExpandableMenu`, expanded sticky entries can now be collapsed by clicking the label
 - `SpinEdit`, prevent parent container scrolling on mousewheel inside the component
--  Added `TagBox`
+- Added `TagBox`
 - `ViciOne.Ui.MonochromeIcons` packages, updated to version `4.11.0`
 
 ## 5.13.0 - 2026-05-27
@@ -207,7 +209,7 @@
 - `IPropertyGridState`, added `PropertyComparer` and `CategoryComparer` properties to control the sort order of property entries and category groups
 - `ComboBox`, fixed an issue with detecting changes to `Items`
 - `TextBox`, added `MaximumLength`
--  Added `Accordion`
+- Added `Accordion`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

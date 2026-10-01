@@ -1,6 +1,6 @@
 # ViciOne Blazor Components
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 
@@ -15,7 +15,7 @@ This repository contains Blazor components for use in ViciOne applications.
 - Run the sample application
 
   | Technology | Command | URL |
-  |-|-|-|
+  | - | - | - |
   | Blazor Server | `dotnet run --project samples/Server` | `https://localhost:57020` |
   | Blazor WebAssembly | `dotnet run --project samples/Client` | `https://localhost:54401` |
 

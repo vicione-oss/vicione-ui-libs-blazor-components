@@ -1,6 +1,6 @@
 # Tests for `Server` application
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 

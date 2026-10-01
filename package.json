@@ -11,6 +11,7 @@
     "esbuild": "^0.28.2",
     "eslint": "^10.11.0",
     "eslint-config-xo": "^4.0.0",
+    "markdownlint-cli2": "^0.23.3",
     "three-dots": "^0.3.2",
     "typescript": "^6.0.3"
   },
@@ -18,7 +19,9 @@
     "build": "npm --workspaces --if-present run build",
     "lint-root-config": "eslint eslint.config.mjs",
     "lint-eslint-plugins": "eslint .eslint-plugins",
-    "lint": "npm run lint-root-config && npm run lint-eslint-plugins && npm --workspaces --if-present run lint",
-    "lint-with-fix": "npm run lint-root-config -- --fix && npm run lint-eslint-plugins -- --fix && npm --workspaces --if-present run lint-with-fix"
+    "lint-root-markdown": "eslint \"**/*.md\" --ignore-pattern src/ViciOne.Ui.Blazor.Components/ --ignore-pattern samples/Shared/",
+    "lint-markdown-style": "markdownlint-cli2",
+    "lint": "npm run lint-root-config && npm run lint-eslint-plugins && npm run lint-root-markdown && npm run lint-markdown-style && npm --workspaces --if-present run lint",
+    "lint-with-fix": "npm run lint-root-config -- --fix && npm run lint-eslint-plugins -- --fix && npm run lint-root-markdown -- --fix && npm run lint-markdown-style -- --fix && npm --workspaces --if-present run lint-with-fix"
   }
 }

@@ -24,7 +24,7 @@ is invisible, and the user meets it on their next <kbd>Tab</kbd> back in.
 When the reshape is a column being hidden:
 
 | Case | Result |
-|---|---|
+| --- | --- |
 | The position is on the header of a surviving column | Unchanged |
 | The position is on the header of the hidden column | The neighboring header — the column to the right, or to the left when the hidden one was last |
 | Every column is hidden | The no-data placeholder cell, the same stop an empty table uses |

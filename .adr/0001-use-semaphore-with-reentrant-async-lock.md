@@ -72,7 +72,7 @@ When re-entering from within a locked callback, skip semaphore acquisition and e
 
 Tracing the non-async scenario concretely:
 
-```
+```csharp
 WithSemaphoreAsync:                          // async — captures ExecutionContext
   _semaphoreAcquired.Value = true            // set on current context
   await action()

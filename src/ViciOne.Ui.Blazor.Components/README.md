@@ -1,8 +1,8 @@
-# Brief
+# ViciOne.Ui.Blazor.Components
 
 This package provides Blazor components for use in ViciOne applications.
 
-# Components
+## Components
 
 - [`ContextMenu`](ContextMenu/README.md)
 - [`PropertyGrid`](PropertyGrid/README.md)

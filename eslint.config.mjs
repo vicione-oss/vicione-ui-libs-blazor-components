@@ -12,8 +12,7 @@ const config = [
             '**/*.razor.js',
             '**/*.razor.css',
             '**/*.html',
-            '**/*.json',
-            '**/*.md'
+            '**/*.json'
         ]
     },
     ...eslintConfigXo({ space: indent }),
@@ -130,6 +129,25 @@ const config = [
             '@typescript-eslint/no-unsafe-member-access': 'off',
             '@typescript-eslint/naming-convention': 'off',
             'unicorn/filename-case': 'off'
+        }
+    },
+
+    // Markdown files are checked here for broken structure only, their style is checked by
+    // markdownlint, see `.markdownlint-cli2.jsonc`
+    {
+        files: ['**/*.md'],
+        languageOptions: {
+            // Skill and command files for agents start with YAML frontmatter
+            frontmatter: 'yaml'
+        },
+        rules: {
+            'markdown/no-missing-label-refs': [
+                'error',
+                {
+                    // `[TOC]` is the table of contents of GitLab, not a reference to a link
+                    allowLabels: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', 'TOC']
+                }
+            ]
         }
     }
 ];

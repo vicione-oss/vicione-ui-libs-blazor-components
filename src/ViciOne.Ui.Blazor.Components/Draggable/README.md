@@ -1,6 +1,6 @@
 # Draggable
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 
@@ -210,7 +210,7 @@ await DragInteraction.AttachAsync(this, dragGhost: _dragGhost);
 A `DragGhostBase` subclass can opt into drag lifecycle callbacks by implementing either interface — no round-trip is made for a callback that is not implemented:
 
 | Interface | Callback |
-|-|-|
+| - | - |
 | [`IDragStartListener`](Abstractions/IDragStartListener.cs) | `Task DragStartAsync()` — a drag starts. |
 | [`IDragEndListener`](Abstractions/IDragEndListener.cs) | `Task DragEndAsync()` — a drag ends. |
 | [`IDropzoneEnterListener`](Abstractions/IDropzoneEnterListener.cs) | `Task DropzoneEnterAsync()` — a drag enters a dropzone. |
@@ -247,7 +247,7 @@ Styling the content alone would not show: pointer capture is bound to the ghost 
 The JavaScript side of a `DragGhostBase` ghost lives in the [`DragGhostBase.cs.ts`](Components/DragGhostBase.cs.ts) companion module, which exposes **one central factory** that returns a single stateful drag ghost instance:
 
 | Factory export | Instance members |
-|-|-|
+| - | - |
 | `createDragGhost` | Returns one stateful instance holding the host element and .NET reference. `getContent` (required) provides the class-stripped element clone; `dragStart` / `dragEnd` (opt-in) forward the drag-start / drag-end callbacks (`DragStartAsync` / `DragEndAsync`) and `dropzoneEnter` / `dropzoneLeave` (opt-in) forward the dropzone-enter / dropzone-leave callbacks (`DropzoneEnterAsync` / `DropzoneLeaveAsync`). The .NET listener renders the content itself via `RenderContentAsync()`; the ghost's pending `WaitForContentChangeAsync()` call then resolves and raises `contentChanged` to swap the fresh content into the ghost. |
 
 Because the callbacks are methods on a single instance, state can be held across `getContent`, `dragStart`, `dragEnd`, `dropzoneEnter`, and `dropzoneLeave` for the whole drag.
@@ -288,5 +288,5 @@ A built-in drag ghost for table rows is provided: [`ITableRowDragGhost`](Service
 ### Registration
 
 | Helper | Registers |
-|-|-|
+| - | - |
 | `AddDraggable()` | `IDragInteraction` — required for any drag interaction. `ITableRowDragGhost` — the built-in table-row drag ghost. |

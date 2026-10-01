@@ -4,7 +4,7 @@
 - DO run steps one by one using the tools provided by the Playwright MCP.
 - INITIALLY show the browser.
 - Close the browser after you have finished your work.
-- Remember "https://localhost:57020" as "base URL"
+- Remember "<https://localhost:57020>" as "base URL"
 - Prepend "base URL" to relative URLs mentioned in the scenario.
 - Only after all steps are completed, create a Playwright test for xUnit based on patterns in existing tests and message history.
 - Execute the test and iterate until the test passes.

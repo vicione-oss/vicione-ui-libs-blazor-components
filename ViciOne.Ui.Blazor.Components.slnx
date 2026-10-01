@@ -48,6 +48,7 @@
     <File Path=".gitignore" />
     <File Path=".gitlab-ci.yml" />
     <File Path=".globalconfig" />
+    <File Path=".markdownlint-cli2.jsonc" />
     <File Path="AGENTS.md" />
     <File Path="CHANGELOG.md" />
     <File Path="CLAUDE.md" />

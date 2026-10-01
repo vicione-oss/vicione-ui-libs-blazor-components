@@ -1,0 +1,19 @@
+@{
+    var cssClasses = new List<string> { "dropzone" };
+
+    if (_highlighted)
+        cssClasses.Add("highlighted");
+    if (_dragEntered)
+        cssClasses.Add("drag-entered");
+}
+
+<div class="@string.Join(" ", cssClasses)" @ref="_elementReference">
+    @if (_lastDroppedItem is not null)
+    {
+        <span class="dropped-info">Last dropped: <code>@_lastDroppedItem.Key</code> / <code>@_lastDroppedItem.Value</code> (<code>@_lastDroppedCount</code> row(s) in payload)</span>
+    }
+    else
+    {
+        <span class="placeholder">Drop a row here</span>
+    }
+</div>

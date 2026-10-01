@@ -1,0 +1,314 @@
+@page "/tables/simple-table/sorting"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Column-level sort</h3>
+
+<DescriptionBanner>
+    <code>SimpleTableTemplateColumn</code> accepts <code>SortExpression</code> with a LINQ expression to enable sorting by that key.
+
+    Columns without a <code>SortExpression</code> are not sortable.
+
+    Click once for ascending, again for descending.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" SortExpression="x => x.Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Tied rows — descending is the exact reverse of ascending</h3>
+
+<DescriptionBanner>
+    Toggling a direction reorders every row, not only the key groups. Rows that tie on every sorted column keep
+    the order they have in <code>Items</code>, reversed once the innermost sorting is descending.
+
+    Sort by <code>Key</code> below: three rows share each key, and switching to descending reverses the tied
+    rows inside a group as well as the groups themselves. The guarantee comes from
+    <code>SimpleTable</code>'s built-in provider — a consumer-supplied <code>IItemsProvider</code> defines its
+    own tie order.
+</DescriptionBanner>
+
+<SimpleTable Items="s_tiedItems" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Sort by more than one column</h3>
+
+<DescriptionBanner>
+    <kbd>Shift</kbd>-click a header to add its column to the sort instead of replacing it. The added column becomes the
+    lowest priority, so it decides the order of the rows that tie on everything sorted before it. <kbd>Shift</kbd>-clicking
+    a column that is already sorted flips its direction and keeps its priority, while a plain click drops
+    every column but the clicked one.
+
+    The rows below are the tied ones again. Sort by <code>Key</code>, then <kbd>Shift</kbd>-click <code>Value</code>: the
+    groups stay put and the rows inside them line up by their source position instead of falling back to the
+    tie order.
+</DescriptionBanner>
+
+<SimpleTable Items="s_tiedItems" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" SortExpression="x => x.Value" Resizeable="false">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Custom sort comparer — natural ordering</h3>
+
+<DescriptionBanner>
+    <code>SortComparer</code> accepts any <code>IComparer</code> (derive from <code>Comparer&lt;TKey&gt;</code> or
+    use .NET comparers like <code>StringComparer</code>) to override how the keys of a <code>SortExpression</code>
+    are compared. It applies to <code>SimpleTable</code>'s in-memory sorting only.
+
+    Both <code>Code</code> columns below sort the same code, but the right one uses the .NET's natural-ordering comparer —
+    <code>CompareInfo.GetStringComparer(CompareOptions.NumericOrdering)</code> — placing
+    <code>FB2</code> before <code>FB10</code> where the default lexicographic sort does not.
+</DescriptionBanner>
+
+<SimpleTable Items="s_codeItems" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="CodeDefault" Title="Code (default sort)" SortExpression="x => x.Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="CodeNatural"
+                                   Title="Code (natural sort)"
+                                   SortExpression="x => x.Key"
+                                   SortComparer="s_naturalComparer"
+                                   Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Start with a sort — an unchanging <code>SortingState</code></h3>
+
+<DescriptionBanner>
+    Pass <code>SortingState</code> from a field that is never reassigned to give the table the sort it starts
+    with. The table applies it once the columns have registered and owns it from then on, because handing over
+    the same instance again is not a new command — clicking a header changes the sort and nothing puts it back.
+    An entry for a column the table does not show is dropped. A plain header click replaces the whole value, so
+    a sort over several columns survives a stray click only as far as <kbd>Shift</kbd>-clicking rebuilds it.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" SortingState="_seedSortingState" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" SortExpression="x => x.Value" Resizeable="false">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable="false">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Observe changes — <code>SortingStateChanged</code></h3>
+
+<DescriptionBanner>
+    Handle <code>SortingStateChanged</code> without passing <code>SortingState</code> to watch the applied sort
+    without driving it. It reports the applied sorting after every change, whatever caused it. The list below
+    reports what was last raised.
+</DescriptionBanner>
+
+@if (_observedSortingState.ColumnSortings.Count > 0)
+{
+    <ul>
+        @foreach (var columnSorting in _observedSortingState.ColumnSortings)
+        {
+            <li><code>@columnSorting.ColumnId</code> — @(columnSorting.Ascending ? "ascending" : "descending")</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>Nothing observed yet — click a column header.</em></p>
+}
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" SortingStateChanged="ObservedSortingStateChanged" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" SortExpression="x => x.Value" Resizeable="false">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" SortExpression="x => x.Timestamp" Resizeable="false">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Drive the sort from markup — <code>@("@bind-SortingState")</code></h3>
+
+<DescriptionBanner>
+    Bind <code>SortingState</code> to drive the table from a field and have every change written back into it,
+    whoever made it — the buttons below or a column header. A new instance in the field is a command; the same
+    instance again is not, which is what lets the table's own value flow back without starting over.
+
+    <strong>Note:</strong> build the value in a field and only replace it when it really changes. A parent that
+    produces a fresh, content-equal instance on every render makes the table re-apply on every render, and under
+    a binding that never terminates — each apply reports back, each report renders the parent, each render
+    builds another instance.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Sort order</label>
+        <Button Text="Sort by Key" OnClick="SortBoundTableByKey" Size="ButtonSize.Small" />
+    </div>
+    <div class="option">
+        <label>Sort order</label>
+        <Button Text="Clear sort" OnClick="ClearBoundSorting" Size="ButtonSize.Small" />
+    </div>
+</div>
+
+@if (_boundSortingState.ColumnSortings.Count > 0)
+{
+    <ul>
+        @foreach (var columnSorting in _boundSortingState.ColumnSortings)
+        {
+            <li><code>@columnSorting.ColumnId</code> — @(columnSorting.Ascending ? "ascending" : "descending")</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No active sort.</em></p>
+}
+
+<SimpleTable Items="s_items"
+             RowClickSelectionEnabled="false"
+             @bind-SortingState="_boundSortingState"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key" Resizeable="false">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" SortExpression="x => x.Value" Resizeable="false">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" SortExpression="x => x.Timestamp" Resizeable="false">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Change the sort from outside — <code>SetSortingStateAsync</code></h3>
+
+<DescriptionBanner>
+    Hold the table in an <code>@("@ref")</code> and call <code>SetSortingStateAsync</code> for the changes a
+    binding expresses badly — a reset, a jump to a preset — and for callers that are not in a render at all.
+    Unlike the parameter the method has no memory of what it was handed before, so resetting works here even
+    though the empty sorting is a value the table has seen before.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Sort order</label>
+        <Button Text="Reset sort" OnClick="ResetSortingAsync" Size="ButtonSize.Small" />
+    </div>
+</div>
+
+@if (_pushedSortingState.ColumnSortings.Count > 0)
+{
+    <ul>
+        @foreach (var columnSorting in _pushedSortingState.ColumnSortings)
+        {
+            <li><code>@columnSorting.ColumnId</code> — @(columnSorting.Ascending ? "ascending" : "descending")</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No active sort.</em></p>
+}
+
+<SimpleTable @ref="_pushTargetTable"
+             Items="s_items"
+             RowClickSelectionEnabled="false"
+             SortingStateChanged="PushedSortingStateChanged"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" SortExpression="x => x.Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" SortExpression="x => x.Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" SortExpression="x => x.Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

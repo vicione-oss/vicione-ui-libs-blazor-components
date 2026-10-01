@@ -32,6 +32,7 @@
     <File Path="docs/commit-message-style.md" />
     <File Path="docs/csharp-code-style.md" />
     <File Path="docs/documentation-style.md" />
+    <File Path="docs/general-conventions.md" />
     <File Path="docs/localization-guide.md" />
     <File Path="docs/scss-code-style.md" />
   </Folder>

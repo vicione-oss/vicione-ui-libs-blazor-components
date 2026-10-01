@@ -1,0 +1,20 @@
+@using ViciOne.Ui.Blazor.Components.SearchBox
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Filters
+@using ContainsFilterEditorLocalization = ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Localization.ContainsFilterEditor
+
+@typeparam TItem where TItem : class
+
+@inherits ColumnFilterEditorBase
+
+<FilterEditorFrame Title="@ContainsFilterEditorLocalization.Title"
+                     OnApply="ApplyAsync"
+                     OnCancel="CancelAsync">
+
+    <div class="simple-table-contains-filter">
+        <SearchBox Text="@_text"
+                   TextChanging="SearchBoxTextChanging"
+                   EnterPressed="ApplyAsync"
+                   Placeholder="@ContainsFilterEditorLocalization.FilterValuePlaceholder" />
+    </div>
+
+</FilterEditorFrame>

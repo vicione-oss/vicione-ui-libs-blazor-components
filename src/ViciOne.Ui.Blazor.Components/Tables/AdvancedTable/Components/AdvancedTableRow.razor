@@ -1,0 +1,13 @@
+@typeparam TItem where TItem : class
+
+<tr @ref="_elementReference"
+    class="@CssClass"
+    @onclick="OnClick"
+    @onpointerenter="OnPointerEnter"
+    @ondblclick="OnDoubleClick"
+    @oncontextmenu="OnContextMenu"
+    @oncontextmenu:preventDefault="ContextMenuPreventDefault"
+    @ondragstart:preventDefault="Draggable">
+
+    @ChildContent
+</tr>

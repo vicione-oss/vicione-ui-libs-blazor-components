@@ -45,7 +45,8 @@
                     {
                         // render column again when it was rendered in ChildContent
                         // as it somehow gets optimized away seemingly due to non-complex parameters
-                        <NavigationColumn NavigationButtonTitle="@NavigationColumn.NavigationButtonTitle"
+                        <NavigationColumn TGridItem="TGridItem"
+                                          NavigationButtonTitle="@NavigationColumn.NavigationButtonTitle"
                                           Navigate="@NavigationColumn.Navigate"
                                           @key="Guid.NewGuid()" />
                     }

@@ -1,0 +1,88 @@
+@page "/tables/advanced-table/footer"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+<DescriptionBanner>
+    The footer is an optional render fragment, and a table has no footer until one is supplied — leaving
+    <code>Footer</code> unset emits no footer element and reserves no space for one.
+
+    <code>TableFooter</code> is the built-in footer, and both of its counts are optional: leave
+    <code>ItemCount</code> unset and the table's own item count is displayed, leave
+    <code>SelectedItemCount</code> unset and no selection count is displayed.
+</DescriptionBanner>
+
+<h3>Neither count supplied</h3>
+
+<DescriptionBanner>
+    Placed without parameters, <code>TableFooter</code> displays the number of items the table currently holds
+    and keeps it current as the table reloads. The item type is cascaded, so it needs no explicit type argument.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="StaticItemsProvider" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter/>
+    </Footer>
+</AdvancedTable>
+
+<h3>Selection count supplied</h3>
+
+<DescriptionBanner>
+    Supply <code>SelectedItemCount</code> to display the number of selected items beside the item count.
+    Click a row to select it, click + <kbd>Ctrl</kbd> or click + <kbd>Shift</kbd> for multiselection.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="StaticItemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               @bind-SelectedItems="_selectedItems"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Title="Key" Id="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Title="Value" Id="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Title="Timestamp" Id="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_selectedItems.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h3>Both counts supplied</h3>
+
+<DescriptionBanner>
+    Supply <code>ItemCount</code> as well and the footer displays exactly the two numbers it was given instead
+    of reading one of them from the table — the form in which the two numbers cannot disagree for a frame.
+    The number passed here is the one this page already holds, the size of its own item source.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="StaticItemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               @bind-SelectedItems="_bothCountsSelectedItems"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Title="Key" Id="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Title="Value" Id="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter ItemCount="s_items.Count" SelectedItemCount="_bothCountsSelectedItems.Count" />
+    </Footer>
+</AdvancedTable>

@@ -1,0 +1,19 @@
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@typeparam TItem
+
+@inherits TableBodyCellContentBase<TItem>
+
+@{
+    var navigateButtonCssClasses = new List<string> { "navigate-button" };
+
+    if (RowState.Hovered)
+        navigateButtonCssClasses.Add("navigate-button--visible");
+}
+
+<div>
+    <button class="@string.Join(" ", navigateButtonCssClasses)" title="@Tooltip" @onclick="NavigateButtonClickAsync">
+        <MonochromeIcon Name="MonochromeIconName.ExpanderLightRight" Size="MonochromeIconSize.SmallMedium" />
+    </button>
+</div>

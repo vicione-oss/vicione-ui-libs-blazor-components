@@ -28,6 +28,20 @@ li {
 
             text-decoration: none;
 
+            &.group {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                margin: 0;
+                padding: 0;
+
+                font: inherit;
+                color: inherit;
+                text-align: left;
+
+                cursor: pointer;
+            }
+
             &.current {
                 color: colors.$accent;
 
@@ -39,6 +53,5 @@ li {
     .nested-navigation-items {
         list-style: none;
         padding-left: 16px;
-        margin: 0;
     }
 }

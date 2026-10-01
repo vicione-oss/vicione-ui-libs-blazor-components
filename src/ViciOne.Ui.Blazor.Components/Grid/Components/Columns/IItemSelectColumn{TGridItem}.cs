@@ -4,6 +4,7 @@
 /// Contract for a column that can determine selection state for grid items.
 /// </summary>
 /// <typeparam name="TGridItem">The item/row type handled by the grid column.</typeparam>
+[Obsolete(Constants.ObsoleteMessage)]
 internal interface IItemSelectColumn<TGridItem>
 {
     /// <summary>

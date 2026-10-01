@@ -9,6 +9,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components;
 /// <summary>
 /// Component for rendering a filter control in render fragment <see cref="Grid{TGridItem}.Filter"/>
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class GridFilterControl : ComponentBase
 {
     private readonly string _iconCssClass =

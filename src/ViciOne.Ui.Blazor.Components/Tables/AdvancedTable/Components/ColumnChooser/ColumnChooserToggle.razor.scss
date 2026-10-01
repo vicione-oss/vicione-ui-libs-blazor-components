@@ -1,0 +1,43 @@
+@use "../../../../Styles/design/colors";
+@use "../../../../Styles/design/popup";
+@use "../../Styles/column-chooser";
+
+$maximum-visible-row-count: var(--column-chooser-maximum-visible-row-count, 10);
+
+.column-chooser-toggle {
+    position: relative;
+
+    .column-chooser-popup {
+        position: absolute;
+        top: 0;
+        // Same layer as Popup, so this lifts over the table's sticky column header like a popup should.
+        z-index: popup.$z-index;
+
+        width: max-content;
+
+        border: 1px solid colors.$border;
+
+        // The following 2 rules are adopted from Popup.razor.scss
+        box-shadow: popup.$box-shadow;
+        border-radius: popup.$border-radius;
+
+        &.open-to-left {
+            right: 0;
+        }
+
+        // PopupHeaderBodyLayout scrolls its body already. Limited to whole rows of ColumnChooserContent, a long
+        // column list scrolls there instead of stretching the popup past the dialog or page it opens in, with the
+        // scrollbar at the popup's border and the body's padding between it and the column headers.
+        ::deep .popup-header-body-layout > .body {
+            // A scroll container's bottom padding only shows at the end of the scrolled content; before that, the
+            // content runs through it. As tall as a row gap, it shows the gap after the last visible row there,
+            // so the list is cut off between two rows instead of in the middle of the next one.
+            padding-block: column-chooser.$gap;
+
+            max-height: calc(
+                #{$maximum-visible-row-count} * #{column-chooser.$row-height}
+                + (#{$maximum-visible-row-count} + 1) * #{column-chooser.$gap}
+            );
+        }
+    }
+}

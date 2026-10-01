@@ -1,0 +1,29 @@
+@using ViciOne.Ui.Blazor.Components.ContextMenu.Components
+
+@inherits SpecializedContextMenuBase<ExampleRowContextMenuContext>
+
+<ContextMenu @ref="ContextMenu">
+
+    <ContextMenuHeader Text="@HeaderText" />
+
+    <ContextMenuItem ApplicableTo="new(typeof(HighQuantityRow), typeof(LowQuantityRow))"
+                     IconCssClass="@_editIcon"
+                     OnClick="@(() => ActionInvokedAsync("Edit"))"
+                     Text="Edit" />
+
+    <ContextMenuItem ApplicableTo="new(typeof(HighQuantityRow), typeof(LowQuantityRow))"
+                     IconCssClass="@_detailsIcon"
+                     OnClick="@(() => ActionInvokedAsync("Details"))"
+                     Text="Details" />
+
+    <ContextMenuItem ApplicableTo="new(typeof(HighQuantityRow))"
+                     BeginGroup="true"
+                     OnClick="@(() => ActionInvokedAsync("Split into batches"))"
+                     Text="Split into batches" />
+
+    <ContextMenuItem ApplicableTo="new(typeof(HighQuantityRow), typeof(LowQuantityRow))"
+                     BeginGroup="true"
+                     IconCssClass="@_deleteIcon"
+                     OnClick="@(() => ActionInvokedAsync("Delete"))"
+                     Text="Delete" />
+</ContextMenu>

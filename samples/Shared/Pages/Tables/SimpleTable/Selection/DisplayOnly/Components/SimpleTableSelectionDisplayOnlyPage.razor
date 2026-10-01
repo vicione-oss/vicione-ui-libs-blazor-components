@@ -1,0 +1,122 @@
+@page "/tables/simple-table/selection/display-only"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns.SimpleTableSelectColumn
+
+<h3>Display-Only Selection</h3>
+
+<DescriptionBanner>
+    A display-only channel still <strong>renders</strong> the current selection but cannot <strong>change</strong> it.
+
+    Each channel locks independently: the row-click channel with <code>RowClickSelectionEnabled="false"</code>, the
+    column channel with <code>DisplayOnly="true"</code>.
+
+    The host still drives the selection through the <code>SelectedItems</code> binding — display-only locks out the user,
+    not the host. All three tables below start with a host-supplied selection.
+</DescriptionBanner>
+
+<h4>Row-click display-only</h4>
+
+<DescriptionBanner>
+    Row clicks do not select, but the supplied rows stay highlighted. No select column is present.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             RowClickSelectionEnabled="false"
+             @bind-SelectedItems="_rowDisplayOnly"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_rowDisplayOnly.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Column display-only (row-click still live)</h4>
+
+<DescriptionBanner>
+    <code>DisplayOnly="true"</code> disables the checkboxes and the select-all header, but both still show the
+    selection: the header renders its tri-state (indeterminate for a partial selection) disabled.
+
+    The row-click channel stays live, so clicking a row still selects it.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_columnDisplayOnly"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn DisplayOnly="true" />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnDisplayOnly.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Whole-table display-only</h4>
+
+<DescriptionBanner>
+    Both channels are display-only (<code>RowClickSelectionEnabled="false"</code> and <code>DisplayOnly="true"</code>):
+    the entire selection renders but no user action can change it.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             RowClickSelectionEnabled="false"
+             @bind-SelectedItems="_wholeTableDisplayOnly"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableSelectColumn DisplayOnly="true" />
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_wholeTableDisplayOnly.Count" />
+    </Footer>
+</SimpleTable>

@@ -15,4 +15,9 @@
 
 <div @attributes="attributes" @ref="_elementReference">
     <span class="label">@Label</span>
+
+    @if (ServedTickets is { } servedTickets)
+    {
+        <span class="hint">Serves @(servedTickets == TicketParity.Odd ? "odd" : "even") tickets</span>
+    }
 </div>

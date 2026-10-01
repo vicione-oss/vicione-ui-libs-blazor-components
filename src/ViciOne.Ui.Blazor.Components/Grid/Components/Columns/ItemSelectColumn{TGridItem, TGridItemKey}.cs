@@ -12,6 +12,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 /// </summary>
 /// <typeparam name="TGridItem">Grid item type</typeparam>
 /// <typeparam name="TGridItemKey">Grid item key type</typeparam>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed class ItemSelectColumn<TGridItem, TGridItemKey> : ColumnBase<TGridItem>, IItemSelectColumn<TGridItem>, IDisposable
 {
     private static readonly RenderFragment<QuickGrid.ColumnBase<TGridItem>> s_ownHeaderContent = column => builder =>

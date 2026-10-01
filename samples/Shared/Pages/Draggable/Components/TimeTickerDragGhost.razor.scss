@@ -10,12 +10,16 @@
     }
 
     &.outside-dropzone {
+        cursor: not-allowed;
+
         ::deep .icon {
             color: colors.$error;
         }
     }
 
     &.over-dropzone {
+        cursor: alias;
+
         ::deep .icon {
             color: colors.$accent;
         }

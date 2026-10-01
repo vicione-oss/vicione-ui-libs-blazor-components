@@ -1,3 +1,6 @@
 .drag-ghost-content {
     display: none;
+
+    // Content without a cursor of its own must not show the cursor of wherever the drag ghost is placed.
+    cursor: auto;
 }

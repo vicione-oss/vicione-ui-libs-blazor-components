@@ -2,6 +2,7 @@
 
 namespace ViciOne.Ui.Blazor.Components.Grid.Services;
 
+[Obsolete(Constants.ObsoleteMessage)]
 internal sealed class GridItemSelection<TGridItemKey> : IGridItemSelection<TGridItemKey>
 {
     private readonly HashSet<TGridItemKey> _items = [];

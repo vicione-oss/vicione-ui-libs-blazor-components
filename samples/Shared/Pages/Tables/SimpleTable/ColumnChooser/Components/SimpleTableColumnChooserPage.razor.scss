@@ -1,0 +1,7 @@
+@use "../../../../../Styles/mixins";
+
+.toolbar-container {
+    @include mixins.toolbar-container-styles();
+
+    margin-bottom: 16px;
+}

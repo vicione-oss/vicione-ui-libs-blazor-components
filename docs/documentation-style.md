@@ -45,7 +45,17 @@ mechanism.
   exceptions, thread safety, disposal requirements, ordering and timing
   guarantees, observable side effects.
 - The **mechanism** is not: data structures, locks, private helpers, caching,
-  algorithm names.
+  algorithm names, and how the type is put together — which collaborators it
+  delegates to, what was split out of it, which file or folder a part lives in.
+  A consumer cannot act on any of it and every word of it goes stale on the
+  next refactor.
+- **`<remarks>` earns its place or it goes.** A `<summary>` is bounded by the
+  question it answers; `<remarks>` is bounded by nothing, which is why
+  mechanism collects there. Write one only for a contract that genuinely does
+  not fit the summary — a disposal requirement, an ordering guarantee, a state
+  that suppresses an event. Watch for it directly after a refactor: the design
+  is freshest in mind exactly then, and a `<remarks>` will take the commit
+  message if it is let to.
 - Never restate the signature. No "Gets or sets", no `<param>` echoing the
   parameter name, no `<summary>Disposes.</summary>`.
 - For every doc and every part of one, ask: does an external user need this?
@@ -77,7 +87,7 @@ before writing it.
   "does this go?", not "can this be shorter?". Rewriting a comment that should
   not exist launders it — it survives the review it should not have survived,
   now harder to spot.
-- **A surviving why does not carry its neighbours.** Split it at sentence and
+- **A surviving why does not carry its neighbors.** Split it at sentence and
   clause boundaries and run every piece through the checks again on its own. A
   clause naming an identifier, call or value that appears in the lines the
   comment sits on is a restatement and goes, however sound the clause next to
@@ -102,9 +112,13 @@ before writing it.
   written, or it is not written. Unverifiable and wrong cost the same.
 - **Say it once, where the decision lives.** A reason that spans files is
   stated at the place that owns it. Elsewhere, restate it in a clause rather
-  than sending the reader away. Past roughly three lines, the reason is
-  architectural, not local — it belongs in the feature's `README.md`, with
-  nothing left behind above the code.
+  than sending the reader away. Length alone does not decide where a reason
+  goes; what it explains does. A reason that shapes the feature beyond the
+  lines it sits on is architectural, not local — it belongs in the feature's
+  `README.md`, with nothing left behind above the code. A reason about those
+  lines alone stays above them, even when understanding the issue takes
+  several sentences: moved to a separate file, it would be cut off from the
+  only code it explains and help no one.
 - **A reference is a last resort.** A path, a section name or an ADR number
   drifts silently and nothing fails when it does. In order: state the reason
   inline; failing that, name a symbol a rename would carry with it; only then
@@ -121,7 +135,7 @@ before writing it.
 Applies to comments and XML docs alike. Which term to pick is
 `## Consistent terminology` above.
 
-- Full sentences, capitalised and terminated.
+- Full sentences, capitalized and terminated.
 - **Plainest word that is still precise.** Covers, not occludes. Pointless,
   not futile. "Able to fail", not "discriminating". A word the reader stops at
   costs more than the syllables it saves. Precision still wins — keep the exact

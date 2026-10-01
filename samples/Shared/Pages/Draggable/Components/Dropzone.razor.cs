@@ -15,6 +15,9 @@ public sealed partial class Dropzone : ComponentBase, IHasLabel, IDropzone, IAsy
     [Parameter, EditorRequired] public string Label { get; set; } = default!;
     [Parameter] public int? GridSize { get; set; }
 
+    /// <summary>The tickets this dropzone serves, or <see langword="null"/> to serve every ticket.</summary>
+    [Parameter] public TicketParity? ServedTickets { get; set; }
+
     [Inject] private IDragInteraction DragInteraction { get; set; } = default!;
     [Inject] private ISnapToGridPointerCaptureBehavior SnapToGridPointerCaptureBehavior { get; set; } = default!;
     [Inject] private IDropPolicy<IDropzone> DropPolicy { get; set; } = default!;

@@ -1,0 +1,6 @@
+@use "../Styles/variables";
+
+tr {
+    content-visibility: auto;
+    contain-intrinsic-size: auto variables.$grid-row-height;
+}

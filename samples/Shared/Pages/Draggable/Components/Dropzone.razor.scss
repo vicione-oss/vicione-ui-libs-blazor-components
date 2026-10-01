@@ -16,6 +16,10 @@
         font-weight: bold;
     }
 
+    .hint {
+        font-size: smaller;
+    }
+
     &.highlighted {
         border-color: colors.$font-light;
     }

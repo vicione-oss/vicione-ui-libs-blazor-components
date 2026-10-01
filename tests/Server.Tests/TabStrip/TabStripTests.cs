@@ -191,7 +191,7 @@ public partial class TabStripTests(ServerFixture fixture)
             var clippedTabIndex = await FindFirstTabClippedOnRightAsync(tabs, containerBox.X + containerBox.Width - overflowSize);
             Assert.True(clippedTabIndex >= 1, "Expected a tab hidden behind the right overflow gradient to navigate to.");
 
-            // Focus the first tab, then walk focus one item at a time towards the clipped tab using the right arrow key.
+            // Focus the first tab, then walk focus one item at a time toward the clipped tab using the right arrow key.
             await tabs.First.FocusAsync();
             Assert.Equal(0, await GetFocusedTabIndexAsync(tabs));
 
@@ -253,7 +253,7 @@ public partial class TabStripTests(ServerFixture fixture)
             Assert.True(clippedTabIndex >= 0, "Expected a tab hidden behind the left overflow gradient.");
             Assert.True(clippedTabIndex < tabCount - 1, "Expected the clipped tab to be navigable from the last tab.");
 
-            // Focus the last tab, then walk focus one item at a time towards the clipped tab using the left arrow key.
+            // Focus the last tab, then walk focus one item at a time toward the clipped tab using the left arrow key.
             await tabs.Last.FocusAsync();
             Assert.Equal(tabCount - 1, await GetFocusedTabIndexAsync(tabs));
 
@@ -454,7 +454,7 @@ public partial class TabStripTests(ServerFixture fixture)
 
             // Click the still-visible left portion using raw mouse coordinates. A normal locator click would let
             // Playwright scroll the tab fully into view first, hiding the very race this test guards against: the
-            // pointerdown focuses the tab, and if the focusin handler scrolled it away the click would be cancelled.
+            // pointerdown focuses the tab, and if the focusin handler scrolled it away the click would be canceled.
             var clickX = (float)((tabBox.X + Math.Min(tabBox.X + tabBox.Width, containerRight)) / 2);
             var clickY = tabBox.Y + (tabBox.Height / 2);
 

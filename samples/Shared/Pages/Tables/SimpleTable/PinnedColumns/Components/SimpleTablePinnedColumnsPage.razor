@@ -1,0 +1,82 @@
+@page "/tables/simple-table/pinned-columns"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Pinned Columns</h3>
+
+<DescriptionBanner>
+    Set <code>PinSide</code> on a column to anchor it to the left or right edge so it stays visible while the
+    unpinned columns scroll horizontally. Pinned columns render grouped by side — all left pins, then the
+    unpinned columns, then all right pins — regardless of declaration order. Each table below is bounded
+    narrower than its columns, so scroll horizontally to see the pinning.
+</DescriptionBanner>
+
+<h3>Left and right pins (fixed widths)</h3>
+
+<DescriptionBanner>
+    <code>Id</code> and <code>Key</code> are pinned left; <code>Owner</code> and <code>Actions</code> are
+    pinned right. All four hold their edges while the middle two columns scroll under them. Multiple pins on
+    the same side stack without overlapping.
+</DescriptionBanner>
+
+<div class="pinned-sample-table">
+    <SimpleTable Items="s_items" MaximumHeight="300px">
+        <Columns>
+            <SimpleTableTemplateColumn Id="Id" Title="Id" Width="120" PinSide="PinSide.Left">
+                <CellContent>@context.Id</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Key" Title="Key" Width="160" PinSide="PinSide.Left">
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Value" Title="Value" Width="220">
+                <CellContent>@context.Value</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Width="200">
+                <CellContent>@context.Timestamp</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Owner" Title="Owner" Width="140" PinSide="PinSide.Right">
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Actions" Title="Actions" Width="140" PinSide="PinSide.Right">
+                <CellContent><Button Text="Open" Size="ButtonSize.Small" /></CellContent>
+            </SimpleTableTemplateColumn>
+        </Columns>
+    </SimpleTable>
+</div>
+
+<h3>Pinned and resizable</h3>
+
+<DescriptionBanner>
+    Pinning is orthogonal to width: a pinned column can also be <code>Resizeable</code>. Drag the edge of any
+    pinned column — the sticky offsets recompute on every step of the drag, so the pins that follow it stay
+    flush against each other throughout the gesture.
+</DescriptionBanner>
+
+<div class="pinned-sample-table">
+    <SimpleTable Items="s_items" MaximumHeight="300px">
+        <Columns>
+            <SimpleTableTemplateColumn Id="Id" Title="Id" Width="120" PinSide="PinSide.Left" Resizeable>
+                <CellContent>@context.Id</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Key" Title="Key" Width="160" PinSide="PinSide.Left" Resizeable>
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Value" Title="Value" Width="220" Resizeable>
+                <CellContent>@context.Value</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Width="200" Resizeable>
+                <CellContent>@context.Timestamp</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Owner" Title="Owner" Width="140" PinSide="PinSide.Right" Resizeable>
+                <CellContent>@context.Key</CellContent>
+            </SimpleTableTemplateColumn>
+            <SimpleTableTemplateColumn Id="Actions" Title="Actions" Width="140" PinSide="PinSide.Right" Resizeable>
+                <CellContent><Button Text="Open" Size="ButtonSize.Small" /></CellContent>
+            </SimpleTableTemplateColumn>
+        </Columns>
+    </SimpleTable>
+</div>

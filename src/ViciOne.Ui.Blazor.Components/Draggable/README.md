@@ -30,7 +30,7 @@ flowchart LR
 
 ### First pointer move (drag start)
 
-> The drag begins on the first `pointermove` after a valid `pointerdown`. `DragInteraction` mounts the ghost host, binds pointer capture, calls `dragStart()` on the drag ghost, and invokes `DragStartAsync` on the .NET side. That raises the `DragStart` event; each handling `IDropzone` adds itself to `DragStartEventArgs.Dropzones`, and the resolved dropzone descriptors are returned to the JavaScript side for hit-testing.
+> The drag begins on the first `pointermove` after a valid `pointerdown`. `DragInteraction` mounts the ghost host, binds pointer capture, calls `dragStart()` on the drag ghost, and invokes `DragStartAsync` on the .NET side. That first awaits the draggable's `IDraggable.PrepareDragStartAsync()`, then raises the `DragStart` event; each handling `IDropzone` adds itself to `DragStartEventArgs.Dropzones`, and the resolved dropzone descriptors are returned to the JavaScript side for hit-testing. The ghost follows the pointer before any of this, so a slow preparation delays only when the dropzones become known, never the drag itself.
 
 ```mermaid
 flowchart LR
@@ -42,7 +42,8 @@ flowchart LR
     DragInteraction-- calls -->DragStart("dragStart()")
     DragInteraction-- invokes -->DragStartAsync("DragStartAsync (JSInvokable)")
 
-    DragStartAsync-- raises -->DragStartEvent("DragStart Event")
+    DragStartAsync-- awaits -->PrepareDragStartAsync("IDraggable.PrepareDragStartAsync()")
+    PrepareDragStartAsync-- then raises -->DragStartEvent("DragStart Event")
     DragStartEvent-- handled by -->Dropzone
     Dropzone-. implements .->IDropzone
     Dropzone-- adds self to -->DragStartEventArgs("DragStartEventArgs.Dropzones")
@@ -67,7 +68,7 @@ flowchart LR
 
 ### Pointer up (drag end)
 
-> A `pointerup` without any preceding move cancels the armed `pointermove` so a plain click never drags. When the pointer did move, `DragInteraction` calls `DragEndAsync` on every dropzone and `DragDroppedAsync` on the dropzone under the pointer (if any).
+> A `pointerup` without any preceding move cancels the armed `pointermove` so a plain click never drags. Once the drag has started, `DragInteraction` calls `DragEndAsync` on every dropzone, even when the pointer is released before the drag ghost moves, and `DragDroppedAsync` on the dropzone under the pointer (if any).
 
 ```mermaid
 flowchart LR
@@ -142,6 +143,21 @@ flowchart LR
 
 > The [`Shape`](../../../samples/Shared/Pages/Draggable/Components/Shape.razor.cs) component can be taken as a template to get started.
 
+#### Prepare the drag start
+
+Often a dropzone needs to decide at drag start whether to take part on a drag, often from what the draggable carries. When that state is only settled once the drag starts, and possibly asynchronously, implement `IDraggable.PrepareDragStartAsync()`: `DragInteraction` awaits it before it raises `DragStart`, so every dropzone already sees the settled state. It does nothing unless implemented.
+
+```csharp
+public async Task PrepareDragStartAsync()
+{
+    Payload = await PayloadService.ResolveAsync(Id);
+}
+```
+
+A failing preparation is logged, and the dropzones are resolved against the unprepared draggable.
+
+> The [`TicketDispenser`](../../../samples/Shared/Pages/Draggable/Components/TicketDispenser.razor.cs) sample hands out the next ticket after a delay whenever a drag starts; only the dropzone serving that ticket lights up.
+
 ### Implement dropzone
 
 - Create razor component
@@ -207,6 +223,24 @@ The [`TimeTickerDragGhost`](../../../samples/Shared/Pages/Draggable/Components/T
 Rather than have .NET call into JavaScript, the JavaScript ghost *pulls*: for the duration of a drag it keeps a `WaitForContentChangeAsync()` interop call pending on the .NET ghost, which completes it whenever content is rendered. The ghost then re-fetches and swaps the content and immediately waits again. This keeps the ghost element driven entirely by JavaScript calling into .NET, never the other way around, so `DragGhostBase` needs no `IJSRuntime` dependency.
 
 The [`TimeTickerDragGhost`](../../../samples/Shared/Pages/Draggable/Components/TimeTickerDragGhost.razor) sample uses a timer to keep its clock ticking while it is being dragged.
+
+#### Cursor
+
+The cursor shown during the drag is the CSS `cursor` of the first element inside `DragGhostContent`, declared in the component's own scoped stylesheet like any other style. It follows every `RenderContentAsync()`, so switching a CSS class from `DropzoneEnterAsync` / `DropzoneLeaveAsync` switches the cursor:
+
+```scss
+.my-drag-ghost {
+    cursor: not-allowed;
+
+    &.over-dropzone {
+        cursor: alias;
+    }
+}
+```
+
+Without a cursor of its own, the document's cursor stays.
+
+Styling the content alone would not show: pointer capture is bound to the ghost host, and a captured pointer shows the cursor of the capturing element. The ghost therefore exposes the opt-in `getCursor()` ([`DragGhostCursorSource`](Scripts/DragGhostCursorSource.ts)), which `DragInteraction` applies to the host each time it sets the content. The cursor is read from the rendered source content, not from the clone, since only the source keeps the component's scoped CSS. The default drag ghost and the table-row drag ghost don't implement it: their content is a copy of the dragged element, which carries that element's own cursor.
 
 ##### How opt-in is wired
 

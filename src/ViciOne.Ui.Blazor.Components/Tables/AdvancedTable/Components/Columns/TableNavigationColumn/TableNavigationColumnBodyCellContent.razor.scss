@@ -1,0 +1,5 @@
+@use "../../../../../Styles/buttons/mixins" as buttons;
+
+.navigate-button {
+    @include buttons.lucent-styling();
+}

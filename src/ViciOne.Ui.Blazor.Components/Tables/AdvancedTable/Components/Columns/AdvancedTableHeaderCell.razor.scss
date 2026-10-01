@@ -1,0 +1,186 @@
+@use "../../../../Styles/design/colors";
+@use "../../../../Styles/design/typography";
+@use "../../Styles/cells";
+@use "../../Styles/variables";
+
+@mixin sortable-header-hint {
+    text-decoration: underline;
+    text-decoration-color: colors.$accent-hover;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+th {
+    position: relative;
+
+    color: colors.$font-light;
+
+    white-space: nowrap;
+    overflow: hidden;
+
+    text-align: start;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    letter-spacing: 0.2px;
+    font-weight: typography.$font-weight-semi-bold;
+
+    .resize-handle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 6px;
+        height: 100%;
+
+        cursor: col-resize;
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            top: 25%;
+            bottom: 25%;
+            right: 2px;
+            width: 2px;
+
+            background-color: colors.$font-light;
+            opacity: 0.2;
+        }
+
+        &:hover {
+            background-color: colors.$accent;
+            opacity: 0.4;
+        }
+    }
+
+    // Last children of the header, so they cover the resize handle without a z-index.
+    .gap-zone {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+
+        &.gap-zone-start {
+            left: 0;
+        }
+
+        &.gap-zone-end {
+            right: 0;
+        }
+    }
+
+    &.pinned-column {
+        position: sticky;
+        z-index: 11;
+        background-color: colors.$background-dark;
+    }
+
+    &:focus-visible {
+        @include cells.focused-cell-indicator;
+
+        // The keyboard is on the header, so the gesture it carries is worth naming the same way hovering
+        // it does.
+        .header-cell.sortable {
+            @include sortable-header-hint;
+        }
+    }
+
+    &.gap-indicator-start {
+        &::before {
+            content: '';
+
+            position: absolute;
+            left: 0;
+            top: 3px;
+            width: 0;
+            height: 0;
+
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 7px solid colors.$accent;
+
+            pointer-events: none;
+        }
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            left: 4px;
+            top: 10px;
+            bottom: 4px;
+            width: 2px;
+
+            background-color: colors.$accent;
+
+            pointer-events: none;
+        }
+    }
+
+    // The gap behind the last column of a pin side has no column to sit in front of, so it draws on that
+    // column's right edge.
+    &.gap-indicator-end {
+        &::before {
+            content: '';
+
+            position: absolute;
+            right: 0;
+            top: 3px;
+            width: 0;
+            height: 0;
+
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 7px solid colors.$accent;
+
+            pointer-events: none;
+        }
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            right: 4px;
+            top: 10px;
+            bottom: 4px;
+            width: 2px;
+
+            background-color: colors.$accent;
+
+            pointer-events: none;
+        }
+    }
+
+    .header-cell {
+        padding-left: variables.$column-header-padding-left-right;
+        padding-right: variables.$column-header-padding-left-right;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: default;
+
+        &.sortable {
+            cursor: pointer;
+
+            &:hover {
+                @include sortable-header-hint;
+            }
+        }
+
+        .header-content {
+            flex: 0 1 auto;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &:not(:last-child) {
+        .header-cell {
+            border-style: solid;
+            border-color: colors.$background-darker;
+            border-width: 0 1px 0 0;
+        }
+    }
+}

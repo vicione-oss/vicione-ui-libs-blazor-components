@@ -1,0 +1,8 @@
+@using ViciOne.Ui.Blazor.Components.CheckBox
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+@typeparam TItem
+
+@inherits TableHeaderCellContentBase<TItem>
+
+<CheckBox Enabled="Enabled" AllowIndeterminateState="AllowIndeterminateState" @bind-Value:get="Value" @bind-Value:set="ValueChangedAsync" />

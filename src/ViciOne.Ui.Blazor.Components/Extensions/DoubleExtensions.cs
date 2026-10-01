@@ -8,6 +8,8 @@ namespace ViciOne.Ui.Blazor.Components.Extensions;
 /// </summary>
 public static class DoubleExtensions
 {
+    // Concurrent because renders of different circuits run on different threads: a plain dictionary written
+    // from two of them at once corrupts and then throws on every later read for the lifetime of the process.
     private static readonly ConcurrentDictionary<int, string> s_attributeValueFormats = [];
 
     /// <summary>
@@ -22,14 +24,9 @@ public static class DoubleExtensions
         if (precision < 0)
             precision = 0;
 
-        if (!s_attributeValueFormats.TryGetValue(precision, out var format))
-        {
-            // https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-numeric-format-strings
-            var decimalDigitFormat = new string('#', precision);
-            format = "{0:0." + decimalDigitFormat + "}";
-
-            s_attributeValueFormats[precision] = format;
-        }
+        // https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-numeric-format-strings
+        var format = s_attributeValueFormats.GetOrAdd(precision,
+            static digitCount => "{0:0." + new string('#', digitCount) + "}");
 
         return string.Format(culture, format, value);
     }

@@ -1,0 +1,10 @@
+@use "../../Styles/column-chooser";
+
+.column-chooser-content {
+    display: grid;
+    grid-template-areas: "check-box column-header";
+    grid-template-columns: auto 1fr;
+    grid-auto-rows: column-chooser.$row-height;
+    align-items: center;
+    gap: column-chooser.$gap;
+}

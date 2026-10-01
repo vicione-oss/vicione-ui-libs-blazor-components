@@ -49,6 +49,32 @@ internal static partial class IJSObjectReferenceExtensions
         }
     }
 
+    public static async Task<TValue?> InvokeAsync<TValue>(this IJSObjectReference? jsObjectReference, string identifier,
+        ILogger logger, CancellationToken cancellationToken = default, params object?[]? args)
+    {
+        if (jsObjectReference is null)
+            return default;
+
+        try
+        {
+            return await jsObjectReference.InvokeAsync<TValue>(identifier, cancellationToken, args);
+        }
+        catch (JSDisconnectedException)
+        {
+            // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+        }
+        catch (OperationCanceledException)
+        {
+            // Operation canceled, return gracefully
+        }
+        catch (Exception ex)
+        {
+            InvokingFailed(logger, ex, identifier, args);
+        }
+
+        return default;
+    }
+
     public static Task<IJSObjectReference?> InvokeConstructorAsync(this IJSObjectReference? jsObjectReference,
         string identifier, ILogger logger, params object?[]? args)
         => jsObjectReference.InvokeConstructorAsync(identifier, logger, CancellationToken.None, args);
@@ -79,6 +105,9 @@ internal static partial class IJSObjectReferenceExtensions
         return null;
     }
 #pragma warning restore CA1068 // CancellationToken parameters must come last
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Invoking jsObjectReference.{identifier}({args}) failed")]
+    private static partial void InvokingFailed(ILogger logger, Exception ex, string identifier, object?[]? args);
 
     [LoggerMessage(Level = LogLevel.Error, Message = "Invoking jsObjectReference.{identifier}({args}) failed")]
     private static partial void InvokingVoidFailed(ILogger logger, Exception ex, string identifier, object?[]? args);

@@ -1,0 +1,36 @@
+@page "/tables/simple-table/rows/double-click"
+
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Row Double Click</h3>
+
+@if (_doubleClickedItem is not null)
+{
+    <DescriptionBanner>
+        Double clicked: <code>@_doubleClickedItem.Key</code> / <code>@_doubleClickedItem.Value</code>
+    </DescriptionBanner>
+}
+
+<SimpleTable Items="s_items"
+             RowClickSelectionEnabled="false"
+             RowDoubleClick="@((ExampleTableItem item) => _doubleClickedItem = item)"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

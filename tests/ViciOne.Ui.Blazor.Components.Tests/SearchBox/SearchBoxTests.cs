@@ -1,4 +1,5 @@
 using Bunit;
+using Microsoft.AspNetCore.Components.Web;
 using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.SearchBox;
@@ -180,6 +181,40 @@ public sealed class SearchBoxTests : IDisposable
 
         // Assert
         receivedValue.Should().Be("test");
+    }
+
+    [Fact]
+    public void Should_invoke_enter_pressed_with_the_entered_text()
+    {
+        // Arrange
+        string? receivedValue = null;
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
+            .Add(p => p.EnterPressed, v => receivedValue = v));
+
+        // Act
+        var input = renderedComponent.Find("input");
+        input.Input("test");
+        input.KeyUp(new KeyboardEventArgs { Key = "Enter" });
+
+        // Assert
+        receivedValue.Should().Be("test");
+    }
+
+    [Fact]
+    public void Should_not_invoke_enter_pressed_for_other_keys()
+    {
+        // Arrange
+        var invocationCount = 0;
+        var renderedComponent = _testContext.Render<SearchBoxComponent>(b => b
+            .Add(p => p.EnterPressed, _ => invocationCount++));
+
+        // Act
+        var input = renderedComponent.Find("input");
+        input.Input("test");
+        input.KeyUp(new KeyboardEventArgs { Key = "a" });
+
+        // Assert
+        invocationCount.Should().Be(0);
     }
 
     [Fact]

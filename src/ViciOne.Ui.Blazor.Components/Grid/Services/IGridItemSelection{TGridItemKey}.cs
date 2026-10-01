@@ -12,6 +12,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Services;
 /// The selection is enumerable and exposes an update lock via <see cref="IHasUpdateLock"/>
 /// to group multiple changes into a single update.
 /// </remarks>
+[Obsolete(Constants.ObsoleteMessage)]
 public interface IGridItemSelection<TGridItemKey> : IEnumerable<TGridItemKey>, IHasUpdateLock
 {
     /// <summary>

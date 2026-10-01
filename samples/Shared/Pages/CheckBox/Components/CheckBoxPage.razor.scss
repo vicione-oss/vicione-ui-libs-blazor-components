@@ -6,3 +6,15 @@
     --vo-ui-bc-check-box-color-accent-focus: #{color.adjust(green, $lightness: -10%)};
     --vo-ui-bc-check-box-color-accent-hover: #{color.adjust(pink, $lightness: -10%)};
 }
+
+.clickable-card {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--vo-ui-bc-color-accent);
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    width: fit-content;
+}

@@ -1,0 +1,128 @@
+@page "/tables/advanced-table/selection/column"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns.AdvancedTableSelectColumn
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+<h3>Column Selection</h3>
+
+<DescriptionBanner>
+    An <code>AdvancedTableSelectColumn</code> adds a per-row checkbox (it has no "select all" header). Leaving the
+    row-click channel on gives <strong>both channels</strong>; switching it off with
+    <code>RowClickSelectionEnabled="false"</code> gives <strong>column-only selection</strong>. Both work at either
+    cardinality.
+</DescriptionBanner>
+
+<h4>Both channels — Single</h4>
+
+<DescriptionBanner>
+    @_bothChannelsSingleSelection.Count selected. Click a row or its checkbox; either replaces the previous selection.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Single"
+               @bind-SelectedItems="_bothChannelsSingleSelection"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_bothChannelsSingleSelection.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h4>Both channels — Multiple</h4>
+
+<DescriptionBanner>
+    @_bothChannelsMultipleSelection.Count selected. Row click and checkbox both accumulate rows.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               @bind-SelectedItems="_bothChannelsMultipleSelection"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_bothChannelsMultipleSelection.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h4>Column-only — Single</h4>
+
+<DescriptionBanner>
+    @_columnOnlySingleSelection.Count selected. <code>RowClickSelectionEnabled="false"</code> with
+    <code>SelectionMode.Single</code> gives single-cardinality selection driven solely by the checkbox — checking a
+    second row replaces the previous one, while clicking the row does nothing.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Single"
+               RowClickSelectionEnabled="false"
+               @bind-SelectedItems="_columnOnlySingleSelection"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnOnlySingleSelection.Count" />
+    </Footer>
+</AdvancedTable>
+
+<h4>Column-only — Multiple</h4>
+
+<DescriptionBanner>
+    @_columnOnlyMultipleSelection.Count selected. The checkbox accumulates rows; clicking the row itself does not select.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               SelectionMode="SelectionMode.Multiple"
+               RowClickSelectionEnabled="false"
+               @bind-SelectedItems="_columnOnlyMultipleSelection"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn />
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_columnOnlyMultipleSelection.Count" />
+    </Footer>
+</AdvancedTable>

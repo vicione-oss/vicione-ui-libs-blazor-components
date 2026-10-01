@@ -5,7 +5,7 @@ using ViciOne.Ui.Blazor.Components.Extensions;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Extensions;
 
-public sealed class IJSObjectReferenceExtensionsTests
+public sealed partial class IJSObjectReferenceExtensionsTests
 {
     public sealed class InvokeConstructorAsync : IAsyncDisposable
     {

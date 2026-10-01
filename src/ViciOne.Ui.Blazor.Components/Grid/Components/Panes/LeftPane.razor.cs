@@ -7,6 +7,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Panes;
 /// Renders arbitrary content in a <see href="https://en.wikipedia.org/wiki/Paned_window_(computing)">pane</see>
 /// displayed on the left of <see cref="Grid{TGridItem}.ChildContent" />.
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class LeftPane : ComponentBase
 {
     [CascadingParameter] private LeftPaneSectionId SectionId { get; set; } = default!;

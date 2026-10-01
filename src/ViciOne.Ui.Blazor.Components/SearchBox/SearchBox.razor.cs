@@ -47,6 +47,12 @@ public sealed partial class SearchBox : ComponentBase, IHasIcon
     public EventCallback<string?> TextChanged { get; set; }
 
     /// <summary>
+    /// Raised when Enter was pressed in the input element, after <see cref="TextChanged"/> has committed the value.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string?> EnterPressed { get; set; }
+
+    /// <summary>
     /// <see langword="true"/> when user interaction should be allowed, otherwise <see langword="false"/>.
     /// </summary>
     [Parameter]
@@ -117,5 +123,11 @@ public sealed partial class SearchBox : ComponentBase, IHasIcon
 
         if (_textBox is not null)
             await _textBox.FocusAsync();
+    }
+
+    private async Task TextBoxEnterPressedAsync()
+    {
+        if (EnterPressed.HasDelegate)
+            await EnterPressed.InvokeAsync(Text);
     }
 }

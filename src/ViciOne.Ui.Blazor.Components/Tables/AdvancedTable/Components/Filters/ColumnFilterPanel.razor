@@ -1,0 +1,13 @@
+@* Rendered only once positioned: placing it at 0,0 first and moving it afterwards flashes the panel in the
+   top-left corner before it snaps under its anchor. *@
+@if (_positioned)
+{
+    <div @ref="_panelElement"
+         class="column-filter-panel"
+         style="@PanelStyle"
+         @onclick:stopPropagation="true"
+         @onkeyup:stopPropagation="true">
+
+        @ChildContent
+    </div>
+}

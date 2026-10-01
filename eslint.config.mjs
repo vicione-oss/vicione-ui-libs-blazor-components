@@ -1,4 +1,5 @@
 import eslintConfigXo from 'eslint-config-xo';
+import noLeadingTypeOperator from './.eslint-plugins/no-leading-type-operator.mjs';
 
 const indent = 4;
 
@@ -27,6 +28,7 @@ const config = [
                     // No `tsconfig.json` covers the configuration files themselves
                     allowDefaultProject: [
                         'eslint.config.mjs',
+                        '.eslint-plugins/*.mjs',
                         'src/*/eslint.config.mjs',
                         'samples/*/eslint.config.mjs'
                     ]
@@ -34,9 +36,31 @@ const config = [
             }
         }
     },
+
+    // Formatting shared by all JavaScript / TypeScript code the solution lints
+    {
+        files: ['**/*.ts', '**/eslint.config.mjs', '.eslint-plugins/*.mjs'],
+        rules: {
+            '@stylistic/comma-dangle': ['error', 'never'],
+            '@stylistic/object-curly-spacing': ['error', 'always'],
+
+            // A guard and the return after it read better as two statements than as
+            // one long ternary, hence this rule is off
+            'unicorn/prefer-ternary': 'off'
+        }
+    },
+
     {
         files: ['**/*.ts'],
+        plugins: {
+            local: {
+                rules: {
+                    'no-leading-type-operator': noLeadingTypeOperator
+                }
+            }
+        },
         rules: {
+            'local/no-leading-type-operator': 'error',
             'no-unused-vars': 'error',
             curly: ['error', 'multi-or-nest', 'consistent'],
             '@stylistic/padded-blocks': 'off',
@@ -51,10 +75,8 @@ const config = [
                     ignorePattern: '^import '
                 }
             ],
-            '@stylistic/comma-dangle': ['error', 'never'],
             '@stylistic/function-paren-newline': ['error', 'consistent'],
             '@stylistic/curly-newline': ['error', { minElements: 1 }],
-            '@stylistic/object-curly-spacing': ['error', 'always'],
             '@stylistic/operator-linebreak': ['error', 'after'],
             '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
 
@@ -63,10 +85,6 @@ const config = [
 
             'import-x/no-absolute-path': 'off',
             'import-x/no-unassigned-import': ['error', { allow: ['**/*Mixins.ts'] }],
-
-            // A guard and the return after it read better as two statements than as
-            // one long ternary, hence this rule is off
-            'unicorn/prefer-ternary': 'off',
 
             // Each guard carries its own reason, and merging them leaves a trailing
             // comment describing the whole condition or rendering the whole
@@ -111,9 +129,7 @@ const config = [
             '@typescript-eslint/no-unsafe-call': 'off',
             '@typescript-eslint/no-unsafe-member-access': 'off',
             '@typescript-eslint/naming-convention': 'off',
-            'unicorn/filename-case': 'off',
-            '@stylistic/comma-dangle': ['error', 'never'],
-            '@stylistic/object-curly-spacing': ['error', 'always']
+            'unicorn/filename-case': 'off'
         }
     }
 ];

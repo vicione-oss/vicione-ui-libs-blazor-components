@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 using ViciOne.Ui.Blazor.Components.Grid.Components.Panes;
 using ViciOne.Ui.Blazor.Components.Grid.Models;
@@ -11,6 +10,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components;
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class Grid<TGridItem> : ComponentBase
 {
     private readonly LeftPaneSectionId _leftPaneSectionId = new();

@@ -1,0 +1,70 @@
+@page "/tables/simple-table/loading-mode"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Loading modes</h3>
+
+<DescriptionBanner>
+    The table supports two loading modes:
+
+    <strong>Virtualize</strong> renders only visible rows (efficient for large datasets),
+    while <strong>Load All</strong> renders every row at once.
+
+    Virtualization requires <code>MaximumHeight</code> to be set — without it the table has no bounded viewport and virtualization has no effect.
+
+    Toggle below to switch.
+</DescriptionBanner>
+
+<h3>Range selection across both modes</h3>
+
+<DescriptionBanner>
+    Click a row, scroll well past it, then <kbd>Shift</kbd>-click another: every row in between is selected, in both
+    loading modes. Under <strong>Virtualize</strong> the rows outside the viewport were never rendered, so the
+    range is resolved by position and fetched in one go — which is why the selected count in the footer can far
+    exceed the number of rows on screen.
+
+    The footer is the feedback channel for that: a range can reach rows the viewport never shows, so a table
+    offering range selection under virtualization wants a footer reporting the count.
+</DescriptionBanner>
+
+<div class="virtualize-wrapper">
+    <div>Virtualize table</div>
+    <Switch @bind-Value="_virtualize" />
+</div>
+
+<SimpleTable Items="s_items"
+             Mode="@LoadingMode"
+             SelectionMode="SelectionMode.Multiple"
+             ItemIdSelector="item => item.Id"
+             @bind-SelectedItems="_selectedItems"
+             MaximumHeight="300px">
+    <Footer>
+        <TableFooter SelectedItemCount="_selectedItems.Count" />
+    </Footer>
+    <Columns>
+        <SimpleTableTemplateColumn Id="Id" Title="Id">
+            <CellContent>
+                @context.Id
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

@@ -67,6 +67,44 @@ public class DraggableTests(ServerFixture fixture)
     }
 
     [Fact]
+    public async Task Should_show_time_ticker_drag_ghost_cursor_while_dragging()
+    {
+        // Arrange
+        var browser = new Browser();
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await SetupDraggablePageAsync(page);
+
+            var shapeB = page.Locator(".shape", new() { HasTextString = "Shape B" });
+
+            await DragOntoDropzoneAsync(page, shapeB, dropzoneIndex: 1,
+                whileDragging: p => WaitForDragCursorAsync(p, "not-allowed"),
+                overDropzone: p => WaitForDragCursorAsync(p, "alias"));
+        });
+    }
+
+    [Fact]
+    public async Task Should_keep_document_cursor_for_default_drag_clone()
+    {
+        // Arrange
+        var browser = new Browser();
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await SetupDraggablePageAsync(page);
+
+            var shapeA = page.Locator(".shape", new() { HasTextString = "Shape A" });
+
+            await DragOntoDropzoneAsync(page, shapeA, dropzoneIndex: 0,
+                whileDragging: async p => Assert.Equal("auto", await GetDragCursorAsync(p)),
+                overDropzone: async p => Assert.Equal("auto", await GetDragCursorAsync(p)));
+        });
+    }
+
+    [Fact]
     public async Task Should_drop_table_row_with_default_ghost_onto_dropzone()
     {
         // Arrange
@@ -121,6 +159,39 @@ public class DraggableTests(ServerFixture fixture)
         });
     }
 
+    [Fact]
+    public async Task Should_clear_dropzone_highlight_when_released_without_moving_the_drag_ghost()
+    {
+        // Arrange
+        var browser = new Browser();
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await SetupDraggablePageAsync(page);
+
+            var shapeA = page.Locator(".shape", new() { HasTextString = "Shape A" });
+
+            var shapeABox = await shapeA.BoundingBoxAsync();
+            Assert.NotNull(shapeABox);
+
+            var highlightedDropzones = page.Locator(".dropzone.highlighted");
+
+            await page.Mouse.MoveAsync(shapeABox.X + GrabOffset, shapeABox.Y + GrabOffset);
+            await page.Mouse.DownAsync();
+
+            // A single move starts the drag and marks the dropzones. Pointer capture then moves to the drag ghost
+            // host, which sees no move of its own before the release: a jittery click.
+            await page.Mouse.MoveAsync(shapeABox.X + GrabOffset + 1, shapeABox.Y + GrabOffset + 1);
+
+            await Expect(highlightedDropzones.First).ToBeVisibleAsync();
+
+            await page.Mouse.UpAsync();
+
+            await Expect(highlightedDropzones).ToHaveCountAsync(0);
+        });
+    }
+
     private async Task SetupDraggablePageAsync(IPage page)
     {
         // Size the viewport large enough that every draggable (including the table rows lower on the page)
@@ -141,7 +212,8 @@ public class DraggableTests(ServerFixture fixture)
         IPage page,
         ILocator draggable,
         int dropzoneIndex,
-        Func<IPage, Task>? whileDragging = null)
+        Func<IPage, Task>? whileDragging = null,
+        Func<IPage, Task>? overDropzone = null)
     {
         var dropzone = page.Locator(".dropzone").Nth(dropzoneIndex);
 
@@ -175,8 +247,26 @@ public class DraggableTests(ServerFixture fixture)
 
         await page.Mouse.MoveAsync(endX, endY, new() { Steps = 15 });
         await page.Mouse.MoveAsync(endX, endY);
+
+        if (overDropzone is not null)
+            await overDropzone(page);
+
         await page.Mouse.UpAsync();
     }
+
+    // The drag cursor is the one of the element holding the pointer capture, which is the drag ghost host.
+    private static async Task<string> GetDragCursorAsync(IPage page)
+        => await page.EvaluateAsync<string>(@"() => {
+            const captor = [...document.body.children].find(c => c.hasPointerCapture(1));
+            return captor ? getComputedStyle(captor).cursor : '';
+        }");
+
+    // The drag ghost applies its cursor once the .NET side has rendered the content for the current state.
+    private static async Task WaitForDragCursorAsync(IPage page, string cursor)
+        => await page.WaitForFunctionAsync(@"cursor => {
+            const captor = [...document.body.children].find(c => c.hasPointerCapture(1));
+            return !!captor && getComputedStyle(captor).cursor === cursor;
+        }", cursor);
 
     // Reads the live drag ghost host's inner HTML while a drag is in progress. The host is the absolutely
     // positioned, semi-transparent element the drag interaction appends to <body> to render the drag ghost.

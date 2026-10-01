@@ -1,0 +1,62 @@
+@use "../../../../../Styles/design/colors";
+@use "../../../../../Styles/design/typography";
+@use "../../../../../Styles/design/animations/mixins" as animations;
+@use "../../../../../Styles/buttons/mixins" as buttons;
+@use "../../../../../Styles/inputs/mixins" as inputs;
+
+@use "sass:color";
+
+.table-action-button {
+    // general resets
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border-width: 0;
+
+    // general styles
+    border-radius: 4px;
+
+    background-color: inherit;
+    color: color.change(colors.$font-light, $alpha: 0.8);
+
+    font-family: inherit;
+    font-weight: typography.$font-weight-light;
+    letter-spacing: 0.4px;
+
+    display: inline-grid;
+    grid-template-areas: "icon text";
+    // grid-template-columns is set in modifier classes
+    align-items: center;
+
+    @include animations.multiple($color: true, $background-color: true);
+
+    ::deep .icon {
+        grid-area: icon;
+
+        margin: 0 !important;
+    }
+
+    .text {
+        grid-area: text;
+    }
+
+    // size
+    @include buttons.size-modifier($size: "small", $height: 24px, $icon-margin-right: 6px, $icon-size: 16px, $font-size: 12px, $text-padding-left-right: 8px);
+
+    // interaction
+    @include inputs.disabled-style();
+
+    @include buttons.no-outline-on-focus();
+
+    &:not(:disabled) {
+        &:hover {
+            color: colors.$font-light;
+            background-color: color.change(colors.$font-light, $alpha: 0.05);
+        }
+    }
+
+    &:focus {
+        color: colors.$font-light;
+        background-color: color.change(colors.$font-light, $alpha: 0.05);
+    }
+}

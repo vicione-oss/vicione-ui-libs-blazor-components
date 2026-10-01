@@ -5,6 +5,7 @@ using ViciOne.Ui.Blazor.Components.Grid.Services;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Grid.Services;
 
+[Obsolete("Tests the obsolete Grid")]
 public class GridItemSelectionTests
 {
     [Fact]

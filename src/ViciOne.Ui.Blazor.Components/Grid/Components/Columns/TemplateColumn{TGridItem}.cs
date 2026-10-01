@@ -11,6 +11,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 /// Represents a <see cref="Grid{TGridItem}"/> column whose cells render a supplied template.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed class TemplateColumn<TGridItem> : QuickGrid.TemplateColumn<TGridItem>
 {
     private static readonly RenderFragment<QuickGrid.ColumnBase<TGridItem>> s_ownHeaderTemplate = column => builder =>
@@ -31,10 +32,11 @@ public sealed class TemplateColumn<TGridItem> : QuickGrid.TemplateColumn<TGridIt
     private new Grid<TGridItem> Grid { get; set; } = default!;
 
     /// <inheritdoc cref="QuickGrid.TemplateColumn{TGridItem}.SortBy"/>
-    [Parameter] public GridSort<TGridItem>? Sort { get; set; }
+    [Parameter]
+    public GridSort<TGridItem>? Sort { get; set; }
 
     /// <summary>
-    /// Make parameter inaccessable in razor files to enforce use of <see cref="Sort"/> instead,
+    /// Make parameter inaccessible in razor files to enforce use of <see cref="Sort"/> instead,
     /// which is converted to the base class <see cref="QuickGrid.ColumnBase{TGridItem}.SortBy"/> in <see cref="OnParametersSet"/>."/>
     /// </summary>
 #pragma warning disable IDE0051 // Remove unused private members

@@ -1,0 +1,21 @@
+@use "../../../../Styles/design/colors";
+@use "../../../../Styles/design/popup";
+
+.column-filter-panel {
+    position: fixed;
+
+    // Fixed positioning shrink-to-fits against the containing block, so a panel opened near its right edge would
+    // be squeezed narrow — clipping its title and pushing button labels out of bounds — and the positioning
+    // script would then measure it at that squeezed width. max-content holds it at its natural width, leaving
+    // the script free to move it back into view.
+    width: max-content;
+    // A percentage resolves against the same containing block the positioning script clamps against, whether
+    // that is the viewport or a dialog; 100vw would instead include the scrollbar and ignore the dialog. The
+    // subtrahend is twice the margin the script keeps free of that block's edge.
+    max-width: calc(100% - 16px);
+
+    background: colors.$background-dark;
+    border: 1px solid colors.$border;
+    border-radius: popup.$border-radius;
+    box-shadow: popup.$box-shadow;
+}

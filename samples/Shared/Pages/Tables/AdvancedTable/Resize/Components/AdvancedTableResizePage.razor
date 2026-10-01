@@ -1,0 +1,140 @@
+@page "/tables/advanced-table/resize"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns.AdvancedTableSelectColumn
+
+@{
+    var widthPropertyName = nameof(AdvancedTableColumn<>.Width);
+    var minimumWidthPropertyName = nameof(AdvancedTableColumn<>.MinimumWidth);
+}
+
+<h3>Column resize</h3>
+
+<DescriptionBanner>
+    Drag the right edge of a column header to resize it. Only the grabbed column changes — the table
+    grows or shrinks with it (no width is transferred to neighbors). Every resizeable column has a
+    handle, including the last one. When the columns are wider than the container the table scrolls
+    horizontally; when they are narrower the table ends early and the space to the right stays empty.
+    The effect on the total is temporary: the next change in available space re-splits it among the columns
+    still flexing, and the dragged one holds the width you gave it.
+</DescriptionBanner>
+
+<h3>Flex columns sharing space</h3>
+
+<DescriptionBanner>
+    Columns without a <code>@widthPropertyName</code> are flex columns: they split the leftover container space
+    equally, floored at their <code>@minimumWidthPropertyName</code>, and split it again whenever that space changes.
+    All three columns below are flex — expect three equal widths that fill the container exactly. Dragging one
+    pins it, and only that one; see the <a href="/tables/advanced-table/reflow">re-flow page</a> for the space-change side.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Resizeable>
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Mixed: fixed starting width + flex</h3>
+
+<DescriptionBanner>
+    <code>@widthPropertyName</code> (pixels) pins a column's width — here <code>Key</code> holds
+    <code>120</code> and <code>Timestamp</code> <code>200</code>, while <code>Value</code> is flex
+    and takes whatever is left, re-splitting it whenever the space changes. <code>@widthPropertyName</code> is
+    one-way: it only sets the width the column starts at, and a value below
+    <code>@minimumWidthPropertyName</code> is clamped up to it. Dragging afterwards overrides it; a change in
+    available space never does.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key (Width 120)" Width="120" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value (flex)" Resizeable>
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp (Width 200)" Width="200" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Non-resizeable columns stay put</h3>
+
+<DescriptionBanner>
+    <code>@nameof(AdvancedTableColumn<>.Resizeable) = "false"</code> removes a column's drag handle but not its sizing —
+    <code>Value</code> below is still a flex column (it re-flows and honors its min), it just cannot
+    be dragged. The select column is a fixed column type (56px) and never resizes. Under the push
+    model, resizing any neighbor leaves both untouched.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableSelectColumn/>
+        <AdvancedTableColumn Id="Key" Title="Key" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value (locked)">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>MinimumWidth, empty-on-right and overflow</h3>
+
+<DescriptionBanner>
+    <code>@minimumWidthPropertyName</code> (pixels, default <code>50</code>) floors a column, both when dragging
+    and when it re-flows — <code>Key</code> below cannot shrink past <code>150</code>. Drag columns narrower
+    and the table ends early, showing empty background on the right; drag one past the container and a
+    horizontal scrollbar appears.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key (min 150)" Width="160" MinimumWidth="150" Resizeable>
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Resizeable>
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

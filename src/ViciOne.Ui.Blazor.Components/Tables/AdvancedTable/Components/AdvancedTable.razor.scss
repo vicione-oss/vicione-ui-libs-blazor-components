@@ -1,0 +1,159 @@
+@use "../../../Styles/design/colors";
+@use "../../../Styles/design/typography";
+@use "../../../Styles/design/scrollbar" as scrollbar;
+@use "sass:color";
+@use "../Styles/cells";
+@use "../Styles/variables";
+
+// The cells need an opaque color so a pinned cell covers the unpinned cells scrolling beneath it; the row
+// repeats it so a fractional row height cannot expose the background behind the table as a hairline.
+@mixin row-background($color) {
+    background-color: $color;
+
+    > td {
+        background-color: $color;
+    }
+}
+
+.advanced-table {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+        display: flex;
+    }
+
+    .content-container {
+        display: flex;
+        min-height: 0px;
+
+        // Positioned so the boundaries below are taken out of the flex flow entirely.
+        position: relative;
+
+        // Where the table's tab order begins and ends. Focusable, so the browser stops here first coming in
+        // from either side, and out of the flow and invisible, so nothing is shown for the moment focus
+        // spends on one. Not display:none or visibility:hidden — neither can take focus, which is the one
+        // thing these have to do.
+        .tab-boundary {
+            position: absolute;
+
+            width: 1px;
+            height: 1px;
+
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .left-outlet {
+            overflow: auto;
+            background: variables.$background-color;
+            flex: 0 0 auto;
+            margin-right: 4px;
+
+            @include scrollbar.adjust-styles();
+        }
+
+        .inner-table-container {
+            flex-grow: 1;
+            overflow: auto;
+
+            scrollbar-gutter: stable;
+
+            @include scrollbar.adjust-styles();
+
+            .inner-table {
+                border-spacing: 0;
+                table-layout: fixed;
+
+                thead {
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+
+                    tr {
+                        height: 38px;
+                        background: colors.$background-dark;
+                        padding: 0;
+                        border-bottom: 4px solid color.adjust(colors.$background-dark, $lightness: -1%);
+                    }
+                }
+
+                tbody {
+                    // The placeholder row is rendered by the table itself, not by a row component, so it is
+                    // styled without ::deep and carries its own cell styling.
+                    tr.no-data {
+                        td {
+                            height: variables.$grid-row-height;
+                            background-color: variables.$background-color;
+                            padding-left: variables.$column-header-padding-left-right;
+                            padding-right: variables.$column-header-padding-left-right;
+
+                            color: color.change(colors.$font-light, $alpha: 0.5);
+                            text-align: center;
+                            font-size: 12px;
+                            letter-spacing: 0.2px;
+                            font-weight: typography.$font-weight-regular;
+                        }
+                    }
+
+                    > ::deep tr {
+                        @include row-background(variables.$background-color);
+
+                        > td {
+                            width: 100%;
+                            height: variables.$grid-row-height;
+                            contain: strict;
+                            padding-left: variables.$column-header-padding-left-right;
+                            padding-right: variables.$column-header-padding-left-right;
+                            font-size: 12px;
+                            color: color.change(colors.$font-light, $alpha: 0.8);
+                            letter-spacing: 0.2px;
+                            font-weight: typography.$font-weight-regular;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+
+                            &.pinned-column {
+                                position: sticky;
+                                z-index: 1;
+                            }
+
+                            &:focus-visible {
+                                @include cells.focused-cell-indicator;
+                            }
+                        }
+
+                        &:hover {
+                            @include row-background(variables.$background-hover-color);
+                        }
+
+                        &.selected {
+                            @include row-background(variables.$background-selected-color);
+                        }
+
+                        &.selected:hover {
+                            @include row-background(variables.$background-selected-hover-color);
+                        }
+                    }
+                }
+
+                &.selectable {
+                    tbody > ::deep tr {
+                        cursor: pointer;
+                        user-select: none;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .footer {
+        font-size: 12px;
+        padding: 16px;
+        color: color.change(colors.$font-light, $alpha: 0.8);
+        letter-spacing: 0.2px;
+        font-weight: typography.$font-weight-semi-bold;
+        display: flex;
+    }
+}

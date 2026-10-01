@@ -1,0 +1,17 @@
+@using ViciOne.Ui.Blazor.Components.SearchBox
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Filters
+
+@inherits ColumnFilterEditorBase
+
+<FilterEditorFrame Title="Custom Filter - StartsWith"
+                     OnApply="ApplyAsync"
+                     OnCancel="CancelAsync">
+
+    <div class="starts-with-filter">
+        <SearchBox Text="@_text"
+                   TextChanging="SearchBoxTextChanging"
+                   EnterPressed="ApplyAsync"
+                   Placeholder="Starts with..." />
+    </div>
+
+</FilterEditorFrame>

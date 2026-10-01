@@ -6,6 +6,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Footers;
 /// <summary>
 ///  Represents a <see cref="Grid{TGridItem}"/> footer, which contains the total number of elements.
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class DefaultFooter
 {
     [CascadingParameter]

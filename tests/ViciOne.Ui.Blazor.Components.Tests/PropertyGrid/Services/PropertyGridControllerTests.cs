@@ -121,7 +121,7 @@ public sealed class PropertyGridControllerTests
         propretyGridStateChanged.Should().BeTrue();
         updatePropertyRequestedEventArgs.Should().NotBeNull();
 
-        updatePropertyRequestedEventArgs!.Targets.SelectMany(target => target.PropertyDescriptors)
+        updatePropertyRequestedEventArgs.Targets.SelectMany(target => target.PropertyDescriptors)
             .Should().BeEquivalentTo([s_briefPropertyDescriptor, s_abstractPropertyDescriptor]);
     }
 
@@ -146,7 +146,7 @@ public sealed class PropertyGridControllerTests
 
         // Assert
         focusPropertyRequestedEventArgs.Should().NotBeNull();
-        focusPropertyRequestedEventArgs!.Name.Should().Be(PropertyName);
+        focusPropertyRequestedEventArgs.Name.Should().Be(PropertyName);
     }
 
     [Fact]
@@ -223,7 +223,7 @@ public sealed class PropertyGridControllerTests
         propertyGridController.UpdateDependents(briefPropertyGridItem);
 
         updatePropertyRequestedEventArgs.Should().NotBeNull();
-        updatePropertyRequestedEventArgs!.Targets.SelectMany(target => target.PropertyDescriptors)
+        updatePropertyRequestedEventArgs.Targets.SelectMany(target => target.PropertyDescriptors)
             .Should().BeEquivalentTo([s_abstractPropertyDescriptor]);
     }
 

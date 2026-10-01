@@ -1,5 +1,6 @@
 import { type DragGhostContentSource } from '../Scripts/DragGhostContentSource.ts';
 import { type DragGhostContentChangedNotifier } from '../Scripts/DragGhostContentChangedNotifier.ts';
+import { type DragGhostCursorSource } from '../Scripts/DragGhostCursorSource.ts';
 import { type DragStartListener } from '../Scripts/DragStartListener.ts';
 import { type DragEndListener } from '../Scripts/DragEndListener.ts';
 import { type DropzoneEnterListener } from '../Scripts/DropzoneEnterListener.ts';
@@ -26,6 +27,7 @@ import { type CreateDragGhostArgs } from '../Models/CreateDragGhostArgs.cs.ts';
  */
 class DragGhostBase implements DragGhostContentSource,
     DragGhostContentChangedNotifier,
+    DragGhostCursorSource,
     DragStartListener,
     DragEndListener,
     DropzoneEnterListener,
@@ -130,6 +132,18 @@ class DragGhostBase implements DragGhostContentSource,
 
     public getContent(): HTMLElement {
         return this.#cloneContent();
+    }
+
+    // Read from the source rather than the clone: the clone's root is the wrapper, whose scoped-CSS marker is
+    // stripped, while the source is attached and keeps the deriving component's scoped CSS.
+    public getCursor(): string | undefined {
+        const contentRoot = this.#contentElementReference.firstElementChild;
+        if (!contentRoot)
+            return undefined;
+
+        const { cursor } = getComputedStyle(contentRoot);
+
+        return cursor === 'auto' ? undefined : cursor;
     }
 
     public dragStart() {

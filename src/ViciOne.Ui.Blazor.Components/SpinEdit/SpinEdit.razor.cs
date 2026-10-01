@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Timers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -57,6 +57,12 @@ public sealed partial class SpinEdit<TValue, TInterval, TLimit>
     /// </summary>
     [Parameter]
     public Expression<Func<TValue>>? ValueExpression { get; set; }
+
+    /// <summary>
+    /// Raised when Enter was pressed in the input element, after <see cref="ValueChanged"/> has committed the value.
+    /// </summary>
+    [Parameter]
+    public EventCallback<TValue> EnterPressed { get; set; }
 
     /// <summary>
     /// Interval of the increment / decrement
@@ -183,7 +189,12 @@ public sealed partial class SpinEdit<TValue, TInterval, TLimit>
     }
 
     private async Task TextBoxEnterPressedAsync(string? value)
-        => await TextBoxValueChangedAsync(value);
+    {
+        await TextBoxValueChangedAsync(value);
+
+        if (EnterPressed.HasDelegate)
+            await EnterPressed.InvokeAsync(_valueApplicable);
+    }
 
     private async Task TextBoxEscapePressedAsync(string? value)
         => await TextBoxValueChangedAsync(value);

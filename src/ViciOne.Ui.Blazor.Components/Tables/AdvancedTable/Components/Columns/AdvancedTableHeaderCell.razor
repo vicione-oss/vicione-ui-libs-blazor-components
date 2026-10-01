@@ -1,0 +1,70 @@
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Filters
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Services
+
+@typeparam TItem where TItem : class
+
+@* tabindex is hard-coded to -1 rather than bound. Blazor only updates attributes whose rendered value
+   changes, so it never touches this one again, and the keyboard module can switch the active cell to 0
+   without a re-render resetting it. The tabindex and key handler are on the cell rather than its content
+   because the arrow keys move between cells. *@
+<th class="@ThClass"
+    style="@PinStyle"
+    tabindex="-1"
+    data-column-id="@Column.Id"
+    aria-sort="@AriaSort"
+    draggable="@DraggableAttribute"
+    @onkeyup="KeyUpAsync"
+    @ondragstart="DragStartAsync"
+    @ondragend="DragEndAsync"
+    @ondragover:preventDefault>
+
+    <div class="@HeaderClass" @onclick="HeaderClickAsync">
+
+        <div class="header-content">
+            <CascadingValue Value="Context.State" IsFixed="true">
+                <CellContainer>
+                    @Column.Header
+                </CellContainer>
+            </CascadingValue>
+        </div>
+
+        @if (SortAscending is { } ascending)
+        {
+            <ColumnSortIndicator Ascending="ascending"/>
+        }
+
+        @if (Column is IFilterableColumn { FilterEditor: not null } filterableColumn)
+        {
+            <CascadingValue TValue="IAdvancedTableJsSession" Value="Context.JsSession" IsFixed="true">
+                <ColumnFilterButton ColumnId="@Column.Id"
+                                    FilterEditor="filterableColumn.FilterEditor"
+                                    Filter="Filter"
+                                    ColumnFilterChanged="FilterChanged"
+                                    OpenChanged="FilterOpenChanged" />
+            </CascadingValue>
+        }
+    </div>
+
+    @if (Column is IResizeableColumn { Resizeable: true })
+    {
+        <div class="resize-handle" @onclick:stopPropagation="true"></div>
+    }
+
+    @if (Reorder.IsDragging)
+    {
+        @* The two halves of the header, each standing for the column gap on that side. They exist only
+           while a column is being dragged, so at rest they cannot swallow a click, a sort, a filter or a
+           resize, and they render last so they cover the resize handle without a z-index. Dropping happens
+           here rather than on the th, which would run the reorder a second time with a side-less target
+           once the drop bubbles. *@
+        <div class="gap-zone gap-zone-start"
+             @ondragenter="() => GapDragEnterAsync(false)"
+             @ondragleave="() => GapDragLeaveAsync(false)"
+             @ondrop="() => GapDropAsync(false)"></div>
+
+        <div class="gap-zone gap-zone-end"
+             @ondragenter="() => GapDragEnterAsync(true)"
+             @ondragleave="() => GapDragLeaveAsync(true)"
+             @ondrop="() => GapDropAsync(true)"></div>
+    }
+</th>

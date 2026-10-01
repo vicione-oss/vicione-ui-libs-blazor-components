@@ -1,0 +1,68 @@
+@page "/tables/simple-table/rows/drag-and-drop"
+
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+
+<h3>Draggable Rows</h3>
+
+<DescriptionBanner>
+    When <code>RowsDraggable</code> is set, rows can be dragged to any registered dropzone.
+
+    Dragging a row that is part of the current selection carries the whole selection;
+    dragging an unselected row selects it first, just like a click.
+
+    Select one or more rows, then drag — the dropzone reports how many rows landed.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <code>DragPayloadProvider</code> decides what the drag actually carries. Filtering never removes anything
+    from <code>SelectedItems</code>, so without one a drag drops selected rows the filter hides — rows the
+    user cannot even see on the table it started from. The provider here keeps only what
+    <code>VisibleSelectionChanged</code> last reported, so the drag carries what the table shows and nothing
+    else.
+
+    Provider and mirror are scoped services rather than page state, so the rule is testable on its own and the
+    page holds neither the set nor a handler for it. Scoped means per circuit: the mirror outlives navigating
+    away from this page, and two tables sharing one store would overwrite each other.
+
+    Select several rows, filter the Key column so some of them disappear, then drag one of the rows that is
+    left: the dropzone counts only those.
+</DescriptionBanner>
+
+<p>@_selectedItems.Count selected, @VisibleSelection.Count of them left by the filter.</p>
+
+@* TItem stated explicitly: the callback below is a method group, which carries no type to infer it
+   from. *@
+<SimpleTable TItem="ExampleTableItem"
+             Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_selectedItems"
+             VisibleSelectionChanged="VisibleSelection.Store"
+             DragPayloadProvider="DragPayloadProvider"
+             RowsDraggable="true"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<RowDropzone />

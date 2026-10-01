@@ -1,0 +1,230 @@
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.ColumnChooser
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Filters
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Models
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Services
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+
+@typeparam TItem
+
+@{
+    var cssClasses = new List<string> { "advanced-table" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.Add(CssClass);
+
+    var attributes = new Dictionary<string, object>
+    {
+        { "class", string.Join(" ", cssClasses) }
+    };
+
+    if (MaximumHeight is not null)
+        attributes.Add("style", $"max-height: {MaximumHeight}");
+}
+
+<div @attributes="@attributes">
+    <CascadingValue Value="this" IsFixed="true">
+        @Columns
+    </CascadingValue>
+
+    @if (ColumnChooserToggleId is not null)
+    {
+        <SectionContent SectionId="@ColumnChooserToggleId">
+            <CascadingValue Value="this" IsFixed="true">
+                <ColumnChooserContent TItem="TItem" />
+            </CascadingValue>
+        </SectionContent>
+    }
+
+    @if (Header is not null)
+    {
+        <div class="header">
+            @Header
+        </div>
+    }
+
+    <div class="content-container">
+
+        @if (LeftOutlet is not null)
+        {
+            <div class="left-outlet">
+                @LeftOutlet
+            </div>
+        }
+
+        @* The two boundary elements are where the table's tab order begins and ends. Being the first and last
+           things the browser can put focus on here, they catch every arrival: one coming from outside is sent
+           on to the focused cell, one coming from inside is let through so the browser carries on out of the
+           table. That is what makes the whole body a single stop however many controls its cells hold, without
+           the table touching the tabindex of content a consumer wrote. The value is a constant, so Blazor's
+           diff never writes it. *@
+        <div class="tab-boundary" tabindex="0" aria-hidden="true"></div>
+
+        @* The keyboard listeners sit on the scroll container: it is the one element that is never derendered
+           by virtualization, so a key raised on any cell reaches them however the rows have been replaced.
+           It is not itself a stop — the cells are. The row-click flag rides along as an attribute so the
+           keyboard module can drop a selection gesture without paying a round trip to find out it would be
+           ignored. *@
+        <div class="inner-table-container" data-row-click-selection="@RowClickSelectionEnabled">
+            @{
+                var tableClasses = new List<string> { "inner-table" };
+
+                if (RowClickSelectionEnabled)
+                    tableClasses.Add("selectable");
+            }
+            <table @ref="_tableElement" class="@string.Join(" ", tableClasses)" style="@_columnLayout.TableWidthStyle">
+                <colgroup>
+                    @foreach (var (column, _) in _columnLayout.RenderedColumns)
+                    {
+                        <col @attributes="_columnLayout.GetColumnAttributes(column)"/>
+                    }
+                </colgroup>
+
+                <thead>
+                    @* The column, its state, the JavaScript seam and the reorder interaction reach the header
+                       cell as one cascaded context: every one of them is an internal type, which a
+                       generated-public component cannot take as a parameter. *@
+                    <tr>
+                        @foreach (var (column, pinStyle) in _columnLayout.RenderedColumns)
+                        {
+                            @* Resolved here rather than inline below: nested child content is rendered later
+                               than this pass, and a column unregistered in between would have its state looked
+                               up after it was dropped. Naming it also puts the context somewhere a breakpoint
+                               can read it. *@
+                            var headerContext = GetHeaderContext(column);
+
+                            <CascadingValue Value="headerContext" IsFixed="true" @key="column">
+                                <AdvancedTableHeaderCell TItem="TItem"
+                                                         PinStyle="@pinStyle"
+                                                         SortAscending="GetSortDirection(column)"
+                                                         Filter="GetColumnFilter(column.Id)"
+                                                         DragEnabled="IsColumnDragEnabled(column)"
+                                                         SortRequested="GetSortRequestedCallback(column)"
+                                                         FilterChanged="GetColumnFilterChangedCallback(column)"
+                                                         FilterOpenChanged="GetFilterOpenChangedCallback(column)" />
+                            </CascadingValue>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody @onpointerleave="() => HandleHover(null)">
+                    @{
+                        // Each pass hands out fresh numbers to the rows it renders, so a cell the previous
+                        // pass left behind in the DOM resolves to nothing rather than to a different item.
+                        ClearRowSequences();
+
+                        if (Mode == TableLoadingMode.Virtualize)
+                        {
+                            <Virtualize @ref="_virtualizeComponent" ItemsProvider="VirtualizationItemsProviderAsync" Context="item" ItemSize="32">
+                                @RowTemplate((item, GetRowState(item)))
+                            </Virtualize>
+                        }
+                        else
+                        {
+                            @foreach (var item in InputItems)
+                            {
+                                @RowTemplate((item, GetRowState(item)))
+                            }
+                        }
+                    }
+
+                    @if (NoDataPlaceholderVisible)
+                    {
+                        <tr class="no-data">
+                            @* Carries the tab stop for a table with no rows to navigate, and no indicator:
+                               there is nothing on it to point at. *@
+                            <td tabindex="-1" colspan="@NoDataPlaceholderColumnSpan">@Localization.AdvancedTable.NoData</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-boundary" tabindex="0" aria-hidden="true"></div>
+
+    </div>
+
+    @if (Footer is not null)
+    {
+        <div class="footer">
+            <CascadingValue Value="this" IsFixed="true">
+                @Footer
+            </CascadingValue>
+        </div>
+    }
+</div>
+
+@code {
+
+    private RenderFragment<(TItem Item, RowState RowState)> RowTemplate => input =>
+    {
+        var item = input.Item;
+        var rowState = input.RowState;
+
+        var rowSequence = RegisterRowSequence(item);
+        var absoluteRowIndex = GetAbsoluteRowIndex(item);
+
+        var trClasses = new List<string>();
+
+        if (IsRowSelected(item))
+            trClasses.Add("selected");
+
+        return @<AdvancedTableRow @key="GetRowKey(item)"
+                                  Item="item"
+                                  Draggable="RowsDraggable"
+                                  DragPayloadResolver="this"
+                                  CssClass="@string.Join(" ", trClasses)"
+                                  OnClick="args => HandleRowClickAsync(item, args)"
+                                  OnPointerEnter="_ => HandleHover(rowState)"
+                                  OnDoubleClick="_ => RowDoubleClickAsync(item)"
+                                  OnContextMenu="@GetRowContextMenuCallback(item)"
+                                  ContextMenuPreventDefault="NativeContextMenuSuppressed">
+
+                   <CascadingValue Value="rowState" IsFixed="true">
+                       @{
+                           foreach (var (column, pinStyle) in _columnLayout.RenderedColumns)
+                           {
+                               // Keyed by column instance (not position) so a removal or reorder forces the
+                               // cell to be disposed and recreated; the fresh cell subscribes to the current
+                               // ColumnState cascade instead of keeping a stale positional pairing.
+                               <CascadingValue Value="_columnStates[column]" IsFixed="true">
+                                   <CellContainer @key="column">
+                                       @{
+                                           var cellClasses = new List<string>();
+
+                                           if (column.PinSide != PinSide.None)
+                                               cellClasses.Add("pinned-column");
+
+                                           // The keyboard contract of a body cell: which column it belongs
+                                           // to, the number the seam resolves its row's item through, and
+                                           // where that row sits in the filtered, sorted set — which is what
+                                           // keyboard movement steps by and scrolls to. All three sit on the
+                                           // cell rather than the row, so the row component stays untouched.
+                                           var cellAttributes = new Dictionary<string, object>
+                                           {
+                                               { "data-column-id", column.Id },
+                                               { "data-row-sequence", rowSequence },
+                                               { "data-row-index", absoluteRowIndex }
+                                           };
+
+                                           if (cellClasses.Count > 0)
+                                               cellAttributes.Add("class", string.Join(" ", cellClasses));
+
+                                           if (pinStyle is { } cellPinStyle)
+                                               cellAttributes.Add("style", cellPinStyle);
+                                       }
+                                       <td tabindex="-1" @attributes="cellAttributes">
+                                           @column.CellContent(item)
+                                       </td>
+                                   </CellContainer>
+                               </CascadingValue>
+                           }
+                       }
+                   </CascadingValue>
+               </AdvancedTableRow>;
+    };
+
+}

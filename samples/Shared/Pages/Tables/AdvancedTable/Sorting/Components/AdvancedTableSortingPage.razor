@@ -1,0 +1,214 @@
+@page "/tables/advanced-table/sorting"
+
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<h3>Column-level sort</h3>
+
+<DescriptionBanner>
+    Add <code>Sortable</code> to any <code>AdvancedTableColumn</code> to make it user-sortable.
+    Click once for ascending, again for descending.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Sortable="true">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Sortable="true">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Sort by more than one column</h3>
+
+<DescriptionBanner>
+    <kbd>Shift</kbd>-click a header to add its column to the sort instead of replacing it. The added column becomes the
+    lowest priority, so it decides the order of the rows that tie on everything sorted before it. <kbd>Shift</kbd>-clicking
+    a column that is already sorted flips its direction and keeps its priority, while a plain click drops
+    every column but the clicked one.
+
+    Every row below ties with two others on <code>Key</code>. Sort by <code>Key</code>, then <kbd>Shift</kbd>-click
+    <code>Value</code> to decide the order inside each group. Applying every entry is the items provider's job —
+    the one behind this page chains them, a provider that reads only the first entry would ignore the rest.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_tiedItemsProvider" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Sortable="true" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Sortable="true" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Start with a sort — an unchanging <code>SortingState</code></h3>
+
+<DescriptionBanner>
+    Pass <code>SortingState</code> from a field that is never reassigned to give the table the sort it starts
+    with. The table applies it once the columns have registered and owns it from then on, because handing over
+    the same instance again is not a new command — clicking a header changes the sort and nothing puts it back.
+    An entry for a column the table does not show is dropped. A plain header click replaces the whole value, so
+    a sort over several columns survives a stray click only as far as <kbd>Shift</kbd>-clicking rebuilds it.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" SortingState="_seedSortingState" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Sortable="true" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Sortable="true" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Sortable="true" Resizeable="false">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Observe changes — <code>SortingStateChanged</code></h3>
+
+<DescriptionBanner>
+    Handle <code>SortingStateChanged</code> without passing <code>SortingState</code> to watch the applied sort
+    without driving it. It reports the applied sorting after every change, whatever caused it — a header click,
+    a change made from outside, or a column disappearing. The list below reports what was last raised.
+</DescriptionBanner>
+
+@if (_observedSortingState.ColumnSortings.Count > 0)
+{
+    <ul>
+        @foreach (var columnSorting in _observedSortingState.ColumnSortings)
+        {
+            <li><code>@columnSorting.ColumnId</code> — @(columnSorting.Ascending ? "ascending" : "descending")</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>Nothing observed yet — click a column header.</em></p>
+}
+
+<AdvancedTable ItemsProvider="_itemsProvider" RowClickSelectionEnabled="false" SortingStateChanged="ObservedSortingStateChanged" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Sortable="true" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Sortable="true" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Sortable="true" Resizeable="false">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Drive the sort from markup — <code>@("@bind-SortingState")</code></h3>
+
+<DescriptionBanner>
+    Bind <code>SortingState</code> to drive the table from a field and have every change written back into it,
+    whoever made it — the buttons below or a column header. A new instance in the field is a command; the same
+    instance again is not, which is what lets the table's own value flow back without starting over.
+
+    <strong>Note:</strong> build the value in a field and only replace it when it really changes. A parent that
+    produces a fresh, content-equal instance on every render makes the table re-apply on every render, and under
+    a binding that never terminates — each apply reports back, each report renders the parent, each render
+    builds another instance.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Sort order</label>
+        <Button Text="Sort by Key" OnClick="SortBoundTableByKey" Size="ButtonSize.Small" />
+    </div>
+    <div class="option">
+        <label>Sort order</label>
+        <Button Text="Clear sort" OnClick="ClearBoundSorting" Size="ButtonSize.Small" />
+    </div>
+</div>
+
+@if (_boundSortingState.ColumnSortings.Count > 0)
+{
+    <ul>
+        @foreach (var columnSorting in _boundSortingState.ColumnSortings)
+        {
+            <li><code>@columnSorting.ColumnId</code> — @(columnSorting.Ascending ? "ascending" : "descending")</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No active sort.</em></p>
+}
+
+<AdvancedTable ItemsProvider="_itemsProvider"
+               RowClickSelectionEnabled="false"
+               @bind-SortingState="_boundSortingState"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Sortable="true" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Sortable="true" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Sortable="true" Resizeable="false">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>
+
+<h3>Change the sort from outside — <code>SetSortingStateAsync</code></h3>
+
+<DescriptionBanner>
+    Hold the table in an <code>@("@ref")</code> and call <code>SetSortingStateAsync</code> for the changes a
+    binding expresses badly — a reset, a jump to a preset — and for callers that are not in a render at all,
+    such as a debounce timer or a server push. Unlike the parameter the method has no memory of what it was
+    handed before, so resetting works here even though the empty sorting is a value the table has seen before.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Sort order</label>
+        <Button Text="Reset sort" OnClick="ResetSortingAsync" Size="ButtonSize.Small" />
+    </div>
+</div>
+
+@if (_pushedSortingState.ColumnSortings.Count > 0)
+{
+    <ul>
+        @foreach (var columnSorting in _pushedSortingState.ColumnSortings)
+        {
+            <li><code>@columnSorting.ColumnId</code> — @(columnSorting.Ascending ? "ascending" : "descending")</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No active sort.</em></p>
+}
+
+<AdvancedTable @ref="_pushTargetTable"
+               ItemsProvider="_itemsProvider"
+               RowClickSelectionEnabled="false"
+               SortingStateChanged="PushedSortingStateChanged"
+               MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Sortable="true">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Sortable="true">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Sortable="true">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

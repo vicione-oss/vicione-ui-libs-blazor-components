@@ -1,0 +1,8 @@
+@use "../../../CheckBox/Styles/variables" as check-box;
+
+// Between the rows of ColumnChooserContent, and between its CheckBox and header columns.
+$gap: 8px;
+
+// As tall as the CheckBox, or as the header text if its inherited line-height is taller. Fixed, so a height of
+// whole rows cuts the list off exactly after the last visible one.
+$row-height: max(#{check-box.$size}, 1lh);

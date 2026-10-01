@@ -8,6 +8,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.ActionButtons;
 /// <summary>
 /// Component for rendering an edit button in render fragment <see cref="Grid{TGridItem}.ActionButtons"/>
 /// </summary>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed partial class EditGridActionButton : ComponentBase
 {
     private readonly string _iconCssClass =

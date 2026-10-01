@@ -1,0 +1,41 @@
+@page "/tables/simple-table/filter/built-in"
+
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+
+<h3>Built-in contains filter</h3>
+
+<DescriptionBanner>
+    Add a <code>&lt;FilterEditor&gt;</code> render fragment to a <code>SimpleTableTemplateColumn</code> to show a filter icon in its header.
+    The pre-made <code>SimpleTableContainsColumnFilterEditor</code> only needs a <code>ValueSelector</code> projecting each row to the text to match.
+    Unlike <code>AdvancedTable</code>, <code>SimpleTable</code> applies the filter itself — each
+    <code>ISimpleTableColumnFilter</code> carries its own <code>Matches</code> predicate, so no manual provider mapping is required.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable="false">
+            <CellContent>
+                @FormatTimestamp(context)
+            </CellContent>
+            <FilterEditor>
+                @* TItem stated here only: a method group carries no type to infer TItem from, unlike the
+                   lambda the other columns pass. *@
+                <SimpleTableContainsColumnFilterEditor TItem="ExampleTableItem" ValueSelector="FormatTimestamp" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

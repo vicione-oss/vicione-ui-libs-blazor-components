@@ -1,0 +1,77 @@
+@page "/tables/simple-table/filter/custom-filters"
+
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Write your own filter</h3>
+
+<DescriptionBanner>
+    A filter is two parts. The <strong>filter</strong> is a record implementing
+    <code>ISimpleTableColumnFilter&lt;TItem&gt;</code> — its <code>ColumnId</code>, whatever the criterion needs, and a
+    <code>Matches</code> predicate. The <strong>editor</strong> is a component deriving from
+    <code>ColumnFilterEditorBase</code>, placed in a column's <code>&lt;FilterEditor&gt;</code> slot, which produces
+    that record on apply.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Because the filter carries its own predicate, <code>SimpleTable</code>'s built-in provider applies it in-memory with
+    nothing else wired up — the AdvancedTable equivalents are data only and leave matching to the consumer's items
+    provider. The editor picks up its <code>ColumnFilterEditorContext</code> as a cascading value, so nothing is passed
+    at the call site.
+</DescriptionBanner>
+
+<h3>One value — <code>SimpleTableStartsWithColumnFilter</code></h3>
+
+<DescriptionBanner>
+    The editor keeps one <code>string</code> draft, seeds it from the column's current filter when the panel opens, and
+    returns <code>null</code> from <code>BuildFilter</code> when the text is empty — which is how a column's filter is
+    cleared.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+            <FilterEditor>
+                <SimpleTableStartsWithColumnFilterEditor ValueSelector="x => x.Key" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable="false">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableStartsWithColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<h3>Two values — <code>SimpleTableIntRangeColumnFilter</code></h3>
+
+<DescriptionBanner>
+    A draft is whatever shape the filter needs, so a range editor keeps a lower and an upper bound and neither is
+    "the" value. <code>ColumnFilterEditorBase</code> holds no draft of its own for exactly this reason — it carries
+    only the context and the apply/cancel plumbing, and the editor decides what its own fields mean. Here both bounds
+    are inclusive, a bound left empty is unbounded on that side, and both left empty clears the filter.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Note the <code>ValueSelector</code> projects the raw <code>int?</code> rather than display text: a range compares
+    the underlying value, so it must not go through the cell's formatting.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" RowClickSelectionEnabled="false" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable="false">
+            <CellContent>@context.Key</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity" Resizeable="false">
+            <CellContent>@context.Quantity</CellContent>
+            <FilterEditor>
+                <SimpleTableIntRangeColumnFilterEditor ValueSelector="x => x.Quantity" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

@@ -1,0 +1,64 @@
+@page "/tables/simple-table/rows/context-menu"
+
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Models
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Row Context Menu</h3>
+
+<DescriptionBanner>
+    Right-clicking a row raises <code>RowContextMenuRequested</code> with the row's item and the mouse position, and
+    that is all the table does — it opens no menu, builds no menu context and filters no entries. The handler
+    is the bridge: it decides which rows the menu is about, which entries apply to them, and sends its own
+    <code>IContextMenuContext</code> down the ordinary context-menu pipeline.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Right-clicking a row outside the selection replaces the selection with that row, so the highlight and the
+    menu always agree on what an action would apply to. Right-clicking inside the selection leaves it alone
+    and the menu acts on all of it. The table does none of this — the handler below does.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <code>Split into batches</code> is declared <code>ApplicableTo</code> high-quantity rows only, so it shows
+    while every selected row has a <code>Quantity</code> of 100 or more and hides as soon as one does not. The
+    handler states what was clicked, each entry states what it can handle, and the menu shows the entries that
+    cover everything clicked.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Suppression covers the whole row, cell content included. The <code>Note</code> column opts back out with
+    <code>@@oncontextmenu:stopPropagation="true"</code>, so right-clicking inside its input gives the browser's
+    own menu — cut, copy, paste — while the rest of the row still opens the custom one.
+</DescriptionBanner>
+
+@if (_lastAction is not null)
+{
+    <p>Last action: <code>@_lastAction</code></p>
+}
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_selectedItems"
+             RowContextMenuRequested="@((RowContextMenuEventArgs<ExampleTableItem> args) => RowRightClickAsync(args))"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Quantity" Title="Quantity">
+            <CellContent>@context.Quantity</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Note" Title="Note">
+            <CellContent>
+                <input class="native-context-menu-input" value="@context.Value" @oncontextmenu:stopPropagation="true" />
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>
+
+<SampleContextMenu ActionInvoked="@(action => _lastAction = action)" />

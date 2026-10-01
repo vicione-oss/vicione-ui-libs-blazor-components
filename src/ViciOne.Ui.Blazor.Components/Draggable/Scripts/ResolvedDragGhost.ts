@@ -1,6 +1,7 @@
 import { type DragGhostContentSource } from './DragGhostContentSource.ts';
 import { type DragGhostDraggableLink } from './DragGhostDraggableLink.ts';
 import { type DragGhostContentChangedNotifier } from './DragGhostContentChangedNotifier.ts';
+import { type DragGhostCursorSource } from './DragGhostCursorSource.ts';
 import { type DragImminentListener } from './DragImminentListener.ts';
 import { type DragStartListener } from './DragStartListener.ts';
 import { type DragEndListener } from './DragEndListener.ts';
@@ -15,12 +16,14 @@ import { type DropzoneLeaveListener } from './DropzoneLeaveListener.ts';
  simply omit it. `DragInteraction` assigns `contentChanged` to learn when to re-fetch and swap the drag ghost
  content, and calls each opt-in lifecycle listener the drag ghost implements: `dragImminent` (synchronously
  on `pointerdown`, warming the content before the drag begins), `dragStart` (on the first move, when the drag
- actually begins), `dragEnd`, `dropzoneEnter` and `dropzoneLeave`.
+ actually begins), `dragEnd`, `dropzoneEnter` and `dropzoneLeave`. A drag ghost that implements
+ `DragGhostCursorSource` sets the cursor for the drag; without it the document's cursor stays.
  */
 export type ResolvedDragGhost =
     DragGhostContentSource &
     Partial<DragGhostDraggableLink> &
     Partial<DragGhostContentChangedNotifier> &
+    Partial<DragGhostCursorSource> &
     Partial<DragImminentListener> &
     Partial<DragStartListener> &
     Partial<DragEndListener> &

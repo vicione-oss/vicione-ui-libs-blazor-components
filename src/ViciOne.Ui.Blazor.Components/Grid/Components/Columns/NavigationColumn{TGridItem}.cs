@@ -11,6 +11,7 @@ namespace ViciOne.Ui.Blazor.Components.Grid.Components.Columns;
 /// Represents a <see cref="Grid{TGridItem}"/> column whose cells display a navigation button when row is hovered.
 /// </summary>
 /// <typeparam name="TGridItem">Grid item type</typeparam>
+[Obsolete(Constants.ObsoleteMessage)]
 public sealed class NavigationColumn<TGridItem> : ColumnBase<TGridItem>, INavigationColumn<TGridItem>, IDisposable
 {
     [CascadingParameter]

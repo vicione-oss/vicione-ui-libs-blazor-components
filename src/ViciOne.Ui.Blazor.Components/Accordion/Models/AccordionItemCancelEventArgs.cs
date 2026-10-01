@@ -13,7 +13,7 @@ public sealed class AccordionItemCancelEventArgs : EventArgs
     public required IAccordionItem Sender { get; init; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the expand or collapse action should be cancelled.
+    /// Gets or sets a value indicating whether the expand or collapse action should be canceled.
     /// </summary>
     public bool Cancel { get; set; }
 }

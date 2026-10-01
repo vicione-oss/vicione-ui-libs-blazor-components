@@ -36,6 +36,10 @@ export class DragGhostHost {
         this.#element.replaceChildren(content);
     }
 
+    public setCursor(cursor: string | undefined) {
+        this.#element.style.cursor = cursor ?? '';
+    }
+
     public appendTo(parent: HTMLElement) {
         parent.append(this.#element);
     }

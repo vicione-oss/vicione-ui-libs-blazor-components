@@ -79,6 +79,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>SpinButton.resx</DependentUpon>
     </Compile>
+    <Compile Update="Tables\AdvancedTable\Components\ColumnChooser\Localization\ColumnChooserToggle.Designer.cs">
+      <DependentUpon>ColumnChooserToggle.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Tables\AdvancedTable\Components\Localization\AdvancedTable.Designer.cs">
+      <DependentUpon>AdvancedTable.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Tables\SimpleTable\Localization\ContainsFilterEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainsFilterEditor.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -115,6 +130,18 @@
     <EmbeddedResource Update="SpinEdit\Localization\SpinButton.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SpinButton.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Tables\AdvancedTable\Components\ColumnChooser\Localization\ColumnChooserToggle.resx">
+      <LastGenOutput>ColumnChooserToggle.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Tables\AdvancedTable\Components\Localization\AdvancedTable.resx">
+      <LastGenOutput>AdvancedTable.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Tables\SimpleTable\Localization\ContainsFilterEditor.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainsFilterEditor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -375,6 +402,9 @@
     <GeneratedStaticWebAsset Include="Draggable\Scripts\DragGhostHost.js">
       <DestinationFile>draggable\drag-ghost-host.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Draggable\Scripts\DragGhostCursorSource.js">
+      <DestinationFile>draggable\drag-ghost-cursor-source.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Draggable\Services\TableRowDragGhost.cs.js">
       <DestinationFile>draggable\table-row-drag-ghost.js</DestinationFile>
     </GeneratedStaticWebAsset>
@@ -417,6 +447,27 @@
     <!-- Emitted by target 'BundleMaterialWebRipple' rather than by the TypeScript compile -->
     <GeneratedStaticWebAsset Include="obj\material-web\ripple.js">
       <DestinationFile>material-web\ripple.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Components\AdvancedTable.razor.js">
+      <DestinationFile>advanced-table\components\advanced-table.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Models\ColumnWidth.cs.js">
+      <DestinationFile>advanced-table\models\column-width.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Scripts\TableColumn.js">
+      <DestinationFile>advanced-table\scripts\table-column.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Scripts\ResolvedColumnWidth.js">
+      <DestinationFile>advanced-table\scripts\resolved-column-width.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Scripts\CloseObserver.js">
+      <DestinationFile>advanced-table\scripts\close-observer.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Scripts\KeyboardNavigation.js">
+      <DestinationFile>advanced-table\scripts\keyboard-navigation.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Tables\AdvancedTable\Scripts\Focusable.js">
+      <DestinationFile>advanced-table\scripts\focusable.js</DestinationFile>
     </GeneratedStaticWebAsset>
   </ItemGroup>
 

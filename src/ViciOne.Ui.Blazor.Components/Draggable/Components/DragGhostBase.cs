@@ -22,6 +22,11 @@ namespace ViciOne.Ui.Blazor.Components.Draggable.Components;
 ///     <see cref="IDropzoneLeaveListener"/>. From those callbacks, mutate the state the drag ghost content depends on and
 ///     call <see cref="RenderContentAsync"/> to refresh the drag ghost.
 /// </para>
+/// <para>
+///     The cursor shown during a drag is the CSS <c>cursor</c> of the first element inside
+///     <see cref="DragGhostContent"/>, and follows it whenever <see cref="RenderContentAsync"/> refreshes the drag
+///     ghost. Without a cursor of its own, the document's cursor stays.
+/// </para>
 /// </remarks>
 public abstract partial class DragGhostBase : ComponentBase, IDragGhost, IDisposable
 {

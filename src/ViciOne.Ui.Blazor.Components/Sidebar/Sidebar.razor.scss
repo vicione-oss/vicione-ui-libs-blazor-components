@@ -20,7 +20,7 @@
 
     $resize-handle-width: 10px;
 
-    ::deep .resize-handle {
+    > ::deep .resize-handle {
         width: $resize-handle-width;
         height: auto;
         top: 0;
@@ -42,7 +42,7 @@
             left: 0;
         }
 
-        ::deep .resize-handle {
+        > ::deep .resize-handle {
             right: -$resize-handle-width;
         }
     }
@@ -59,7 +59,7 @@
             right: 0;
         }
 
-        ::deep .resize-handle {
+        > ::deep .resize-handle {
             left: -$resize-handle-width;
         }
     }

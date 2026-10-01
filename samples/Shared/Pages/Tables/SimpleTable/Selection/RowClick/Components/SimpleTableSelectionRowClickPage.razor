@@ -1,0 +1,80 @@
+@page "/tables/simple-table/selection/row-click"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Footers
+@using ViciOne.Ui.Blazor.Components.Tables.Shared.Enums
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<h3>Row-Click Selection</h3>
+
+<DescriptionBanner>
+    The row-click channel drives selection and there is no select column. This is the default: set a
+    <code>SelectionMode</code> and clicking a row just works.
+</DescriptionBanner>
+
+<h4>Single</h4>
+
+@if (_singleSelectedItems.Count > 0)
+{
+    <DescriptionBanner>
+        Selected: <code>@_singleSelectedItems[0].Key</code> / <code>@_singleSelectedItems[0].Value</code>
+    </DescriptionBanner>
+}
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Single"
+             @bind-SelectedItems="_singleSelectedItems"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_singleSelectedItems.Count" />
+    </Footer>
+</SimpleTable>
+
+<h4>Multiple</h4>
+
+<DescriptionBanner>
+    @_multiSelectedItems.Count selected. <kbd>Ctrl</kbd>+click to toggle, <kbd>Shift</kbd>+click for range.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items"
+             SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_multiSelectedItems"
+             MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+    <Footer>
+        <TableFooter SelectedItemCount="_multiSelectedItems.Count" />
+    </Footer>
+</SimpleTable>

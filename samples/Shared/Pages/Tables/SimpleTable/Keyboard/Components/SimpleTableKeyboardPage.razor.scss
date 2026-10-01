@@ -1,0 +1,11 @@
+.keyboard-container {
+    max-width: 900px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    // Narrower than the widths the multiple-selection sample's columns add up to, so that table really does
+    // scroll horizontally and the lead has somewhere to be brought out from behind a pinned column.
+    &.multi {
+        max-width: 560px;
+    }
+}

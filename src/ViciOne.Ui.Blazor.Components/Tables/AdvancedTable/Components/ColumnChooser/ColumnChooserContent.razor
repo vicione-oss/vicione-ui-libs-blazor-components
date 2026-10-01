@@ -1,0 +1,21 @@
+@using ViciOne.Ui.Blazor.Components.CheckBox
+
+@typeparam TItem where TItem : class
+
+<div class="column-chooser-content">
+    @foreach (var column in ChooserColumns)
+    {
+        if (column.State is not { } columnState)
+            continue;
+
+        <CheckBox @bind-Value="columnState.Visible" />
+
+        // Similar to AdvancedTable.razor, cascade columnState to allow column implementations
+        // to access it like they would when rendered with the table.
+        //
+        // Reached by any column whose Header is a component reading ColumnState through TableHeaderCellContentBase.
+        <CascadingValue Value="columnState" IsFixed="true">
+            <span>@column.Header</span>
+        </CascadingValue>
+    }
+</div>

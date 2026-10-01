@@ -22,10 +22,7 @@ export class DragInteraction {
     readonly #setPositionPointerCaptureBehavior = new SetPositionPointerCaptureBehavior();
     readonly #additionalPointerCaptureBehaviors: Set<PointerCaptureBehavior> = new Set<PointerCaptureBehavior>();
 
-    // Placeholder until the configured drag ghost is resolved. No pointer listener is registered before
-    // then, so no drag can start with it.
-    #dragGhost: ResolvedDragGhost = new DefaultDragGhost();
-    #isDisposed = false;
+    readonly #dragGhost: ResolvedDragGhost;
 
     #dropzoneDescriptors: DropzoneDescriptor[] | undefined;
     #targetDropzoneDescriptor: DropzoneDescriptor | undefined;
@@ -104,6 +101,7 @@ export class DragInteraction {
         const ghostContent = this.#dragGhost.getContent();
 
         dragGhostHost.setContent(ghostContent);
+        dragGhostHost.setCursor(this.#dragGhost.getCursor?.());
 
         dragGhostHost.appendTo(document.body);
 
@@ -218,44 +216,36 @@ export class DragInteraction {
         if (wasPointerMoved) {
             this.context.draggable.classList.remove(this.context.ongoingCssClass);
             this.context.draggable.classList.add(this.context.endedCssClass);
+        }
 
-            await this.context.dotNetObject.invokeMethodAsync('DragEndAsync', this.context.draggableId, x, y);
+        // The .NET side was told the drag started on the first move, so it must hear of the end even when the
+        // pointer is released before the drag ghost moves: dropzones marked on start are only cleared here.
+        await this.context.dotNetObject.invokeMethodAsync('DragEndAsync', this.context.draggableId, x, y);
 
-            if (this.#targetDropzoneDescriptor) {
-                const dropzoneBoundingClientRect = this.#targetDropzoneDescriptor.element.getBoundingClientRect();
+        // Only a move of the drag ghost hit-tests the dropzones, so a target implies the pointer was moved.
+        if (this.#targetDropzoneDescriptor) {
+            const dropzoneBoundingClientRect = this.#targetDropzoneDescriptor.element.getBoundingClientRect();
 
-                x -= dropzoneBoundingClientRect.x + window.scrollX;
-                y -= dropzoneBoundingClientRect.y + window.scrollY;
+            x -= dropzoneBoundingClientRect.x + window.scrollX;
+            y -= dropzoneBoundingClientRect.y + window.scrollY;
 
-                await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync',
-                    this.context.draggableId,
-                    this.#targetDropzoneDescriptor.id,
-                    x,
-                    y);
-            }
+            await this.context.dotNetObject.invokeMethodAsync('DragDroppedAsync',
+                this.context.draggableId,
+                this.#targetDropzoneDescriptor.id,
+                x,
+                y);
         }
     };
 
-    constructor(readonly context: DragInteractionContext) {
+    constructor(readonly context: DragInteractionContext, dragGhost: ResolvedDragGhost) {
+        this.#dragGhost = dragGhost;
+        this.#dragGhost.setDraggable?.(context.draggable);
+
         for (const behavior of context.pointerCaptureBehaviors ?? [])
             this.#additionalPointerCaptureBehaviors.add(behavior);
 
-        void this.#initialize();
-    }
-
-    // A custom drag ghost lives in its own JS module that has to be imported first, which a constructor
-    // cannot await. The draggable therefore only reacts to the pointer once its drag ghost is known.
-    async #initialize() {
-        const dragGhost = await resolveDragGhost(this.context.dragGhostJsModule ?? undefined);
-
-        if (this.#isDisposed)
-            return;
-
-        this.#dragGhost = dragGhost;
-        this.#dragGhost.setDraggable?.(this.context.draggable);
-
-        this.context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
-        this.context.draggable.addEventListener('pointerup', this.#pointerUpEventListener);
+        context.draggable.addEventListener('pointerdown', this.#pointerDownEventListener);
+        context.draggable.addEventListener('pointerup', this.#pointerUpEventListener);
     }
 
     #hasRequiredKeyState(event: PointerEvent) {
@@ -280,6 +270,7 @@ export class DragInteraction {
         const oldSize = { width: dragGhostHost.offsetWidth, height: dragGhostHost.offsetHeight };
 
         dragGhostHost.setContent(content);
+        dragGhostHost.setCursor(this.#dragGhost.getCursor?.());
 
         const newSize = { width: dragGhostHost.offsetWidth, height: dragGhostHost.offsetHeight };
 
@@ -335,8 +326,6 @@ export class DragInteraction {
     }
 
     public dispose() {
-        this.#isDisposed = true;
-
         this.context.draggable.removeEventListener('pointerdown', this.#pointerDownEventListener);
         this.context.draggable.removeEventListener('pointerup', this.#pointerUpEventListener);
         this.context.draggable.removeEventListener('pointermove', this.#pointerMoveEventListener);
@@ -355,6 +344,21 @@ export class DragInteraction {
     public removePointerCaptureBehavior(pointerCaptureBehavior: PointerCaptureBehavior) {
         this.#additionalPointerCaptureBehaviors.delete(pointerCaptureBehavior);
     }
+}
+
+// Not a constructor invoked from .NET: a custom drag ghost lives in its own JS module, and a constructor
+// cannot await its import. Resolving it here keeps attaching a draggable to a single round-trip, and the
+// browser caches the import after the first draggable.
+export async function attach(context: DragInteractionContext) {
+    // Blazor resolves the element reference when this call arrives, so an element removed while the attach
+    // was queued (a virtualized row scrolled out) arrives as null. Nothing to wire; its owner is disposing.
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types
+    if ((context.draggable as HTMLElement | null) === null)
+        return undefined;
+
+    const dragGhost = await resolveDragGhost(context.dragGhostJsModule ?? undefined);
+
+    return new DragInteraction(context, dragGhost);
 }
 
 async function resolveDragGhost(jsModule: DragGhostJsModuleDescriptor | undefined): Promise<ResolvedDragGhost> {

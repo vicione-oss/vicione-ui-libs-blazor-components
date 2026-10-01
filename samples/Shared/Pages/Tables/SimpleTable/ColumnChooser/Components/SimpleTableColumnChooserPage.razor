@@ -1,0 +1,64 @@
+@page "/tables/simple-table/column-chooser"
+
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.ColumnChooser
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Filters
+@using ViciOne.Ui.Blazor.Components.Toolbar.Components
+@using ViciOne.Ui.Localization.Resources
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+<h3>Column Chooser</h3>
+
+<DescriptionBanner>
+    The column chooser works with a <code>SimpleTable</code> the same way it does with an
+    <code>AdvancedTable</code>: give the table a <code>ColumnChooserToggleId</code> and place a
+    <code>ColumnChooserToggle</code> with the matching <code>Id</code> wherever the menu should appear — here
+    above the table. The menu lists every chooser-eligible column; set <code>ShowInColumnChooser="false"</code>
+    to keep a column always visible and out of the menu.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    Hiding a column also clears any filter active on it: the header is the only place that filter can be edited,
+    so keeping it would leave the data constrained by an unreachable filter. Filter the <code>Value</code>
+    column below, then hide it from the menu — the rows return and re-showing the column starts filterless.
+</DescriptionBanner>
+
+<DescriptionBanner>
+    <code>MaximumVisibleRowCount</code> limits how many columns the menu lists at once, 10 by default; any
+    further ones are reached by scrolling the list, so a table with many columns cannot stretch the menu past the
+    dialog or page it opens in. Here it is set to 2, one less than the columns in the menu.
+</DescriptionBanner>
+
+<div class="toolbar-container">
+    <Toolbar>
+        <ColumnChooserToggle Id="_columnChooserToggleId" MaximumVisibleRowCount="2">
+            <Button>
+                <ToolbarButton IconName="MonochromeIconName.ColumnChooserMenu"
+                               Tooltip="@string.Format(UserActions.OpenSomething, context.PopupTitle)"
+                               Active="context.PopupVisible"
+                               OnClick="context.Toggle" />
+            </Button>
+        </ColumnChooserToggle>
+    </Toolbar>
+</div>
+
+<SimpleTable Items="s_items" ColumnChooserToggleId="_columnChooserToggleId" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+            <FilterEditor>
+                <SimpleTableContainsColumnFilterEditor ValueSelector="x => x.Value" />
+            </FilterEditor>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Id" Title="Id" ShowInColumnChooser="false">
+            <CellContent>@context.Id</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

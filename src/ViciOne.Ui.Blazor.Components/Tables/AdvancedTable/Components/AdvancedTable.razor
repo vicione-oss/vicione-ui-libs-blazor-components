@@ -172,6 +172,12 @@
         if (IsRowSelected(item))
             trClasses.Add("selected");
 
+        // Taken from the row's position in the filtered, sorted set rather than from its position among the
+        // rendered rows, as a CSS :nth-of-type would: under virtualization the rendered window starts at any
+        // row, so a row would change its color whenever the window moved by an odd number of rows.
+        if (Striped && absoluteRowIndex % 2 == 0)
+            trClasses.Add("alternate");
+
         return @<AdvancedTableRow @key="GetRowKey(item)"
                                   Item="item"
                                   Draggable="RowsDraggable"

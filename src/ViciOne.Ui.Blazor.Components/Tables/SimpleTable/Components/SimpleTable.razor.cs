@@ -95,6 +95,10 @@ public sealed partial class SimpleTable<TItem> : ComponentBase, ISimpleTable<TIt
     [Parameter]
     public string? MaximumHeight { get; set; }
 
+    /// <inheritdoc cref="AdvancedTable{TItem}.Striped"/>
+    [Parameter]
+    public bool Striped { get; set; }
+
     /// <inheritdoc cref="AdvancedTable{TItem}.SortingState"/>
     [Parameter]
     public SortingState SortingState { get; set; } = SortingState.Empty;

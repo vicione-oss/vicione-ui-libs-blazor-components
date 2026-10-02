@@ -7,6 +7,7 @@ $grid-row-height: 32px;
 // Theme-aware background colors
 // Opaque, not translucent: a cell of a pinned column has to cover the cells scrolling beneath it.
 $background-color: color.mix(colors.$theme-inverted, colors.$background-darker, 5%);
+$background-alternate-color: color.mix(colors.$theme-inverted, colors.$background-darker, 1%);
 $background-hover-color: color.mix(colors.$theme-inverted, colors.$background-darker, 10%);
 $background-selected-color: color.mix(colors.$theme-inverted, colors.$background-darker, 15%);
 $background-selected-hover-color: color.mix(colors.$theme-inverted, colors.$background-darker, 20%);

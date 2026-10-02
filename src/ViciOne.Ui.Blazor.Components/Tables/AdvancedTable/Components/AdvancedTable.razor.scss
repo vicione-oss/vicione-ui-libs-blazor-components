@@ -123,6 +123,11 @@
                             }
                         }
 
+                        // Ahead of the hover and selected rules, which weigh the same and so replace it.
+                        &.alternate {
+                            @include row-background(variables.$background-alternate-color);
+                        }
+
                         &:hover {
                             @include row-background(variables.$background-hover-color);
                         }

@@ -1,0 +1,38 @@
+@page "/tables/advanced-table/rows/striping"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<DescriptionBanner>
+    <code>@nameof(AdvancedTable<>.Striped)</code> gives every other row a different color, which makes a row easier
+    to follow across wide tables. Hovered and selected rows keep their own colors.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Virtualize table</label>
+        <Switch @bind-Value="_virtualize" />
+    </div>
+</div>
+
+<h3>Stripes while scrolling</h3>
+
+<DescriptionBanner>
+    Under <strong>Virtualize</strong> only the visible rows are rendered: scroll the table and check that each row
+    keeps its color.
+</DescriptionBanner>
+
+<AdvancedTable ItemsProvider="_itemsProvider" Striped Mode="@LoadingMode" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key">
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value">
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

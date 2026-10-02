@@ -261,6 +261,12 @@ public sealed partial class AdvancedTable<TItem>
     public EventCallback<TItem> RowDoubleClick { get; set; }
 
     /// <summary>
+    /// When <see langword="true"/>, every other row has a different color. Defaults to <see langword="false"/>.
+    /// </summary>
+    [Parameter]
+    public bool Striped { get; set; }
+
+    /// <summary>
     /// When <see langword="true"/>, rows can be dragged. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]

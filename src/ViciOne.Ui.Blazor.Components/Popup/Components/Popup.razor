@@ -59,6 +59,11 @@
                 { "class", string.Join(" ", modelDialogCssClasses) },
                 { "style", string.Join("; ", modalDialogStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}")) }
             };
+
+            // Without backdrop the popup does not block the page, hence the focus trap of a popup below may
+            // let the focus move into it.
+            if (!ShowBackdrop)
+                modalDialogAttributes["data-focus-trap-exempt"] = true;
         }
         <div @attributes="modalDialogAttributes"
              @ref="_modalDialogElementReference">

@@ -12,7 +12,10 @@ public sealed partial class PopupTests
         private readonly BunitContext _testContext = new();
 
         public Visible()
-            => _testContext.Services.AddPopup();
+        {
+            _testContext.Services.AddPopup();
+            _testContext.JSInterop.SetupForPopup();
+        }
 
         public ValueTask DisposeAsync()
             => _testContext.DisposeAsync();

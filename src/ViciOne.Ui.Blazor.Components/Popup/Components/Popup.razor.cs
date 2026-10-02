@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Extensions;
+using ViciOne.Ui.Blazor.Components.FocusTrap.Components;
+using ViciOne.Ui.Blazor.Components.FocusTrap.Services;
 using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;
 using ViciOne.Ui.Blazor.Components.Popup.Services;
@@ -11,7 +13,8 @@ namespace ViciOne.Ui.Blazor.Components.Popup.Components;
 /// <summary>
 /// A component that displays a popup.
 /// </summary>
-public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandle, IMoveContainer, IMoveablePopup, IAsyncDisposable
+public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandle, IMoveContainer, IMoveablePopup,
+    IFocusTrappable, IAsyncDisposable
 {
     private ElementReference _modalRootElementReference;
     private ElementReference _modalDialogElementReference;
@@ -82,6 +85,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     /// </summary>
     /// <remarks>
     /// A backdrop is a semi-transparent overlay shown behind the popup that covers the entire viewport.
+    /// As it blocks the page behind the popup, the focus is kept inside the popup while it is shown.
     /// </remarks>
     /// <value>
     /// <see langword="true"/> if the backdrop should be shown, otherwise <see langword="false"/>.
@@ -138,6 +142,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     [Inject] private IMoveInteraction MoveInteraction { get; set; } = default!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
     [Inject] private ILogger<Popup> Logger { get; set; } = default!;
+    [Inject] private IFocusTrap FocusTrap { get; set; } = default!;
 
     /// <inheritdoc/>
     protected override void OnInitialized()
@@ -201,6 +206,11 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
             }
         }
 
+        if (!_visible)
+            _modalDialogElementReference = default;
+
+        await UpdateFocusTrapAsync();
+
         // We check the element reference first, because the modal dialog is handed to the SectionOutlet in PopupCell
         // through SectionContent, so its element reference is only assigned once PopupCell has rendered.
         if (!string.IsNullOrEmpty(_modalDialogElementReference.Id) &&
@@ -231,6 +241,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
             return;
 
         await RemoveMoveInteractionAsync();
+        await FocusTrap.RemoveAsync(this);
 
         await DisposeJsInstanceAsync();
 
@@ -247,6 +258,17 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
 
         _showCloseSemaphore.Release();
         _showCloseSemaphore.Dispose();
+    }
+
+    private async Task UpdateFocusTrapAsync()
+    {
+        if (_disposed)
+            return;
+
+        if (_visible && ShowBackdrop)
+            await FocusTrap.AttachAsync(this);
+        else
+            await FocusTrap.RemoveAsync(this);
     }
 
     /// <summary>
@@ -341,6 +363,9 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
 
     /// <inheritdoc/>
     ElementReference IMoveContainer.GetElementReference() => _modalRootElementReference;
+
+    /// <inheritdoc/>
+    ElementReference IFocusTrappable.GetElementReference() => _modalDialogElementReference;
 
     /// <inheritdoc/>
     public IMoveHandle GetMoveHandle() => _moveHandle ?? this;

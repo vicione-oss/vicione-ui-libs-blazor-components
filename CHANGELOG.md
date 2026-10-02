@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.0 - Unreleased
+## 6.3.0 - 2026-10-02
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
@@ -8,6 +8,12 @@
 - `SimpleTable`, added `Striped` to give every other row a different color
 - `Popup` and `Dialog`, added `CloseOnEscape` to close them on `Escape`
 - `TagBox` and `TextBox`, `Escape` clearing or reverting the input is no longer passed on to surrounding components
+- `Popup`, added a focus trap keeping the focus inside the popup while `Visible` and `ShowBackdrop` are `true`
+
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `Popup`, added extension method `SetupForPopup()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
+- `Dialog`, added extension method `SetupForDialog()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
 
 ## 6.2.0 - 2026-10-01
 

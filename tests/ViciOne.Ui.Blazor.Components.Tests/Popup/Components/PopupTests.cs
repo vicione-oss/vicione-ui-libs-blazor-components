@@ -1,5 +1,6 @@
 using Bunit;
 using ViciOne.Ui.Blazor.Components.Popup.Extensions;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.Popup.Extensions;
 using PopupComponent = ViciOne.Ui.Blazor.Components.Popup.Components.Popup;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Popup.Components;
@@ -9,7 +10,10 @@ public sealed partial class PopupTests : IAsyncDisposable
     private readonly BunitContext _testContext = new();
 
     public PopupTests()
-        => _testContext.Services.AddPopup();
+    {
+        _testContext.Services.AddPopup();
+        _testContext.JSInterop.SetupForPopup();
+    }
 
     public ValueTask DisposeAsync()
         => _testContext.DisposeAsync();

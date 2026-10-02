@@ -9,6 +9,9 @@ namespace Server.Tests.Popup;
 public class PopupTests(ServerFixture fixture)
 {
     private const int EscapeSettleDelay = 250;
+    private const int FocusSettleDelay = 250;
+
+    private static readonly TimeSpan s_focusTimeout = TimeSpan.FromSeconds(2);
 
     [Fact]
     public async Task Should_close_popup_on_escape()
@@ -219,17 +222,213 @@ public class PopupTests(ServerFixture fixture)
         });
     }
 
-    private async Task<ILocator> ShowPopupAsync(IPage page)
+    [Fact]
+    public async Task Should_move_focus_back_into_popup_with_backdrop()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: true);
+
+            // Act
+            await page.Locator(".switch.popup-visible").FocusAsync();
+
+            // Assert
+            var activeElementClass = await WaitForActiveElementAsync(page, "first-popup");
+
+            activeElementClass.Should().Contain("first-popup");
+        });
+    }
+
+    [Fact]
+    public async Task Should_leave_focus_outside_popup_without_backdrop()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: false);
+
+            // Act
+            await page.Locator(".switch.popup-visible").FocusAsync();
+
+            // Assert
+            await page.WaitForTimeoutAsync(FocusSettleDelay);
+
+            var activeElementClass = await GetActiveElementClassAsync(page);
+
+            activeElementClass.Should().Contain("popup-visible");
+        });
+    }
+
+    [Fact]
+    public async Task Should_move_focus_into_topmost_popup_with_backdrop()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: true);
+            await ShowSecondPopupAsync(page, showBackdrop: true);
+
+            // Act
+            // The popup below the topmost one must not take the focus back from it.
+            await page.Locator(".first-popup .switch.show-backdrop").FocusAsync();
+
+            // Assert
+            var activeElementClass = await WaitForActiveElementAsync(page, "second-popup");
+
+            activeElementClass.Should().Contain("second-popup");
+        });
+    }
+
+    [Fact]
+    public async Task Should_leave_focus_in_topmost_popup_with_backdrop()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: true);
+            await ShowSecondPopupAsync(page, showBackdrop: true);
+
+            // Act
+            await page.Locator(".second-popup .switch.second-popup-close").FocusAsync();
+
+            // Assert
+            await page.WaitForTimeoutAsync(FocusSettleDelay);
+
+            var activeElementClass = await GetActiveElementClassAsync(page);
+
+            activeElementClass.Should().Contain("second-popup-close");
+        });
+    }
+
+    [Fact]
+    public async Task Should_leave_focus_in_popup_without_backdrop_above_popup_with_backdrop()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: true);
+            await ShowSecondPopupAsync(page, showBackdrop: false);
+
+            // Act
+            await page.Locator(".second-popup .switch.second-popup-close").FocusAsync();
+
+            // Assert
+            await page.WaitForTimeoutAsync(FocusSettleDelay);
+
+            var activeElementClass = await GetActiveElementClassAsync(page);
+
+            activeElementClass.Should().Contain("second-popup-close");
+        });
+    }
+
+    [Fact]
+    public async Task Should_allow_interaction_with_popup_without_backdrop_above_popup_with_backdrop()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: true);
+            await ShowSecondPopupAsync(page, showBackdrop: false);
+
+            // Act
+            // The popup below must neither swallow the click nor take the focus the switch needs to be operated.
+            await page.Locator(".second-popup .switch.second-popup-close").ClickAsync();
+
+            // Assert
+            await Expect(page.Locator(".second-popup")).ToHaveCountAsync(0);
+            await Expect(page.Locator(".first-popup")).ToHaveCountAsync(1);
+        });
+    }
+
+    [Fact]
+    public async Task Should_move_focus_back_into_popup_with_backdrop_after_popup_above_is_closed()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act & Assert
+        await browser.LaunchAsync(async page =>
+        {
+            await ShowPopupAsync(page, showBackdrop: true);
+            await ShowSecondPopupAsync(page, showBackdrop: true);
+
+            await page.Locator(".second-popup .switch.second-popup-close").ClickAsync();
+
+            await Expect(page.Locator(".second-popup")).ToHaveCountAsync(0);
+
+            // Act
+            await page.Locator(".switch.popup-visible").FocusAsync();
+
+            // Assert
+            var activeElementClass = await WaitForActiveElementAsync(page, "first-popup");
+
+            activeElementClass.Should().Contain("first-popup");
+        });
+    }
+
+    private async Task<ILocator> ShowPopupAsync(IPage page, bool showBackdrop = false)
     {
         await page.GotoAsync($"{fixture.ServerAddress}/popup");
 
         await page.Locator(".switch.popup-visible").ClickAsync();
 
-        var popup = page.Locator(".modal-dialog");
+        var popup = page.Locator(".modal-dialog.first-popup");
 
         // The popup takes the focus once it has rendered, so a key pressed before would not reach it.
         await Expect(popup).ToBeFocusedAsync();
 
+        if (showBackdrop)
+            await popup.Locator(".switch.show-backdrop").ClickAsync();
+
         return popup;
+    }
+
+    private static async Task ShowSecondPopupAsync(IPage page, bool showBackdrop)
+    {
+        if (showBackdrop)
+            await page.Locator(".first-popup .switch.second-popup-show-backdrop").ClickAsync();
+
+        await page.Locator(".first-popup .switch.second-popup-visible").ClickAsync();
+    }
+
+    private static Task<string> GetActiveElementClassAsync(IPage page)
+        => page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''");
+
+    private static async Task<string> WaitForActiveElementAsync(IPage page, string cssClass)
+    {
+        var deadline = DateTime.UtcNow + s_focusTimeout;
+
+        var activeElementClass = await GetActiveElementClassAsync(page);
+
+        while (!activeElementClass.Contains(cssClass, StringComparison.Ordinal) && DateTime.UtcNow < deadline)
+            activeElementClass = await GetActiveElementClassAsync(page);
+
+        return activeElementClass;
     }
 }

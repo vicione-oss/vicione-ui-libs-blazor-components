@@ -432,6 +432,9 @@
     <GeneratedStaticWebAsset Include="DropDown\DropDown.razor.js">
       <DestinationFile>drop-down\drop-down.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Popup\Components\Popup.razor.js">
+      <DestinationFile>popup\components\popup.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Tooltip\Components\TooltipDisplay.razor.js">
       <DestinationFile>tooltip\components\tooltip-display.js</DestinationFile>
     </GeneratedStaticWebAsset>

@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
+using ViciOne.Ui.Blazor.Components.Extensions;
 using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Services;
 using ViciOne.Ui.Blazor.Components.Popup.Services;
@@ -27,6 +30,11 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     private bool _disposed;
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+
+    private IJSObjectReference? _jsModule;
+    private IJSObjectReference? _jsInstance;
+    private DotNetObjectReference<Popup>? _dotNetObjectReference;
+    private string? _closeOnEscapeListenerElementId;
 
     /// <summary>
     /// Text rendered into the <see href="https://html.spec.whatwg.org/#classes">class</see> attribute
@@ -115,8 +123,21 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     /// </summary>
     [Parameter] public EventCallback OnClosing { get; set; }
 
+    /// <summary>
+    /// When <see langword="true"/>, the component dismisses itself upon an 'Escape' key press.
+    /// </summary>
+    /// <remarks>
+    /// The component also closes on an 'Escape' key press that a component in its content acts on itself.
+    /// A content component that gives 'Escape' a meaning of its own must stop the propagation of that 'keydown'
+    /// event, as <see cref="TextBox.TextBox"/> and <see cref="TagBox.TagBox"/> do while they have input to revert
+    /// or clear.
+    /// </remarks>
+    [Parameter] public bool CloseOnEscape { get; set; }
+
     [Inject] private IPopupRegistry PopupRegistry { get; set; } = default!;
     [Inject] private IMoveInteraction MoveInteraction { get; set; } = default!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+    [Inject] private ILogger<Popup> Logger { get; set; } = default!;
 
     /// <inheritdoc/>
     protected override void OnInitialized()
@@ -188,6 +209,8 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
             await _modalDialogElementReference.FocusAsync();
         }
 
+        await UpdateCloseOnEscapeListenerAsync();
+
         if (Interlocked.CompareExchange(ref _showing, false, true))
         {
             if (VisibleChanged.HasDelegate)
@@ -208,6 +231,14 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
             return;
 
         await RemoveMoveInteractionAsync();
+
+        await DisposeJsInstanceAsync();
+
+        _dotNetObjectReference?.Dispose();
+        _dotNetObjectReference = null;
+
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
 
         PopupRegistry.Remove(this);
 
@@ -261,6 +292,7 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
     }
 
     /// <inheritdoc/>
+    [JSInvokable]
     public async Task CloseAsync()
     {
         if (_disposed)
@@ -356,6 +388,75 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
 
             _requestRemoveMoveInteractionAfterRender = true;
             InvokeAsync(StateHasChanged);
+        }
+    }
+
+    // The dialog element is created anew each time the popup is shown, so the listener follows it: it is kept
+    // on the current element while the popup closes on Escape, and removed otherwise.
+    private async Task UpdateCloseOnEscapeListenerAsync()
+    {
+        var modalDialogElementId = _visible && CloseOnEscape && !string.IsNullOrEmpty(_modalDialogElementReference.Id)
+            ? _modalDialogElementReference.Id
+            : null;
+
+        if (modalDialogElementId == _closeOnEscapeListenerElementId)
+            return;
+
+        _closeOnEscapeListenerElementId = modalDialogElementId;
+
+        await DisposeJsInstanceAsync();
+
+        if (modalDialogElementId is not null)
+            await AttachJsAsync();
+    }
+
+    private async Task AttachJsAsync()
+    {
+        _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
+            $"./_content/{typeof(Popup).Assembly.GetName().Name}/popup/components/popup.js");
+
+        _dotNetObjectReference ??= DotNetObjectReference.Create(this);
+
+        _jsInstance = await _jsModule.InvokeConstructorAsync("Popup", Logger, _dotNetObjectReference, _modalDialogElementReference);
+    }
+
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
+    private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
+
+    private async Task DisposeJsInstanceAsync()
+    {
+        if (_jsInstance is not null)
+        {
+            try
+            {
+                await _jsInstance.InvokeVoidAsync("dispose");
+            }
+            catch (JSDisconnectedException)
+            {
+                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+            }
+            catch (Exception ex)
+            {
+                InvokingJsInstanceDisposeFailed(Logger, ex);
+            }
+
+            try
+            {
+                await _jsInstance.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+            }
+            catch (Exception ex)
+            {
+                DisposingJsInstanceFailed(Logger, ex);
+            }
+
+            _jsInstance = null;
         }
     }
 }

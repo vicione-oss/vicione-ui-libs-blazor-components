@@ -25,6 +25,7 @@
         Height="@($"{_dialogHeight}px")"
         HeaderSlot="@(_dialogWithHeaderToolbar ? RenderFragments.HeaderToolbar : null)"
         PreventBrowserContextMenu="@_dialogPreventBrowserContextMenu"
+        CloseOnEscape="_dialogCloseOnEscape"
         @bind-Visible="_dialogVisible">
 
     <Body>
@@ -68,6 +69,12 @@
                             <div>
                                 <SpinEdit @bind-Value="_dialogMinimumWidth" Interval="10" Minimum="100" Maximum="800" /> px
                             </div>
+                        </div>
+
+                        <div class="option">
+                            <label><code>@nameof(Dialog.CloseOnEscape)</code></label>
+
+                            <Switch @bind-Value="_dialogCloseOnEscape"/>
                         </div>
                     </div>
 

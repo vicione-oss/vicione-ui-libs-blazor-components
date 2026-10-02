@@ -567,7 +567,7 @@ public sealed class TagBoxTests : IDisposable
         input.Input("something");
 
         // Act
-        input.KeyDown(new KeyboardEventArgs { Key = "Escape" });
+        input.KeyUp(new KeyboardEventArgs { Key = "Escape" });
 
         // Assert
         input.GetAttribute("value").Should().BeEmpty();
@@ -587,7 +587,7 @@ public sealed class TagBoxTests : IDisposable
         input.Input("something");
 
         // Act
-        input.KeyDown(new KeyboardEventArgs { Key = "Escape" });
+        input.KeyUp(new KeyboardEventArgs { Key = "Escape" });
 
         // Assert
         updatedTags.Should().BeNull();

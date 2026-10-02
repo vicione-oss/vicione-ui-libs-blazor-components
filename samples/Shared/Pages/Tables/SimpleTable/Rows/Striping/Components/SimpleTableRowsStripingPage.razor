@@ -1,0 +1,44 @@
+@page "/tables/simple-table/rows/striping"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<DescriptionBanner>
+    <code>@nameof(SimpleTable<>.Striped)</code> gives every other row a different color, which makes a row easier
+    to follow across wide tables. Hovered and selected rows keep their own colors.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Virtualize table</label>
+        <Switch @bind-Value="_virtualize" />
+    </div>
+</div>
+
+<h3>Stripes while scrolling</h3>
+
+<DescriptionBanner>
+    Under <strong>Virtualize</strong> only the visible rows are rendered: scroll the table and check that each row
+    keeps its color.
+</DescriptionBanner>
+
+<SimpleTable Items="s_items" Striped Mode="@LoadingMode" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key">
+            <CellContent>
+                @context.Key
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value">
+            <CellContent>
+                @context.Value
+            </CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp">
+            <CellContent>
+                @context.Timestamp
+            </CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

@@ -61,6 +61,19 @@ public sealed partial class SimpleTableTests : IAsyncDisposable
     }
 
     [Fact]
+    public void Striped_gives_every_other_row_the_alternate_css_class()
+    {
+        // Act
+        var renderedComponent = _testContext.Render<SimpleTable<TableTestItem>>(b => b
+            .Add(p => p.Items, [new(1, "Content One"), new(2, "Content Two"), new(3, "Content Three")])
+            .Add(p => p.Striped, true));
+
+        // Assert
+        renderedComponent.FindAll("tbody tr").Select(row => row.ClassList.Contains("alternate")).Should()
+            .Equal(true, false, true);
+    }
+
+    [Fact]
     public void Setting_a_filter_that_is_not_applicable_in_memory_does_not_throw_and_is_skipped()
     {
         // Arrange — TestColumnFilter is an IColumnFilter but not an ISimpleTableColumnFilter<TItem>, so

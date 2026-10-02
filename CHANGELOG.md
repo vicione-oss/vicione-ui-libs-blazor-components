@@ -2,6 +2,11 @@
 
 ## 6.3.0 - Unreleased
 
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `AdvancedTable`, added `Striped` to give every other row a different color
+- `SimpleTable`, added `Striped` to give every other row a different color
+
 ## 6.2.0 - 2026-10-01
 
 ### Package `ViciOne.Ui.Blazor.Components`

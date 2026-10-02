@@ -13,7 +13,14 @@
     </div>
 </div>
 
-<Popup CssClass="@(_popupWithInvertedModifier ? "inverted" : null)"
+@{
+    var popupCssClasses = new List<string> { "first-popup" };
+
+    if (_popupWithInvertedModifier)
+        popupCssClasses.Add("inverted");
+}
+
+<Popup CssClass="@string.Join(" ", popupCssClasses)"
        MinimumWidth="@(_popupMinimumWidth is not null ? $"{_popupMinimumWidth}px" : null)"
        Width="@($"{_popupWidth}px")"
        Height="@($"{_popupHeight}px")"
@@ -35,7 +42,19 @@
                 <div class="option">
                     <label><code>@nameof(Popup.ShowBackdrop)</code></label>
 
-                    <Switch @bind-Value="_popupShowBackdrop" />
+                    <Switch CssClass="show-backdrop" @bind-Value="_popupShowBackdrop" />
+                </div>
+
+                <div class="option">
+                    <label>Second popup <code>@nameof(Popup.Visible)</code></label>
+
+                    <Switch CssClass="second-popup-visible" @bind-Value="_secondPopupVisible" />
+                </div>
+
+                <div class="option">
+                    <label>Second popup <code>@nameof(Popup.ShowBackdrop)</code></label>
+
+                    <Switch CssClass="second-popup-show-backdrop" @bind-Value="_secondPopupShowBackdrop" />
                 </div>
 
                 <div class="option">
@@ -91,6 +110,27 @@
             {
                 <p>@_faker.Lorem.Paragraph(1)</p>
             }
+        </Body>
+    </PopupHeaderBodyLayout>
+</Popup>
+
+<Popup CssClass="second-popup"
+       Width="400px"
+       Height="300px"
+       ShowBackdrop="@_secondPopupShowBackdrop"
+       @bind-Visible="_secondPopupVisible">
+
+    <PopupHeaderBodyLayout HeaderText="Dolor sit amet">
+        <Body>
+            <div class="options">
+                <div class="option">
+                    <label><code>@nameof(Popup.Visible)</code></label>
+
+                    <Switch CssClass="second-popup-close" @bind-Value="_secondPopupVisible" />
+                </div>
+            </div>
+
+            <p>@_faker.Lorem.Paragraph(1)</p>
         </Body>
     </PopupHeaderBodyLayout>
 </Popup>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.Moveable.Components;
 using ViciOne.Ui.Blazor.Components.Popup.Components;
 using ViciOne.Ui.Blazor.Components.Popup.Extensions;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.Popup.Extensions;
 using PopupComponent = ViciOne.Ui.Blazor.Components.Popup.Components.Popup;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Popup.Components;
@@ -13,6 +14,9 @@ public sealed partial class PopupTests
     // attaching and removing that listener; the key press itself is covered by the Server tests.
     public sealed class CloseOnEscape : IAsyncDisposable
     {
+        private static readonly string s_jsModulePath =
+            $"./_content/{typeof(PopupComponent).Assembly.GetName().Name}/popup/components/popup.js";
+
         private readonly BunitContext _testContext = new();
         private readonly IRenderedComponent<PopupRoot> _popupRoot;
         private readonly BunitJSModuleInterop _jsModule;
@@ -21,9 +25,10 @@ public sealed partial class PopupTests
         public CloseOnEscape()
         {
             _testContext.Services.AddPopup();
+            _testContext.JSInterop.SetupForPopup();
 
-            _jsModule = _testContext.JSInterop.SetupModule(
-                $"./_content/{typeof(PopupComponent).Assembly.GetName().Name}/popup/components/popup.js");
+            // Replaces the loose module set up above, so these tests can tell the calls to it apart.
+            _jsModule = _testContext.JSInterop.SetupModule(s_jsModulePath);
 
             _jsInstance = _jsModule.SetupModule("Popup", _ => true);
             _jsInstance.SetupVoid("dispose").SetVoidResult();
@@ -66,7 +71,8 @@ public sealed partial class PopupTests
             // Assert
             // Every key listened to would otherwise cost a call into JS, so a popup that does not close on
             // Escape does not load the module at all.
-            _testContext.JSInterop.Invocations.Should().NotContain(i => i.Identifier == "import");
+            _testContext.JSInterop.Invocations.Should().NotContain(i =>
+                i.Identifier == "import" && Equals(i.Arguments[0], s_jsModulePath));
         }
 
         [Fact]

@@ -438,6 +438,9 @@
     <GeneratedStaticWebAsset Include="Tooltip\Components\TooltipDisplay.razor.js">
       <DestinationFile>tooltip\components\tooltip-display.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="FocusTrap\Services\FocusTrap.cs.js">
+      <DestinationFile>focus-trap\focus-trap.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="TabStrip\Components\TabStrip.razor.js">
       <DestinationFile>tab-strip\components\tab-strip.js</DestinationFile>
     </GeneratedStaticWebAsset>

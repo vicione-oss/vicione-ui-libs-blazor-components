@@ -2,6 +2,7 @@ using Bunit;
 using ViciOne.Ui.Blazor.Components.Dialog.Components;
 using ViciOne.Ui.Blazor.Components.Dialog.Extensions;
 using ViciOne.Ui.Blazor.Components.Popup.Components;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.Dialog.Extensions;
 using DialogComponent = ViciOne.Ui.Blazor.Components.Dialog.Components.Dialog;
 using PopupComponent = ViciOne.Ui.Blazor.Components.Popup.Components.Popup;
 
@@ -15,6 +16,7 @@ public sealed class DialogTests : IAsyncDisposable
     public DialogTests()
     {
         _testContext.Services.AddDialog();
+        _testContext.JSInterop.SetupForDialog();
 
         _popupRoot = _testContext.Render<PopupRoot>();
     }
@@ -230,10 +232,6 @@ public sealed class DialogTests : IAsyncDisposable
     [InlineData(true)]
     public void Should_pass_close_on_escape_to_popup(bool closeOnEscape)
     {
-        // Arrange
-        // The popup listens for Escape through JS, which bUnit does not run.
-        _testContext.JSInterop.Mode = JSRuntimeMode.Loose;
-
         // Act
         var dialog = _testContext.Render<DialogComponent>(b => b
             .Add(p => p.Visible, true)
@@ -241,5 +239,23 @@ public sealed class DialogTests : IAsyncDisposable
 
         // Assert
         dialog.FindComponent<PopupComponent>().Instance.CloseOnEscape.Should().Be(closeOnEscape);
+    }
+
+    [Fact]
+    public void Should_trap_focus_when_visible()
+    {
+        // Arrange
+        var dialog = _testContext.Render<DialogComponent>(b => b
+            .Add(p => p.HeaderText, "Test")
+            .Add(p => p.Visible, true));
+
+        // Act
+        dialog.Render(b => b
+            .Add(p => p.HeaderText, "Test")
+            .Add(p => p.Visible, true));
+
+        // Assert
+        _testContext.JSInterop.Invocations.Count(i => i.Identifier == "attach")
+            .Should().Be(1);
     }
 }

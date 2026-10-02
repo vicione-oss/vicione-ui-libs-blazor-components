@@ -14,6 +14,8 @@ public sealed partial class PopupPage
     private bool _popupShowBackdrop;
     private bool _popupMoveable;
     private bool _popupPreventBrowserContextMenu;
+    private bool _secondPopupVisible;
+    private bool _secondPopupShowBackdrop;
 
     private readonly Faker _faker = new();
 }

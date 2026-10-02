@@ -66,6 +66,7 @@ public sealed partial class PropertyGridTests
         {
             // Arrange
             using var testContext = new BunitContext();
+            testContext.JSInterop.Mode = JSRuntimeMode.Loose;
             testContext.Services.AddPropertyGrid<object>();
 
             var state = testContext.Services.GetRequiredService<IPropertyGridState<object>>();

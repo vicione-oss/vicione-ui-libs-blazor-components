@@ -65,6 +65,10 @@ public sealed partial class Dialog : ComponentBase
     /// <inheritdoc cref="PopupComponent.OnClosing"/>
     [Parameter] public EventCallback OnClosing { get; set; }
 
+    /// <inheritdoc cref="PopupComponent.CloseOnEscape"/>
+    [Parameter]
+    public bool CloseOnEscape { get; set; }
+
     /// <summary>
     /// Shows the dialog.
     /// </summary>

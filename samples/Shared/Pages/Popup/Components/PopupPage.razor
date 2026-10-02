@@ -1,15 +1,15 @@
 @page "/popup"
 
-@using ViciOne.Ui.Blazor.Components.Button
 @using ViciOne.Ui.Blazor.Components.Popup.Components
 @using ViciOne.Ui.Blazor.Components.SpinEdit
+@using ViciOne.Ui.Blazor.Components.TagBox
 @using ViciOne.Ui.Blazor.Components.Switch
 
 <div class="options">
     <div class="option">
         <label><code>@nameof(Popup.Visible)</code></label>
 
-        <Switch @bind-Value="_popupVisible" />
+        <Switch CssClass="popup-visible" @bind-Value="_popupVisible" />
     </div>
 </div>
 
@@ -20,6 +20,7 @@
        ShowBackdrop="@_popupShowBackdrop"
        Moveable="@_popupMoveable"
        PreventBrowserContextMenu="@_popupPreventBrowserContextMenu"
+       CloseOnEscape="_popupCloseOnEscape"
        @bind-Visible="_popupVisible">
 
     <PopupHeaderBodyLayout HeaderText="Lorem ipsum">
@@ -71,6 +72,18 @@
                     <label><code>@nameof(Popup.PreventBrowserContextMenu)</code></label>
 
                     <Switch @bind-Value="_popupPreventBrowserContextMenu" />
+                </div>
+
+                <div class="option">
+                    <label><code>@nameof(Popup.CloseOnEscape)</code></label>
+
+                    <Switch CssClass="close-on-escape" @bind-Value="_popupCloseOnEscape" />
+                </div>
+
+                <div class="option">
+                    <label>Component handling 'Escape' itself</label>
+
+                    <TagBox AllowCustomTags="true" @bind-Tags="_popupTags" />
                 </div>
             </div>
 

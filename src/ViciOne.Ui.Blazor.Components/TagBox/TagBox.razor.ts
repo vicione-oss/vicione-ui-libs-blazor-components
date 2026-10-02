@@ -10,12 +10,21 @@ export class TagBox {
         this.alignInputElement();
     };
 
+    // Escape clears the tag being entered, which TagBox does on keyup. While there is text to clear, the
+    // keydown is kept from the elements above, so that a popup around the tag box does not close on the
+    // same key press. Only Escape is kept back, so that other keys still reach the elements above.
+    readonly #inputKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape' && this.#tagInputElement.value !== '')
+            event.stopPropagation();
+    };
+
     constructor(tagBoxElement: HTMLDivElement, tagInputElement: HTMLInputElement) {
         this.#tagBoxElement = tagBoxElement;
         this.#tagInputElement = tagInputElement;
 
         this.#tagBoxElement.addEventListener('click', this.#tagBoxClick);
         this.#tagInputElement.addEventListener('input', this.#inputChanged);
+        this.#tagInputElement.addEventListener('keydown', this.#inputKeyDown);
     }
 
     public alignInputElement() {
@@ -54,5 +63,6 @@ export class TagBox {
     public dispose() {
         this.#tagBoxElement.removeEventListener('click', this.#tagBoxClick);
         this.#tagInputElement.removeEventListener('input', this.#inputChanged);
+        this.#tagInputElement.removeEventListener('keydown', this.#inputKeyDown);
     }
 }

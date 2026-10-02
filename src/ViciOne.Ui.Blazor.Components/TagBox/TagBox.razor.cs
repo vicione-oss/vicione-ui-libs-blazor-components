@@ -101,7 +101,13 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
             if (!string.IsNullOrWhiteSpace(_inputValue))
                 await AddTagAsync(_inputValue.Trim());
         }
-        else if (e.Key is "Escape")
+    }
+
+    // Handled on keyup, because the JS instance keeps the Escape keydown from reaching any Blazor handler
+    // while there is text to clear.
+    private void InputKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key is "Escape")
         {
             _inputValue = string.Empty;
             _alignInputElement = true;

@@ -60,7 +60,8 @@
                 { "style", string.Join("; ", modalDialogStyles.Select(kvp => $"{kvp.Key}: {kvp.Value}")) }
             };
         }
-        <div @attributes="modalDialogAttributes" @ref="_modalDialogElementReference">
+        <div @attributes="modalDialogAttributes"
+             @ref="_modalDialogElementReference">
             <div class="modal-content">
                 @if (ChildContent is not null)
                 {

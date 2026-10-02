@@ -11,6 +11,7 @@ public sealed partial class DialogPage
     private bool _dialogPreventBrowserContextMenu = true;
     private bool _dialogVisible;
     private bool _dialogWithBodyTextLayout = true;
+    private bool _dialogCloseOnEscape = true;
 
     private readonly Faker _faker = new();
 

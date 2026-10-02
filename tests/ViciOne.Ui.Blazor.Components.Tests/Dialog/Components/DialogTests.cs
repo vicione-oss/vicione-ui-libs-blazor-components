@@ -1,132 +1,110 @@
-using AngleSharp.Dom;
 using Bunit;
 using ViciOne.Ui.Blazor.Components.Dialog.Components;
 using ViciOne.Ui.Blazor.Components.Dialog.Extensions;
-using ViciOne.Ui.Blazor.Components.TestingHelpers.Dialog.Extensions;
+using ViciOne.Ui.Blazor.Components.Popup.Components;
 using DialogComponent = ViciOne.Ui.Blazor.Components.Dialog.Components.Dialog;
+using PopupComponent = ViciOne.Ui.Blazor.Components.Popup.Components.Popup;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.Dialog.Components;
 
-public sealed class DialogTests
+public sealed class DialogTests : IAsyncDisposable
 {
-    [Fact]
-    public async Task Should_render_header_text()
-    {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
+    private readonly BunitContext _testContext = new();
+    private readonly IRenderedComponent<PopupRoot> _popupRoot;
 
+    public DialogTests()
+    {
+        _testContext.Services.AddDialog();
+
+        _popupRoot = _testContext.Render<PopupRoot>();
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        _popupRoot.Dispose();
+        return _testContext.DisposeAsync();
+    }
+
+    [Fact]
+    public void Should_render_header_text()
+    {
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "My Dialog Title")
             .Add(p => p.Visible, true));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        var headerText = sectionContent.Find(".header .text");
+        var headerText = _popupRoot.Find(".header .text");
         headerText.TextContent.Trim().Should().Be("My Dialog Title");
     }
 
     [Fact]
-    public async Task Should_render_css_class()
+    public void Should_render_css_class()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.CssClass, "custom-dialog")
             .Add(p => p.Visible, true));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        sectionContent.Find(".modal-dialog.custom-dialog");
+        _popupRoot.Find(".modal-dialog.custom-dialog");
     }
 
     [Fact]
-    public async Task Should_render_width()
+    public void Should_render_width()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Width, "500px")
             .Add(p => p.Visible, true));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        var modalDialog = sectionContent.Find(".modal-dialog");
+        var modalDialog = _popupRoot.Find(".modal-dialog");
         modalDialog.GetAttribute("style").Should().Contain("width: 500px");
     }
 
     [Fact]
-    public async Task Should_render_height()
+    public void Should_render_height()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Height, "300px")
             .Add(p => p.Visible, true));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        var modalDialog = sectionContent.Find(".modal-dialog");
+        var modalDialog = _popupRoot.Find(".modal-dialog");
         modalDialog.GetAttribute("style").Should().Contain("height: 300px");
     }
 
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task Assert_visible(bool value)
+    public void Assert_visible(bool value)
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
-        IElement? layoutElement = null;
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, value));
 
-        if (value)
-        {
-            var sectionContent = dialog.RenderSectionContent(testContext);
-            layoutElement = sectionContent.Find(".popup-dialog-layout");
-        }
+        var layoutElements = _popupRoot.FindAll(".popup-dialog-layout");
 
         // Assert
         if (value)
-            Assert.NotNull(layoutElement);
+            layoutElements.Should().ContainSingle();
         else
-            Assert.Null(layoutElement);
+            layoutElements.Should().BeEmpty();
     }
 
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task Assert_header_with_slot_css_class(bool withSlot)
+    public void Assert_header_with_slot_css_class(bool withSlot)
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b =>
+        _testContext.Render<DialogComponent>(b =>
         {
             b.Add(p => p.HeaderText, "Test");
             b.Add(p => p.Visible, true);
@@ -135,8 +113,7 @@ public sealed class DialogTests
                 b.Add(p => p.HeaderSlot, "<span>Slot</span>");
         });
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-        var header = sectionContent.Find(".header");
+        var header = _popupRoot.Find(".header");
 
         // Assert
         if (withSlot)
@@ -146,114 +123,82 @@ public sealed class DialogTests
     }
 
     [Fact]
-    public async Task Should_render_header_slot_content()
+    public void Should_render_header_slot_content()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, true)
             .Add(p => p.HeaderSlot, "<span class=\"custom-slot\">My Slot</span>"));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        var slot = sectionContent.Find(".header .slot .custom-slot");
+        var slot = _popupRoot.Find(".header .slot .custom-slot");
         slot.TextContent.Should().Be("My Slot");
     }
 
     [Fact]
-    public async Task Should_render_body()
+    public void Should_render_body()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, true)
             .Add(p => p.Body, "<div class=\"body-content\">Body Text</div>"));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        var body = sectionContent.Find(".body .body-content");
+        var body = _popupRoot.Find(".body .body-content");
         body.TextContent.Should().Be("Body Text");
     }
 
     [Fact]
-    public async Task Should_render_footer()
+    public void Should_render_footer()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, true)
             .Add(p => p.Footer, "<div class=\"footer-content\">Footer Text</div>"));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        var footer = sectionContent.Find(".footer .footer-content");
+        var footer = _popupRoot.Find(".footer .footer-content");
         footer.TextContent.Should().Be("Footer Text");
     }
 
     [Fact]
-    public async Task Should_render_footer_button()
+    public void Should_render_footer_button()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test dialog")
             .Add(p => p.Visible, true)
             .Add<DialogFooterButton>(p => p.Footer, b => b
                 .Add(p => p.Text, "Ok")));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        sectionContent.FindFooterButton(button => button.Text == "Ok");
+        var button = _popupRoot.FindComponent<DialogFooterButton>().FindComponent<Blazor.Components.Button.Button>();
+        button.Instance.Text.Should().BeEquivalentTo("Ok");
     }
 
     [Fact]
-    public async Task Should_render_close_action_button()
+    public void Should_render_close_action_button()
     {
-        // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, true));
 
-        var sectionContent = dialog.RenderSectionContent(testContext);
-
         // Assert
-        sectionContent.Find(".header .action-buttons");
+        _popupRoot.Find(".header .action-buttons");
     }
 
     [Fact]
-    public async Task Should_invoke_on_showing_when_becoming_visible()
+    public void Should_invoke_on_showing_when_becoming_visible()
     {
         // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         var onShowingInvoked = false;
 
         // Act
-        testContext.Render<DialogComponent>(b => b
+        _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, true)
             .Add(p => p.OnShowing, () => onShowingInvoked = true));
@@ -266,13 +211,10 @@ public sealed class DialogTests
     public async Task Should_invoke_on_closing_when_closing()
     {
         // Arrange
-        await using var testContext = new BunitContext();
-        testContext.Services.AddDialog();
-
         var onClosingInvoked = false;
 
         // Act
-        var dialog = testContext.Render<DialogComponent>(b => b
+        var dialog = _testContext.Render<DialogComponent>(b => b
             .Add(p => p.HeaderText, "Test")
             .Add(p => p.Visible, true)
             .Add(p => p.OnClosing, () => onClosingInvoked = true));
@@ -281,5 +223,23 @@ public sealed class DialogTests
 
         // Assert
         onClosingInvoked.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Should_pass_close_on_escape_to_popup(bool closeOnEscape)
+    {
+        // Arrange
+        // The popup listens for Escape through JS, which bUnit does not run.
+        _testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+
+        // Act
+        var dialog = _testContext.Render<DialogComponent>(b => b
+            .Add(p => p.Visible, true)
+            .Add(p => p.CloseOnEscape, closeOnEscape));
+
+        // Assert
+        dialog.FindComponent<PopupComponent>().Instance.CloseOnEscape.Should().Be(closeOnEscape);
     }
 }

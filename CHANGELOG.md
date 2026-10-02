@@ -6,6 +6,8 @@
 
 - `AdvancedTable`, added `Striped` to give every other row a different color
 - `SimpleTable`, added `Striped` to give every other row a different color
+- `Popup` and `Dialog`, added `CloseOnEscape` to close them on `Escape`
+- `TagBox` and `TextBox`, `Escape` clearing or reverting the input is no longer passed on to surrounding components
 
 ## 6.2.0 - 2026-10-01
 

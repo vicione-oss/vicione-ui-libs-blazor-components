@@ -16,6 +16,8 @@ public sealed partial class TextBox
 {
     private IJSObjectReference? _jsModule;
     private IJSObjectReference? _jsInstance;
+    private Task<IJSObjectReference?>? _attachJsTask;
+    private string? _jsRevertValue;
 
     private bool _disposedAsync;
 
@@ -192,21 +194,35 @@ public sealed partial class TextBox
         }
     }
 
-    private async Task<IJSObjectReference?> AttachJsAsync()
-    {
-        if (_jsInstance is null)
-        {
-            _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
-                $"./_content/{typeof(TextBox).Assembly.GetName().Name}/text-box/text-box.js");
+    private Task<IJSObjectReference?> AttachJsAsync()
+        => _attachJsTask ??= CreateJsInstanceAsync();
 
-            _jsInstance = await _jsModule.InvokeConstructorAsync("TextBox", Logger);
-        }
+    private async Task<IJSObjectReference?> CreateJsInstanceAsync()
+    {
+        _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
+            $"./_content/{typeof(TextBox).Assembly.GetName().Name}/text-box/text-box.js");
+
+        _jsRevertValue = Value;
+        _jsInstance = await _jsModule.InvokeConstructorAsync("TextBox", Logger, _inputElementReference, Value);
 
         return _jsInstance;
     }
 
+    private async Task UpdateJsRevertValueAsync()
+    {
+        if (_jsInstance is null || string.Equals(Value, _jsRevertValue, StringComparison.Ordinal))
+            return;
+
+        _jsRevertValue = Value;
+
+        await _jsInstance.InvokeVoidAsync("setRevertValue", Logger, args: [Value]);
+    }
+
     private async Task RemoveJsAsync()
         => await DisposeJsInstanceAsync();
+
+    [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]
+    private static partial void InvokingJsInstanceDisposeFailed(ILogger logger, Exception ex);
 
     [LoggerMessage(Level = LogLevel.Error, Message = $"Disposing jsInstance failed")]
     private static partial void DisposingJsInstanceFailed(ILogger logger, Exception ex);
@@ -215,6 +231,19 @@ public sealed partial class TextBox
     {
         if (_jsInstance is not null)
         {
+            try
+            {
+                await _jsInstance.InvokeVoidAsync("dispose");
+            }
+            catch (JSDisconnectedException)
+            {
+                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+            }
+            catch (Exception ex)
+            {
+                InvokingJsInstanceDisposeFailed(Logger, ex);
+            }
+
             try
             {
                 await _jsInstance.DisposeAsync();
@@ -265,6 +294,11 @@ public sealed partial class TextBox
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+            await AttachJsAsync();
+        else
+            await UpdateJsRevertValueAsync();
+
         if (_selectContentAfterRender)
         {
             await SelectContentAsync();
@@ -302,6 +336,8 @@ public sealed partial class TextBox
                 await ValueChanged.InvokeAsync(value);
 
             Value = value;
+
+            await UpdateJsRevertValueAsync();
         }
     }
 

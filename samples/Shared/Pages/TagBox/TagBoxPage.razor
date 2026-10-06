@@ -1,5 +1,7 @@
 @page "/tag-box"
 
+@using ViciOne.Ui.Blazor.Components.Button
+@using ViciOne.Ui.Blazor.Components.Button.Enums
 @using ViciOne.Ui.Blazor.Components.TagBox
 
 <div class="tag-box-page">
@@ -57,4 +59,16 @@
 
     <TagBox @bind-Tags="_tags9"
             AvailableTags="s_manyAvailableTags" />
+
+    <h4>Full width in a container that gets narrower</h4>
+
+    <Button Size="ButtonSize.Small"
+            Text="@(_isResizableContainerNarrow ? "Widen container" : "Narrow container")"
+            OnClick="ResizeContainerButtonClick" />
+
+    <div class="resizable-container @(_isResizableContainerNarrow ? "narrow" : null)">
+        <TagBox @bind-Tags="_tags10"
+                AvailableTags="s_manyAvailableTags"
+                CssClass="full-width" />
+    </div>
 </div>

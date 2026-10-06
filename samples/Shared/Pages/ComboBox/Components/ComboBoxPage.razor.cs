@@ -11,6 +11,8 @@ public sealed partial class ComboBoxPage : ComponentBase
     private ButtonSize _buttonSize = ButtonSize.Medium;
     private string _city = "Berlin";
     private string _connection = "MQTT connection";
+    private string _fullWidthCity = "Zurich";
+    private bool _isResizableContainerNarrow;
     private SampleObject? _selectedSampleObject;
 
     private readonly List<ComboBoxItem<ButtonSize, string>> _buttonSizeComboBoxItems = [..
@@ -49,4 +51,7 @@ public sealed partial class ComboBoxPage : ComponentBase
 
     private void ResetCitySelectionButtonClick()
         => _city = _customInputComboBoxItems[0];
+
+    private void ResizeContainerButtonClick()
+        => _isResizableContainerNarrow = !_isResizableContainerNarrow;
 }

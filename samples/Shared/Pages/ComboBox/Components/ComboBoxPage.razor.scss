@@ -1,0 +1,12 @@
+.resizable-container {
+    width: 400px;
+    margin-top: 8px;
+
+    &.narrow {
+        width: 200px;
+    }
+
+    ::deep .full-width {
+        width: 100%;
+    }
+}

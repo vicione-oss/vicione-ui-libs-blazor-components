@@ -451,6 +451,49 @@ public class TagBoxTests(ServerFixture fixture)
     }
 
     [Fact]
+    public async Task Should_follow_width_of_container_when_container_gets_narrower_and_wider_again()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/tag-box");
+
+            var container = page.Locator(".resizable-container");
+            var tagBox = container.Locator(".tag-box");
+
+            // The drop-down sets its minimum width once after its first render, before that the width is not pinned
+            await tagBox.Locator(".drop-down[style*='min-width']").WaitForAsync(new() { State = WaitForSelectorState.Attached });
+
+            var wideWidth = await GetWidthAsync(tagBox);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Narrow container" }).ClickAsync();
+            await page.Locator(".resizable-container.narrow").WaitForAsync();
+
+            var narrowWidth = await GetWidthAsync(tagBox);
+            var narrowContainerWidth = await GetWidthAsync(container);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Widen container" }).ClickAsync();
+            await page.Locator(".resizable-container:not(.narrow)").WaitForAsync();
+
+            var widenedWidth = await GetWidthAsync(tagBox);
+
+            // Assert
+            Assert.True(Math.Abs(wideWidth - 400) < 1,
+                $"Expected the TagBox to fill the 400px container, but was {wideWidth}px");
+
+            Assert.True(Math.Abs(narrowWidth - narrowContainerWidth) < 1,
+                $"Expected the TagBox to shrink to the {narrowContainerWidth}px container, but kept {narrowWidth}px");
+
+            Assert.True(Math.Abs(widenedWidth - 400) < 1,
+                $"Expected the TagBox to fill the 400px container again, but was {widenedWidth}px");
+        });
+    }
+
+    [Fact]
     public async Task Should_start_arrow_key_navigation_at_most_recently_selected_item_without_highlight_when_drop_down_reopens()
     {
         // Arrange
@@ -462,7 +505,8 @@ public class TagBoxTests(ServerFixture fixture)
         {
             await page.GotoAsync($"{fixture.ServerAddress}/tag-box");
 
-            var tagBox = page.Locator(".tag-box").Last;
+            // The last TagBox apart from the full width one below it holds many available tags
+            var tagBox = page.Locator(".tag-box:not(.full-width)").Last;
             var tagInput = tagBox.Locator(".tag-input");
             var dropDown = tagBox.Locator(".drop-down-container");
             var placedDropDown = tagBox.Locator(".drop-down-container.placed");
@@ -501,8 +545,8 @@ public class TagBoxTests(ServerFixture fixture)
         {
             await page.GotoAsync($"{fixture.ServerAddress}/tag-box");
 
-            // The last TagBox holds more available tags than the drop-down shows at once
-            var tagBox = page.Locator(".tag-box").Last;
+            // The last TagBox apart from the full width one below it holds more available tags than the drop-down shows at once
+            var tagBox = page.Locator(".tag-box:not(.full-width)").Last;
             var tagInput = tagBox.Locator(".tag-input");
             var dropDown = tagBox.Locator(".drop-down-container");
             var placedDropDown = tagBox.Locator(".drop-down-container.placed");
@@ -530,5 +574,13 @@ public class TagBoxTests(ServerFixture fixture)
             Assert.True(Math.Abs(mostRecentlySelectedItemBoundingBox.Y - dropDownBoundingBox.Y) < 2,
                 $"Expected the most recently selected drop-down-item (Y={mostRecentlySelectedItemBoundingBox.Y}) to be at the top of the drop-down (Y={dropDownBoundingBox.Y})");
         });
+    }
+
+    private static async Task<float> GetWidthAsync(ILocator locator)
+    {
+        var boundingBox = await locator.BoundingBoxAsync();
+        Assert.NotNull(boundingBox);
+
+        return boundingBox.Width;
     }
 }

@@ -65,6 +65,16 @@ contains <code>@_city</code>
 
 <ComboBox Items="@_simpleItems" @bind-Value="@_buttonSize" />
 
+<h3>Full width in a container that gets narrower</h3>
+
+<Button Size="ButtonSize.Small"
+        Text="@(_isResizableContainerNarrow ? "Widen container" : "Narrow container")"
+        OnClick="ResizeContainerButtonClick" />
+
+<div class="resizable-container @(_isResizableContainerNarrow ? "narrow" : null)">
+    <ComboBox Items="@_customInputComboBoxItems" @bind-Value="@_fullWidthCity" CssClass="full-width" />
+</div>
+
 <h3>Items modeled with <code>@nameof(SampleObject)</code>, data binding and no <code>@nameof(ComboBox<,>.ValueSelector)</code></h3>
 
 <ComboBox Items="@_sampleObjects" @bind-Value="@_selectedSampleObject" TextSelector="@(item => item.Name)" />

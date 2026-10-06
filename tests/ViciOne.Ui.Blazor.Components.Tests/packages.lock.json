@@ -474,7 +474,7 @@
           "AwesomeAssertions": "[9.3.0, )",
           "Bunit": "[2.7.2, )",
           "NSubstitute": "[5.3.0, )",
-          "ViciOne.Ui.Blazor.Components": "[6.2.0, )"
+          "ViciOne.Ui.Blazor.Components": "[6.4.0, )"
         }
       },
       "Microsoft.AspNetCore.Components.QuickGrid": {

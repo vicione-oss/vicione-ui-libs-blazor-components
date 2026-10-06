@@ -5,6 +5,7 @@ using ViciOne.Ui.Blazor.Components.PropertyGrid.Components;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Extensions;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Models.Items;
 using ViciOne.Ui.Blazor.Components.PropertyGrid.Services;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.TextBox.Extensions;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.PropertyGrid.Components;
 
@@ -17,7 +18,7 @@ public sealed partial class PropertyGridTests
         {
             // Arrange
             using var testContext = new BunitContext();
-            testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+            testContext.JSInterop.SetupForTextBox();
             testContext.Services.AddPropertyGrid<object>();
 
             var state = testContext.Services.GetRequiredService<IPropertyGridState<object>>();
@@ -46,7 +47,7 @@ public sealed partial class PropertyGridTests
         {
             // Arrange
             using var testContext = new BunitContext();
-            testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+            testContext.JSInterop.SetupForTextBox();
             testContext.Services.AddPropertyGrid<object>();
 
             var state = testContext.Services.GetRequiredService<IPropertyGridState<object>>();

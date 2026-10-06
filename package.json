@@ -10,10 +10,14 @@
     "@typescript-eslint/parser": "^8.70.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.11.0",
-    "eslint-config-xo": "^4.0.0",
+    "eslint-config-xo": "^4.0.1",
     "markdownlint-cli2": "^0.23.3",
     "three-dots": "^0.3.2",
     "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "katex": "0.19.0",
+    "smol-toml": "1.9.0"
   },
   "scripts": {
     "build": "npm --workspaces --if-present run build",

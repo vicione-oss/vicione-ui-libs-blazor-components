@@ -151,12 +151,22 @@ export class DropDown {
         //
         // Also, it is important, that at this point, that the CSS modifier ".visible" is NOT SET,
         // because it applies absolute positioning, which causes the container element to have the width of the wrapper instead of the items (right: 0).
-        const computedWidth = getComputedStyle(this.#containerElement).width;
+        const containerStyle = getComputedStyle(this.#containerElement);
+        const laidOutWidth = Number.parseFloat(containerStyle.width);
+
+        // The width read above is the width the page layout gives the drop-down, which is not always the width its items
+        // need: when the component around the drop-down is wider than the items (e.g. because it is set to 100% width),
+        // it stretches the drop-down to its own width. To find out how wide the items really are, the container is
+        // briefly sized to its widest item and measured. The browser does not paint while this method runs, so this
+        // temporary width never shows up on screen.
+        this.#containerElement.style.width = 'max-content';
+        const itemsWidth = Number.parseFloat(containerStyle.width);
+        this.#containerElement.style.removeProperty('width');
 
         // The following statement set minWidth because:
-        // - the drop-down should not shrink, caused by filtered items, while typing.
-        // - the drop-down should be allowed to get wider, when outer styling causes it (e.g. TagBox, that changes it's width, while typing).
-        wrapper.style.minWidth = computedWidth;
+        // - the drop-down should not shrink, caused by filtered items, while typing
+        // - the drop-down should be allowed to get wider, when outer styling causes it
+        wrapper.style.minWidth = `${Math.min(itemsWidth, laidOutWidth)}px`;
 
         // Revert rule applied in scss to ensure, that items take full width, when no vertical scrollbar is present.
         this.#containerElement.style.scrollbarGutter = 'unset';

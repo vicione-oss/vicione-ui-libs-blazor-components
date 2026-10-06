@@ -1,6 +1,10 @@
 # Changelog
 
-## 6.4.0 - Unreleased
+## 6.4.0 - 2026-10-06
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `ComboBox` and `TagBox`, no longer keep the width of their first render when the surrounding layout gets narrower
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

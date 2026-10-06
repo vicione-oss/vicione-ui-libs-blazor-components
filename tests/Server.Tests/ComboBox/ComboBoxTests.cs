@@ -172,6 +172,94 @@ public class ComboBoxTests(ServerFixture fixture)
         });
     }
 
+    [Fact]
+    public async Task Should_follow_width_of_container_when_container_gets_narrower_and_wider_again()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/combo-box");
+
+            var container = page.Locator(".resizable-container");
+            var comboBox = container.Locator(".combo-box");
+
+            // The drop-down sets its minimum width once after its first render, before that the width is not pinned
+            await comboBox.Locator(".drop-down[style*='min-width']").WaitForAsync(new() { State = WaitForSelectorState.Attached });
+
+            var wideWidth = await GetWidthAsync(comboBox);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Narrow container" }).ClickAsync();
+            await page.Locator(".resizable-container.narrow").WaitForAsync();
+
+            var narrowWidth = await GetWidthAsync(comboBox);
+            var narrowContainerWidth = await GetWidthAsync(container);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Widen container" }).ClickAsync();
+            await page.Locator(".resizable-container:not(.narrow)").WaitForAsync();
+
+            var widenedWidth = await GetWidthAsync(comboBox);
+
+            // Assert
+            Assert.True(Math.Abs(wideWidth - 400) < 1,
+                $"Expected the ComboBox to fill the 400px container, but was {wideWidth}px");
+
+            Assert.True(Math.Abs(narrowWidth - narrowContainerWidth) < 1,
+                $"Expected the ComboBox to shrink to the {narrowContainerWidth}px container, but kept {narrowWidth}px");
+
+            Assert.True(Math.Abs(widenedWidth - 400) < 1,
+                $"Expected the ComboBox to fill the 400px container again, but was {widenedWidth}px");
+        });
+    }
+
+    [Fact]
+    public async Task Should_keep_width_when_typing_filters_out_the_widest_items()
+    {
+        // Arrange
+        var browser = new Browser()
+            .WithOptions(new() { SlowMo = 200 });
+
+        // Act
+        await browser.LaunchAsync(async page =>
+        {
+            await page.GotoAsync($"{fixture.ServerAddress}/combo-box");
+
+            // The first ComboBox takes the width of its items
+            var comboBox = page.Locator(".combo-box").First;
+            var input = comboBox.Locator(".combo-box-input");
+            var dropDownItems = comboBox.Locator(".drop-down-item");
+
+            await comboBox.Locator(".drop-down[style*='min-width']").WaitForAsync(new() { State = WaitForSelectorState.Attached });
+
+            var initialWidth = await GetWidthAsync(comboBox);
+            var initialItemCount = await dropDownItems.CountAsync();
+
+            await input.FillAsync("Sm");
+            await comboBox.Locator(".drop-down-container.placed").WaitForAsync();
+
+            var filteredWidth = await GetWidthAsync(comboBox);
+            var filteredItemCount = await dropDownItems.CountAsync();
+
+            // Assert
+            Assert.True(filteredItemCount < initialItemCount,
+                $"Expected typing to filter the items, but {filteredItemCount} of {initialItemCount} items are shown");
+
+            Assert.True(Math.Abs(filteredWidth - initialWidth) < 1,
+                $"Expected the ComboBox to keep its width of {initialWidth}px while filtering, but was {filteredWidth}px");
+        });
+    }
+
+    private static async Task<float> GetWidthAsync(ILocator locator)
+    {
+        var boundingBox = await locator.BoundingBoxAsync();
+        Assert.NotNull(boundingBox);
+
+        return boundingBox.Width;
+    }
+
     private static Task<string> GetComputedStylePropertyAsync(ILocator locator, string propertyName) => locator.EvaluateAsync<string>(
         "(element, propertyName) => getComputedStyle(element).getPropertyValue(propertyName)",
         propertyName);

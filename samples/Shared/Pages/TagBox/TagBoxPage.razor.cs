@@ -19,4 +19,9 @@ public partial class TagBoxPage
     private IEnumerable<string> _tags7 = ["Database"];
     private IEnumerable<string> _tags8 = [];
     private IEnumerable<string> _tags9 = [];
+    private IEnumerable<string> _tags10 = ["Tag 1"];
+    private bool _isResizableContainerNarrow;
+
+    private void ResizeContainerButtonClick()
+        => _isResizableContainerNarrow = !_isResizableContainerNarrow;
 }

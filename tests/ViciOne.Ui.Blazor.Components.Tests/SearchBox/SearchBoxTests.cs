@@ -1,5 +1,6 @@
 using Bunit;
 using Microsoft.AspNetCore.Components.Web;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.SearchBox.Extensions;
 using SearchBoxComponent = ViciOne.Ui.Blazor.Components.SearchBox.SearchBox;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.SearchBox;
@@ -11,9 +12,7 @@ public sealed class SearchBoxTests : IDisposable
     public SearchBoxTests()
     {
         _testContext = new BunitContext();
-
-        // TextBox imports a JS module; set up a catch-all so bUnit doesn't throw
-        _testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+        _testContext.JSInterop.SetupForSearchBox();
     }
 
     public void Dispose()

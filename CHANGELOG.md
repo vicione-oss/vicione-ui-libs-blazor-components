@@ -2,6 +2,11 @@
 
 ## 6.4.0 - Unreleased
 
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `TextBox`, added extension method `SetupForTextBox()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
+- `SearchBox`, added extension method `SetupForSearchBox()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
+
 ## 6.3.0 - 2026-10-02
 
 ### Package `ViciOne.Ui.Blazor.Components`

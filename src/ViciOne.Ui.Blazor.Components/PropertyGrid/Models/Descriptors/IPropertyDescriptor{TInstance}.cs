@@ -35,6 +35,14 @@ public interface IPropertyDescriptor<TInstance> : IPropertyDescriptor
     /// When <see langword="null"/>, the property is considered visible. When provided, return
     /// <see langword="true"/> to show the property and <see langword="false"/> to hide it.
     /// Use this to implement conditional visibility based on instance state.
+    /// <para>
+    /// A hidden property is not validated. When it is refreshed while hidden, its messages are removed from the
+    /// <see cref="Services.IPropertyGridMessageStore"/>. A property is refreshed when a property listed in
+    /// <see cref="IPropertyDescriptor.DependsOn"/> is changed in the property grid, or when
+    /// <see cref="Services.IPropertyGridController.UpdateProperty"/> is called for this property. List the
+    /// properties the predicate reads in <see cref="IPropertyDescriptor.DependsOn"/>, so the property gets validated
+    /// once it becomes visible.
+    /// </para>
     /// </remarks>
     Func<TInstance, bool>? Visible { get; }
 

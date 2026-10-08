@@ -1,6 +1,10 @@
 # Changelog
 
-## 6.5.0 - Unreleased
+## 6.5.0 - 2026-10-08
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `PropertyGrid`, fixed hidden properties being validated, which left errors in `IPropertyGridMessageStore` that could neither be seen nor fixed
 
 ## 6.4.0 - 2026-10-06
 

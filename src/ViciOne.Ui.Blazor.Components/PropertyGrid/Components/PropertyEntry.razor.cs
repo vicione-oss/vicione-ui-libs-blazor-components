@@ -426,7 +426,7 @@ public sealed partial class PropertyEntry<TPropertyValue> : ComponentBase, IDisp
 
         _messageStore?.Remove(PropertyGridItem);
 
-        if (withValidation)
+        if (withValidation && IsVisible())
         {
             if (_value is not null)
                 PropertyGridItem.Validate(_value.Value);

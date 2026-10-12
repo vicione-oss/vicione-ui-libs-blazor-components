@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.6.0 - Unreleased
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `AdvancedTable` and `SimpleTable`, added CSS custom property `--vo-ui-bc-tables-footer-padding-bottom` to set the bottom padding of the footer; it applies to the table it is set on, not to nested tables
+- `Grid`, added CSS custom property `--vo-ui-bc-grid-footer-padding-bottom` to set the bottom padding of the footer; it applies to the grid it is set on, not to nested grids
+
 ## 6.5.0 - 2026-10-08
 
 ### Package `ViciOne.Ui.Blazor.Components`

@@ -5,7 +5,20 @@
 
 @use "sass:color";
 
+$footer-padding: 16px;
+
+// Not inherited, so it only applies to the grid it is set on, not to grids nested inside.
+@property --vo-ui-bc-grid-footer-padding-bottom {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: $footer-padding;
+}
+
 .grid-container {
+    // Passes the property on to the footer; every grid redefines it, so a nested grid starts again from the initial
+    // value. The fallback keeps the default in a browser without @property support.
+    --grid-footer-padding-bottom: var(--vo-ui-bc-grid-footer-padding-bottom, #{$footer-padding});
+
     display: grid;
     grid-template-areas:
         "action-buttons action-buttons filter"
@@ -326,7 +339,8 @@
     .footer {
         grid-area: footer;
         font-size: 12px;
-        padding: 16px;
+        padding: $footer-padding;
+        padding-bottom: var(--grid-footer-padding-bottom);
         color: color.change(colors.$font-light, $alpha: 0.8);
         letter-spacing: 0.4px;
         text-align: left;

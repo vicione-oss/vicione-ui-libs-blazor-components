@@ -53,6 +53,10 @@ public sealed partial class Grid<TGridItem> : ComponentBase
     /// <summary>
     /// Renders footer below the grid for general information of grid data.
     /// </summary>
+    /// <remarks>
+    /// The footer's bottom padding is 16px. To change it, set CSS custom property
+    /// <c>--vo-ui-bc-grid-footer-padding-bottom</c> on the grid's root element; grids nested inside keep 16px.
+    /// </remarks>
     [Parameter] public RenderFragment? Footer { get; set; }
 
     /// <summary>

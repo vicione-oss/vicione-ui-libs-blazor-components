@@ -15,7 +15,20 @@
     }
 }
 
+$footer-padding: 16px;
+
+// Not inherited, so it only applies to the table it is set on, not to tables nested inside.
+@property --vo-ui-bc-tables-footer-padding-bottom {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: $footer-padding;
+}
+
 .advanced-table {
+    // Passes the property on to the footer; every table redefines it, so a nested table starts again from the initial
+    // value. The fallback keeps the default in a browser without @property support.
+    --tables-footer-padding-bottom: var(--vo-ui-bc-tables-footer-padding-bottom, #{$footer-padding});
+
     display: flex;
     flex-direction: column;
 
@@ -155,7 +168,8 @@
 
     .footer {
         font-size: 12px;
-        padding: 16px;
+        padding: $footer-padding;
+        padding-bottom: var(--tables-footer-padding-bottom);
         color: color.change(colors.$font-light, $alpha: 0.8);
         letter-spacing: 0.2px;
         font-weight: typography.$font-weight-semi-bold;

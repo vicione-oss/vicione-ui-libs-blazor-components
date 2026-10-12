@@ -188,6 +188,10 @@ public sealed partial class AdvancedTable<TItem>
     /// There is no footer by default. To show the item count, use component
     /// <see cref="TableFooter{TItem}"/> and supply <see cref="TableFooter{TItem}.SelectedItemCount"/>
     /// to show a selection count beside it.
+    /// <para>
+    /// The footer's bottom padding is 16px. To change it, set CSS custom property
+    /// <c>--vo-ui-bc-tables-footer-padding-bottom</c> on the table's root element; tables nested inside keep 16px.
+    /// </para>
     /// </remarks>
     [Parameter]
     public RenderFragment? Footer { get; set; }

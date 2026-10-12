@@ -1,0 +1,6 @@
+@use "../design/colors";
+
+@use "sass:color";
+
+// Background of buttons while hovered
+$background-hover-color: color.change(colors.$theme-inverted, $alpha: 0.03);

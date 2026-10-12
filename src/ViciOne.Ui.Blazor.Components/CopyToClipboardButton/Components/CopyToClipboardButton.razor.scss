@@ -1,0 +1,250 @@
+@use "../../Styles/design/animations";
+@use "../../Styles/design/button";
+@use "../../Styles/design/colors";
+@use "../../Styles/design/tooltip";
+@use "../../Styles/buttons";
+@use "../../Styles/inputs/mixins" as inputs;
+
+// Heights of the Button sizes, the button is square.
+$sizes: (
+    "small": 24px,
+    "medium": 32px,
+    "large": 36px,
+);
+
+$color: rgb(163, 163, 163); // todo: where to pull this from colors.scss?
+$hover-color: colors.$font-light;
+$hover-background-color: buttons.$background-hover-color;
+$copied-color: rgb(125, 213, 158); // todo: where to pull this from colors.scss?
+
+$icon-animation-duration: animations.$duration;
+
+// Has to be free of overshoot, which a cubic-bezier() with a y value outside 0 to 1 has, such as
+// cubic-bezier(0.34, 1.56, 0.64, 1), as icons settling back from past their target show as a jump.
+$icon-animation-effect: animations.$effect;
+
+// Animating these instead of transform keeps Chrome from moving the animation to the GPU, which draws an icon
+// on a fractional position at sub-pixel precision and snaps it to whole pixels afterwards, showing as a jump.
+@property --vo-ui-bc-copy-to-clipboard-button-icon-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@property --vo-ui-bc-copy-to-clipboard-button-icon-scale {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
+}
+
+$tooltip-distance: 10px;
+$tooltip-slide-distance: 4px;
+$tooltip-arrow-size: 5px;
+
+.copy-to-clipboard-button {
+    display: inline-flex;
+    position: relative;
+
+    .button {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+
+        border: none;
+        border-radius: button.$border-radius;
+        background-color: transparent;
+        color: $color;
+        font: inherit;
+
+        display: inline-grid;
+        place-items: center;
+        position: relative;
+
+        @include animations.multiple($color: true, $background-color: true);
+
+        @each $size, $length in $sizes {
+            &.button--#{$size} {
+                width: $length;
+                height: $length;
+            }
+        }
+
+        > ::deep .copy-icon,
+        > ::deep .copied-icon {
+            grid-area: 1 / 1;
+            transform: rotate(var(--vo-ui-bc-copy-to-clipboard-button-icon-angle)) scale(var(--vo-ui-bc-copy-to-clipboard-button-icon-scale));
+            transition:
+                opacity $icon-animation-duration $icon-animation-effect,
+                --vo-ui-bc-copy-to-clipboard-button-icon-angle $icon-animation-duration $icon-animation-effect,
+                --vo-ui-bc-copy-to-clipboard-button-icon-scale $icon-animation-duration $icon-animation-effect;
+        }
+
+        > ::deep .copied-icon {
+            color: $copied-color;
+            opacity: 0;
+            --vo-ui-bc-copy-to-clipboard-button-icon-angle: -40deg;
+            --vo-ui-bc-copy-to-clipboard-button-icon-scale: 0.4;
+        }
+
+        md-ripple {
+            // Its own styles take it out of the grid only once its module has loaded, which would shift the icons.
+            position: absolute;
+            inset: 0;
+
+            --md-ripple-pressed-color: #{colors.$font-light};
+            --md-ripple-pressed-opacity: 0.1;
+
+            --md-ripple-hover-opacity: 0;
+        }
+
+        &:not(:disabled) {
+            &:hover {
+                background-color: $hover-background-color;
+                color: $hover-color;
+            }
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid colors.$accent;
+            outline-offset: 2px;
+        }
+
+        @include inputs.disabled-style();
+    }
+
+    .tooltip {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        white-space: nowrap;
+
+        padding: 6px 10px;
+        border-radius: tooltip.$border-radius;
+        background-color: tooltip.$background-color;
+        color: tooltip.$content-text-color;
+        box-shadow: tooltip.$box-shadow;
+
+        font-size: tooltip.$font-size;
+        font-weight: tooltip.$font-weight;
+        letter-spacing: tooltip.$letter-spacing;
+        line-height: tooltip.$line-height;
+
+        transition: opacity 0.18s ease, transform 0.18s ease;
+
+        .arrow {
+            position: absolute;
+            border: $tooltip-arrow-size solid transparent;
+        }
+
+        &.tooltip--top {
+            left: 50%;
+            bottom: calc(100% + #{$tooltip-distance});
+            transform: translate(-50%, $tooltip-slide-distance);
+
+            .arrow {
+                left: 50%;
+                top: 100%;
+                transform: translateX(-50%);
+                border-top-color: tooltip.$pointer-background-color;
+            }
+        }
+
+        &.tooltip--right {
+            left: calc(100% + #{$tooltip-distance});
+            top: 50%;
+            transform: translate(-$tooltip-slide-distance, -50%);
+
+            .arrow {
+                right: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                border-right-color: tooltip.$pointer-background-color;
+            }
+        }
+
+        &.tooltip--bottom {
+            left: 50%;
+            top: calc(100% + #{$tooltip-distance});
+            transform: translate(-50%, -$tooltip-slide-distance);
+
+            .arrow {
+                left: 50%;
+                bottom: 100%;
+                transform: translateX(-50%);
+                border-bottom-color: tooltip.$pointer-background-color;
+            }
+        }
+
+        &.tooltip--left {
+            right: calc(100% + #{$tooltip-distance});
+            top: 50%;
+            transform: translate($tooltip-slide-distance, -50%);
+
+            .arrow {
+                left: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                border-left-color: tooltip.$pointer-background-color;
+            }
+        }
+
+        &.tooltip--visible {
+            opacity: 1;
+
+            &.tooltip--top, &.tooltip--bottom {
+                transform: translate(-50%, 0);
+            }
+
+            &.tooltip--right, &.tooltip--left {
+                transform: translate(0, -50%);
+            }
+        }
+    }
+
+    .status {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    &.copy-to-clipboard-button--copied {
+        .button {
+            &, &:not(:disabled):hover {
+                background-color: transparent;
+                color: $copied-color;
+            }
+
+            > ::deep .copy-icon {
+                opacity: 0;
+                --vo-ui-bc-copy-to-clipboard-button-icon-angle: 40deg;
+                --vo-ui-bc-copy-to-clipboard-button-icon-scale: 0.4;
+            }
+
+            > ::deep .copied-icon {
+                opacity: 1;
+                --vo-ui-bc-copy-to-clipboard-button-icon-angle: 0deg;
+                --vo-ui-bc-copy-to-clipboard-button-icon-scale: 1;
+            }
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .button, .tooltip {
+            transition-duration: 0.001ms;
+        }
+
+        .button {
+            > ::deep .copy-icon,
+            > ::deep .copied-icon {
+                transition-duration: 0.001ms;
+            }
+        }
+    }
+}

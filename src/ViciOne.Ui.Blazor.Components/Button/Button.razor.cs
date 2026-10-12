@@ -1,10 +1,9 @@
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Button.Enums;
-using ViciOne.Ui.Blazor.Components.Extensions;
+using ViciOne.Ui.Blazor.Components.Helpers;
 using ViciOne.Ui.Blazor.Components.Interfaces;
 
 namespace ViciOne.Ui.Blazor.Components.Button;
@@ -14,11 +13,6 @@ namespace ViciOne.Ui.Blazor.Components.Button;
 /// </summary>
 public sealed partial class Button : ComponentBase, IHasIcon
 {
-    private static readonly string s_rippleModulePath =
-        $"./_content/{typeof(Button).Assembly.GetName().Name}/material-web/ripple.js";
-
-    private static readonly ConditionalWeakTable<IJSRuntime, Task> s_rippleModuleLoads = [];
-
     /// <summary>
     /// True while the action behind the button is running, otherwise false
     /// </summary>
@@ -106,7 +100,7 @@ public sealed partial class Button : ComponentBase, IHasIcon
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-            await s_rippleModuleLoads.GetValue(JsRuntime, jsRuntime => jsRuntime.ImportAsync(s_rippleModulePath, Logger));
+            await RippleModuleLoader.LoadAsync(JsRuntime, Logger);
     }
 
     private async Task ButtonClickAsync(MouseEventArgs _)

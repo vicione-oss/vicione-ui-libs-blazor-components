@@ -49,6 +49,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ComboBox.resx</DependentUpon>
     </Compile>
+    <Compile Update="CopyToClipboardButton\Components\Localization\CopyToClipboardButton.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CopyToClipboardButton.resx</DependentUpon>
+    </Compile>
     <Compile Update="DropDown\Localization\Dropdown.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -104,6 +109,10 @@
     <EmbeddedResource Update="ComboBox\Localization\ComboBox.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ComboBox.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="CopyToClipboardButton\Components\Localization\CopyToClipboardButton.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CopyToClipboardButton.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="DropDown\Localization\DropDown.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -428,6 +437,9 @@
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenuItem.razor.js">
       <DestinationFile>context-menu\components\context-menu-item.js</DestinationFile>
+    </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="CopyToClipboardButton\Components\CopyToClipboardButton.razor.js">
+      <DestinationFile>copy-to-clipboard-button\components\copy-to-clipboard-button.js</DestinationFile>
     </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="DropDown\DropDown.razor.js">
       <DestinationFile>drop-down\drop-down.js</DestinationFile>

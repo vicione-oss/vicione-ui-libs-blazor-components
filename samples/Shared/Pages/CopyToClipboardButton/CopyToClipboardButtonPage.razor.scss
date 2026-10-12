@@ -1,0 +1,33 @@
+// Leaves room for the tooltips, which would otherwise cover neighboring examples.
+// No inline padding, so the first example stays aligned with the page.
+.inline-grid {
+    display: inline-grid;
+    grid-auto-columns: auto;
+    grid-auto-flow: column;
+    align-items: center;
+    column-gap: 90px;
+    padding-block: 40px;
+}
+
+.labeled-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    // The label sits on the side opposite the tooltip, so the tooltip does not cover it.
+    &.labeled-button--top {
+        flex-direction: column;
+    }
+
+    &.labeled-button--right {
+        flex-direction: row-reverse;
+    }
+
+    &.labeled-button--bottom {
+        flex-direction: column-reverse;
+    }
+
+    &.labeled-button--left {
+        flex-direction: row;
+    }
+}

@@ -104,7 +104,8 @@ const config = [
                     prefixes: {
                         include: true,
                         process: true,
-                        snapped: true
+                        snapped: true,
+                        try: true
                     }
                 }
             ]

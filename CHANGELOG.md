@@ -1,11 +1,17 @@
 # Changelog
 
-## 6.6.0 - Unreleased
+## 6.6.0 - 2026-10-12
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `AdvancedTable` and `SimpleTable`, added CSS custom property `--vo-ui-bc-tables-footer-padding-bottom` to set the bottom padding of the footer; it applies to the table it is set on, not to nested tables
+- `CopyToClipboardButton`, added button that copies text to the clipboard and confirms it with a tooltip
 - `Grid`, added CSS custom property `--vo-ui-bc-grid-footer-padding-bottom` to set the bottom padding of the footer; it applies to the grid it is set on, not to nested grids
+- `Tooltip`, added type-safe enum `TooltipPlacement` to place a tooltip relative to the element it belongs to, used by `CopyToClipboardButton`
+
+### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
+
+- `CopyToClipboardButton`, added extension method `SetupForCopyToClipboardButton()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
 
 ## 6.5.0 - 2026-10-08
 

@@ -1,0 +1,40 @@
+@page "/copy-to-clipboard-button"
+
+@using ViciOne.Ui.Blazor.Components.CopyToClipboardButton.Components
+@using ViciOne.Ui.Blazor.Components.CopyToClipboardButton.Enums
+@using ViciOne.Ui.Blazor.Components.Extensions
+@using ViciOne.Ui.Blazor.Components.Factories
+@using ViciOne.Ui.Blazor.Components.TextBox
+@using ViciOne.Ui.Blazor.Components.Tooltip.Enums
+
+<h3>Size</h3>
+
+<div class="inline-grid">
+    @foreach (var buttonSize in TypeSafeEnumFactory<CopyToClipboardButtonSize>.CreateAll().Reverse())
+    {
+        <CopyToClipboardButton TextToCopy="GetTextToCopyAsync" Size="buttonSize" />
+    }
+</div>
+
+<h3>Tooltip placement</h3>
+
+<div class="inline-grid">
+    @foreach (var tooltipPlacement in TypeSafeEnumFactory<TooltipPlacement>.CreateAll())
+    {
+        <div class="labeled-button labeled-button--@tooltipPlacement.GetName().ToDashCase()">
+            <CopyToClipboardButton TextToCopy="GetTextToCopyAsync" TooltipPlacement="tooltipPlacement" />
+            @tooltipPlacement.ToString()
+        </div>
+    }
+</div>
+
+<h3>Disabled</h3>
+
+<CopyToClipboardButton TextToCopy="GetTextToCopyAsync" Enabled="false" />
+
+<h3>Text</h3>
+
+<div class="labeled-button">
+    <TextBox @bind-Value="_text" />
+    <CopyToClipboardButton TextToCopy="GetTextToCopyAsync" Size="CopyToClipboardButtonSize.Small" TooltipPlacement="TooltipPlacement.Right" />
+</div>

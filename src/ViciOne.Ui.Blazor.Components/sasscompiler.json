@@ -10,6 +10,7 @@
         "AdvancedErrorBoundary",
         "ContentLoadingIndication",
         "ContextMenu",
+        "CopyToClipboardButton",
         "Dialog",
         "Draggable",
         "DropDown",

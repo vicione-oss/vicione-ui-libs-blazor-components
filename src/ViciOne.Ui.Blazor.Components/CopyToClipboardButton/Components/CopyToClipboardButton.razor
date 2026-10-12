@@ -1,0 +1,41 @@
+@using ViciOne.Ui.Blazor.Components.CopyToClipboardButton.Extensions
+@using ViciOne.Ui.Blazor.Components.Tooltip.Extensions
+@using ViciOne.Ui.Localization.Resources
+@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@{
+    var cssClasses = new List<string> { "copy-to-clipboard-button" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    var iconSize = Size.ToMonochromeIconSize();
+    var title = Title ?? CommonVocabulary.CopyVerb;
+
+    // The tooltip keeps its text while fading out, so it is hidden from assistive technology,
+    // which learns about the copy from the status element instead.
+    var tooltipCssClasses = new List<string> { "tooltip", TooltipPlacement.ToModifierCssClass() };
+}
+
+<span class="@string.Join(" ", cssClasses)" @ref="_element">
+    <button type="button"
+            class="button @Size.ToModifierCssClass()"
+            aria-label="@title"
+            title="@title"
+            disabled="@(!Enabled)"
+            @onclick="ButtonClickAsync">
+
+        <MonochromeIcon CssClass="copy-icon" Name="MonochromeIconName.Duplicate" Size="iconSize" />
+        <MonochromeIcon CssClass="copied-icon" Name="MonochromeIconName.Check" Size="iconSize" />
+
+        <md-ripple disabled="@(!Enabled)"></md-ripple>
+    </button>
+
+    <span class="@string.Join(" ", tooltipCssClasses)" aria-hidden="true">
+        @Localization.CopyToClipboardButton.Copied
+        <span class="arrow"></span>
+    </span>
+
+    <span class="status" role="status"></span>
+</span>

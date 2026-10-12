@@ -4,7 +4,7 @@
 @use "../Styles/design/animations/mixins" as animations;
 @use "../Styles/animations/spinning-icon" as spinning-icon-animation;
 @use "../Styles/animations/sweep" as sweep-animation;
-@use "../Styles/buttons/mixins" as buttons;
+@use "../Styles/buttons";
 @use "../Styles/inputs/mixins" as inputs;
 
 @use "sass:color";
@@ -84,7 +84,7 @@
 
     &:not(:disabled):not(.button--busy) {
          &:hover {
-            background-color: color.change(colors.$font-light, $alpha: 0.03);
+            background-color: buttons.$background-hover-color;
         }
     }
 

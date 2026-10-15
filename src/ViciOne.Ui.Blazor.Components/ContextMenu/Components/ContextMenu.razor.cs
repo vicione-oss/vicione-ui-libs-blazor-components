@@ -189,7 +189,8 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
     /// </summary>
     private async ValueTask DisposeAsyncCoreAsync()
     {
-        if (_disposedAsync)
+        // Marked before the first await, so an attach still loading sees it.
+        if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
 
         await RemoveJsAsync();
@@ -197,23 +198,11 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
         _dotNetObjectReference?.Dispose();
         _dotNetObjectReference = null;
 
-        if (_jsModule is not null)
-        {
-            try
-            {
-                await _jsModule.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            _jsModule = null;
-        }
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
 
         _renderTimer.Elapsed -= OnRenderTimerElapsedAsync;
         _renderTimer.Dispose();
-
-        _disposedAsync = true;
     }
 
     /// <inheritdoc/>
@@ -310,9 +299,21 @@ public sealed partial class ContextMenu : ComponentBase, IContextMenu, IPopup, I
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(ContextMenu).Assembly.GetName().Name}/context-menu/components/context-menu.js");
 
+            // A menu removed while its script was loading has had its disposal run without seeing the module; a new
+            // reference here would keep its window listener calling into it.
+            if (_disposedAsync)
+            {
+                await _jsModule.DisposeAsync(Logger);
+                _jsModule = null;
+                return;
+            }
+
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
             _jsInstance = await _jsModule.InvokeConstructorAsync("ContextMenu", Logger, _dotNetObjectReference);
+
+            if (_disposedAsync)
+                await DisposeJsInstanceAsync();
         }
     }
 

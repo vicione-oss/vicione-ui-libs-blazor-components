@@ -82,13 +82,28 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
         {
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(DropDown<TItem>).Assembly.GetName().Name}/drop-down/drop-down.js");
+
+            // Removed while its script was loading: the disposal ran without seeing the module.
+            if (_disposedAsync)
+            {
+                await _jsModule.DisposeAsync(Logger);
+                _jsModule = null;
+                return;
+            }
         }
 
         if (!_disposedAsync && _jsModule is not null && _jsInstance is null)
         {
             _jsInstance = await _jsModule.InvokeConstructorAsync("DropDown", Logger, _containerElement);
 
-            if (!_disposedAsync && _jsInstance is not null)
+            // Removed while its instance was being created: the disposal ran without seeing the instance.
+            if (_disposedAsync)
+            {
+                await DisposeJsInstanceAsync();
+                return;
+            }
+
+            if (_jsInstance is not null)
                 await _jsInstance.InvokeVoidAsync("setMinimumWidth");
         }
 
@@ -210,20 +225,8 @@ public sealed partial class DropDown<TItem> : ComponentBase, IAsyncDisposable
 
         await DisposeJsInstanceAsync();
 
-        if (_jsModule is not null)
-        {
-            try
-            {
-                await _jsModule.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            _jsModule = null;
-        }
-
-        _disposedAsync = true;
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
     }
 
     [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]

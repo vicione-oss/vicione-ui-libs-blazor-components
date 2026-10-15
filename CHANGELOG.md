@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.6.1 - 2026-10-15
+
+### Package `ViciOne.Ui.Blazor.Components`
+
+- `AdvancedTable`, `ContextMenu`, `CopyToClipboardButton`, `DropDown`, `Popup`, `TabStrip`, `TagBox`, `TextBox` and tooltips no longer log an error or leave their script behind when removed while it is still loading, as in a virtualized row scrolled out of view
+
 ## 6.6.0 - 2026-10-12
 
 ### Package `ViciOne.Ui.Blazor.Components`

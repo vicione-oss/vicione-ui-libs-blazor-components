@@ -108,10 +108,16 @@ public sealed partial class CopyToClipboardButton : ComponentBase, IAsyncDisposa
         _jsModule = await JsRuntime.ImportModuleAsync(
             $"./_content/{assemblyName}/copy-to-clipboard-button/components/copy-to-clipboard-button.js", Logger);
 
+        if (_disposed)
+        {
+            await DisposeJsAsync();
+            return null;
+        }
+
         _jsInstance = await _jsModule.InvokeConstructorAsync("CopyToClipboardButton", Logger,
             _element, Localization.CopyToClipboardButton.Copied);
 
-        // A disposal during the import or construction found nothing to dispose.
+        // A disposal during the construction found nothing to dispose.
         if (_disposed)
             await DisposeJsAsync();
 

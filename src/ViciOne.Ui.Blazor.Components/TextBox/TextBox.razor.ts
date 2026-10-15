@@ -1,17 +1,20 @@
 export class TextBox {
-    readonly #input: HTMLInputElement;
+    readonly #input: HTMLInputElement | undefined;
     #revertValue: string;
 
     readonly #inputKeyDown = (event: KeyboardEvent) => {
-        if (event.code === 'Escape' && this.#input.value !== this.#revertValue)
+        if (event.code === 'Escape' && this.#input?.value !== this.#revertValue)
             event.stopPropagation();
     };
 
-    constructor(input: HTMLInputElement, revertValue: string | undefined) {
-        this.#input = input;
+    /**
+     Blazor passes null for an input that left the page before the instance was created; then there is nothing to listen to
+     */
+    constructor(input: HTMLInputElement | undefined, revertValue: string | undefined) {
+        this.#input = input ?? undefined;
         this.#revertValue = revertValue ?? '';
 
-        this.#input.addEventListener('keydown', this.#inputKeyDown);
+        this.#input?.addEventListener('keydown', this.#inputKeyDown);
     }
 
     /**
@@ -29,6 +32,6 @@ export class TextBox {
     }
 
     dispose() {
-        this.#input.removeEventListener('keydown', this.#inputKeyDown);
+        this.#input?.removeEventListener('keydown', this.#inputKeyDown);
     }
 }

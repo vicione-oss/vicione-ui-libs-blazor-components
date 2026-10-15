@@ -1,9 +1,11 @@
 ﻿using System.Drawing;
 using System.Timers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.Tooltip.Models;
 using ViciOne.Ui.Blazor.Components.Tooltip.Services;
+using ViciOne.Ui.Blazor.Components.Extensions;
 
 namespace ViciOne.Ui.Blazor.Components.Tooltip.Components;
 
@@ -34,6 +36,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
     [CascadingParameter] private TooltipService? CascadedTooltipService { get; set; }
 
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+    [Inject] private ILogger<TooltipDisplay> Logger { get; set; } = default!;
     [Inject] private IServiceProvider ServiceProvider { get; set; } = default!;
 
     /// <inheritdoc/>
@@ -63,20 +66,13 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        if (_disposedAsync)
+        // Marked before the first await, so an import still loading sees it.
+        if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
 
-        try
-        {
-            if (_jsModule is not null)
-                await _jsModule.DisposeAsync();
-        }
-        catch (JSDisconnectedException)
-        {
-            // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-        }
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
 
-        _disposedAsync = true;
         Dispose(disposing: false);
     }
 
@@ -112,6 +108,14 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
         {
             _jsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(TooltipDisplay).Assembly.GetName().Name}/tooltip/components/tooltip-display.js");
+
+            // Removed while its script was loading: the disposal ran without seeing the module.
+            if (_disposedAsync)
+            {
+                await _jsModule.DisposeAsync(Logger);
+                _jsModule = null;
+                return;
+            }
         }
 
         if (_renderingTooltips.Count == 0 || _jsModule is null)

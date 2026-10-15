@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using ViciOne.Ui.Blazor.Components.CopyToClipboardButton.Enums;
 using ViciOne.Ui.Blazor.Components.Factories;
 using ViciOne.Ui.Blazor.Components.TestingHelpers.CopyToClipboardButton.Extensions;
+using ViciOne.Ui.Blazor.Components.Tests.Extensions;
 using ViciOne.Ui.Blazor.Components.Tooltip.Enums;
 using ViciOne.Ui.Localization.Resources;
 
@@ -231,5 +232,30 @@ public sealed partial class CopyToClipboardButtonTests
         var button = renderedComponent.Find("button");
         button.GetAttribute("title").Should().Be(CommonVocabulary.CopyVerb);
         button.GetAttribute("aria-label").Should().Be(CommonVocabulary.CopyVerb);
+    }
+
+    [Fact]
+    public async Task Should_dispose_module_without_creating_script_when_disposed_while_module_is_loading()
+    {
+        // Arrange
+        await using var testContext = new BunitContext();
+        testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+
+        var assemblyName = typeof(CopyToClipboardButtonComponent).Assembly.GetName().Name;
+        var pendingImport = PendingJSModuleImport.SetUp(testContext,
+            $"./_content/{assemblyName}/copy-to-clipboard-button/components/copy-to-clipboard-button.js");
+
+        testContext.Render<CopyToClipboardButtonComponent>(b => b
+            .Add(p => p.TextToCopy, () => Task.FromResult("text")));
+        await pendingImport.WaitUntilRequestedAsync();
+
+        // Act
+        await testContext.DisposeComponentsAsync();
+        await pendingImport.CompleteAsync();
+
+        // Assert
+        await pendingImport.Module.Received(1).DisposeAsync();
+        await pendingImport.Module.DidNotReceive()
+            .InvokeConstructorAsync(Arg.Any<string>(), Arg.Any<CancellationToken>(), Arg.Any<object?[]?>());
     }
 }

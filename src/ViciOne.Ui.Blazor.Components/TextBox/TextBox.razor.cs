@@ -179,19 +179,8 @@ public sealed partial class TextBox
             return;
 
         await RemoveJsAsync();
-
-        if (_jsModule is not null)
-        {
-            try
-            {
-                await _jsModule.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            _jsModule = null;
-        }
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
     }
 
     private Task<IJSObjectReference?> AttachJsAsync()
@@ -202,8 +191,23 @@ public sealed partial class TextBox
         _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
             $"./_content/{typeof(TextBox).Assembly.GetName().Name}/text-box/text-box.js");
 
+        // A text box removed while its script was loading, as in a virtualized row scrolled out of view, has no
+        // input left to attach to, and its disposal has already run without seeing the module.
+        if (_disposedAsync)
+        {
+            await _jsModule.DisposeAsync(Logger);
+            _jsModule = null;
+            return null;
+        }
+
         _jsRevertValue = Value;
         _jsInstance = await _jsModule.InvokeConstructorAsync("TextBox", Logger, _inputElementReference, Value);
+
+        if (_disposedAsync)
+        {
+            await DisposeJsInstanceAsync();
+            return null;
+        }
 
         return _jsInstance;
     }

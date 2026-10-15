@@ -36,6 +36,28 @@ public sealed partial class TabStripTests
                 .Which.Identifier.Should().Be("TabStrip");
         }
 
+        [Fact]
+        public async Task Should_dispose_module_without_creating_script_when_disposed_while_module_is_loading()
+        {
+            // Arrange
+            _testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+
+            var pendingImport = PendingJSModuleImport.SetUp(_testContext, s_jsModuleIdentifier);
+
+            _testContext.Render<TabStripComponent>(b => b
+                .Add(p => p.ChildContent, _ => { }));
+            await pendingImport.WaitUntilRequestedAsync();
+
+            // Act
+            await _testContext.DisposeComponentsAsync();
+            await pendingImport.CompleteAsync();
+
+            // Assert
+            await pendingImport.Module.Received(1).DisposeAsync();
+            await pendingImport.Module.DidNotReceive()
+                .InvokeConstructorAsync(Arg.Any<string>(), Arg.Any<CancellationToken>(), Arg.Any<object?[]?>());
+        }
+
         private sealed class ImportingJSRuntime(IJSObjectReference jsModule) : IJSRuntime
         {
             public ValueTask<TValue> InvokeAsync<TValue>(string identifier, object?[]? args)

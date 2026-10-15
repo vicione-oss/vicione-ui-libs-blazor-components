@@ -48,9 +48,31 @@ internal sealed class AdvancedTableJsSession<TComponent>(IJSRuntime jsRuntime, T
         {
             var module = await _moduleTask.Value;
 
+            // A table removed while its script was loading, as in a virtualized view scrolled away, has no element
+            // left to attach to, and its disposal has already run without seeing the module.
+            if (_disposed)
+            {
+                await ReleaseAsync(module);
+                return;
+            }
+
             _componentReference = DotNetObjectReference.Create(component);
 
-            _attachResult = await module.InvokeAsync<IJSObjectReference>("attach", tableElement, _componentReference);
+            var attachResult = await module.InvokeAsync<IJSObjectReference>("attach", tableElement, _componentReference);
+
+            // Disposed while attaching: the disposal released the module and the reference, but not what the attach
+            // returned afterwards.
+            if (_disposed)
+            {
+                await DetachAsync(attachResult);
+                return;
+            }
+
+            _attachResult = attachResult;
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit is gone; nothing was created to release.
         }
         finally
         {
@@ -102,6 +124,31 @@ internal sealed class AdvancedTableJsSession<TComponent>(IJSRuntime jsRuntime, T
         finally
         {
             _componentReference?.Dispose();
+        }
+    }
+
+    private static async Task DetachAsync(IJSObjectReference attachResult)
+    {
+        try
+        {
+            await attachResult.InvokeVoidAsync("dispose");
+            await attachResult.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit is gone; nothing to resolve against anymore.
+        }
+    }
+
+    private static async Task ReleaseAsync(IJSObjectReference module)
+    {
+        try
+        {
+            await module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit is gone; nothing to resolve against anymore.
         }
     }
 

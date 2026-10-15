@@ -1,5 +1,6 @@
 using Bunit;
 using Microsoft.AspNetCore.Components.Web;
+using ViciOne.Ui.Blazor.Components.Tests.Extensions;
 using TagBoxComponent = ViciOne.Ui.Blazor.Components.TagBox.TagBox;
 
 namespace ViciOne.Ui.Blazor.Components.Tests.TagBox;
@@ -723,5 +724,25 @@ public sealed class TagBoxTests : IDisposable
 
         // Assert
         renderedComponent.FindAll(".drop-down-item:not(.drop-down-empty)").Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Should_dispose_module_without_creating_script_when_disposed_while_module_is_loading()
+    {
+        // Arrange
+        var pendingImport = PendingJSModuleImport.SetUp(_testContext,
+            $"./_content/{typeof(TagBoxComponent).Assembly.GetName().Name}/tag-box/tag-box.js");
+
+        _testContext.Render<TagBoxComponent>();
+        await pendingImport.WaitUntilRequestedAsync();
+
+        // Act
+        await _testContext.DisposeComponentsAsync();
+        await pendingImport.CompleteAsync();
+
+        // Assert
+        await pendingImport.Module.Received(1).DisposeAsync();
+        await pendingImport.Module.DidNotReceive()
+            .InvokeConstructorAsync(Arg.Any<string>(), Arg.Any<CancellationToken>(), Arg.Any<object?[]?>());
     }
 }

@@ -440,9 +440,21 @@ public sealed partial class Popup : ComponentBase, IPopup, IMoveable, IMoveHandl
         _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
             $"./_content/{typeof(Popup).Assembly.GetName().Name}/popup/components/popup.js");
 
+        // Removed while its script was loading, the popup has no dialog left to attach to, and its disposal has
+        // already run without seeing the module.
+        if (_disposed)
+        {
+            await _jsModule.DisposeAsync(Logger);
+            _jsModule = null;
+            return;
+        }
+
         _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
         _jsInstance = await _jsModule.InvokeConstructorAsync("Popup", Logger, _dotNetObjectReference, _modalDialogElementReference);
+
+        if (_disposed)
+            await DisposeJsInstanceAsync();
     }
 
     [LoggerMessage(Level = LogLevel.Error, Message = $"Invoking jsInstance.dispose() failed")]

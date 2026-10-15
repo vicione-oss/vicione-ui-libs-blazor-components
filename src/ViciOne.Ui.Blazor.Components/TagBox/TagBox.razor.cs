@@ -80,7 +80,22 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(TagBox).Assembly.GetName().Name}/tag-box/tag-box.js");
 
+            // Removed while its script was loading, as in a virtualized row scrolled out of view, the tag box has no
+            // elements left to attach to, and its disposal has already run without seeing the module.
+            if (_disposedAsync)
+            {
+                await _jsModule.DisposeAsync(Logger);
+                _jsModule = null;
+                return;
+            }
+
             _jsInstance = await _jsModule.InvokeConstructorAsync("TagBox", Logger, _tagBox, _inputElement);
+
+            if (_disposedAsync)
+            {
+                await DisposeJsInstanceAsync();
+                return;
+            }
 
             // The compiled TypeScript runs after the first render, so the width and height values are not set yet. Re-rendering here applies
             // those values and prevents jumping effect of the TagBox.
@@ -211,19 +226,8 @@ public sealed partial class TagBox : ComponentBase, IAsyncDisposable
             return;
 
         await DisposeJsInstanceAsync();
-
-        if (_jsModule is not null)
-        {
-            try
-            {
-                await _jsModule.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            _jsModule = null;
-        }
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
 
         _disposedAsync = true;
     }

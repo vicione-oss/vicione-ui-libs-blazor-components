@@ -110,18 +110,8 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
         _dotNetObjectReference?.Dispose();
         _dotNetObjectReference = null;
 
-        if (_jsModule is not null)
-        {
-            try
-            {
-                await _jsModule.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
-            }
-            _jsModule = null;
-        }
+        await _jsModule.DisposeAsync(Logger);
+        _jsModule = null;
 
         ParentContextMenu.UnregisterContextMenuItem(this);
 
@@ -143,9 +133,20 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
                 $"./_content/{typeof(ContextMenu).Assembly.GetName().Name}/context-menu/components/context-menu-item.js");
 
+            // An item removed while its script was loading has had its disposal run without seeing the module.
+            if (_disposedAsync)
+            {
+                await _jsModule.DisposeAsync(Logger);
+                _jsModule = null;
+                return;
+            }
+
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
             _jsInstance = await _jsModule.InvokeConstructorAsync("ContextMenuItem", Logger, _dotNetObjectReference);
+
+            if (_disposedAsync)
+                await DisposeJsInstanceAsync();
         }
     }
 

@@ -23,9 +23,10 @@
     "build": "npm --workspaces --if-present run build",
     "lint-root-config": "eslint eslint.config.mjs",
     "lint-eslint-plugins": "eslint .eslint-plugins",
-    "lint-root-markdown": "eslint \"**/*.md\" --ignore-pattern src/ViciOne.Ui.Blazor.Components/ --ignore-pattern samples/Shared/",
+    "lint-markdown-outside-workspaces": "eslint \"**/*.md\"",
     "lint-markdown-style": "markdownlint-cli2",
-    "lint": "npm run lint-root-config && npm run lint-eslint-plugins && npm run lint-root-markdown && npm run lint-markdown-style && npm --workspaces --if-present run lint",
-    "lint-with-fix": "npm run lint-root-config -- --fix && npm run lint-eslint-plugins -- --fix && npm run lint-root-markdown -- --fix && npm run lint-markdown-style -- --fix && npm --workspaces --if-present run lint-with-fix"
+    "lint-html-outside-workspaces": "eslint \"**/*.html\"",
+    "lint": "npm run lint-root-config && npm run lint-eslint-plugins && npm run lint-markdown-outside-workspaces && npm run lint-markdown-style && npm run lint-html-outside-workspaces && npm --workspaces --if-present run lint",
+    "lint-with-fix": "npm run lint-root-config -- --fix && npm run lint-eslint-plugins -- --fix && npm run lint-markdown-outside-workspaces -- --fix && npm run lint-markdown-style -- --fix && npm run lint-html-outside-workspaces -- --fix && npm --workspaces --if-present run lint-with-fix"
   }
 }

@@ -1,5 +1,7 @@
 # Changelog
 
+## 6.7.0 - Unreleased
+
 ## 6.6.1 - 2026-10-15
 
 ### Package `ViciOne.Ui.Blazor.Components`

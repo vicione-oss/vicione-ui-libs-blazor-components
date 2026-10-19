@@ -1,7 +1,13 @@
+import { readFileSync } from 'node:fs';
 import eslintConfigXo from 'eslint-config-xo';
 import noLeadingTypeOperator from './.eslint-plugins/no-leading-type-operator.mjs';
 
 const indent = 4;
+
+// The npm workspaces lint themselves with their own config, which extends this one. Ignoring them
+// here keeps root lint scripts from linting their files a second time. As ESLint resolves these
+// patterns relative to the config file in use, the workspaces still lint their own files
+const { workspaces } = JSON.parse(readFileSync(new URL('package.json', import.meta.url), 'utf8'));
 
 const config = [
     {
@@ -11,8 +17,8 @@ const config = [
             '**/*.cs.js',
             '**/*.razor.js',
             '**/*.razor.css',
-            '**/*.html',
-            '**/*.json'
+            '**/*.json',
+            ...workspaces.map(workspace => `${workspace}/**`)
         ]
     },
     ...eslintConfigXo({ space: indent }),
@@ -149,6 +155,15 @@ const config = [
                     allowLabels: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', 'TOC']
                 }
             ]
+        }
+    },
+
+    {
+        files: ['**/*.html'],
+        rules: {
+            // HTML files here are host pages of sample apps, which are never shared as link
+            // previews and have no fixed public URL that Open Graph tags could point to
+            '@html-eslint/require-open-graph-protocol': 'off'
         }
     }
 ];

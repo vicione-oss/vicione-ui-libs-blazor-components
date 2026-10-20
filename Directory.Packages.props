@@ -48,15 +48,15 @@
 
   <!-- Test tooling packages managed by renovate.json -->
   <ItemGroup>
-    <PackageVersion Include="AwesomeAssertions" Version="9.3.0" />
-    <PackageVersion Include="Bogus" Version="35.6.4" />
-    <PackageVersion Include="bunit" Version="2.7.2" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-    <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.59.0" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.3.1" />
-    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
+    <PackageVersion Include="Bogus" Version="35.6.5" />
+    <PackageVersion Include="bunit" Version="2.12.5" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.0" />
+    <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.63.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="ViciOne.Ui.Testing.Playwright" Version="1.0.0" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.2" />
   </ItemGroup>
 </Project>

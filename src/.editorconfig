@@ -17,9 +17,6 @@ dotnet_diagnostic.SYSLIB1045.severity = warning # Use GeneratedRegexAttribute to
 [*.nt.cs]
 dotnet_diagnostic.IDE0057.severity = none # NTypewriter templates require Substring() instead of range operator to avoid CS0518 (System.Range not defined)
 
-[package.json]
-indent_size = 2
-
 [*.{cs,cs.nt,razor,scss,ts,ts.nt,json,sh}]
 end_of_line = lf
 

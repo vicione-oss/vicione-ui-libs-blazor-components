@@ -10,8 +10,12 @@ root = true
 [*.{csproj,config,nuspec,xml,resx,ruleset,props,targets}]
 indent_size = 2
 
+# JSON files
+[*.json]
+indent_size = 2
+
 # Code files
-[*.{cs,csx,vb,vbx,cake,json}]
+[*.{cs,csx,vb,vbx,cake}]
 indent_size = 4
 
 # Shell scripts

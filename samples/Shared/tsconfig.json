@@ -1,32 +1,32 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "target": "es2022",
-        "module": "es2022",
-        "inlineSourceMap": true,
-        "inlineSources": true,
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitOverride": true,
-        "skipLibCheck": true,
-        "allowImportingTsExtensions": true,
-        "rewriteRelativeImportExtensions": true
-    },
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true
+  },
 
-    // Keeps the .ts sources from the referenced project out of this compilation, which would otherwise emit a .js next to
-    // each of them in the referenced project. TypeScript substitutes the declarations that project emits,
-    // while Visual Studio reads the sources directly and so needs no build to resolve the imports
-    "references": [
-        { "path": "../../src/ViciOne.Ui.Blazor.Components" }
-    ],
+  // Keeps the .ts sources from the referenced project out of this compilation, which would otherwise emit a .js next to
+  // each of them in the referenced project. TypeScript substitutes the declarations that project emits,
+  // while Visual Studio reads the sources directly and so needs no build to resolve the imports
+  "references": [
+    { "path": "../../src/ViciOne.Ui.Blazor.Components" }
+  ],
 
-    "include": [
-        "Pages/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "include": [
+    "Pages/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

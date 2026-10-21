@@ -1,4 +1,6 @@
 {
+  "private": true,
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
     "lint-with-fix": "eslint . --fix"

@@ -1,14 +1,14 @@
 ﻿{
-    "help": "https://go.microsoft.com/fwlink/?linkid=866610",
-    "root": false,
+  "help": "https://go.microsoft.com/fwlink/?linkid=866610",
+  "root": false,
 
-    "dependentFileProviders": {
-        "pathSegment": {
-            "add": {
-                ".*": [
-                    ".cs"
-                ]
-            }
-        }
+  "dependentFileProviders": {
+    "pathSegment": {
+      "add": {
+        ".*": [
+          ".cs"
+        ]
+      }
     }
+  }
 }

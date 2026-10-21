@@ -1,6 +1,21 @@
 {
   "name": "vicione-blazor-components-root",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  },
+  "scripts": {
+    "build": "npm --workspaces --if-present run build",
+    "lint-root-config": "eslint eslint.config.mjs",
+    "lint-eslint-plugins": "eslint .eslint-plugins",
+    "lint-markdown-outside-workspaces": "eslint \"**/*.md\"",
+    "lint-markdown-style": "markdownlint-cli2",
+    "lint-html-outside-workspaces": "eslint \"**/*.html\"",
+    "lint-json-outside-workspaces": "eslint \"**/*.{json,jsonc}\"",
+    "lint": "npm run lint-root-config && npm run lint-eslint-plugins && npm run lint-markdown-outside-workspaces && npm run lint-markdown-style && npm run lint-html-outside-workspaces && npm run lint-json-outside-workspaces && npm --workspaces --if-present run lint",
+    "lint-with-fix": "npm run lint-root-config -- --fix && npm run lint-eslint-plugins -- --fix && npm run lint-markdown-outside-workspaces -- --fix && npm run lint-markdown-style -- --fix && npm run lint-html-outside-workspaces -- --fix && npm run lint-json-outside-workspaces -- --fix && npm --workspaces --if-present run lint-with-fix"
+  },
   "workspaces": [
     "src/ViciOne.Ui.Blazor.Components",
     "samples/Shared"
@@ -11,6 +26,7 @@
     "esbuild": "^0.28.2",
     "eslint": "^10.11.0",
     "eslint-config-xo": "^4.0.1",
+    "eslint-plugin-jsonc": "^3.4.2",
     "markdownlint-cli2": "^0.23.3",
     "three-dots": "^0.3.2",
     "typescript": "^6.0.3"
@@ -18,15 +34,5 @@
   "overrides": {
     "katex": "0.19.0",
     "smol-toml": "1.9.0"
-  },
-  "scripts": {
-    "build": "npm --workspaces --if-present run build",
-    "lint-root-config": "eslint eslint.config.mjs",
-    "lint-eslint-plugins": "eslint .eslint-plugins",
-    "lint-markdown-outside-workspaces": "eslint \"**/*.md\"",
-    "lint-markdown-style": "markdownlint-cli2",
-    "lint-html-outside-workspaces": "eslint \"**/*.html\"",
-    "lint": "npm run lint-root-config && npm run lint-eslint-plugins && npm run lint-markdown-outside-workspaces && npm run lint-markdown-style && npm run lint-html-outside-workspaces && npm --workspaces --if-present run lint",
-    "lint-with-fix": "npm run lint-root-config -- --fix && npm run lint-eslint-plugins -- --fix && npm run lint-markdown-outside-workspaces -- --fix && npm run lint-markdown-style -- --fix && npm run lint-html-outside-workspaces -- --fix && npm --workspaces --if-present run lint-with-fix"
   }
 }

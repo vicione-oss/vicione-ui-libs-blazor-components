@@ -8,7 +8,8 @@
 
 - Refer to `docs/csharp-code-style.md` for C# coding conventions
 - Refer to `docs/scss-code-style.md` for SCSS coding conventions
-- After changing `.html` files, run `npm run lint-with-fix` from the solution root. ESLint checks them with the HTML rules of `eslint-config-xo`, adjusted in `eslint.config.mjs`
+- After changing `.html` files, run `npm run lint-with-fix` from the solution root
+- After changing `.json` or `.jsonc` files, run `npm run lint-with-fix` from the solution root
 
 ## Documentation style
 

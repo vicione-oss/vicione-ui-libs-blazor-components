@@ -8,7 +8,7 @@
   "configMigration": true,
   "pruneStaleBranches": false,
   "prTitleStrict": true,
-  "enabledManagers": [ "nuget", "npm" ],
+  "enabledManagers": ["nuget", "npm"],
   "vulnerabilityAlerts": {
     "enabled": true,
     "dependencyDashboardApproval": true
@@ -17,8 +17,8 @@
   "packageRules": [
     {
       "description": "MR configuration",
-      "matchManagers": [ "nuget", "npm" ],
-      "addLabels": [ "Dependencies", "Modernization" ],
+      "matchManagers": ["nuget", "npm"],
+      "addLabels": ["Dependencies", "Modernization"],
       "rebaseWhen": "auto",
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
@@ -27,26 +27,26 @@
     },
     {
       "description": "MR label for the update type, as it is not part of the naming. version:: is a scoped label, so GitLab keeps only one per MR: the most significant update in the MR wins",
-      "matchManagers": [ "nuget", "npm" ],
-      "matchUpdateTypes": [ "major", "minor", "patch" ],
-      "addLabels": [ "version::{{#if (includes (lookupArray upgrades 'updateType') 'major')}}major{{else}}{{#if (includes (lookupArray upgrades 'updateType') 'minor')}}minor{{else}}patch{{/if}}{{/if}}" ]
+      "matchManagers": ["nuget", "npm"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "addLabels": ["version::{{#if (includes (lookupArray upgrades 'updateType') 'major')}}major{{else}}{{#if (includes (lookupArray upgrades 'updateType') 'minor')}}minor{{else}}patch{{/if}}{{/if}}"]
     },
     {
       "description": "MR / commit naming",
-      "matchManagers": [ "nuget", "npm" ],
+      "matchManagers": ["nuget", "npm"],
       "semanticCommits": "disabled",
       "commitMessagePrefix": "",
       "commitMessageAction": "Update"
     },
     {
       "description": "MR / commit naming for ungrouped updates",
-      "matchManagers": [ "nuget", "npm" ],
+      "matchManagers": ["nuget", "npm"],
       "commitMessageTopic": "{{{depName}}}",
       "commitMessageExtra": "to {{{newVersion}}}"
     },
     {
       "description": "MR / commit naming for grouped updates",
-      "matchManagers": [ "nuget", "npm" ],
+      "matchManagers": ["nuget", "npm"],
       "groupSingleUpdates": true,
       "recreateWhen": "never",
       "group": {
@@ -56,26 +56,26 @@
     },
     {
       "description": "Branch naming for ungrouped updates",
-      "matchManagers": [ "nuget", "npm" ],
+      "matchManagers": ["nuget", "npm"],
       "branchTopic": "update-{{{replace '\\.' '-' depNameSanitized}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}"
     },
     {
       "description": "Branch naming for grouped updates",
-      "matchManagers": [ "nuget", "npm" ],
+      "matchManagers": ["nuget", "npm"],
       "group": {
         "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}"
       }
     },
     {
       "description": "NuGet: opt out of everything, then opt back in below",
-      "matchManagers": [ "nuget" ],
+      "matchManagers": ["nuget"],
       "enabled": false
     },
     {
       "description": ".NET packages pinned to $(DotNetVersion). They all move to the same version, so commitMessageTopic names the group and the version instead of listing every single package",
-      "matchManagers": [ "nuget" ],
-      "matchFileNames": [ "Directory.Packages.props" ],
-      "matchJsonata": [ "sharedVariableName = 'DotNetVersion'" ],
+      "matchManagers": ["nuget"],
+      "matchFileNames": ["Directory.Packages.props"],
+      "matchJsonata": ["sharedVariableName = 'DotNetVersion'"],
       "enabled": true,
       "groupName": ".NET",
       "groupSlug": "net",
@@ -87,8 +87,8 @@
     },
     {
       "description": "NuGet: test tooling",
-      "matchManagers": [ "nuget" ],
-      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchManagers": ["nuget"],
+      "matchFileNames": ["Directory.Packages.props"],
       "matchPackageNames": [
         "AwesomeAssertions",
         "Bogus",
@@ -108,28 +108,28 @@
       "separateMultipleMajor": false,
       "separateMultipleMinor": false,
       "separateMinorPatch": false,
-      "addLabels": [ "Renovate::Frozen" ],
+      "addLabels": ["Renovate::Frozen"],
       "stopUpdatingLabel": "Renovate::Frozen"
     },
     {
       "description": "npm: bump the range in package.json instead of only moving package-lock.json, so both files always state the same version",
-      "matchManagers": [ "npm" ],
+      "matchManagers": ["npm"],
       "rangeStrategy": "bump"
     },
     {
       "description": "npm: opt out of everything, then opt back in below",
-      "matchManagers": [ "npm" ],
+      "matchManagers": ["npm"],
       "enabled": false
     },
     {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "@types/blazor__javascript-interop" ],
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@types/blazor__javascript-interop"],
       "enabled": true,
-      "addLabels": [ "JS interop" ]
+      "addLabels": ["JS interop"]
     },
     {
       "description": "npm: eslint and the packages it depends on updated as one group",
-      "matchManagers": [ "npm" ],
+      "matchManagers": ["npm"],
       "matchPackageNames": [
         "/^eslint/",
         "/^@typescript-eslint//",
@@ -142,33 +142,33 @@
       "separateMultipleMajor": false,
       "separateMultipleMinor": false,
       "separateMinorPatch": false,
-      "addLabels": [ "ESLint", "TypeScript", "Renovate::Frozen" ],
+      "addLabels": ["ESLint", "TypeScript", "Renovate::Frozen"],
       "stopUpdatingLabel": "Renovate::Frozen"
     },
     {
       "description": "npm: version ceiling for the TypeScript entry of the eslint group above",
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "typescript" ],
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["typescript"],
       "allowedVersions": "<7"
     },
     {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "three-dots" ],
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["three-dots"],
       "enabled": true
     },
     {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "@material/web" ],
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@material/web"],
       "enabled": true
     },
     {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "esbuild" ],
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["esbuild"],
       "enabled": true
     },
     {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "markdownlint-cli2" ],
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["markdownlint-cli2"],
       "enabled": true
     }
   ]

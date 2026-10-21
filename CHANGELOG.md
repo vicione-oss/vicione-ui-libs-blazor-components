@@ -5,6 +5,7 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.13`
+- `SpinEdit`, fixed unintended value changes by the mouse wheel
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

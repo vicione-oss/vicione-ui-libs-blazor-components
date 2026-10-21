@@ -67,7 +67,7 @@ public interface IPropertyGridItem
     /// Holds <see langword="true"/> when the item should be visible, otherwise <see langword="false"/>.
     /// </summary>
     /// <remarks>
-    /// A hidden item is not validated, see <see cref="Descriptors.IPropertyDescriptor{TInstance}.Visible"/>.
+    /// A hidden item is not validated, see <see cref="IPropertyDescriptor{TInstance}.Visible"/>.
     /// </remarks>
     bool Visible { get; }
 

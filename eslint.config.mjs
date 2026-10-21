@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import eslintConfigXo from 'eslint-config-xo';
+import eslintPluginJsonc from 'eslint-plugin-jsonc';
 import noLeadingTypeOperator from './.eslint-plugins/no-leading-type-operator.mjs';
 
 const indent = 4;
@@ -14,11 +15,14 @@ const config = [
         ignores: [
             '**/bin/**',
             '**/obj/**',
+            '**/.vs/**',
             '**/*.cs.js',
             '**/*.razor.js',
             '**/*.razor.css',
-            '**/*.json',
-            ...workspaces.map(workspace => `${workspace}/**`)
+            ...workspaces.map(workspace => `${workspace}/**`),
+
+            // Written by NuGet, which rewrites them on every restore
+            '**/packages.lock.json'
         ]
     },
     ...eslintConfigXo({ space: indent }),
@@ -164,6 +168,30 @@ const config = [
             // HTML files here are host pages of sample apps, which are never shared as link
             // previews and have no fixed public URL that Open Graph tags could point to
             '@html-eslint/require-open-graph-protocol': 'off'
+        }
+    },
+
+    // JSON files are parsed and checked for their content by the JSON support of XO, which
+    // has no rules for their layout, hence those come from `eslint-plugin-jsonc`
+    {
+        files: ['**/*.json', '**/*.jsonc'],
+        plugins: {
+            jsonc: eslintPluginJsonc
+        },
+        rules: {
+            // Unlike code, JSON files are indented by 2 spaces, the default of the tools writing
+            // them such as npm, see `.editorconfig`
+            'jsonc/indent': ['error', 2],
+            'jsonc/array-bracket-spacing': ['error', 'never'],
+            'jsonc/array-bracket-newline': ['error', 'consistent'],
+            'jsonc/array-element-newline': ['error', 'consistent'],
+            'jsonc/object-curly-spacing': ['error', 'always'],
+            'jsonc/object-curly-newline': ['error', { consistent: true }],
+            'jsonc/object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
+            'jsonc/key-spacing': 'error',
+            'jsonc/comma-style': 'error',
+            'jsonc/comma-dangle': ['error', 'never'],
+            'jsonc/no-irregular-whitespace': 'error'
         }
     }
 ];

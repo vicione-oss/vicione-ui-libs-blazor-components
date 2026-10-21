@@ -8,6 +8,14 @@ const config = [
             'dist/**/*.js',
             'wwwroot/css/site.css'
         ]
+    },
+
+    {
+        files: ['package.json'],
+        rules: {
+            // A workspace runs on the Node.js version declared by `engines.node` of the root package
+            'package-json/require-engines': 'off'
+        }
     }
 ];
 

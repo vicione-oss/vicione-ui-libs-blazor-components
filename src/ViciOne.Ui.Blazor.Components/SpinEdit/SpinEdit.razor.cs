@@ -214,8 +214,8 @@ public sealed partial class SpinEdit<TValue, TInterval, TLimit>
     private bool CanReceiveFocus()
         => !ReadOnly && Enabled;
 
-    private bool CanReceiveInput(bool mustHaveFocus)
-        => !ReadOnly && Enabled && ((mustHaveFocus && _focused) || !mustHaveFocus);
+    private bool CanReceiveInput()
+        => !ReadOnly && Enabled && _focused;
 
     private void FocusIn(FocusEventArgs _)
     {
@@ -247,7 +247,7 @@ public sealed partial class SpinEdit<TValue, TInterval, TLimit>
 
     private void KeyDown(KeyboardEventArgs args)
     {
-        if (!CanReceiveInput(true))
+        if (!CanReceiveInput())
             return;
 
         if (args.Code == "ArrowUp")
@@ -302,16 +302,11 @@ public sealed partial class SpinEdit<TValue, TInterval, TLimit>
 
     private async Task WheelAsync(WheelEventArgs args)
     {
-        if (!CanReceiveInput(false))
-            return;
-
-        if (!_focused)
-        {
-            if (_textBox is not null)
-                await _textBox.FocusAsync();
-        }
-
-        if (!_focused)
+        // Without focus the wheel is ignored, and as @onwheel:preventDefault follows _focused, it scrolls the nearest
+        // scroll container instead, so that passing over the spin edit can't change its value. On Blazor Server,
+        // preventDefault follows focus only once the server has rendered, which is accepted for the few wheel
+        // notches right after a focus change.
+        if (!CanReceiveInput())
             return;
 
         if (args.DeltaY < 0)

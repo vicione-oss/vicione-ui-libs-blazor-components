@@ -20,8 +20,10 @@ public sealed partial class SpinEditPage : ComponentBase
     private SpinEdit<int, int, int>? _unboundSpinEdit;
     private int _unboundSpinEditValue = 150;
 
-    private readonly string _lorem1 = s_faker.Lorem.Paragraph(1);
-    private readonly string _lorem2 = s_faker.Lorem.Paragraph(1);
+    // Enough sentences that even the shortest ones overflow the scrollable container, which the end-to-end
+    // tests rely on to have room to scroll; a single paragraph can be as short as one sentence
+    private readonly string _lorem1 = s_faker.Lorem.Sentences(20, " ");
+    private readonly string _lorem2 = s_faker.Lorem.Sentences(20, " ");
 
     private void GetUnboundSpinEditValueClick()
     {

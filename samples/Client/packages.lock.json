@@ -246,7 +246,7 @@
       "shared": {
         "type": "Project",
         "dependencies": {
-          "Bogus": "[35.6.4, )",
+          "Bogus": "[35.6.5, )",
           "Microsoft.AspNetCore.Components.Web": "[10.0.13, )",
           "ViciOne.Ui.Blazor.Components": "[6.7.0, )",
           "ViciOne.Ui.Localization": "[3.6.0, )"
@@ -263,9 +263,9 @@
       },
       "Bogus": {
         "type": "CentralTransitive",
-        "requested": "[35.6.4, )",
-        "resolved": "35.6.4",
-        "contentHash": "9ruy4agpXZ2L3B29IypUZJh61/lq+7Tbs03KyS0Uxrkx7c20JuWB1vMtZ0xBqwnekZGphjBhX7MkhM1nb5BA5g=="
+        "requested": "[35.6.5, )",
+        "resolved": "35.6.5",
+        "contentHash": "2FGZn+aAVHjmCgClgmGkTDBVZk0zkLvAKGaxEf5JL6b3i9JbHTE4wnuY4vHCuzlCmJdU6VZjgDfHwmYkQF8VAA=="
       },
       "Microsoft.AspNetCore.Components.QuickGrid": {
         "type": "CentralTransitive",

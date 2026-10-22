@@ -8,23 +8,23 @@ import { type DropzoneLeaveListener } from '../Scripts/DropzoneLeaveListener.ts'
 import { type CreateDragGhostArgs } from '../Models/CreateDragGhostArgs.cs.ts';
 
 /**
- The single stateful drag ghost backing a `DragGhostBase` subclass.
+The single stateful drag ghost backing a `DragGhostBase` subclass.
 
- Holds the host element and .NET object reference for the whole drag, so `getContent` and the lifecycle
- callbacks share one instance. `getContent` returns the class-stripped element clone; `dragStart`, `dragEnd`,
- `dropzoneEnter` and `dropzoneLeave` forward their ticks to the .NET listener, which renders the content
- itself when it has something new to show.
+Holds the host element and .NET object reference for the whole drag, so `getContent` and the lifecycle
+callbacks share one instance. `getContent` returns the class-stripped element clone; `dragStart`, `dragEnd`,
+`dropzoneEnter` and `dropzoneLeave` forward their ticks to the .NET listener, which renders the content
+itself when it has something new to show.
 
- Content changes — whether rendered from a lifecycle callback or from outside one (for example a per-second
- timer) — reach the drag ghost the same way: rather than have .NET call into JavaScript, the drag ghost pulls.
- While `contentChanged` is assigned (which `DragInteraction` does for the duration of the drag) it keeps a
- `WaitForContentChangeAsync` interop call pending on the .NET drag ghost and raises `contentChanged` each time it
- resolves. This keeps the drag ghost driven entirely by JavaScript calling into .NET, never the other way around.
+Content changes — whether rendered from a lifecycle callback or from outside one (for example a per-second
+timer) — reach the drag ghost the same way: rather than have .NET call into JavaScript, the drag ghost pulls.
+While `contentChanged` is assigned (which `DragInteraction` does for the duration of the drag) it keeps a
+`WaitForContentChangeAsync` interop call pending on the .NET drag ghost and raises `contentChanged` each time it
+resolves. This keeps the drag ghost driven entirely by JavaScript calling into .NET, never the other way around.
 
- The lifecycle methods are always present, but each one is gated by the opt-in flag captured at construction:
- when the deriving component did not implement the matching listener interface, the method is a no-op and makes
- no round-trip.
- */
+The lifecycle methods are always present, but each one is gated by the opt-in flag captured at construction:
+when the deriving component did not implement the matching listener interface, the method is a no-op and makes
+no round-trip.
+*/
 class DragGhostBase implements DragGhostContentSource,
     DragGhostContentChangedNotifier,
     DragGhostCursorSource,
@@ -71,12 +71,12 @@ class DragGhostBase implements DragGhostContentSource,
     }
 
     /**
-     Pull loop for out-of-band content changes (for example a per-second timer). While `contentChanged` is
-     assigned it keeps a single `WaitForContentChangeAsync` call pending on the .NET drag ghost; each time that
-     resolves with `true` a change was rendered, so we raise `contentChanged` and wait again. A `false` result
-     means the drag ghost was disposed, so the loop stops. The .NET side keeps at most one waiter, so this never
-     piles up calls.
-     */
+    Pull loop for out-of-band content changes (for example a per-second timer). While `contentChanged` is
+    assigned it keeps a single `WaitForContentChangeAsync` call pending on the .NET drag ghost; each time that
+    resolves with `true` a change was rendered, so we raise `contentChanged` and wait again. A `false` result
+    means the drag ghost was disposed, so the loop stops. The .NET side keeps at most one waiter, so this never
+    piles up calls.
+    */
     async #waitForContentChanges(): Promise<void> {
         this.#waitingForContentChanges = true;
 
@@ -100,11 +100,11 @@ class DragGhostBase implements DragGhostContentSource,
     }
 
     /**
-     Forwards a lifecycle tick to the .NET listener. The drag ghost is cosmetic and must never block the drag, so
-     the caller runs this off the critical path. Any content the listener renders completes the pending
-     content-change wait (see #waitForContentChanges), which re-fetches and swaps the drag ghost content, so there
-     is nothing to report back here.
-     */
+    Forwards a lifecycle tick to the .NET listener. The drag ghost is cosmetic and must never block the drag, so
+    the caller runs this off the critical path. Any content the listener renders completes the pending
+    content-change wait (see #waitForContentChanges), which re-fetches and swaps the drag ghost content, so there
+    is nothing to report back here.
+    */
     async #invoke(methodIdentifier: string): Promise<void> {
         try {
             await this.#dotNetObject.invokeMethodAsync(methodIdentifier);
@@ -115,10 +115,10 @@ class DragGhostBase implements DragGhostContentSource,
     }
 
     /**
-     Assigned by `DragInteraction` for the duration of a drag and cleared (set to `undefined`) when the drag
-     ends. Assigning a handler starts a pull loop that awaits the next out-of-band content change on the .NET
-     drag ghost; clearing it stops the loop.
-     */
+    Assigned by `DragInteraction` for the duration of a drag and cleared (set to `undefined`) when the drag
+    ends. Assigning a handler starts a pull loop that awaits the next out-of-band content change on the .NET
+    drag ghost; clearing it stops the loop.
+    */
     public get contentChanged(): (() => void) | undefined {
         return this.#contentChanged;
     }
@@ -185,10 +185,10 @@ class DragGhostBase implements DragGhostContentSource,
 }
 
 /**
- Creates the single stateful drag ghost for a `DragGhostBase` subclass. The returned instance
- always exposes the lifecycle methods, but each gates itself on its opt-in flag, so an unimplemented callback
- makes no round-trip.
- */
+Creates the single stateful drag ghost for a `DragGhostBase` subclass. The returned instance
+always exposes the lifecycle methods, but each gates itself on its opt-in flag, so an unimplemented callback
+makes no round-trip.
+*/
 export function createDragGhost(args: CreateDragGhostArgs): DragGhostBase {
     return new DragGhostBase(args);
 }

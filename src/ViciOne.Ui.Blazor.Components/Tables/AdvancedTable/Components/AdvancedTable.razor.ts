@@ -3,6 +3,7 @@ import { type CloseObserver } from '../Scripts/CloseObserver.ts';
 import { KeyboardNavigation } from '../Scripts/KeyboardNavigation.ts';
 import { type ResolvedColumnWidth } from '../Scripts/ResolvedColumnWidth.ts';
 import { type TableColumn } from '../Scripts/TableColumn.ts';
+import { type BlazorNullable } from '../../../Scripts/BlazorNullable.ts';
 import '../../../Scripts/StringMixins.ts';
 
 const commitQuietPeriodMilliseconds = 150;
@@ -305,8 +306,7 @@ class AdvancedTable {
         this.#commitColumnWidths(columnWidths, null);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- the value crosses to .NET, where the absence of a user-fixed column is null
-    #commitColumnWidths(columnWidths: ColumnWidth[], userFixedColumnId: string | null): void {
+    #commitColumnWidths(columnWidths: ColumnWidth[], userFixedColumnId: BlazorNullable<string>): void {
         void this.#dotNetObject.invokeMethodAsync('SetColumnWidthsAsync', columnWidths, userFixedColumnId)
             .catch(() => {/* circuit gone, nothing left to commit to */});
     }
@@ -341,35 +341,35 @@ class AdvancedTable {
     }
 
     /**
-     Sends the keyboard back to the default cell. Called from .NET after a reshape: a remembered position
-     would then point at whichever item ended up in that row, and a gesture would act on that one.
-     */
+    Sends the keyboard back to the default cell. Called from .NET after a reshape: a remembered position
+    would then point at whichever item ended up in that row, and a gesture would act on that one.
+    */
     public resetFocusedCell(): void {
         this.#keyboardNavigation?.resetFocusedCell();
     }
 
     /**
-     Moves the focus into the focused cell's content. Called from .NET after the render an activation caused,
-     which is the first moment content the handler created is there to take it.
-     */
+    Moves the focus into the focused cell's content. Called from .NET after the render an activation caused,
+    which is the first moment content the handler created is there to take it.
+    */
     public enterFocusedCell(): void {
         this.#keyboardNavigation?.enterFocusedCell();
     }
 
     /**
-     Called from .NET when the set of columns changed. There is no payload: the colgroup it has just rendered
-     carries everything this needs.
-     */
+    Called from .NET when the set of columns changed. There is no payload: the colgroup it has just rendered
+    carries everything this needs.
+    */
     public columnsChanged(): void {
         this.#reflow();
     }
 
     /**
-     Fills the `--pin-left-{index}`/`--pin-right-{index}` custom properties the pinned headers and cells
-     reference, so left pins stack from the left edge and right pins from the right edge without
-     overlapping. The index is the header's position in `thead`, the same position the .NET side names the
-     property by.
-     */
+    Fills the `--pin-left-{index}`/`--pin-right-{index}` custom properties the pinned headers and cells
+    reference, so left pins stack from the left edge and right pins from the right edge without
+    overlapping. The index is the header's position in `thead`, the same position the .NET side names the
+    property by.
+    */
     public updatePinnedOffsets(): void {
         // Each header carries its own measured width and the position .NET names its custom property by.
         // Every width is measured before the first write: interleaving the two would force a synchronous

@@ -1,6 +1,6 @@
 /**
- Gets the size of the tooltip with the provided id
- @param tooltipId The Identifier of the tooltip
+Gets the size of the tooltip with the provided id
+@param tooltipId The Identifier of the tooltip
 */
 export function getTooltipSize(tooltipId: string) {
     const element = document.querySelector<HTMLElement>(`#${CSS.escape(tooltipId)}`);
@@ -12,8 +12,8 @@ export function getTooltipSize(tooltipId: string) {
 }
 
 /**
- Gets the size of the current window
- */
+Gets the size of the current window
+*/
 export function getWindowSize() {
     return {
         height: window.innerHeight,

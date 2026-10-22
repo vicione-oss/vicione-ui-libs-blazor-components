@@ -1,4 +1,5 @@
 // Auto-generated code
+import { type BlazorNullable } from '../../Scripts/BlazorNullable.ts';
 import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
 import { type ResizeHandleInfo } from './ResizeHandleInfo.cs.ts';
 
@@ -14,7 +15,5 @@ export class ResizeInteractionContext {
         readonly ongoingCssClass: string,
         readonly endedCssClass: string,
         readonly dotNetObject: DotNet.DotNetObject,
-
-        // eslint-disable-next-line @typescript-eslint/no-restricted-types
-        readonly pointerCaptureBehaviors: PointerCaptureBehavior[] | null) {}
+        readonly pointerCaptureBehaviors: BlazorNullable<PointerCaptureBehavior[]>) {}
 }

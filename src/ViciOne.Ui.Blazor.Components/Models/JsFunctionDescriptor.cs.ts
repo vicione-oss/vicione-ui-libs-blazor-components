@@ -1,8 +1,7 @@
 // Auto-generated code
+import { type BlazorNullable } from '../Scripts/BlazorNullable.ts';
 
 export class JsFunctionDescriptor {
     constructor(readonly name: string,
-
-        // eslint-disable-next-line @typescript-eslint/no-restricted-types
-        readonly args: any | null) {}
+        readonly args: BlazorNullable<any>) {}
 }

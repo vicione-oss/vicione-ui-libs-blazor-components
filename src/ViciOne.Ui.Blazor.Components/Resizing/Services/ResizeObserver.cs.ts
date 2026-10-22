@@ -1,7 +1,7 @@
 /**
- Allows to subscribe to elements by their property 'data-observer-id'.
- When a resize occurs, the subcriber is notified and receives the new dimension.
- */
+Allows to subscribe to elements by their property 'data-observer-id'.
+When a resize occurs, the subcriber is notified and receives the new dimension.
+*/
 const parseCssLength = (value: string): number => {
     const parsed = Number.parseFloat(value);
     return Number.isNaN(parsed) ? 0 : parsed;
@@ -78,9 +78,9 @@ export class HtmlElementResizeObserver {
     };
 
     /**
-     Removes an element from the list of observed elements via it's reference.
-     @param element The element which should no be observed
-     */
+    Removes an element from the list of observed elements via it's reference.
+    @param element The element which should no be observed
+    */
     public unobserve(element: HTMLElement | undefined): void {
         if (!element)
             return;
@@ -93,9 +93,9 @@ export class HtmlElementResizeObserver {
 }
 
 /**
- Creates and returns a new instance
- @returns The created observer
- */
+Creates and returns a new instance
+@returns The created observer
+*/
 export function createInstance(): HtmlElementResizeObserver {
     return new HtmlElementResizeObserver();
 }

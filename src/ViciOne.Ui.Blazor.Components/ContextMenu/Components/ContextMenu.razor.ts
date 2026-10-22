@@ -50,8 +50,8 @@ export class ContextMenu {
     }
 
     /**
-     Returns a position based on the given mouse event that ensures the context menu is fully visible
-     */
+    Returns a position based on the given mouse event that ensures the context menu is fully visible
+    */
     public calculatePosition(htmlElement: HTMLElement | undefined, mouseEvent: MouseEvent) {
         if (htmlElement === undefined) {
             console.error('ContextMenu.calculatePosition() -> HTML element is undefined');

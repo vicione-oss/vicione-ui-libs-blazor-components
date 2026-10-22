@@ -1,3 +1,5 @@
+import { type BlazorNullable } from '../Scripts/BlazorNullable.ts';
+
 export class TextBox {
     readonly #input: HTMLInputElement | undefined;
     #revertValue: string;
@@ -8,9 +10,9 @@ export class TextBox {
     };
 
     /**
-     Blazor passes null for an input that left the page before the instance was created; then there is nothing to listen to
-     */
-    constructor(input: HTMLInputElement | undefined, revertValue: string | undefined) {
+    Blazor passes null for an input that left the page before the instance was created; then there is nothing to listen to
+    */
+    constructor(input: BlazorNullable<HTMLInputElement>, revertValue: BlazorNullable<string>) {
         this.#input = input ?? undefined;
         this.#revertValue = revertValue ?? '';
 
@@ -18,15 +20,15 @@ export class TextBox {
     }
 
     /**
-     Sets the value Escape reverts the input to
-     */
-    setRevertValue(revertValue: string | undefined) {
+    Sets the value Escape reverts the input to
+    */
+    setRevertValue(revertValue: BlazorNullable<string>) {
         this.#revertValue = revertValue ?? '';
     }
 
     /**
-     Selects the content of the given input
-     */
+    Selects the content of the given input
+    */
     selectContent(input: HTMLInputElement) {
         input.select();
     }

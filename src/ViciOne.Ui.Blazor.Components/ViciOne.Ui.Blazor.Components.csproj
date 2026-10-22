@@ -252,6 +252,9 @@
     <GeneratedStaticWebAsset Include="Models\JsFunctionDescriptor.cs.js">
       <DestinationFile>js\js-function-descriptor.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Scripts\BlazorNullable.js">
+      <DestinationFile>js\blazor-nullable.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="Scripts\Point.js">
       <DestinationFile>js\point.js</DestinationFile>
     </GeneratedStaticWebAsset>

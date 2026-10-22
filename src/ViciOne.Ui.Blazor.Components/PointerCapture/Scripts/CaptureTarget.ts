@@ -1,11 +1,11 @@
 import { type CaptureTargetRect } from './CaptureTargetRect.ts';
 
 /**
- Describes the pointer capture target in its current state.
+Describes the pointer capture target in its current state.
 
- Behaviors should use {@link Readonly} parameters like {@link CaptureTarget.originalRect} as the source to
- calculate new state and update writeable parameters like {@link CaptureTarget.rect} from it when needed.
- */
+Behaviors should use {@link Readonly} parameters like {@link CaptureTarget.originalRect} as the source to
+calculate new state and update writeable parameters like {@link CaptureTarget.rect} from it when needed.
+*/
 export class CaptureTarget {
     readonly originalRect: Readonly<CaptureTargetRect>;
     lastRect: Readonly<CaptureTargetRect>;

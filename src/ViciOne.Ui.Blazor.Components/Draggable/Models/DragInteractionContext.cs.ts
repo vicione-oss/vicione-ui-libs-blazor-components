@@ -1,4 +1,5 @@
 // Auto-generated code
+import { type BlazorNullable } from '../../Scripts/BlazorNullable.ts';
 import { type PointerCaptureBehavior } from '../../PointerCapture/Scripts/PointerCaptureBehavior.ts';
 import { type ModifierKey } from '../../Enums/ModifierKey.cs.ts';
 import { type DragGhostJsModuleDescriptor } from './DragGhostJsModuleDescriptor.cs.ts';
@@ -10,15 +11,8 @@ export class DragInteractionContext {
         readonly startedCssClass: string,
         readonly ongoingCssClass: string,
         readonly endedCssClass: string,
-
-        // eslint-disable-next-line @typescript-eslint/no-restricted-types
-        readonly modifierKey: ModifierKey | null,
-
+        readonly modifierKey: BlazorNullable<ModifierKey>,
         readonly dotNetObject: DotNet.DotNetObject,
-
-        // eslint-disable-next-line @typescript-eslint/no-restricted-types
-        readonly pointerCaptureBehaviors: PointerCaptureBehavior[] | null,
-
-        // eslint-disable-next-line @typescript-eslint/no-restricted-types
-        readonly dragGhostJsModule: DragGhostJsModuleDescriptor | null) {}
+        readonly pointerCaptureBehaviors: BlazorNullable<PointerCaptureBehavior[]>,
+        readonly dragGhostJsModule: BlazorNullable<DragGhostJsModuleDescriptor>) {}
 }

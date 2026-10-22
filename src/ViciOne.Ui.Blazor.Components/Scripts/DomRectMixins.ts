@@ -2,11 +2,11 @@
 
 class DomRectMixins {
     /**
-     Calculates the overlapping region of this rectangle and another.
+    Calculates the overlapping region of this rectangle and another.
 
-     @param other - The rectangle to intersect with.
-     @returns The overlapping rectangle, or undefined when the two rectangles do not overlap.
-     */
+    @param other - The rectangle to intersect with.
+    @returns The overlapping rectangle, or undefined when the two rectangles do not overlap.
+    */
     intersect(this: DOMRect, other: DOMRect): DOMRect | undefined {
         const left = Math.max(this.left, other.left);
         const top = Math.max(this.top, other.top);

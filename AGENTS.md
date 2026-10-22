@@ -8,6 +8,8 @@
 
 - Refer to `docs/csharp-code-style.md` for C# coding conventions
 - Refer to `docs/scss-code-style.md` for SCSS coding conventions
+- Refer to `docs/typescript-code-style.md` for TypeScript coding conventions
+- After changing `.ts` files, run `npm run lint-with-fix` from the solution root
 - After changing `.html` files, run `npm run lint-with-fix` from the solution root
 - After changing `.json` or `.jsonc` files, run `npm run lint-with-fix` from the solution root
 
@@ -61,17 +63,3 @@ force-pushing a rewritten branch. It is not worth it where the upstream delta
 touches no code at all: a docs, skill or tooling merge cannot break a build that
 already passed, so rebase plainly. Confirm that rather than assuming it, with
 `git diff --stat <old-base> <upstream>`.
-
-## Working on `.ts` files
-
-When working on `.ts` files living in a folder of a `.csproj`, you need to keep attention to the following files to get the orchestration of the folder / file structure for generated `.js` files right.
-
-Only touch these files when you **add, rename, remove, or re-target** a `.ts` file or an import specifier. A pure in-file logic change requires no updates here.
-
-| File | What to do |
-| - | - |
-| `.csproj` | Maintain MSBuild items named `GeneratedStaticWebAsset` to ensure generated `.js` files are included as static web assets in the Blazor project. |
-
-After making changes to the `.ts` files, make sure the code style is consistent by running the following command from solution root:
-
-`npm run lint-with-fix`

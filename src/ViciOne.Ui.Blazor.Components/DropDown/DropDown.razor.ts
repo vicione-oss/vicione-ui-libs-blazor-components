@@ -88,8 +88,7 @@ export class DropDown {
         let parent = element.parentElement;
 
         while (parent) {
-            const style = getComputedStyle(parent);
-            const { overflowY } = style;
+            const { overflowY } = getComputedStyle(parent);
 
             if (overflowY === 'auto' || overflowY === 'scroll')
                 return parent;

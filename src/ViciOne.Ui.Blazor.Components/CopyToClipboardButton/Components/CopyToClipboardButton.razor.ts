@@ -86,8 +86,8 @@ export class CopyToClipboardButton {
     }
 
     /**
-     Copies the given text to the clipboard and confirms it when it succeeded
-     */
+    Copies the given text to the clipboard and confirms it when it succeeded
+    */
     async copy(text: string) {
         if (await this.#tryCopyTextToClipboard(text))
             this.#showCopiedState();

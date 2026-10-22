@@ -1,12 +1,13 @@
+import { type BlazorNullable } from '../../../Scripts/BlazorNullable.ts';
 import { type PointerCaptureBehavior } from '../../Scripts/PointerCaptureBehavior.ts';
 import { type PointerCaptureBehaviorContext } from '../../Scripts/PointerCaptureBehaviorContext.ts';
 import { type CaptureTargetRect } from '../../Scripts/CaptureTargetRect.ts';
 
 class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
-    #gridSize = 10;
+    #gridSize: number;
 
-    constructor(gridSize?: number) {
-        this.#gridSize = gridSize ?? 10;
+    constructor(gridSize: number) {
+        this.#gridSize = gridSize;
     }
 
     #snap(rect: CaptureTargetRect, lastRect: Readonly<CaptureTargetRect>, edge: 'left' | 'top' | 'right' | 'bottom'): boolean {
@@ -43,6 +44,6 @@ class SnapToGridPointerCaptureBehavior implements PointerCaptureBehavior {
     }
 }
 
-export async function createInstance(gridSize?: number) {
-    return new SnapToGridPointerCaptureBehavior(gridSize);
+export async function createInstance(gridSize: BlazorNullable<number>) {
+    return new SnapToGridPointerCaptureBehavior(gridSize ?? 10);
 }

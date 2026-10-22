@@ -35,6 +35,7 @@
     <File Path="docs/general-conventions.md" />
     <File Path="docs/localization-guide.md" />
     <File Path="docs/scss-code-style.md" />
+    <File Path="docs/typescript-code-style.md" />
   </Folder>
   <Folder Name="/samples/">
     <File Path="samples/.editorconfig" />

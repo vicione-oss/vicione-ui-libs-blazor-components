@@ -17,27 +17,27 @@ type FocusedCell =
     { readonly kind: 'placeholder' };
 
 /**
-     The table's one keyboard position, held as DOM focus. The focused cell carries `tabindex="0"` and every
-     other cell the constant `-1` .NET renders, so an arrow key moves the `0` and the focus together.
-     Movement covers the header row as well; Space selects the focused cell's row, Enter enters a body cell,
-     Escape leaves an entered one, and Alt+ArrowDown opens a column's filter.
+The table's one keyboard position, held as DOM focus. The focused cell carries `tabindex="0"` and every
+other cell the constant `-1` .NET renders, so an arrow key moves the `0` and the focus together.
+Movement covers the header row as well; Space selects the focused cell's row, Enter enters a body cell,
+Escape leaves an entered one, and Alt+ArrowDown opens a column's filter.
 
-     The body is a single tab stop because the two boundary elements either side of the scroll container catch
-     every arrival by Tab: one from outside is sent on to the focused cell, one from inside is let through and
-     the browser carries focus past the table. Nothing inside a cell has its `tabindex` touched to achieve
-     that — content a consumer wrote stays as they wrote it and is simply never arrived at, which is also why
-     a cell is entered rather than tabbed into.
+The body is a single tab stop because the two boundary elements either side of the scroll container catch
+every arrival by Tab: one from outside is sent on to the focused cell, one from inside is let through and
+the browser carries focus past the table. Nothing inside a cell has its `tabindex` touched to achieve
+that — content a consumer wrote stays as they wrote it and is simply never arrived at, which is also why
+a cell is entered rather than tabbed into.
 
-     Movement, the promotion and the focus calls live here rather than in .NET because under Interactive
-     Server every arrow press would otherwise cost a round trip and a body-wide render diff, and an
-     auto-repeating arrow would flood the circuit and overshoot the released key. What crosses to .NET is one
-     call per selection gesture and one per activation — .NET keeps the anchor, the selection rules and the
-     events.
+Movement, the promotion and the focus calls live here rather than in .NET because under Interactive
+Server every arrow press would otherwise cost a round trip and a body-wide render diff, and an
+auto-repeating arrow would flood the circuit and overshoot the released key. What crosses to .NET is one
+call per selection gesture and one per activation — .NET keeps the anchor, the selection rules and the
+events.
 
-     Rows are addressed by the absolute index their cells carry and columns by their column id, never by
-     position: DOM order is pin order, so movement follows column reorder and pinning with no column model on
-     this side, and a cell whose row has been scrolled out of the render window can be found again.
-     */
+Rows are addressed by the absolute index their cells carry and columns by their column id, never by
+position: DOM order is pin order, so movement follows column reorder and pinning with no column model on
+this side, and a cell whose row has been scrolled out of the render window can be found again.
+*/
 export class KeyboardNavigation {
     readonly #container: HTMLElement;
     readonly #tableElement: HTMLElement;

@@ -13,6 +13,7 @@ import { type DragGhostJsModuleDescriptor } from '../Models/DragGhostJsModuleDes
 import { type ResolvedDragGhost } from '../Scripts/ResolvedDragGhost.ts';
 import { DefaultDragGhost } from '../Scripts/DefaultDragGhost.ts';
 import { DragGhostHost } from '../Scripts/DragGhostHost.ts';
+import { type BlazorNullable } from '../../Scripts/BlazorNullable.ts';
 import '../../Scripts/PointerEventMixins.ts';
 
 export class DragInteraction {
@@ -352,8 +353,7 @@ export class DragInteraction {
 export async function attach(context: DragInteractionContext) {
     // Blazor resolves the element reference when this call arrives, so an element removed while the attach
     // was queued (a virtualized row scrolled out) arrives as null. Nothing to wire; its owner is disposing.
-    // eslint-disable-next-line @typescript-eslint/no-restricted-types
-    if ((context.draggable as HTMLElement | null) === null)
+    if ((context.draggable as BlazorNullable<HTMLElement>) === null)
         return undefined;
 
     const dragGhost = await resolveDragGhost(context.dragGhostJsModule ?? undefined);

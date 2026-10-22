@@ -5,10 +5,10 @@ import { RgbColor } from './RgbColor.ts';
 import type { RgbaColor } from './RgbaColor.ts';
 
 /**
- Finds the real background color behind an element, even when several see-through layers overlap.
- Stateless: call refreshBackgroundColor() whenever the value needs to be recomputed
- (for example when the observed element changes size).
- */
+Finds the real background color behind an element, even when several see-through layers overlap.
+Stateless: call refreshBackgroundColor() whenever the value needs to be recomputed
+(for example when the observed element changes size).
+*/
 export class ComputedBackgroundColor {
     // Collects every background layer stacked at a point (top to bottom, stopping at the first opaque
     // one) and blends them into a single solid color, falling back to the page background.

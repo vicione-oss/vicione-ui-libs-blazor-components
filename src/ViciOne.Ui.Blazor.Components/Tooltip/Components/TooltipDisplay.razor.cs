@@ -17,7 +17,6 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
     private const int TooltipPositioningMarginPx = 10;
 
     private bool _disposed;
-    private bool _disposedAsync;
     private IJSObjectReference? _jsModule;
     private readonly System.Timers.Timer _renderDelayTimer = new()
     {
@@ -28,9 +27,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
     private ICollection<TooltipInfo> _renderingTooltips = [];
     private bool _shouldRender;
     private bool _shouldRenderDelayElapsed;
-#pragma warning disable CA2213 // Disposable fields should be disposed - we cannot know if the service is still used by something else
-    private TooltipService _tooltipService = default!;
-#pragma warning restore CA2213 // Disposable fields should be disposed
+    private TooltipService? _tooltipService;
     private Size _windowSize = Size.Empty;
 
     [CascadingParameter] private TooltipService? CascadedTooltipService { get; set; }
@@ -40,46 +37,28 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
     [Inject] private IServiceProvider ServiceProvider { get; set; } = default!;
 
     /// <inheritdoc/>
-    public void Dispose()
-        => Dispose(disposing: true);
-
-    /// <summary>
-    /// Performs synchronous clean-up
-    /// </summary>
-    private void Dispose(bool disposing)
+    public async ValueTask DisposeAsync()
     {
-        if (_disposed)
+        if (Interlocked.CompareExchange(ref _disposed, true, false))
             return;
 
-        if (disposing)
+        if (_tooltipService is not null)
         {
             _tooltipService.PreRenderingRequested -= OnPreRenderingRequestedAsync;
             _tooltipService.TooltipsChanged -= OnTooltipsChangedAsync;
-
-            _renderDelayTimer.Elapsed -= OnRenderDelayTimerElapsedAsync;
-            _renderDelayTimer.Dispose();
         }
 
-        _disposed = true;
-    }
-
-    /// <inheritdoc/>
-    public async ValueTask DisposeAsync()
-    {
-        // Marked before the first await, so an import still loading sees it.
-        if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
-            return;
+        _renderDelayTimer.Elapsed -= OnRenderDelayTimerElapsedAsync;
+        _renderDelayTimer.Dispose();
 
         await _jsModule.DisposeAsync(Logger);
         _jsModule = null;
-
-        Dispose(disposing: false);
     }
 
-    private Point GetTooltipRootPosition(TooltipInfo info)
+    private Point GetTooltipRootPosition(TooltipInfo info, bool useThirds)
     {
         bool moveLeft, moveUp;
-        if (_tooltipService.UseThirds)
+        if (useThirds)
         {
             var windowThirds = new Size((int)Math.Round(_windowSize.Width / 3.0), (int)Math.Round(_windowSize.Height / 3.0));
             moveLeft = info.Position.X > windowThirds.Width * 2;
@@ -110,7 +89,7 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
                 $"./_content/{typeof(TooltipDisplay).Assembly.GetName().Name}/tooltip/components/tooltip-display.js");
 
             // Removed while its script was loading: the disposal ran without seeing the module.
-            if (_disposedAsync)
+            if (_disposed)
             {
                 await _jsModule.DisposeAsync(Logger);
                 _jsModule = null;
@@ -132,6 +111,9 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
 
     private async void OnTooltipsChangedAsync()
     {
+        if (_disposed || _tooltipService is null)
+            return;
+
         _renderingTooltips = _tooltipService.GetTooltipInfos();
 
         _shouldRender = true;
@@ -164,6 +146,9 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
 
     private async void OnPreRenderingRequestedAsync()
     {
+        if (_disposed || _tooltipService is null)
+            return;
+
         _renderingTooltips = _tooltipService.GetTooltipInfos();
 
         _shouldRender = true;
@@ -172,6 +157,9 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
 
     private async void OnRenderDelayTimerElapsedAsync(object? sender, ElapsedEventArgs e)
     {
+        if (_disposed)
+            return;
+
         _shouldRender = true;
         _shouldRenderDelayElapsed = true;
 
@@ -181,6 +169,10 @@ public sealed partial class TooltipDisplay : ComponentBase, IAsyncDisposable
     /// <inheritdoc/>
     protected override bool ShouldRender()
     {
+        // A handler already running when the display was removed must not restart the disposed timer.
+        if (_disposed)
+            return false;
+
         if (_shouldRender)
         {
             _shouldRender = false;

@@ -45,8 +45,8 @@ public sealed partial class AdvancedTableHeaderCell<TItem> : ComponentBase
     public IColumnFilter? Filter { get; set; }
 
     /// <summary>
-    /// Whether this header may start a drag. Suppressed while its own filter panel is open, so an in-panel
-    /// text drag cannot start a reorder.
+    /// Whether this header may start a drag. Suppressed while the table has column reordering turned off or
+    /// while its own filter panel is open, so an in-panel text drag cannot start a reorder.
     /// </summary>
     [Parameter]
     public bool DragEnabled { get; set; } = true;
@@ -136,6 +136,9 @@ public sealed partial class AdvancedTableHeaderCell<TItem> : ComponentBase
     // the gap zones and the drop indicator sit on every other header — which is what ReorderChanged asks for.
     private Task DragStartAsync()
     {
+        if (!DragEnabled)
+            return Task.CompletedTask;
+
         Reorder.DragStart(Column);
 
         return Context.ReorderChanged.InvokeAsync();

@@ -277,6 +277,13 @@ public sealed partial class AdvancedTable<TItem>
     public bool RowsDraggable { get; set; }
 
     /// <summary>
+    /// When <see langword="true"/>, columns can be reordered by dragging their headers. Defaults to
+    /// <see langword="true"/>.
+    /// </summary>
+    [Parameter]
+    public bool ColumnReorderEnabled { get; set; } = true;
+
+    /// <summary>
     /// An optional callback invoked when a row is right-clicked, receiving a
     /// <see cref="RowContextMenuEventArgs{TItem}"/> with the row's data item and mouse position. When
     /// unwired, nothing is invoked and the browser's native context menu is left untouched.
@@ -1236,7 +1243,7 @@ public sealed partial class AdvancedTable<TItem>
     // A header cannot start a reorder while its own filter panel is open, so an in-panel text drag cannot
     // turn into one. The icon press-drag is handled separately in AdvancedTable.razor.ts.
     private bool IsColumnDragEnabled(IAdvancedTableColumn<TItem> column)
-        => _openFilterColumnId != column.Id;
+        => ColumnReorderEnabled && _openFilterColumnId != column.Id;
 
     private Task RowDoubleClickAsync(TItem item)
         => RowDoubleClick.InvokeAsync(item);

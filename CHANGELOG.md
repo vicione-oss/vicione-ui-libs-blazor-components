@@ -1,11 +1,12 @@
 # Changelog
 
-## 6.7.0 - Unreleased
+## 6.7.0 - 2026-10-23
 
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.13`
 - `AccordionItem`, added method `ScrollIntoViewAsync()` to scroll the item into view, for example the active item of a navigation
+- `AdvancedTable` and `SimpleTable`, added `ColumnReorderEnabled` to turn off reordering the columns by dragging their headers
 - `ContextMenu`
   - Child context menus are now opened and closed by one coordinator of the root context menu, which fixes them not opening or closing reliably
   - `VisibilityChanged` is now raised once the context menu is shown or hidden on screen, and not at all when it is closed before it appeared

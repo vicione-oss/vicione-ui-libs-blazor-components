@@ -145,6 +145,10 @@ public sealed partial class SimpleTable<TItem> : ComponentBase, ISimpleTable<TIt
     [Parameter]
     public bool RowsDraggable { get; set; }
 
+    /// <inheritdoc cref="AdvancedTable{TItem}.ColumnReorderEnabled"/>
+    [Parameter]
+    public bool ColumnReorderEnabled { get; set; } = true;
+
     /// <inheritdoc cref="AdvancedTable{TItem}.RowDoubleClick"/>
     [Parameter]
     public EventCallback<TItem> RowDoubleClick { get; set; }

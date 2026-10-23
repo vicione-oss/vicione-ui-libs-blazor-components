@@ -1,0 +1,33 @@
+@page "/tables/advanced-table/column-reorder"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.AdvancedTable.Components.Columns
+
+<DescriptionBanner>
+    Drag a column header onto the gap between two other headers to move the column there.
+    <code>@nameof(AdvancedTable<>.ColumnReorderEnabled)="false"</code> turns this off: the headers can no longer be
+    dragged and the columns keep their order. In either setting, drag the right edge of a header to resize its
+    column.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Column reorder enabled</label>
+        <Switch @bind-Value="_columnReorderEnabled" />
+    </div>
+</div>
+
+<AdvancedTable ItemsProvider="_itemsProvider" ColumnReorderEnabled="_columnReorderEnabled" MaximumHeight="300px">
+    <Columns>
+        <AdvancedTableColumn Id="Key" Title="Key" Resizeable>
+            <CellContent>@context.Key</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Value" Title="Value" Resizeable>
+            <CellContent>@context.Value</CellContent>
+        </AdvancedTableColumn>
+        <AdvancedTableColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>@context.Timestamp</CellContent>
+        </AdvancedTableColumn>
+    </Columns>
+</AdvancedTable>

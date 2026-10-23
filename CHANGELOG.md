@@ -5,11 +5,13 @@
 ### Package `ViciOne.Ui.Blazor.Components`
 
 - `.NET` packages, updated to version `10.0.13`
+- `AccordionItem`, added method `ScrollIntoViewAsync()` to scroll the item into view, for example the active item of a navigation
 - `SpinEdit`, fixed unintended value changes by the mouse wheel
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 
 - `.NET` packages, updated to version `10.0.13`
+- `AccordionItem`, added extension method `SetupForAccordionItem()` for `BunitJSInterop` to unify setup of JS interop in bUnit tests
 
 ## 6.6.1 - 2026-10-15
 

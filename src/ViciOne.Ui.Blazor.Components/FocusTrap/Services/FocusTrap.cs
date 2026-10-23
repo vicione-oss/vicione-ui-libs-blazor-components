@@ -40,8 +40,8 @@ internal sealed class FocusTrap(ILogger<FocusTrap> logger, IJSRuntime jsRuntime)
                 {
                     _assemblyName ??= typeof(FocusTrap).Assembly.GetName().Name;
 
-                    _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken,
-                        $"./_content/{_assemblyName}/focus-trap/focus-trap.js");
+                    _jsModule ??= await jsRuntime.ImportModuleAsync(
+                        $"./_content/{_assemblyName}/focus-trap/focus-trap.js", logger);
 
                     jsInstance = await _jsModule.InvokeConstructorAsync("FocusTrap", logger, cancellationToken);
 

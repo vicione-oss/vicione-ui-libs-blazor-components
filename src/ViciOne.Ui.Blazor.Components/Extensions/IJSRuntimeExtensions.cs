@@ -26,12 +26,13 @@ internal static partial class IJSRuntimeExtensions
         }
     }
 
-    public static async Task<IJSObjectReference?> ImportModuleAsync(this IJSRuntime jsRuntime, string modulePath, ILogger logger,
-        CancellationToken cancellationToken = default)
+    public static async Task<IJSObjectReference?> ImportModuleAsync(this IJSRuntime jsRuntime, string modulePath, ILogger logger)
     {
         try
         {
-            return await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken, modulePath);
+            // Takes no cancellation token: a canceled import still loads the module and creates its object reference in
+            // the browser, which then never reaches .NET and cannot be released.
+            return await jsRuntime.InvokeAsync<IJSObjectReference>("import", modulePath);
         }
         catch (JSDisconnectedException)
         {
@@ -39,7 +40,7 @@ internal static partial class IJSRuntimeExtensions
         }
         catch (OperationCanceledException)
         {
-            // Operation canceled, return gracefully
+            // The JavaScript interop call timed out, return gracefully
         }
         catch (Exception ex)
         {

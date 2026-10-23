@@ -42,8 +42,8 @@ internal sealed class MoveInteraction(ILogger<MoveInteraction> logger, IJSRuntim
 
                 _assemblyName ??= typeof(MoveInteraction).Assembly.GetName().Name;
 
-                _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken,
-                    $"./_content/{_assemblyName}/moveable/move-interaction.js");
+                _jsModule ??= await jsRuntime.ImportModuleAsync(
+                    $"./_content/{_assemblyName}/moveable/move-interaction.js", logger);
 
                 _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 

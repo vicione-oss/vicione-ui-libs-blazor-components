@@ -1,6 +1,8 @@
 @page "/accordion"
 
+@using global::Shared.Components
 @using ViciOne.Ui.Blazor.Components.Accordion.Components
+@using ViciOne.Ui.Blazor.Components.Button
 @using ViciOne.Ui.Blazor.Components.Switch
 
 <h3>Basic</h3>
@@ -104,3 +106,47 @@
 <h4>Event log</h4>
 
 <p>Last event: <strong>@_lastEvent</strong></p>
+
+<h3>Scroll into view</h3>
+
+<DescriptionBanner>
+    <code>ScrollIntoViewAsync()</code> scrolls an item the shortest distance that brings it fully into view, as needed
+    when an item is expanded from outside the accordion, e.g. to show the active entry of a navigation. An item already
+    in view does not move.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Scroll into view</label>
+
+        <Switch @bind-Value="_scrollIntoView" />
+    </div>
+
+    <div class="option">
+        <label>First item</label>
+
+        <Button Text="Expand first" OnClick="@ExpandFirstItemButtonClick" />
+    </div>
+
+    <div class="option">
+        <label>Last item</label>
+
+        <Button Text="Expand last" OnClick="@ExpandLastItemButtonClick" />
+    </div>
+</div>
+
+<div class="scroll-into-view-example">
+    <Accordion>
+        @foreach (var itemText in _scrollableItemTexts)
+        {
+            <AccordionItem Text="@itemText"
+                           Expanded="@(_expandedScrollableItem == itemText)"
+                           OnBeforeExpand="ScrollableItemBeforeExpand"
+                           OnBeforeCollapse="ScrollableItemBeforeCollapse"
+                           @ref="_scrollableAccordionItems[itemText]"
+                           @key="itemText">
+                <p>@_scrollableItemContent</p>
+            </AccordionItem>
+        }
+    </Accordion>
+</div>

@@ -43,8 +43,8 @@ internal sealed class ResizeInteraction(ILogger<ResizeInteraction> logger, IJSRu
 
                 _assemblyName ??= typeof(ResizeInteraction).Assembly.GetName().Name;
 
-                _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken,
-                    $"./_content/{_assemblyName}/resizeable/resize-interaction.js");
+                _jsModule ??= await jsRuntime.ImportModuleAsync(
+                    $"./_content/{_assemblyName}/resizeable/resize-interaction.js", logger);
 
                 _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 

@@ -441,6 +441,9 @@
     <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenuItem.razor.js">
       <DestinationFile>context-menu\components\context-menu-item.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="Accordion\Components\AccordionItem.razor.js">
+      <DestinationFile>accordion\components\accordion-item.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="CopyToClipboardButton\Components\CopyToClipboardButton.razor.js">
       <DestinationFile>copy-to-clipboard-button\components\copy-to-clipboard-button.js</DestinationFile>
     </GeneratedStaticWebAsset>

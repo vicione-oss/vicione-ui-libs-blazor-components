@@ -9,10 +9,10 @@ namespace ViciOne.Ui.Blazor.Components.ContextMenu.Components;
 public class ContextMenuItemBase : ComponentBase
 {
     /// <summary>
-    /// Uppermost context menu in the logical tree of context menus
+    /// Coordinator of the root context menu, which decides when child context menus are shown or closed
     /// </summary>
-    [CascadingParameter(Name = Constants.CascadingParameterNames.RootContextMenu)]
-    internal IContextMenu RootContextMenu { get; set; } = default!;
+    [CascadingParameter]
+    internal ContextMenuCoordinator Coordinator { get; set; } = default!;
 
     /// <summary>
     /// Context menu that contains the context menu item

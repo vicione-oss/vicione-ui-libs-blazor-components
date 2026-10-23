@@ -435,6 +435,9 @@
     <GeneratedStaticWebAsset Include="ContextMenu\Models\ContextMenuPosition.cs.js">
       <DestinationFile>context-menu\models\context-menu-position.js</DestinationFile>
     </GeneratedStaticWebAsset>
+    <GeneratedStaticWebAsset Include="ContextMenu\Models\VisibleContextMenus.cs.js">
+      <DestinationFile>context-menu\models\visible-context-menus.js</DestinationFile>
+    </GeneratedStaticWebAsset>
     <GeneratedStaticWebAsset Include="ContextMenu\Components\ContextMenu.razor.js">
       <DestinationFile>context-menu\components\context-menu.js</DestinationFile>
     </GeneratedStaticWebAsset>

@@ -1,6 +1,4 @@
-using System.Timers;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using ViciOne.Ui.Blazor.Components.ContextMenu.Enums;
@@ -26,13 +24,7 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     private ElementReference? _htmlElementReference;
 
-    private MouseLeaveDirection _childContextMenuMouseLeaveDirection;
-
-    private readonly System.Timers.Timer _showChildContextMenuTimer = new() { AutoReset = false, Interval = 250 };
-    private MouseEventArgs? _childContextMenuMouseEventArgs;
     private int _observingMouseLeave;
-
-    private volatile bool _childContextMenuShowPending;
 
     /// <summary>
     /// Content of the child context menu displayed when the item is clicked / focused / hovered
@@ -72,17 +64,11 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
-    /// <inheritdoc/>
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
+    IContextMenu IContextMenuItem.ParentContextMenu => ParentContextMenu;
 
-        ParentContextMenu.RegisterContextMenuItem(this);
+    IContextMenu? IContextMenuItem.ChildContextMenu => _childContextMenu;
 
-        ParentContextMenu.Closing += ParentContextMenuClosingAsync;
-
-        _showChildContextMenuTimer.Elapsed += ShowChildContentMenuTimerElapsedAsync;
-    }
+    ContextMenuItemFilter? IContextMenuItem.ItemFilter => ItemFilter;
 
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -98,11 +84,12 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
     }
 
     /// <inheritdoc/>
-
     public async ValueTask DisposeAsync()
     {
         if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
             return;
+
+        await Coordinator.ItemRemovedAsync(this);
 
         await EndObserveMouseLeaveAsync();
         await RemoveJsAsync();
@@ -112,18 +99,55 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
 
         await _jsModule.DisposeAsync(Logger);
         _jsModule = null;
+    }
 
-        ParentContextMenu.UnregisterContextMenuItem(this);
+    /// <summary>
+    /// Called from the browser to notify the component about a mouse leave
+    /// </summary>
+    [JSInvokable]
+    public Task MouseLeaveAsync(MouseLeaveDirection direction)
+        => Coordinator.MouseLeftItemAsync(this, direction);
 
-        ParentContextMenu.Closing -= ParentContextMenuClosingAsync;
+    async Task<ChildContextMenuPosition?> IContextMenuItem.CalculateChildContextMenuPositionAsync()
+    {
+        var jsInstance = await GetJsInstanceAsync();
 
-        if (_showChildContextMenuTimer is not null)
+        if (jsInstance is null || _htmlElementReference is null || _childContextMenu is null)
+            return null;
+
+        return await jsInstance.InvokeAsync<ChildContextMenuPosition?>("calculateChildContextMenuPosition",
+            _htmlElementReference, _childContextMenu.ElementReference);
+    }
+
+    Task IContextMenuItem.StartObserveMouseLeaveAsync()
+        => StartObserveMouseLeaveAsync();
+
+    Task IContextMenuItem.EndObserveMouseLeaveAsync()
+        => EndObserveMouseLeaveAsync();
+
+    private async Task MenuItemClickAsync()
+    {
+        if (!Enabled)
+            return;
+
+        await OnClick.InvokeAsync();
+
+        if (_childContextMenu is null)
         {
-            CancelShowChildContextMenuDelayed();
+            await Coordinator.RootContextMenu.CloseAsync();
 
-            _showChildContextMenuTimer.Elapsed -= ShowChildContentMenuTimerElapsedAsync;
-            _showChildContextMenuTimer.Dispose();
+            return;
         }
+
+        await Coordinator.ExpandAsync(this);
+    }
+
+    private async Task MenuItemMouseEnterAsync()
+    {
+        if (!Enabled)
+            return;
+
+        await Coordinator.ExpandAsync(this);
     }
 
     private async Task AttachJsAsync()
@@ -148,6 +172,17 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             if (_disposedAsync)
                 await DisposeJsInstanceAsync();
         }
+    }
+
+    /// <summary>
+    /// Waits for the script that is attached after the first render, as the item can be hovered before it is ready
+    /// </summary>
+    private async Task<IJSObjectReference?> GetJsInstanceAsync()
+    {
+        if (_attachJsTask is not null)
+            await _attachJsTask;
+
+        return _jsInstance;
     }
 
     private async Task RemoveJsAsync()
@@ -193,47 +228,15 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
         }
     }
 
-    private async Task MenuItemClickAsync(MouseEventArgs e)
-    {
-        if (!Enabled)
-            return;
-
-        await OnClick.InvokeAsync();
-
-        if (_childContextMenu is null)
-        {
-            await RootContextMenu.CloseAsync();
-
-            return;
-        }
-
-        if (!_childContextMenu.Visible && !_childContextMenuShowPending)
-        {
-            await CloseOtherChildContextMenusAsync();
-
-            ShowChildContextMenuDelayed(e);
-
-            await StartObserveMouseLeaveAsync();
-        }
-    }
-
-    private async Task ChildContentContextMenuVisibilityChangedAsync(bool isVisible)
-    {
-        CancelShowChildContextMenuDelayed();
-
-        if (!isVisible)
-            await EndObserveMouseLeaveAsync();
-    }
-
     private async Task StartObserveMouseLeaveAsync()
     {
-        if (Interlocked.Exchange(ref _observingMouseLeave, 1) == 0)
-        {
-            if (_jsInstance is null || _htmlElementReference is null)
-                return;
+        var jsInstance = await GetJsInstanceAsync();
 
-            await _jsInstance.InvokeVoidAsync("startObserveMouseLeave", _htmlElementReference.Value);
-        }
+        if (jsInstance is null || _htmlElementReference is null)
+            return;
+
+        if (Interlocked.Exchange(ref _observingMouseLeave, 1) == 0)
+            await jsInstance.InvokeVoidAsync("startObserveMouseLeave", _htmlElementReference.Value);
     }
 
     private async Task EndObserveMouseLeaveAsync()
@@ -246,112 +249,4 @@ public sealed partial class ContextMenuItem : ContextMenuItemBase, IContextMenuI
             await _jsInstance.InvokeVoidAsync("endObserveMouseLeave");
         }
     }
-
-    private async Task MenuItemMouseEnterAsync(MouseEventArgs e)
-    {
-        if (!Enabled)
-            return;
-
-        if (_childContextMenu?.Visible == false)
-        {
-            await CloseOtherChildContextMenusAsync();
-
-            ShowChildContextMenuDelayed(e);
-
-            await StartObserveMouseLeaveAsync();
-        }
-    }
-
-    /// <summary>
-    /// Called from the browser to notify the component about a mouse leave
-    /// </summary>
-    [JSInvokable]
-    public async Task MouseLeaveAsync(MouseLeaveDirection direction)
-    {
-        CancelShowChildContextMenuDelayed();
-
-        if (_childContextMenu?.Visible == true)
-        {
-            if (direction != _childContextMenuMouseLeaveDirection)
-            {
-                await EndObserveMouseLeaveAsync();
-
-                await _childContextMenu.CloseAsync();
-            }
-        }
-        else
-        {
-            await EndObserveMouseLeaveAsync();
-        }
-    }
-
-    private async void ParentContextMenuClosingAsync()
-    {
-        CancelShowChildContextMenuDelayed();
-
-        await EndObserveMouseLeaveAsync();
-
-        if (_childContextMenu?.Visible == true)
-            await _childContextMenu.CloseAsync();
-    }
-
-    private async void ShowChildContentMenuTimerElapsedAsync(object? sender, ElapsedEventArgs e)
-    {
-        if (_jsInstance is null ||
-            _htmlElementReference is null ||
-            _childContextMenu is null ||
-            _childContextMenuMouseEventArgs is null)
-        {
-            return;
-        }
-
-        var childContextMenuPosition = await _jsInstance.InvokeAsync<ChildContextMenuPosition>("calculateChildContextMenuPosition",
-            _htmlElementReference, _childContextMenu.ElementReference);
-
-        if (childContextMenuPosition is null)
-            return;
-
-        _childContextMenuMouseEventArgs.PageX = childContextMenuPosition.X;
-        _childContextMenuMouseEventArgs.PageY = childContextMenuPosition.Y;
-        _childContextMenuMouseLeaveDirection = childContextMenuPosition.MouseLeaveDirection;
-
-        _childContextMenuShowPending = true;
-
-        await _childContextMenu.ShowAsync(_childContextMenuMouseEventArgs, ItemFilter);
-    }
-
-    /// <inheritdoc/>
-    async Task IContextMenuItem.CloseChildContextMenuAsync()
-    {
-        CancelShowChildContextMenuDelayed();
-
-        await EndObserveMouseLeaveAsync();
-
-        if (_childContextMenu?.Visible == true)
-            await _childContextMenu.CloseAsync();
-    }
-
-    private async Task CloseOtherChildContextMenusAsync()
-    {
-        // Close any sibling child context menus that are open or pending to be shown
-        foreach (var sibling in ParentContextMenu.Items)
-        {
-            if (sibling != this)
-                await sibling.CloseChildContextMenuAsync();
-        }
-    }
-
-    private void ShowChildContextMenuDelayed(MouseEventArgs mouseEventArgs)
-    {
-        _childContextMenuMouseEventArgs = mouseEventArgs;
-        _showChildContextMenuTimer.Start();
-    }
-
-    private void CancelShowChildContextMenuDelayed()
-    {
-        _showChildContextMenuTimer.Stop();
-        _childContextMenuShowPending = false;
-    }
-
-    IContextMenu? IContextMenuItem.GetChildContextMenu() => _childContextMenu;
 }

@@ -4,6 +4,10 @@
 
 - Refer to `docs/general-conventions.md` for rules that apply to everything written in this repository, such as American English spelling
 
+## Changelog
+
+- Refer to `docs/changelog-style.md` for how to write entries in `CHANGELOG.md`
+
 ## Code style
 
 - Refer to `docs/csharp-code-style.md` for C# coding conventions

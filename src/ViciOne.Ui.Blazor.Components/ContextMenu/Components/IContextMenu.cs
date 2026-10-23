@@ -7,19 +7,9 @@ namespace ViciOne.Ui.Blazor.Components.ContextMenu.Components;
 internal interface IContextMenu
 {
     /// <summary>
-    /// Parent context menu
-    /// </summary>
-    IContextMenu? ParentContextMenu { get; }
-
-    /// <summary>
     /// Element reference for use in connection with JS interop
     /// </summary>
     ElementReference ElementReference { get; }
-
-    /// <summary>
-    /// Items of the context menu
-    /// </summary>
-    IEnumerable<IContextMenuItem> Items { get; }
 
     /// <summary>
     /// True when context menu is visible, otherwise false
@@ -27,27 +17,12 @@ internal interface IContextMenu
     bool Visible { get; }
 
     /// <summary>
-    /// Raised when <see cref="CloseAsync"/> was called but before the context menu is actually hidden
-    /// </summary>
-    event Action? Closing;
-
-    /// <summary>
     /// Shows the context menu
     /// </summary>
     Task ShowAsync(MouseEventArgs mouseEventArgs, ContextMenuItemFilter? itemFilter);
 
     /// <summary>
-    /// Hides the context menu
+    /// Hides the context menu together with all of its child context menus
     /// </summary>
     Task CloseAsync();
-
-    /// <summary>
-    /// Registers the given <paramref name="contextMenuItem"/>
-    /// </summary>
-    void RegisterContextMenuItem(IContextMenuItem contextMenuItem);
-
-    /// <summary>
-    /// Unregisters the given <paramref name="contextMenuItem"/>
-    /// </summary>
-    void UnregisterContextMenuItem(IContextMenuItem contextMenuItem);
 }

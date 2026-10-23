@@ -235,7 +235,7 @@ public sealed class DragInteractionTests
             .Returns((IJSObjectReference?)null);
 
         var jsRuntime = Substitute.For<IJSRuntime>();
-        jsRuntime.InvokeAsync<IJSObjectReference>("import", Arg.Any<CancellationToken>(), Arg.Any<object?[]?>())
+        jsRuntime.InvokeAsync<IJSObjectReference>("import", Arg.Any<object?[]?>())
             .Returns(jsModule);
 
         testContext.Services.AddSingleton(jsRuntime);

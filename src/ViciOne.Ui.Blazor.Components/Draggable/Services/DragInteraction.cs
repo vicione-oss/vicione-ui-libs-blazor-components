@@ -42,8 +42,8 @@ internal sealed partial class DragInteraction(ILogger<DragInteraction> logger, I
 
             _assemblyName ??= typeof(DragInteraction).Assembly.GetName().Name;
 
-            _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", _cancellationTokenSource.Token,
-                $"./_content/{_assemblyName}/draggable/drag-interaction.js");
+            _jsModule ??= await jsRuntime.ImportModuleAsync(
+                $"./_content/{_assemblyName}/draggable/drag-interaction.js", logger);
 
             _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 

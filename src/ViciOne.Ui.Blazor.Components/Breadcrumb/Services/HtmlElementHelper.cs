@@ -27,9 +27,8 @@ internal sealed class HtmlElementHelper(IJSRuntime jsRuntime, ILogger<HtmlElemen
 
             try
             {
-                _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import",
-                    _cancellationTokenSource.Token,
-                    $"./_content/{GetType().Assembly.GetName().Name}/breadcrumb/html-element-helper.js");
+                _jsModule ??= await jsRuntime.ImportModuleAsync(
+                    $"./_content/{GetType().Assembly.GetName().Name}/breadcrumb/html-element-helper.js", logger);
 
                 return _jsModule;
             }

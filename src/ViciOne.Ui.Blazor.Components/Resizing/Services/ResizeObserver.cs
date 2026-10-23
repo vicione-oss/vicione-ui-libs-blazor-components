@@ -40,9 +40,11 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
         if (_jsInstance is not null)
             return _jsInstance;
 
-        _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
-            cancellationToken,
-            $"./_content/{GetType().Assembly.GetName().Name}/resizing/resize-observer.js");
+        _module = await _jsRuntime.ImportModuleAsync(
+            $"./_content/{GetType().Assembly.GetName().Name}/resizing/resize-observer.js", _logger);
+
+        if (_module is null)
+            return null;
 
         _jsInstance = await _module.InvokeAsync<IJSObjectReference>("createInstance", cancellationToken);
 
@@ -174,11 +176,12 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
         await _cancellationTokenSource.CancelAsync();
         _cancellationTokenSource.Dispose();
 
-        if (_jsInstance is not null)
-        {
-            await _semaphore.WaitAsync();
+        // Waits even without an instance, as a module import still running holds the semaphore.
+        await _semaphore.WaitAsync();
 
-            try
+        try
+        {
+            if (_jsInstance is not null)
             {
                 try
                 {
@@ -189,20 +192,20 @@ internal sealed partial class ResizeObserver : IResizeObserver, IAsyncDisposable
                 {
                     // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
                 }
-
-                await _jsInstance.DisposeAsync(_logger);
-                _jsInstance = null;
-
-                await _module.DisposeAsync(_logger);
-                _module = null;
-
-                _dotNetObjectReference?.Dispose();
-                _dotNetObjectReference = null;
             }
-            finally
-            {
-                _semaphore.Release();
-            }
+
+            await _jsInstance.DisposeAsync(_logger);
+            _jsInstance = null;
+
+            await _module.DisposeAsync(_logger);
+            _module = null;
+
+            _dotNetObjectReference?.Dispose();
+            _dotNetObjectReference = null;
+        }
+        finally
+        {
+            _semaphore.Release();
         }
 
         _semaphore.Dispose();

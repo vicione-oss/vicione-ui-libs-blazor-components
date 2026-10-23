@@ -64,8 +64,12 @@ internal sealed class SnapToGridPointerCaptureBehavior(ILogger<SnapToGridPointer
             {
                 if (_jsObject is null)
                 {
-                    _jsModule ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken,
-                        $"./_content/{typeof(SnapToGridPointerCaptureBehavior).Assembly.GetName().Name}/pointer-capture/snap-to-grid-pointer-capture-behavior.js");
+                    _jsModule ??= await jsRuntime.ImportModuleAsync(
+                        $"./_content/{typeof(SnapToGridPointerCaptureBehavior).Assembly.GetName().Name}/pointer-capture/snap-to-grid-pointer-capture-behavior.js",
+                        logger);
+
+                    if (_jsModule is null)
+                        return null;
 
                     _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 

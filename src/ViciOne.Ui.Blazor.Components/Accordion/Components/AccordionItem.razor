@@ -16,7 +16,7 @@
         headerAttributes.Add("title", Title);
 }
 
-<div @attributes="headerAttributes">
+<div @attributes="headerAttributes" @ref="_rootElementReference">
     <button class="header" @onclick="OnHeaderClickAsync">
         @RenderFragments.Icon(this)
 

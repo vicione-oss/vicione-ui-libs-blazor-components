@@ -1,0 +1,33 @@
+@page "/tables/simple-table/column-reorder"
+
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components
+@using ViciOne.Ui.Blazor.Components.Tables.SimpleTable.Components.Columns
+
+<DescriptionBanner>
+    Drag a column header onto the gap between two other headers to move the column there.
+    <code>@nameof(SimpleTable<>.ColumnReorderEnabled)="false"</code> turns this off: the headers can no longer be
+    dragged and the columns keep their order. In either setting, drag the right edge of a header to resize its
+    column.
+</DescriptionBanner>
+
+<div class="options">
+    <div class="option">
+        <label>Column reorder enabled</label>
+        <Switch @bind-Value="_columnReorderEnabled" />
+    </div>
+</div>
+
+<SimpleTable Items="s_items" ColumnReorderEnabled="_columnReorderEnabled" MaximumHeight="300px">
+    <Columns>
+        <SimpleTableTemplateColumn Id="Key" Title="Key" Resizeable>
+            <CellContent>@context.Key</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Value" Title="Value" Resizeable>
+            <CellContent>@context.Value</CellContent>
+        </SimpleTableTemplateColumn>
+        <SimpleTableTemplateColumn Id="Timestamp" Title="Timestamp" Resizeable>
+            <CellContent>@context.Timestamp</CellContent>
+        </SimpleTableTemplateColumn>
+    </Columns>
+</SimpleTable>

@@ -286,6 +286,30 @@ public sealed partial class AdvancedTableTests
         });
     }
 
+    [Fact]
+    public void Headers_are_not_draggable_when_column_reordering_is_turned_off()
+    {
+        // Act
+        var renderedComponent = RenderTableWithColumnReorderTurnedOff();
+
+        // Assert
+        renderedComponent.FindAll("th").Select(header => header.GetAttribute("draggable")).Should()
+            .Equal("false", "false");
+    }
+
+    [Fact]
+    public async Task A_drag_reaching_a_header_starts_no_reorder_when_column_reordering_is_turned_off()
+    {
+        // Arrange
+        var renderedComponent = RenderTableWithColumnReorderTurnedOff();
+
+        // Act: a drag started on an element inside the header bubbles up to it
+        await renderedComponent.FindAll("th")[0].DragStartAsync(new DragEventArgs());
+
+        // Assert
+        renderedComponent.FindAll(".gap-zone").Should().BeEmpty();
+    }
+
     private static IReadOnlyList<string?> ColumnOrder(
         IRenderedComponent<AdvancedTable<TableTestItem>> renderedComponent)
         => [.. renderedComponent.FindAll("th").Select(header => header.GetAttribute("data-column-id"))];
@@ -299,6 +323,12 @@ public sealed partial class AdvancedTableTests
         => _testContext.Render<AdvancedTable<TableTestItem>>(b => b
             .Add(p => p.ItemsProvider, new TestItemsProvider([new(1, "Value")]))
             .Add(p => p.Columns, ReorderableColumns(columns)));
+
+    private IRenderedComponent<AdvancedTable<TableTestItem>> RenderTableWithColumnReorderTurnedOff()
+        => _testContext.Render<AdvancedTable<TableTestItem>>(b => b
+            .Add(p => p.ItemsProvider, new TestItemsProvider([new(1, "Value")]))
+            .Add(p => p.Columns, ReorderableColumns(("first", true), ("second", true)))
+            .Add(p => p.ColumnReorderEnabled, false));
 
     // Keyed so flipping Visible updates the existing column instead of replacing it — a replacement would
     // re-register the column at the end of the list, losing the order under test.

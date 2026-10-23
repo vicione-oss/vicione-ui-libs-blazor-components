@@ -408,4 +408,24 @@ public sealed partial class SimpleTableTests : IAsyncDisposable
         // Assert
         received.Should().BeNull();
     }
+
+    [Fact]
+    public void ColumnReorderEnabled_false_is_forwarded_so_headers_are_not_draggable()
+    {
+        // Act
+        var renderedComponent = _testContext.Render<SimpleTable<TableTestItem>>(b => b
+            .Add(p => p.Items, [])
+            .Add(p => p.ColumnReorderEnabled, false)
+            .Add(p => p.Columns, builder =>
+            {
+                builder.OpenComponent<SimpleTableTemplateColumn<TableTestItem>>(0);
+                {
+                    builder.AddComponentParameter(1, nameof(SimpleTableTemplateColumn<>.Id), "0");
+                }
+                builder.CloseComponent();
+            }));
+
+        // Assert
+        renderedComponent.Find("th").GetAttribute("draggable").Should().Be("false");
+    }
 }

@@ -1,14 +1,15 @@
 @using ViciOne.Ui.Blazor.Components.Tooltip.Models
 
 <div class="tooltip-display-container">
-    @{
+    @if (_tooltipService is not null)
+    {
         var tooltipIndex = 0;
         foreach (var tooltip in _renderingTooltips.Where(t => t.PreRendered && t.Displaying))
         {
             if (tooltip.Ignore)
                 continue;
 
-            var rootPosition = GetTooltipRootPosition(tooltip);
+            var rootPosition = GetTooltipRootPosition(tooltip, _tooltipService.UseThirds);
 
             <div class="tooltip-container"
                  id="@(tooltip.Id)"

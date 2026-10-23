@@ -7,6 +7,9 @@
 - `.NET` packages, updated to version `10.0.13`
 - `AccordionItem`, added method `ScrollIntoViewAsync()` to scroll the item into view, for example the active item of a navigation
 - `SpinEdit`, fixed unintended value changes by the mouse wheel
+- `TooltipDisplay`
+  - Fixed a removed display still reacting to tooltip changes and staying in memory until the circuit ends
+  - Removed method `Dispose()`, Blazor disposes the component through `DisposeAsync()`
 
 ### Package `ViciOne.Ui.Blazor.Components.TestingHelpers`
 

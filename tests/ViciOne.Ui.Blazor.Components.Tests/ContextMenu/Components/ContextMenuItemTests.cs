@@ -22,14 +22,20 @@ public sealed class ContextMenuItemTests
 
         var pendingImport = PendingJSModuleImport.SetUp(testContext, s_jsModulePath);
 
+        var parentContextMenu = Substitute.For<IContextMenu>();
+        using var coordinator = new ContextMenuCoordinator(parentContextMenu, TimeSpan.Zero);
+
         // Only an item with a child menu loads the module.
-        testContext.Render<CascadingValue<IContextMenu>>(b => b
-            .Add(p => p.Name, Constants.CascadingParameterNames.ParentContextMenu)
-            .Add(p => p.Value, Substitute.For<IContextMenu>())
+        testContext.Render<CascadingValue<ContextMenuCoordinator>>(b => b
+            .Add(p => p.Value, coordinator)
             .Add(p => p.IsFixed, true)
-            .AddChildContent<ContextMenuItem>(b => b
-                .Add(p => p.Text, "Item")
-                .Add(p => p.ChildContent, _ => _ => { })));
+            .AddChildContent<CascadingValue<IContextMenu>>(b => b
+                .Add(p => p.Name, Constants.CascadingParameterNames.ParentContextMenu)
+                .Add(p => p.Value, parentContextMenu)
+                .Add(p => p.IsFixed, true)
+                .AddChildContent<ContextMenuItem>(b => b
+                    .Add(p => p.Text, "Item")
+                    .Add(p => p.ChildContent, _ => _ => { }))));
         await pendingImport.WaitUntilRequestedAsync();
 
         // Act

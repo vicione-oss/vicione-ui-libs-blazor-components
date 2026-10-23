@@ -1,4 +1,5 @@
 import { ContextMenuPosition } from '../Models/ContextMenuPosition.cs.ts';
+import { type VisibleContextMenus } from '../Models/VisibleContextMenus.cs.ts';
 
 export class ContextMenu {
     readonly #dotNetObject: DotNet.DotNetObject;
@@ -8,11 +9,11 @@ export class ContextMenu {
     };
 
     readonly #handleWindowPointerDown = async (event: PointerEvent) => {
-        const contextMenuHtmlElements = await this.#dotNetObject.invokeMethodAsync<HTMLElement[]>('GetVisibleContextMenuHtmlElements');
+        const visibleContextMenus = await this.#dotNetObject.invokeMethodAsync<VisibleContextMenus>('GetVisibleContextMenus');
 
         let wasClickedInsideAnyContextMenu = false;
 
-        for (const contextMenuHtmlElement of contextMenuHtmlElements) {
+        for (const contextMenuHtmlElement of visibleContextMenus.htmlElements) {
             const x = event.clientX;
             const y = event.clientY;
 
@@ -34,7 +35,7 @@ export class ContextMenu {
         }
 
         if (!wasClickedInsideAnyContextMenu)
-            await this.#dotNetObject.invokeMethodAsync('CloseAsync');
+            await this.#dotNetObject.invokeMethodAsync('CloseOnPointerDownOutsideAsync', visibleContextMenus.requestVersion);
     };
 
     constructor(dotNetObject: DotNet.DotNetObject) {

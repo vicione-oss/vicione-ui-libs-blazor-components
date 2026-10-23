@@ -6,6 +6,9 @@
 
 - `.NET` packages, updated to version `10.0.13`
 - `AccordionItem`, added method `ScrollIntoViewAsync()` to scroll the item into view, for example the active item of a navigation
+- `ContextMenu`
+  - Child context menus are now opened and closed by one coordinator of the root context menu, which fixes them not opening or closing reliably
+  - `VisibilityChanged` is now raised once the context menu is shown or hidden on screen, and not at all when it is closed before it appeared
 - `SpinEdit`, fixed unintended value changes by the mouse wheel
 - `TooltipDisplay`
   - Fixed a removed display still reacting to tooltip changes and staying in memory until the circuit ends
